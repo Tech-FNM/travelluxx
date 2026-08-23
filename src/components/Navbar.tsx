@@ -36,11 +36,16 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
     return () => window.removeEventListener("custom_images_updated", handleUpdate);
   }, [settings]);
 
-  const [menuItems, setMenuItems] = useState<any[]>([
-    { id: "1", label: "Book Now", href: "/#calculator", target: "_self" },
-    { id: "2", label: "Blog", href: "/blog", target: "_self" },
-    { id: "3", label: "Contact", href: "/#contact", target: "_self" }
-  ]);
+  const [menuItems, setMenuItems] = useState<any[]>(() => {
+    const cached = localStorage.getItem("travelluxx_menu");
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return [];
+  });
 
   useEffect(() => {
     fetch("/api/menu")
@@ -48,6 +53,7 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setMenuItems(data);
+          localStorage.setItem("travelluxx_menu", JSON.stringify(data));
         }
       })
       .catch(err => console.error("Failed to load menu:", err));

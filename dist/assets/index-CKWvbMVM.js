@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CS-P_S8e.js"(exports, module) {
+  "assets/index-CKWvbMVM.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -15922,15 +15922,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         window.addEventListener("custom_images_updated", handleUpdate);
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, [settings]);
-      const [menuItems, setMenuItems] = reactExports.useState([
-        { id: "1", label: "Book Now", href: "/#calculator", target: "_self" },
-        { id: "2", label: "Blog", href: "/blog", target: "_self" },
-        { id: "3", label: "Contact", href: "/#contact", target: "_self" }
-      ]);
+      const [menuItems, setMenuItems] = reactExports.useState(() => {
+        const cached = localStorage.getItem("travelluxx_menu");
+        if (cached) {
+          try {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          } catch (e) {
+          }
+        }
+        return [];
+      });
       reactExports.useEffect(() => {
         fetch("/api/menu").then((res) => res.json()).then((data) => {
           if (Array.isArray(data) && data.length > 0) {
             setMenuItems(data);
+            localStorage.setItem("travelluxx_menu", JSON.stringify(data));
           }
         }).catch((err) => console.error("Failed to load menu:", err));
       }, []);
