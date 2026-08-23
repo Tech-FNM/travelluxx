@@ -512,6 +512,14 @@ async function sendEmailSafely(mailOptions) {
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error("Failed to send email safely:", error);
+    try {
+      import_fs.default.appendFileSync(
+        import_path.default.join(process.cwd(), "email_errors.log"),
+        `[${(/* @__PURE__ */ new Date()).toISOString()}] To: ${mailOptions.to}, Subject: ${mailOptions.subject}, Error: ${error?.message || String(error)}
+`
+      );
+    } catch (e) {
+    }
     return { success: false, error: error?.message || String(error) };
   }
 }
@@ -871,35 +879,41 @@ app.put("/api/admin/bookings/:id", async (req, res) => {
   try {
     await connectToDatabase();
     let oldBooking = null;
-    if (import_mongoose.default.connection.readyState === 1) {
-      oldBooking = await BookingModel.findOne({ id });
-    }
-    if (!oldBooking) {
-      const bookings2 = readBookings();
-      oldBooking = bookings2.find((b) => b.id === id);
-    }
+    let updatedBooking = null;
     const updateData = {};
     if (status) updateData.status = status;
     if (paymentStatus) updateData.paymentStatus = paymentStatus;
     if (import_mongoose.default.connection.readyState === 1) {
-      await BookingModel.findOneAndUpdate({ id }, { $set: updateData });
+      const dbBooking = await BookingModel.findOne({ id });
+      if (dbBooking) {
+        oldBooking = dbBooking.toObject ? dbBooking.toObject() : dbBooking;
+        const newDbBooking = await BookingModel.findOneAndUpdate({ id }, { $set: updateData }, { new: true });
+        updatedBooking = newDbBooking.toObject ? newDbBooking.toObject() : newDbBooking;
+      }
     }
     const bookings = readBookings();
     const index = bookings.findIndex((b) => b.id === id);
     if (index !== -1) {
-      const updatedBooking = { ...bookings[index], ...updateData };
+      if (!oldBooking) {
+        oldBooking = { ...bookings[index] };
+      }
       if (status) bookings[index].status = status;
       if (paymentStatus) bookings[index].paymentStatus = paymentStatus;
       writeBookings(bookings);
-      const isStatusOrPaymentChanged = status && status !== oldBooking?.status || paymentStatus && paymentStatus !== oldBooking?.paymentStatus;
-      if (isStatusOrPaymentChanged) {
-        await sendBookingEmails(updatedBooking, status === "Confirmed", true).catch((err) => console.error("Status update email error:", err));
+      if (!updatedBooking) {
+        updatedBooking = { ...bookings[index] };
       }
-      return res.json({ success: true, booking: bookings[index] });
     }
-    return res.status(404).json({ error: "Booking not found" });
+    if (!oldBooking && !updatedBooking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+    const isStatusOrPaymentChanged = status && status !== oldBooking?.status || paymentStatus && paymentStatus !== oldBooking?.paymentStatus;
+    if (isStatusOrPaymentChanged && updatedBooking) {
+      await sendBookingEmails(updatedBooking, status === "Confirmed", true).catch((err) => console.error("Status update email error:", err));
+    }
+    return res.json({ success: true, booking: updatedBooking });
   } catch (e) {
-    console.error("Error updating MongoDB booking:", e.message);
+    console.error("Error updating booking status:", e.message);
     return res.status(500).json({ error: e.message });
   }
 });

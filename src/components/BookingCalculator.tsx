@@ -1147,7 +1147,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       luggage: luggageCount,
       paymentMethod: paymentMethod,
       paymentStatus: paymentMethod === "Pay Later" ? "Unpaid" : "Paid",
-      status: "Confirmed"
+      status: "Pending"
     };
 
     try {

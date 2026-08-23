@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-ktL4IBGU.js"(exports, module) {
+  "assets/index-B5Ne0tpu.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -28474,7 +28474,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           luggage: luggageCount,
           paymentMethod,
           paymentStatus: paymentMethod === "Pay Later" ? "Unpaid" : "Paid",
-          status: "Confirmed"
+          status: "Pending"
         };
         try {
           const res = await fetch("/api/bookings", {
@@ -43158,32 +43158,6 @@ ${escapeText(this.code(index, length))}
                                   value: settings[`service_desc_${num}`] || "",
                                   onChange: (e) => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                                }
-                              )
-                            ] })
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Default Pickup" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                                "input",
-                                {
-                                  type: "text",
-                                  value: settings[`service_pickup_${num}`] || "",
-                                  onChange: (e) => setSettings({ ...settings, [`service_pickup_${num}`]: e.target.value }),
-                                  className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
-                                }
-                              )
-                            ] }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Default Dropoff" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                                "input",
-                                {
-                                  type: "text",
-                                  value: settings[`service_dropoff_${num}`] || "",
-                                  onChange: (e) => setSettings({ ...settings, [`service_dropoff_${num}`]: e.target.value }),
-                                  className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
                                 }
                               )
                             ] })

@@ -2473,26 +2473,7 @@ export default function AdminDashboard() {
                                       />
                                     </div>
                                   </div>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                      <label className="block text-xs font-semibold text-[#1d2327] mb-1">Default Pickup</label>
-                                      <input
-                                        type="text"
-                                        value={settings[`service_pickup_${num}`] || ""}
-                                        onChange={e => setSettings({ ...settings, [`service_pickup_${num}`]: e.target.value })}
-                                        className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
-                                      />
-                                    </div>
-                                    <div>
-                                      <label className="block text-xs font-semibold text-[#1d2327] mb-1">Default Dropoff</label>
-                                      <input
-                                        type="text"
-                                        value={settings[`service_dropoff_${num}`] || ""}
-                                        onChange={e => setSettings({ ...settings, [`service_dropoff_${num}`]: e.target.value })}
-                                        className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
-                                      />
-                                    </div>
-                                  </div>
+
                                   <div>
                                     <span className="block text-xs font-semibold text-[#1d2327] mb-1">Card Image</span>
                                     {settings[`service_image_${num}`] ? (

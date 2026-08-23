@@ -3105,10 +3105,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     padding-block: calc(var(--spacing) * 14);
   }
 
-  .py-16 {
-    padding-block: calc(var(--spacing) * 16);
-  }
-
   .py-20 {
     padding-block: calc(var(--spacing) * 20);
   }
