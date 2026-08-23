@@ -794,10 +794,11 @@ export default function AdminDashboard() {
         const savedPost = await res.json();
         if (editingPost) {
           setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...postForm, ...savedPost } : p));
+          setEditingPost(savedPost);
         } else {
           setPosts(prev => [savedPost, ...prev]);
+          setEditingPost(savedPost);
         }
-        setEditingPost(undefined);
         showToast(editingPost ? "Post updated successfully!" : "Post created successfully!");
       }
     } catch (err) {
@@ -866,10 +867,11 @@ export default function AdminDashboard() {
         const savedPage = await res.json();
         if (editingPage) {
           setPages(prev => prev.map(p => p.id === editingPage.id ? { ...p, ...pageForm, ...savedPage } : p));
+          setEditingPage(savedPage);
         } else {
           setPages(prev => [savedPage, ...prev]);
+          setEditingPage(savedPage);
         }
-        setEditingPage(undefined);
         showToast(editingPage ? "Page updated successfully!" : "Page created successfully!");
       }
     } catch (err) {
@@ -2500,6 +2502,41 @@ export default function AdminDashboard() {
                                 </div>
                               ))}
                             </div>
+                          </div>
+                        </div>
+
+                        {/* Section 5: Homepage SEO Settings */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">5. SEO Settings (Homepage)</h3>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Focus Keyphrase</label>
+                            <input
+                              type="text"
+                              value={settings.homepage_seo_focus_keyphrase || ""}
+                              onChange={e => setSettings({ ...settings, homepage_seo_focus_keyphrase: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              placeholder="e.g. airport transfers"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">SEO Title</label>
+                            <input
+                              type="text"
+                              value={settings.homepage_seo_title || ""}
+                              onChange={e => setSettings({ ...settings, homepage_seo_title: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              placeholder="e.g. Travelluxx | Chauffeur & Airport Transfers"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Meta Description</label>
+                            <textarea
+                              rows={3}
+                              value={settings.homepage_seo_description || ""}
+                              onChange={e => setSettings({ ...settings, homepage_seo_description: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              placeholder="e.g. Book luxury private hire and airport transfer services..."
+                            />
                           </div>
                         </div>
                       </div>
