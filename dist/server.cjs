@@ -664,7 +664,7 @@ async function sendBookingEmails(booking, isConfirmedEmail = false, isStatusChan
       html: operatorStatusHtml
     });
   }
-  if (!isConfirmedEmail && !isStatusChange && ws.business_email) {
+  if (!isStatusChange && ws.business_email) {
     await sendEmailSafely({
       from: fromAddress,
       to: ws.business_email,

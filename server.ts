@@ -713,8 +713,8 @@ async function sendBookingEmails(booking: any, isConfirmedEmail = false, isStatu
     });
   }
 
-  // Only send notification to operator on initial creation (not on status change)
-  if (!isConfirmedEmail && !isStatusChange && ws.business_email) {
+  // Always send new booking request notification to operator on initial creation (not on status change)
+  if (!isStatusChange && ws.business_email) {
     await sendEmailSafely({
       from: fromAddress,
       to: ws.business_email,
