@@ -2401,9 +2401,10 @@ export default function AdminDashboard() {
                           </div>
                         </div>
 
-                        {/* Section 4: Airports/Services Intro */}
+                        {/* Section 4: Airports & Services Management */}
                         <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
-                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">4. Airports & Services Intro</h3>
+                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">4. Airports & Services Content</h3>
+                          
                           <div>
                             <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Airports Grid Section Title</label>
                             <input
@@ -2413,6 +2414,111 @@ export default function AdminDashboard() {
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
                               placeholder="e.g. We cover all major London airports"
                             />
+                          </div>
+
+                          {/* 6 Airports Management */}
+                          <div className="border-t border-[#f0f0f1] pt-4 mt-3">
+                            <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Airports (6 items)</h4>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {[1, 2, 3, 4, 5, 6].map(num => (
+                                <div key={num} className="border border-[#c3c4c7] p-3 rounded bg-slate-50 space-y-2">
+                                  <span className="block font-bold text-[10px] text-[#646970] uppercase">Airport {num}</span>
+                                  <div>
+                                    <label className="block text-[10px] text-[#1d2327] mb-0.5">Name</label>
+                                    <input
+                                      type="text"
+                                      value={settings[`airport_name_${num}`] || ""}
+                                      onChange={e => setSettings({ ...settings, [`airport_name_${num}`]: e.target.value })}
+                                      className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] text-[#1d2327] mb-0.5">Code</label>
+                                    <input
+                                      type="text"
+                                      value={settings[`airport_code_${num}`] || ""}
+                                      onChange={e => setSettings({ ...settings, [`airport_code_${num}`]: e.target.value })}
+                                      className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* 5 Services Management */}
+                          <div className="border-t border-[#f0f0f1] pt-4 mt-4">
+                            <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Service Cards (5 items)</h4>
+                            <div className="space-y-4">
+                              {[1, 2, 3, 4, 5].map(num => (
+                                <div key={num} className="border border-[#c3c4c7] p-4 rounded bg-slate-50 space-y-3">
+                                  <span className="block font-bold text-[10px] text-[#646970] uppercase">Service Card {num}</span>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="block text-xs font-semibold text-[#1d2327] mb-1">Title</label>
+                                      <input
+                                        type="text"
+                                        value={settings[`service_title_${num}`] || ""}
+                                        onChange={e => setSettings({ ...settings, [`service_title_${num}`]: e.target.value })}
+                                        className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="block text-xs font-semibold text-[#1d2327] mb-1">Description</label>
+                                      <input
+                                        type="text"
+                                        value={settings[`service_desc_${num}`] || ""}
+                                        onChange={e => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value })}
+                                        className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="block text-xs font-semibold text-[#1d2327] mb-1">Default Pickup</label>
+                                      <input
+                                        type="text"
+                                        value={settings[`service_pickup_${num}`] || ""}
+                                        onChange={e => setSettings({ ...settings, [`service_pickup_${num}`]: e.target.value })}
+                                        className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="block text-xs font-semibold text-[#1d2327] mb-1">Default Dropoff</label>
+                                      <input
+                                        type="text"
+                                        value={settings[`service_dropoff_${num}`] || ""}
+                                        onChange={e => setSettings({ ...settings, [`service_dropoff_${num}`]: e.target.value })}
+                                        className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <span className="block text-xs font-semibold text-[#1d2327] mb-1">Card Image</span>
+                                    {settings[`service_image_${num}`] ? (
+                                      <div className="relative group w-36 h-20 rounded border border-[#c3c4c7] overflow-hidden bg-slate-100 flex items-center justify-center">
+                                        <img src={settings[`service_image_${num}`]} alt={`Service ${num}`} className="max-w-full max-h-full object-cover" />
+                                        <button type="button" onClick={() => setSettings({ ...settings, [`service_image_${num}`]: "" })}
+                                          className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                          <X className="w-3 h-3" />
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setEditorTarget(`settings-service_image_${num}`);
+                                          setEditorMediaModalOpen(true);
+                                        }}
+                                        className="bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs"
+                                      >
+                                        Select Image
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>

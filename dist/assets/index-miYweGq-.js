@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DYZY-m43.js"(exports, module) {
+  "assets/index-miYweGq-.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -43082,7 +43082,7 @@ ${escapeText(this.code(index, length))}
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "4. Airports & Services Intro" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "4. Airports & Services Content" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Airports Grid Section Title" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -43095,6 +43095,126 @@ ${escapeText(this.code(index, length))}
                             placeholder: "e.g. We cover all major London airports"
                           }
                         )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-4 mt-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3", children: "Airports (6 items)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-3 gap-4", children: [1, 2, 3, 4, 5, 6].map((num) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] p-3 rounded bg-slate-50 space-y-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "block font-bold text-[10px] text-[#646970] uppercase", children: [
+                            "Airport ",
+                            num
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] text-[#1d2327] mb-0.5", children: "Name" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings[`airport_name_${num}`] || "",
+                                onChange: (e) => setSettings({ ...settings, [`airport_name_${num}`]: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] text-[#1d2327] mb-0.5", children: "Code" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings[`airport_code_${num}`] || "",
+                                onChange: (e) => setSettings({ ...settings, [`airport_code_${num}`]: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
+                              }
+                            )
+                          ] })
+                        ] }, num)) })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-4 mt-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3", children: "Service Cards (5 items)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: [1, 2, 3, 4, 5].map((num) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] p-4 rounded bg-slate-50 space-y-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "block font-bold text-[10px] text-[#646970] uppercase", children: [
+                            "Service Card ",
+                            num
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Title" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: settings[`service_title_${num}`] || "",
+                                  onChange: (e) => setSettings({ ...settings, [`service_title_${num}`]: e.target.value }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Description" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: settings[`service_desc_${num}`] || "",
+                                  onChange: (e) => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                }
+                              )
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Default Pickup" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: settings[`service_pickup_${num}`] || "",
+                                  onChange: (e) => setSettings({ ...settings, [`service_pickup_${num}`]: e.target.value }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Default Dropoff" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: settings[`service_dropoff_${num}`] || "",
+                                  onChange: (e) => setSettings({ ...settings, [`service_dropoff_${num}`]: e.target.value }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs"
+                                }
+                              )
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Card Image" }),
+                            settings[`service_image_${num}`] ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-20 rounded border border-[#c3c4c7] overflow-hidden bg-slate-100 flex items-center justify-center", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings[`service_image_${num}`], alt: `Service ${num}`, className: "max-w-full max-h-full object-cover" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "button",
+                                {
+                                  type: "button",
+                                  onClick: () => setSettings({ ...settings, [`service_image_${num}`]: "" }),
+                                  className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
+                                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
+                                }
+                              )
+                            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  setEditorTarget(`settings-service_image_${num}`);
+                                  setEditorMediaModalOpen(true);
+                                },
+                                className: "bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs",
+                                children: "Select Image"
+                              }
+                            )
+                          ] })
+                        ] }, num)) })
                       ] })
                     ] })
                   ] }),
