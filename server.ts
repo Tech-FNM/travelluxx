@@ -1903,9 +1903,9 @@ app.get("/sitemap.xml", async (req, res) => {
   try {
     await connectToDatabase();
     if (mongoose.connection.readyState === 1) {
-      const dbPages = await PageModel.find({ published: { $ne: false } });
+      const dbPages = await PageModel.find({ published: { $ne: false } } as any);
       pages = dbPages.map((p: any) => p.toObject ? p.toObject() : p);
-      const dbPosts = await PostModel.find({ published: { $ne: false } });
+      const dbPosts = await PostModel.find({ published: { $ne: false } } as any);
       posts = dbPosts.map((p: any) => p.toObject ? p.toObject() : p);
     }
   } catch (e) {}
