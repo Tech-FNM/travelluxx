@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Ct8-935_.js"(exports, module) {
+  "assets/index-CS-P_S8e.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -41283,8 +41283,12 @@ ${escapeText(this.code(index, length))}
               xImage: "",
               noIndexNoFollow: false
             });
+          } else if (routeSubtab === "homepage") {
+            setEditingHomepage(true);
+            setEditingPage(void 0);
           } else {
             setEditingPage(void 0);
+            setEditingHomepage(false);
           }
         }
       }, [routeTab, routeSubtab, routeId, pages, token]);
@@ -42664,7 +42668,7 @@ ${escapeText(this.code(index, length))}
                       "button",
                       {
                         type: "button",
-                        onClick: () => setEditingHomepage(false),
+                        onClick: () => navigate("/admin/pages"),
                         className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition",
                         children: "Cancel"
                       }
@@ -43284,7 +43288,7 @@ ${escapeText(this.code(index, length))}
                         "button",
                         {
                           type: "button",
-                          onClick: () => setEditingHomepage(false),
+                          onClick: () => navigate("/admin/pages"),
                           className: "w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition",
                           children: "Cancel"
                         }
@@ -43603,9 +43607,9 @@ ${escapeText(this.code(index, length))}
                     (!searchQuery || "homepage".includes(searchQuery.toLowerCase()) || "front page".includes(searchQuery.toLowerCase())) && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group bg-emerald-50/20", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center text-emerald-600 font-bold", children: "★" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-semibold text-[#2271b1] max-w-xs", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => setEditingHomepage(true), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800", children: "Homepage (Front Page Layout)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => navigate("/admin/pages/homepage"), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800", children: "Homepage (Front Page Layout)" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setEditingHomepage(true), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit Content" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => navigate("/admin/pages/homepage"), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit Content" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/", target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View Live" })
                         ] })

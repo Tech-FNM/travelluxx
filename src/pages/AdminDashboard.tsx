@@ -677,8 +677,12 @@ export default function AdminDashboard() {
           xImage: "",
           noIndexNoFollow: false
         });
+      } else if (routeSubtab === "homepage") {
+        setEditingHomepage(true);
+        setEditingPage(undefined);
       } else {
         setEditingPage(undefined);
+        setEditingHomepage(false);
       }
     }
   }, [routeTab, routeSubtab, routeId, pages, token]);
@@ -2066,7 +2070,7 @@ export default function AdminDashboard() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setEditingHomepage(false)}
+                        onClick={() => navigate("/admin/pages")}
                         className="border border-[#c3c4c7] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition"
                       >
                         Cancel
@@ -2614,7 +2618,7 @@ export default function AdminDashboard() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => setEditingHomepage(false)}
+                            onClick={() => navigate("/admin/pages")}
                             className="w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition"
                           >
                             Cancel
@@ -2948,11 +2952,11 @@ export default function AdminDashboard() {
                           <tr className="hover:bg-[#f6f7f7] transition group bg-emerald-50/20">
                             <td className="py-3 px-3 text-center text-emerald-600 font-bold">★</td>
                             <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
-                              <span onClick={() => setEditingHomepage(true)} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800">
+                              <span onClick={() => navigate("/admin/pages/homepage")} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800">
                                 Homepage (Front Page Layout)
                               </span>
                               <div className="hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none">
-                                <button onClick={() => setEditingHomepage(true)} className="text-[#2271b1] hover:text-[#00a0d2]">Edit Content</button>
+                                <button onClick={() => navigate("/admin/pages/homepage")} className="text-[#2271b1] hover:text-[#00a0d2]">Edit Content</button>
                                 <span className="text-[#ddd]">|</span>
                                 <a href="/" target="_blank" rel="noreferrer" className="text-[#2271b1] hover:text-[#00a0d2]">View Live</a>
                               </div>
