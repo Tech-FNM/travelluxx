@@ -176,8 +176,7 @@ async function connectToDatabase() {
 
   try {
     mongoose.set('bufferCommands', false);
-    const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/travelluxx";
-    await mongoose.connect(uri);
+    await mongoose.connect(MONGODB_URI);
     console.log("Connected to MongoDB!");
     isConnected = true;
     await runMigrations();

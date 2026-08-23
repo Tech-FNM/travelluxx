@@ -181,8 +181,7 @@ async function connectToDatabase() {
   }
   try {
     import_mongoose.default.set("bufferCommands", false);
-    const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/travelluxx";
-    await import_mongoose.default.connect(uri);
+    await import_mongoose.default.connect(MONGODB_URI);
     console.log("Connected to MongoDB!");
     isConnected = true;
     await runMigrations();
