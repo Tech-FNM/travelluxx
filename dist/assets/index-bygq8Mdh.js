@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CKWvbMVM.js"(exports, module) {
+  "assets/index-bygq8Mdh.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -28518,10 +28518,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         const bookingStatus = params.get("bookingStatus");
         const bookingId = params.get("bookingId");
         if (bookingStatus === "success" && bookingId) {
-          setCompletedBookingId(bookingId);
-          setPaymentMethod("Mollie");
-          setCurrentStep(4);
-          window.history.replaceState({}, "", window.location.pathname);
+          fetch(`/api/mollie/status/${bookingId}`).then((res) => res.json()).then((data) => {
+            if (data.success && (data.paymentStatus === "Paid" || data.status === "Pending")) {
+              setCompletedBookingId(bookingId);
+              setPaymentMethod("Mollie");
+              setCurrentStep(4);
+            } else {
+              alert("Payment was not completed. Your booking has not been registered.");
+              setCurrentStep(1);
+            }
+          }).catch((err) => {
+            console.error("Failed to verify payment status:", err);
+            alert("We could not confirm your payment status. Please contact support.");
+            setCurrentStep(1);
+          }).finally(() => {
+            window.history.replaceState({}, "", window.location.pathname);
+          });
         }
       }, []);
       const handleMollieCheckout = async () => {

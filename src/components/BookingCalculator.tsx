@@ -1191,11 +1191,28 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     const bookingStatus = params.get("bookingStatus");
     const bookingId = params.get("bookingId");
     if (bookingStatus === "success" && bookingId) {
-      setCompletedBookingId(bookingId);
-      setPaymentMethod("Mollie");
-      setCurrentStep(4);
-      // Clean query params
-      window.history.replaceState({}, "", window.location.pathname);
+      // Verify payment status with the server
+      fetch(`/api/mollie/status/${bookingId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && (data.paymentStatus === "Paid" || data.status === "Pending")) {
+            setCompletedBookingId(bookingId);
+            setPaymentMethod("Mollie");
+            setCurrentStep(4);
+          } else {
+            alert("Payment was not completed. Your booking has not been registered.");
+            setCurrentStep(1);
+          }
+        })
+        .catch(err => {
+          console.error("Failed to verify payment status:", err);
+          alert("We could not confirm your payment status. Please contact support.");
+          setCurrentStep(1);
+        })
+        .finally(() => {
+          // Clean query params
+          window.history.replaceState({}, "", window.location.pathname);
+        });
     }
   }, []);
 

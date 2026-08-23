@@ -943,13 +943,20 @@ app.get("/api/admin/bookings", async (req, res) => {
   try {
     await connectToDatabase();
     if (mongoose.connection.readyState === 1) {
-      const rows = await BookingModel.find().sort({ createdAt: -1 });
+      const rows = await BookingModel.find({
+        $or: [
+          { paymentMethod: { $ne: "Mollie" } },
+          { paymentMethod: "Mollie", paymentStatus: "Paid" }
+        ]
+      }).sort({ createdAt: -1 });
       return res.json(rows.map((r: any) => r.toObject ? r.toObject() : r));
     }
   } catch (e: any) {
     console.error("Error reading from MongoDB bookings:", e.message);
   }
-  const bookings = readBookings();
+  const bookings = readBookings().filter(b => 
+    b.paymentMethod !== "Mollie" || b.paymentStatus === "Paid"
+  );
   return res.json(bookings);
 });
 
@@ -1501,6 +1508,12 @@ app.post("/api/mollie/create-payment", async (req, res) => {
       };
       bookings.unshift(booking);
       writeBookings(bookings);
+
+      // Save draft booking to MongoDB immediately to prevent loss on Vercel
+      if (mongoose.connection.readyState === 1) {
+        const dbBooking = new BookingModel(booking);
+        await dbBooking.save().catch(e => console.error("Error saving draft booking to MongoDB:", e));
+      }
     }
 
     const appUrl = (process.env.APP_URL || `${req.protocol}://${req.get("host")}`).replace(/\/$/, "");
@@ -1598,8 +1611,24 @@ app.post("/api/mollie/webhook", async (req, res) => {
   }
 });
 
-app.get("/api/mollie/status/:bookingId", (req, res) => {
+app.get("/api/mollie/status/:bookingId", async (req, res) => {
   const { bookingId } = req.params;
+  try {
+    await connectToDatabase();
+    if (mongoose.connection.readyState === 1) {
+      const dbBooking = await BookingModel.findOne({ id: bookingId });
+      if (dbBooking) {
+        const b = dbBooking.toObject ? dbBooking.toObject() : dbBooking;
+        return res.json({
+          success: true,
+          bookingId: b.id,
+          paymentStatus: b.paymentStatus,
+          status: b.status
+        });
+      }
+    }
+  } catch (e) {}
+  
   const bookings = readBookings();
   const booking = bookings.find(b => b.id === bookingId);
   if (!booking) {
