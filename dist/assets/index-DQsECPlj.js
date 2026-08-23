@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-W_LcRb3Y.js"(exports, module) {
+  "assets/index-DQsECPlj.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -41067,7 +41067,7 @@ ${escapeText(this.code(index, length))}
     function AdminDashboard() {
       var _a;
       const navigate = useNavigate();
-      const { tab: routeTab, subtab: routeSubtab } = useParams();
+      const { tab: routeTab, subtab: routeSubtab, id: routeId } = useParams();
       const [token, setToken] = reactExports.useState(localStorage.getItem("travelluxx_admin_token"));
       const [authMode, setAuthMode] = reactExports.useState("signin");
       const [showPassword, setShowPassword] = reactExports.useState(false);
@@ -41190,6 +41190,104 @@ ${escapeText(this.code(index, length))}
           navigate("/admin/dashboard", { replace: true });
         }
       }, [routeTab, routeSubtab, token]);
+      reactExports.useEffect(() => {
+        if (!token) return;
+        if (routeTab === "posts") {
+          if (routeSubtab === "edit" && routeId) {
+            const found = posts.find((p) => p.id === routeId);
+            if (found) {
+              setEditingPost(found);
+              setPostForm({
+                title: found.title,
+                slug: found.slug,
+                excerpt: found.excerpt || "",
+                content: found.content || "",
+                image: found.image || "",
+                published: found.published !== false,
+                metaTitle: found.metaTitle || "",
+                metaDescription: found.metaDescription || "",
+                date: found.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+                author: found.author || "admin",
+                template: found.template || "Single Posts",
+                discussion: found.discussion || "Open",
+                socialImage: found.socialImage || "",
+                xImage: found.xImage || "",
+                noIndexNoFollow: !!found.noIndexNoFollow,
+                faqs: found.faqs || []
+              });
+            }
+          } else if (routeSubtab === "new") {
+            setEditingPost(null);
+            setPostForm({
+              title: "",
+              slug: "",
+              excerpt: "",
+              content: "",
+              image: "",
+              published: true,
+              metaTitle: "",
+              metaDescription: "",
+              date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+              author: "admin",
+              template: "Single Posts",
+              discussion: "Open",
+              socialImage: "",
+              xImage: "",
+              noIndexNoFollow: false,
+              faqs: []
+            });
+          } else {
+            setEditingPost(void 0);
+          }
+        }
+      }, [routeTab, routeSubtab, routeId, posts, token]);
+      reactExports.useEffect(() => {
+        if (!token) return;
+        if (routeTab === "pages") {
+          if (routeSubtab === "edit" && routeId) {
+            const found = pages.find((p) => p.id === routeId);
+            if (found) {
+              setEditingPage(found);
+              setPageForm({
+                title: found.title,
+                slug: found.slug,
+                content: found.content || "",
+                metaTitle: found.metaTitle || "",
+                metaDescription: found.metaDescription || "",
+                published: found.published !== false,
+                date: found.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+                author: found.author || "admin",
+                template: found.template || "Default Template",
+                discussion: found.discussion || "Closed",
+                image: found.image || "",
+                socialImage: found.socialImage || "",
+                xImage: found.xImage || "",
+                noIndexNoFollow: !!found.noIndexNoFollow
+              });
+            }
+          } else if (routeSubtab === "new") {
+            setEditingPage(null);
+            setPageForm({
+              title: "",
+              slug: "",
+              content: "",
+              metaTitle: "",
+              metaDescription: "",
+              published: true,
+              date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+              author: "admin",
+              template: "Default Template",
+              discussion: "Closed",
+              image: "",
+              socialImage: "",
+              xImage: "",
+              noIndexNoFollow: false
+            });
+          } else {
+            setEditingPage(void 0);
+          }
+        }
+      }, [routeTab, routeSubtab, routeId, pages, token]);
       const handleTabClick = (tabId) => {
         if (tabId === "posts") {
           setEditingPost(void 0);
@@ -41358,46 +41456,10 @@ ${escapeText(this.code(index, length))}
         return match2 && statusMatch;
       });
       const openNewPost = () => {
-        setEditingPost(null);
-        setPostForm({
-          title: "",
-          slug: "",
-          excerpt: "",
-          content: "",
-          image: "",
-          published: true,
-          metaTitle: "",
-          metaDescription: "",
-          date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
-          author: "admin",
-          template: "Single Posts",
-          discussion: "Open",
-          socialImage: "",
-          xImage: "",
-          noIndexNoFollow: false,
-          faqs: []
-        });
+        navigate("/admin/posts/new");
       };
       const openEditPost = (post) => {
-        setEditingPost(post);
-        setPostForm({
-          title: post.title,
-          slug: post.slug,
-          excerpt: post.excerpt || "",
-          content: post.content || "",
-          image: post.image || "",
-          published: post.published !== false,
-          metaTitle: post.metaTitle || "",
-          metaDescription: post.metaDescription || "",
-          date: post.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
-          author: post.author || "admin",
-          template: post.template || "Single Posts",
-          discussion: post.discussion || "Open",
-          socialImage: post.socialImage || "",
-          xImage: post.xImage || "",
-          noIndexNoFollow: !!post.noIndexNoFollow,
-          faqs: post.faqs || []
-        });
+        navigate(`/admin/posts/edit/${post.id}`);
       };
       const savePost = async (e) => {
         e == null ? void 0 : e.preventDefault();
@@ -41414,11 +41476,10 @@ ${escapeText(this.code(index, length))}
             const savedPost = await res.json();
             if (editingPost) {
               setPosts((prev) => prev.map((p) => p.id === editingPost.id ? { ...p, ...postForm, ...savedPost } : p));
-              setEditingPost(savedPost);
             } else {
               setPosts((prev) => [savedPost, ...prev]);
-              setEditingPost(savedPost);
             }
+            navigate(`/admin/posts/edit/${savedPost.id}`);
             showToast(editingPost ? "Post updated successfully!" : "Post created successfully!");
           }
         } catch (err) {
@@ -41437,42 +41498,10 @@ ${escapeText(this.code(index, length))}
         }
       };
       const openNewPage = () => {
-        setEditingPage(null);
-        setPageForm({
-          title: "",
-          slug: "",
-          content: "",
-          metaTitle: "",
-          metaDescription: "",
-          published: true,
-          date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
-          author: "admin",
-          template: "Default Template",
-          discussion: "Closed",
-          image: "",
-          socialImage: "",
-          xImage: "",
-          noIndexNoFollow: false
-        });
+        navigate("/admin/pages/new");
       };
       const openEditPage = (page) => {
-        setEditingPage(page);
-        setPageForm({
-          title: page.title,
-          slug: page.slug,
-          content: page.content || "",
-          metaTitle: page.metaTitle || "",
-          metaDescription: page.metaDescription || "",
-          published: page.published !== false,
-          date: page.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
-          author: page.author || "admin",
-          template: page.template || "Default Template",
-          discussion: page.discussion || "Closed",
-          image: page.image || "",
-          socialImage: page.socialImage || "",
-          xImage: page.xImage || "",
-          noIndexNoFollow: !!page.noIndexNoFollow
-        });
+        navigate(`/admin/pages/edit/${page.id}`);
       };
       const savePage = async (e) => {
         e == null ? void 0 : e.preventDefault();
@@ -41485,11 +41514,10 @@ ${escapeText(this.code(index, length))}
             const savedPage = await res.json();
             if (editingPage) {
               setPages((prev) => prev.map((p) => p.id === editingPage.id ? { ...p, ...pageForm, ...savedPage } : p));
-              setEditingPage(savedPage);
             } else {
               setPages((prev) => [savedPage, ...prev]);
-              setEditingPage(savedPage);
             }
+            navigate(`/admin/pages/edit/${savedPage.id}`);
             showToast(editingPage ? "Page updated successfully!" : "Page created successfully!");
           }
         } catch (err) {
@@ -42359,7 +42387,7 @@ ${escapeText(this.code(index, length))}
                           onClick: () => {
                             if (confirm("Move this post to trash?")) {
                               if (editingPost) deletePost(editingPost.id);
-                              setEditingPost(void 0);
+                              navigate("/admin/posts");
                             }
                           },
                           className: "w-full text-center border border-[#d63638] text-[#d63638] hover:bg-red-50 py-2 rounded font-semibold transition",
@@ -42370,7 +42398,7 @@ ${escapeText(this.code(index, length))}
                         "button",
                         {
                           type: "button",
-                          onClick: () => setEditingPost(void 0),
+                          onClick: () => navigate("/admin/posts"),
                           className: "w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition",
                           children: "Cancel"
                         }
@@ -43501,7 +43529,7 @@ ${escapeText(this.code(index, length))}
                           onClick: () => {
                             if (confirm("Move this page to trash?")) {
                               if (editingPage) deletePage(editingPage.id);
-                              setEditingPage(void 0);
+                              navigate("/admin/pages");
                             }
                           },
                           className: "w-full text-center border border-[#d63638] text-[#d63638] hover:bg-red-50 py-2 rounded font-semibold transition",
@@ -43512,7 +43540,7 @@ ${escapeText(this.code(index, length))}
                         "button",
                         {
                           type: "button",
-                          onClick: () => setEditingPage(void 0),
+                          onClick: () => navigate("/admin/pages"),
                           className: "w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition",
                           children: "Cancel"
                         }
@@ -45881,6 +45909,7 @@ ${escapeText(this.code(index, length))}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/admin", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/admin/:tab", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/admin/:tab/:subtab", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/admin/:tab/:subtab/:id", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/blog", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogList, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/blog/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogPostDetail, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) })

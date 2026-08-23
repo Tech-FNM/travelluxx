@@ -943,18 +943,10 @@ app.post("/api/admin/login", async (req, res) => {
 app.get("/api/admin/bookings", async (req, res) => {
   try {
     await connectToDatabase();
-    const rows = await BookingModel.find().sort({ createdAt: -1 });
-    // Also include any local-JSON bookings not yet in MongoDB
-    const localBookings = readBookings();
-    const mongoIds = new Set(rows.map((r: any) => r.id));
-    const localOnly = localBookings.filter((b: any) => !mongoIds.has(b.id));
-    // Save local-only ones to Mongo for future consistency
-    for (const bk of localOnly) {
-      try { await new BookingModel(bk).save(); } catch (_) {}
+    if (mongoose.connection.readyState === 1) {
+      const rows = await BookingModel.find().sort({ createdAt: -1 });
+      return res.json(rows.map((r: any) => r.toObject ? r.toObject() : r));
     }
-    const merged = [...rows.map((r: any) => r.toObject ? r.toObject() : r), ...localOnly];
-    merged.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    return res.json(merged);
   } catch (e: any) {
     console.error("Error reading from MongoDB bookings:", e.message);
   }
@@ -1633,17 +1625,7 @@ app.get("/api/admin/inquiries", async (req, res) => {
     await connectToDatabase();
     if (mongoose.connection.readyState === 1) {
       const rows = await InquiryModel.find().sort({ createdAt: -1 });
-      // Also include any local-JSON inquiries not yet in MongoDB
-      const localInquiries = readInquiries();
-      const mongoIds = new Set(rows.map((r: any) => r.id));
-      const localOnly = localInquiries.filter((i: any) => !mongoIds.has(i.id));
-      // Save local-only ones to Mongo for future consistency
-      for (const inq of localOnly) {
-        try { await new InquiryModel(inq).save(); } catch (_) {}
-      }
-      const merged = [...rows.map((r: any) => r.toObject ? r.toObject() : r), ...localOnly];
-      merged.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      return res.json(merged);
+      return res.json(rows.map((r: any) => r.toObject ? r.toObject() : r));
     }
   } catch (e: any) {
     console.error("Error reading from MongoDB inquiries:", e.message);

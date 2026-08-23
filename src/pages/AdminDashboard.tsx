@@ -431,7 +431,7 @@ function YoastSeoBox({
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { tab: routeTab, subtab: routeSubtab } = useParams();
+  const { tab: routeTab, subtab: routeSubtab, id: routeId } = useParams();
   const [token, setToken] = useState<string | null>(localStorage.getItem("travelluxx_admin_token"));
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [showPassword, setShowPassword] = useState(false);
@@ -580,6 +580,108 @@ export default function AdminDashboard() {
       navigate("/admin/dashboard", { replace: true });
     }
   }, [routeTab, routeSubtab, token]);
+
+  // Synchronize post editor state with URL
+  useEffect(() => {
+    if (!token) return;
+    if (routeTab === "posts") {
+      if (routeSubtab === "edit" && routeId) {
+        const found = posts.find(p => p.id === routeId);
+        if (found) {
+          setEditingPost(found);
+          setPostForm({
+            title: found.title,
+            slug: found.slug,
+            excerpt: found.excerpt || "",
+            content: found.content || "",
+            image: found.image || "",
+            published: found.published !== false,
+            metaTitle: found.metaTitle || "",
+            metaDescription: found.metaDescription || "",
+            date: found.date || new Date().toISOString().split("T")[0],
+            author: found.author || "admin",
+            template: found.template || "Single Posts",
+            discussion: found.discussion || "Open",
+            socialImage: found.socialImage || "",
+            xImage: found.xImage || "",
+            noIndexNoFollow: !!found.noIndexNoFollow,
+            faqs: found.faqs || []
+          });
+        }
+      } else if (routeSubtab === "new") {
+        setEditingPost(null);
+        setPostForm({
+          title: "",
+          slug: "",
+          excerpt: "",
+          content: "",
+          image: "",
+          published: true,
+          metaTitle: "",
+          metaDescription: "",
+          date: new Date().toISOString().split("T")[0],
+          author: "admin",
+          template: "Single Posts",
+          discussion: "Open",
+          socialImage: "",
+          xImage: "",
+          noIndexNoFollow: false,
+          faqs: []
+        });
+      } else {
+        setEditingPost(undefined);
+      }
+    }
+  }, [routeTab, routeSubtab, routeId, posts, token]);
+
+  // Synchronize page editor state with URL
+  useEffect(() => {
+    if (!token) return;
+    if (routeTab === "pages") {
+      if (routeSubtab === "edit" && routeId) {
+        const found = pages.find(p => p.id === routeId);
+        if (found) {
+          setEditingPage(found);
+          setPageForm({
+            title: found.title,
+            slug: found.slug,
+            content: found.content || "",
+            metaTitle: found.metaTitle || "",
+            metaDescription: found.metaDescription || "",
+            published: found.published !== false,
+            date: found.date || new Date().toISOString().split("T")[0],
+            author: found.author || "admin",
+            template: found.template || "Default Template",
+            discussion: found.discussion || "Closed",
+            image: found.image || "",
+            socialImage: found.socialImage || "",
+            xImage: found.xImage || "",
+            noIndexNoFollow: !!found.noIndexNoFollow
+          });
+        }
+      } else if (routeSubtab === "new") {
+        setEditingPage(null);
+        setPageForm({
+          title: "",
+          slug: "",
+          content: "",
+          metaTitle: "",
+          metaDescription: "",
+          published: true,
+          date: new Date().toISOString().split("T")[0],
+          author: "admin",
+          template: "Default Template",
+          discussion: "Closed",
+          image: "",
+          socialImage: "",
+          xImage: "",
+          noIndexNoFollow: false
+        });
+      } else {
+        setEditingPage(undefined);
+      }
+    }
+  }, [routeTab, routeSubtab, routeId, pages, token]);
 
   const handleTabClick = (tabId: Tab) => {
     if (tabId === "posts") {
@@ -746,46 +848,10 @@ export default function AdminDashboard() {
 
   // ─── Posts ────────────────────────────────────────────────────────────────────
   const openNewPost = () => {
-    setEditingPost(null);
-    setPostForm({
-      title: "",
-      slug: "",
-      excerpt: "",
-      content: "",
-      image: "",
-      published: true,
-      metaTitle: "",
-      metaDescription: "",
-      date: new Date().toISOString().split("T")[0],
-      author: "admin",
-      template: "Single Posts",
-      discussion: "Open",
-      socialImage: "",
-      xImage: "",
-      noIndexNoFollow: false,
-      faqs: []
-    });
+    navigate("/admin/posts/new");
   };
   const openEditPost = (post: any) => {
-    setEditingPost(post);
-    setPostForm({
-      title: post.title,
-      slug: post.slug,
-      excerpt: post.excerpt || "",
-      content: post.content || "",
-      image: post.image || "",
-      published: post.published !== false,
-      metaTitle: post.metaTitle || "",
-      metaDescription: post.metaDescription || "",
-      date: post.date || new Date().toISOString().split("T")[0],
-      author: post.author || "admin",
-      template: post.template || "Single Posts",
-      discussion: post.discussion || "Open",
-      socialImage: post.socialImage || "",
-      xImage: post.xImage || "",
-      noIndexNoFollow: !!post.noIndexNoFollow,
-      faqs: post.faqs || []
-    });
+    navigate(`/admin/posts/edit/${post.id}`);
   };
   const savePost = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -802,11 +868,10 @@ export default function AdminDashboard() {
         const savedPost = await res.json();
         if (editingPost) {
           setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...postForm, ...savedPost } : p));
-          setEditingPost(savedPost);
         } else {
           setPosts(prev => [savedPost, ...prev]);
-          setEditingPost(savedPost);
         }
+        navigate(`/admin/posts/edit/${savedPost.id}`);
         showToast(editingPost ? "Post updated successfully!" : "Post created successfully!");
       }
     } catch (err) {
@@ -827,42 +892,10 @@ export default function AdminDashboard() {
 
   // ─── Pages ───────────────────────────────────────────────────────────────────
   const openNewPage = () => {
-    setEditingPage(null);
-    setPageForm({
-      title: "",
-      slug: "",
-      content: "",
-      metaTitle: "",
-      metaDescription: "",
-      published: true,
-      date: new Date().toISOString().split("T")[0],
-      author: "admin",
-      template: "Default Template",
-      discussion: "Closed",
-      image: "",
-      socialImage: "",
-      xImage: "",
-      noIndexNoFollow: false
-    });
+    navigate("/admin/pages/new");
   };
   const openEditPage = (page: any) => {
-    setEditingPage(page);
-    setPageForm({
-      title: page.title,
-      slug: page.slug,
-      content: page.content || "",
-      metaTitle: page.metaTitle || "",
-      metaDescription: page.metaDescription || "",
-      published: page.published !== false,
-      date: page.date || new Date().toISOString().split("T")[0],
-      author: page.author || "admin",
-      template: page.template || "Default Template",
-      discussion: page.discussion || "Closed",
-      image: page.image || "",
-      socialImage: page.socialImage || "",
-      xImage: page.xImage || "",
-      noIndexNoFollow: !!page.noIndexNoFollow
-    });
+    navigate(`/admin/pages/edit/${page.id}`);
   };
   const savePage = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -875,11 +908,10 @@ export default function AdminDashboard() {
         const savedPage = await res.json();
         if (editingPage) {
           setPages(prev => prev.map(p => p.id === editingPage.id ? { ...p, ...pageForm, ...savedPage } : p));
-          setEditingPage(savedPage);
         } else {
           setPages(prev => [savedPage, ...prev]);
-          setEditingPage(savedPage);
         }
+        navigate(`/admin/pages/edit/${savedPage.id}`);
         showToast(editingPage ? "Page updated successfully!" : "Page created successfully!");
       }
     } catch (err) {
@@ -1751,7 +1783,7 @@ export default function AdminDashboard() {
                             onClick={() => {
                               if (confirm("Move this post to trash?")) {
                                 if (editingPost) deletePost(editingPost.id);
-                                setEditingPost(undefined);
+                                navigate("/admin/posts");
                               }
                             }}
                             className="w-full text-center border border-[#d63638] text-[#d63638] hover:bg-red-50 py-2 rounded font-semibold transition"
@@ -1760,7 +1792,7 @@ export default function AdminDashboard() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => setEditingPost(undefined)}
+                            onClick={() => navigate("/admin/posts")}
                             className="w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition"
                           >
                             Cancel
@@ -2839,7 +2871,7 @@ export default function AdminDashboard() {
                             onClick={() => {
                               if (confirm("Move this page to trash?")) {
                                 if (editingPage) deletePage(editingPage.id);
-                                setEditingPage(undefined);
+                                navigate("/admin/pages");
                               }
                             }}
                             className="w-full text-center border border-[#d63638] text-[#d63638] hover:bg-red-50 py-2 rounded font-semibold transition"
@@ -2848,7 +2880,7 @@ export default function AdminDashboard() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => setEditingPage(undefined)}
+                            onClick={() => navigate("/admin/pages")}
                             className="w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition"
                           >
                             Cancel

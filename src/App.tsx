@@ -248,6 +248,7 @@ export default function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/:tab" element={<AdminDashboard />} />
         <Route path="/admin/:tab/:subtab" element={<AdminDashboard />} />
+        <Route path="/admin/:tab/:subtab/:id" element={<AdminDashboard />} />
 
         {/* BLOG PAGES */}
         <Route path="/blog" element={<BlogList />} />

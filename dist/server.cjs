@@ -857,19 +857,10 @@ app.post("/api/admin/login", async (req, res) => {
 app.get("/api/admin/bookings", async (req, res) => {
   try {
     await connectToDatabase();
-    const rows = await BookingModel.find().sort({ createdAt: -1 });
-    const localBookings = readBookings();
-    const mongoIds = new Set(rows.map((r) => r.id));
-    const localOnly = localBookings.filter((b) => !mongoIds.has(b.id));
-    for (const bk of localOnly) {
-      try {
-        await new BookingModel(bk).save();
-      } catch (_) {
-      }
+    if (import_mongoose.default.connection.readyState === 1) {
+      const rows = await BookingModel.find().sort({ createdAt: -1 });
+      return res.json(rows.map((r) => r.toObject ? r.toObject() : r));
     }
-    const merged = [...rows.map((r) => r.toObject ? r.toObject() : r), ...localOnly];
-    merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    return res.json(merged);
   } catch (e) {
     console.error("Error reading from MongoDB bookings:", e.message);
   }
@@ -1465,18 +1456,7 @@ app.get("/api/admin/inquiries", async (req, res) => {
     await connectToDatabase();
     if (import_mongoose.default.connection.readyState === 1) {
       const rows = await InquiryModel.find().sort({ createdAt: -1 });
-      const localInquiries = readInquiries();
-      const mongoIds = new Set(rows.map((r) => r.id));
-      const localOnly = localInquiries.filter((i) => !mongoIds.has(i.id));
-      for (const inq of localOnly) {
-        try {
-          await new InquiryModel(inq).save();
-        } catch (_) {
-        }
-      }
-      const merged = [...rows.map((r) => r.toObject ? r.toObject() : r), ...localOnly];
-      merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      return res.json(merged);
+      return res.json(rows.map((r) => r.toObject ? r.toObject() : r));
     }
   } catch (e) {
     console.error("Error reading from MongoDB inquiries:", e.message);
