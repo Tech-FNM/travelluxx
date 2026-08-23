@@ -50,6 +50,15 @@ function PublicLandingPage() {
         document.head.appendChild(robotsMeta);
       }
       robotsMeta.setAttribute("content", settings.search_engine_visibility ? "noindex, nofollow" : "index, follow");
+
+      // Canonical URL for Homepage
+      let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
+      if (!canonical) {
+        canonical = document.createElement("link");
+        canonical.setAttribute("rel", "canonical");
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute("href", "https://travelluxx.co.uk/");
     }
   }, [settings]);
 

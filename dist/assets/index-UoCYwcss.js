@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CF2LEY52.js"(exports, module) {
+  "assets/index-UoCYwcss.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -45892,6 +45892,13 @@ ${escapeText(this.code(index, length))}
             document.head.appendChild(robotsMeta);
           }
           robotsMeta.setAttribute("content", settings.search_engine_visibility ? "noindex, nofollow" : "index, follow");
+          let canonical = document.querySelector("link[rel='canonical']");
+          if (!canonical) {
+            canonical = document.createElement("link");
+            canonical.setAttribute("rel", "canonical");
+            document.head.appendChild(canonical);
+          }
+          canonical.setAttribute("href", "https://travelluxx.co.uk/");
         }
       }, [settings]);
       const handleScrollTo = (elementId) => {
