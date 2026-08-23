@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DQsECPlj.js"(exports, module) {
+  "assets/index-Ct8-935_.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -41413,6 +41413,16 @@ ${escapeText(this.code(index, length))}
         localStorage.removeItem("travelluxx_admin_token");
         setToken(null);
       };
+      const isStatusTransitionAllowed = (current = "Pending", target) => {
+        if (current === target) return true;
+        if (current === "Pending") {
+          return target === "Confirmed" || target === "Cancelled";
+        }
+        if (current === "Confirmed") {
+          return target === "Completed" || target === "Cancelled";
+        }
+        return false;
+      };
       const updateBookingStatus = async (id, newStatus) => {
         const res = await fetch(`/api/admin/bookings/${id}`, {
           method: "PUT",
@@ -42023,7 +42033,15 @@ ${escapeText(this.code(index, length))}
                       value: b.status || "Pending",
                       onChange: (e) => updateBookingStatus(b.id, e.target.value),
                       className: `text-[10px] font-bold px-2 py-1 rounded border focus:outline-none ${(b.status || "") === "Confirmed" ? "border-green-300 bg-green-50 text-green-700" : (b.status || "") === "Completed" ? "border-blue-300 bg-blue-50 text-blue-700" : (b.status || "") === "Cancelled" ? "border-red-300 bg-red-50 text-red-700" : "border-yellow-300 bg-yellow-50 text-yellow-700"}`,
-                      children: ["Pending", "Confirmed", "Completed", "Cancelled"].map((s) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { className: "bg-white text-[#1d2327]", children: s }, s))
+                      children: ["Pending", "Confirmed", "Completed", "Cancelled"].map((s) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "option",
+                        {
+                          className: "bg-white text-[#1d2327]",
+                          disabled: !isStatusTransitionAllowed(b.status, s),
+                          children: s
+                        },
+                        s
+                      ))
                     }
                   ) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-4 text-right space-x-1.5", children: [

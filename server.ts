@@ -912,7 +912,7 @@ app.post("/api/bookings", async (req, res) => {
       console.log("💾 Saved booking to MongoDB after reconnect!");
     }
 
-    sendBookingEmails(newBooking).catch(err => console.error("Booking email error:", err));
+    await sendBookingEmails(newBooking).catch(err => console.error("Booking email error:", err));
     sendWhatsAppNotification(newBooking).catch(err => console.error("WhatsApp notification error:", err));
 
     return res.json({ success: true, booking: newBooking });
@@ -972,6 +972,20 @@ app.put("/api/admin/bookings/:id", async (req, res) => {
       const dbBooking = await BookingModel.findOne({ id });
       if (dbBooking) {
         oldBooking = dbBooking.toObject ? dbBooking.toObject() : dbBooking;
+        
+        // Status transition validation
+        if (status) {
+          const current = oldBooking.status || "Pending";
+          let allowed = false;
+          if (current === status) allowed = true;
+          else if (current === "Pending") allowed = status === "Confirmed" || status === "Cancelled";
+          else if (current === "Confirmed") allowed = status === "Completed" || status === "Cancelled";
+          
+          if (!allowed) {
+            return res.status(400).json({ error: `Invalid status transition from ${current} to ${status}` });
+          }
+        }
+
         const newDbBooking = await BookingModel.findOneAndUpdate({ id }, { $set: updateData }, { new: true });
         updatedBooking = newDbBooking.toObject ? newDbBooking.toObject() : newDbBooking;
       }
@@ -984,6 +998,20 @@ app.put("/api/admin/bookings/:id", async (req, res) => {
       if (!oldBooking) {
         oldBooking = { ...bookings[index] };
       }
+      
+      // Status transition validation (JSON sync)
+      if (status) {
+        const current = oldBooking.status || "Pending";
+        let allowed = false;
+        if (current === status) allowed = true;
+        else if (current === "Pending") allowed = status === "Confirmed" || status === "Cancelled";
+        else if (current === "Confirmed") allowed = status === "Completed" || status === "Cancelled";
+        
+        if (!allowed) {
+          return res.status(400).json({ error: `Invalid status transition from ${current} to ${status}` });
+        }
+      }
+
       if (status) bookings[index].status = status;
       if (paymentStatus) bookings[index].paymentStatus = paymentStatus;
       writeBookings(bookings);

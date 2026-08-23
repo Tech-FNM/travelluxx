@@ -800,6 +800,17 @@ export default function AdminDashboard() {
   const handleLogout = () => { localStorage.removeItem("travelluxx_admin_token"); setToken(null); };
 
   // ─── Bookings ────────────────────────────────────────────────────────────────
+  const isStatusTransitionAllowed = (current: string = "Pending", target: string): boolean => {
+    if (current === target) return true;
+    if (current === "Pending") {
+      return target === "Confirmed" || target === "Cancelled";
+    }
+    if (current === "Confirmed") {
+      return target === "Completed" || target === "Cancelled";
+    }
+    return false;
+  };
+
   const updateBookingStatus = async (id: string, newStatus: string) => {
     const res = await fetch(`/api/admin/bookings/${id}`, {
       method: "PUT",
@@ -1429,7 +1440,15 @@ export default function AdminDashboard() {
                               : (b.status || "") === "Cancelled" ? "border-red-300 bg-red-50 text-red-700"
                               : "border-yellow-300 bg-yellow-50 text-yellow-700"
                             }`}>
-                            {["Pending", "Confirmed", "Completed", "Cancelled"].map(s => <option key={s} className="bg-white text-[#1d2327]">{s}</option>)}
+                            {["Pending", "Confirmed", "Completed", "Cancelled"].map(s => (
+                              <option 
+                                key={s} 
+                                className="bg-white text-[#1d2327]"
+                                disabled={!isStatusTransitionAllowed(b.status, s)}
+                              >
+                                {s}
+                              </option>
+                            ))}
                           </select>
                         </td>
                         <td className="py-3 px-4 text-right space-x-1.5">
