@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-miYweGq-.js"(exports, module) {
+  "assets/index-ktL4IBGU.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -43270,9 +43270,9 @@ ${escapeText(this.code(index, length))}
                     ) })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/page/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "View page", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-4 h-4" }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "View page", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-4 h-4" }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "Desktop view", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z" }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/page/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:underline font-semibold mr-1", children: "Preview" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:underline font-semibold mr-1", children: "Preview" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => savePage(), className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition", children: "Copy this" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "Settings sidebar toggle", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" }),
@@ -43314,7 +43314,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "Permalink:" }),
                       " ",
                       window.location.origin,
-                      "/page/",
+                      "/",
                       pageForm.slug
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-4 space-y-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1", children: [
@@ -43713,11 +43713,11 @@ ${escapeText(this.code(index, length))}
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(p.id), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/page/${p.slug}`, target: "_blank", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${p.slug}`, target: "_blank", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
                         ] })
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: [
-                        "/page/",
+                        "/",
                         p.slug
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "Travelluxx Admin" }),
@@ -45158,10 +45158,18 @@ ${escapeText(this.code(index, length))}
       }, []);
       reactExports.useEffect(() => {
         if (!slug) return;
+        setLoading(true);
         fetch(`/api/pages/${slug}`).then((res) => res.json()).then((data) => {
-          if (!data.error) setPage(data);
+          if (!data.error && data.id) {
+            setPage(data);
+          } else {
+            setPage(null);
+          }
           setLoading(false);
-        }).catch(() => setLoading(false));
+        }).catch(() => {
+          setPage(null);
+          setLoading(false);
+        });
       }, [slug]);
       reactExports.useEffect(() => {
         if (page) {
@@ -45211,21 +45219,28 @@ ${escapeText(this.code(index, length))}
           if (existingScript) existingScript.remove();
         };
       }, [page, settings]);
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white text-slate-800 flex flex-col font-sans", children: [
+      if (loading) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-[#0c0d12] flex items-center justify-center font-sans", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }) });
+      }
+      if (!page) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate, { to: "/", replace: true });
+      }
+      const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-        } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-6 py-16 w-full", children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: "Loading page..." }) : !page ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: "Page not found." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-extrabold text-slate-900 mb-8", children: page.title }),
+        }, settings }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-6 py-28 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-4xl font-extrabold mb-8 ${isRenax ? "text-white" : "text-slate-900"}`, children: page.title }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "div",
             {
-              className: "prose prose-slate max-w-none text-slate-700 text-base leading-relaxed",
+              className: `prose max-w-none text-base leading-relaxed ${isRenax ? "prose-invert text-slate-300" : "prose-slate text-slate-700"}`,
               dangerouslySetInnerHTML: { __html: page.content }
             }
           )
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        } })
+        }, settings })
       ] });
     }
     function RenaxLayout({
@@ -45874,8 +45889,7 @@ ${escapeText(this.code(index, length))}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/admin/:tab/:subtab", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/blog", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogList, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/blog/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogPostDetail, {}) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/page/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "*", element: /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate, { to: "/", replace: true }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) })
       ] }) });
     }
     clientExports.createRoot(document.getElementById("root")).render(

@@ -2581,7 +2581,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center gap-3">
                       {/* External preview icon */}
-                      <a href={`/page/${pageForm.slug}`} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-slate-100 rounded text-[#2c3338]" title="View page">
+                      <a href={`/${pageForm.slug}`} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-slate-100 rounded text-[#2c3338]" title="View page">
                         <ExternalLink className="w-4 h-4" />
                       </a>
                       
@@ -2590,7 +2590,7 @@ export default function AdminDashboard() {
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"/></svg>
                       </button>
 
-                      <a href={`/page/${pageForm.slug}`} target="_blank" rel="noreferrer" className="text-[#2271b1] hover:underline font-semibold mr-1">Preview</a>
+                      <a href={`/${pageForm.slug}`} target="_blank" rel="noreferrer" className="text-[#2271b1] hover:underline font-semibold mr-1">Preview</a>
 
                       <button type="button" onClick={() => savePage()} className="border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition">
                         Copy this
@@ -2636,7 +2636,7 @@ export default function AdminDashboard() {
 
                         {pageForm.slug && (
                           <div className="text-xs text-[#646970] px-1">
-                            <strong>Permalink:</strong> {window.location.origin}/page/{pageForm.slug}
+                            <strong>Permalink:</strong> {window.location.origin}/{pageForm.slug}
                           </div>
                         )}
 
@@ -3034,10 +3034,10 @@ export default function AdminDashboard() {
                                   <span className="text-[#ddd]">|</span>
                                   <button onClick={() => deletePage(p.id)} className="text-[#b32d2e] hover:text-[#d63638]">Trash</button>
                                   <span className="text-[#ddd]">|</span>
-                                  <a href={`/page/${p.slug}`} target="_blank" className="text-[#2271b1] hover:text-[#00a0d2]">View</a>
+                                  <a href={`/${p.slug}`} target="_blank" className="text-[#2271b1] hover:text-[#00a0d2]">View</a>
                                 </div>
                               </td>
-                              <td className="py-3 px-3 font-mono text-[#2271b1]">/page/{p.slug}</td>
+                              <td className="py-3 px-3 font-mono text-[#2271b1]">/{p.slug}</td>
                               <td className="py-3 px-3 text-[#50575e]">Travelluxx Admin</td>
                               <td className="py-3 px-3 text-[#50575e]">{p.published !== false ? "Published" : "Draft"}</td>
                             </tr>

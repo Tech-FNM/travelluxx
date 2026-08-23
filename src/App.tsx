@@ -254,10 +254,10 @@ export default function App() {
         <Route path="/blog/:slug" element={<BlogPostDetail />} />
 
         {/* DYNAMIC CMS PAGES */}
-        <Route path="/page/:slug" element={<DynamicPage />} />
+        <Route path="/:slug" element={<DynamicPage />} />
 
         {/* FALLBACK REDIRECTS TO PUBLIC WEBSITE */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Managed dynamically by path matching, we keep this fallback or let dynamic page handle it */}
 
       </Routes>
     </Router>
