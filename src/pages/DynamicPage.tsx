@@ -38,27 +38,58 @@ export default function DynamicPage() {
 
   useEffect(() => {
     if (page) {
+      const baseUrl = "https://travelluxx.co.uk";
+      const pageUrl = `${baseUrl}/${page.slug || slug}`;
+
       document.title = page.metaTitle || page.title || "Travelluxx";
       
-      const meta = document.querySelector("meta[name='description']");
-      if (meta) {
-        meta.setAttribute("content", page.metaDescription || "");
-      } else {
-        const newMeta = document.createElement("meta");
-        newMeta.setAttribute("name", "description");
-        newMeta.setAttribute("content", page.metaDescription || "");
-        document.head.appendChild(newMeta);
+      // Helper to set/create meta tags
+      const setMeta = (attr: string, attrVal: string, content: string) => {
+        let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+        if (!el) {
+          el = document.createElement("meta");
+          el.setAttribute(attr, attrVal);
+          document.head.appendChild(el);
+        }
+        el.setAttribute("content", content);
+      };
+
+      const desc = page.metaDescription || "";
+      setMeta("name", "description", desc);
+
+      // Robots
+      const isNoIndex = !!settings?.search_engine_visibility || !!page.noIndexNoFollow;
+      setMeta("name", "robots", isNoIndex ? "noindex, nofollow" : "index, follow");
+
+      // Canonical
+      let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
+      if (!canonical) {
+        canonical = document.createElement("link");
+        canonical.setAttribute("rel", "canonical");
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute("href", pageUrl);
+
+      // Open Graph
+      setMeta("property", "og:type", "website");
+      setMeta("property", "og:url", pageUrl);
+      setMeta("property", "og:title", page.metaTitle || page.title || "");
+      setMeta("property", "og:description", desc);
+      setMeta("property", "og:site_name", settings?.business_name || "TravelLuxx");
+      if (page.socialImage || page.image) {
+        const img = page.socialImage || page.image;
+        setMeta("property", "og:image", img.startsWith("http") ? img : baseUrl + img);
       }
 
-      // Update robots meta tag
-      let robotsMeta = document.querySelector("meta[name='robots']");
-      if (!robotsMeta) {
-        robotsMeta = document.createElement("meta");
-        robotsMeta.setAttribute("name", "robots");
-        document.head.appendChild(robotsMeta);
+      // Twitter Card
+      setMeta("property", "twitter:card", "summary_large_image");
+      setMeta("property", "twitter:url", pageUrl);
+      setMeta("property", "twitter:title", page.metaTitle || page.title || "");
+      setMeta("property", "twitter:description", desc);
+      if (page.xImage || page.socialImage || page.image) {
+        const img = page.xImage || page.socialImage || page.image;
+        setMeta("property", "twitter:image", img.startsWith("http") ? img : baseUrl + img);
       }
-      const isNoIndex = !!settings?.search_engine_visibility || !!page.noIndexNoFollow;
-      robotsMeta.setAttribute("content", isNoIndex ? "noindex, nofollow" : "index, follow");
 
       // Inject JSON-LD Schema
       const existingScript = document.getElementById("jsonld-page-schema");
@@ -67,15 +98,23 @@ export default function DynamicPage() {
       const schema = {
         "@context": "https://schema.org",
         "@type": page.template === "About Page" ? "AboutPage" : page.template === "Contact Page" ? "ContactPage" : "WebPage",
+        "@id": pageUrl,
         "name": page.title,
-        "description": page.metaDescription || "",
-        "url": window.location.href,
+        "description": desc,
+        "url": pageUrl,
+        "inLanguage": "en-GB",
+        "datePublished": page.date || undefined,
+        "dateModified": page.updatedAt || page.date || undefined,
+        "image": page.image ? (page.image.startsWith("http") ? page.image : baseUrl + page.image) : undefined,
+        "isPartOf": {
+          "@id": `${baseUrl}/#website`
+        },
         "publisher": {
           "@type": "Organization",
           "name": settings?.business_name || "Travelluxx",
           "logo": settings?.logo_image ? {
             "@type": "ImageObject",
-            "url": settings.logo_image
+            "url": settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image
           } : undefined
         }
       };

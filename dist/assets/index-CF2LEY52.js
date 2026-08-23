@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-bygq8Mdh.js"(exports, module) {
+  "assets/index-CF2LEY52.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -44947,6 +44947,60 @@ ${escapeText(this.code(index, length))}
           setLoading(false);
         }).catch(() => setLoading(false));
       }, []);
+      reactExports.useEffect(() => {
+        const baseUrl = "https://travelluxx.co.uk";
+        const blogUrl = `${baseUrl}/blog`;
+        document.title = "Luxury Travel Blog & News | TravelLuxx";
+        const setMeta = (attr, attrVal, content) => {
+          let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+          if (!el) {
+            el = document.createElement("meta");
+            el.setAttribute(attr, attrVal);
+            document.head.appendChild(el);
+          }
+          el.setAttribute("content", content);
+        };
+        const desc = "Read luxury travel insights, airport guides, and executive chauffeur articles from TravelLuxx.";
+        setMeta("name", "description", desc);
+        setMeta("name", "robots", "index, follow");
+        let canonical = document.querySelector("link[rel='canonical']");
+        if (!canonical) {
+          canonical = document.createElement("link");
+          canonical.setAttribute("rel", "canonical");
+          document.head.appendChild(canonical);
+        }
+        canonical.setAttribute("href", blogUrl);
+        setMeta("property", "og:type", "website");
+        setMeta("property", "og:url", blogUrl);
+        setMeta("property", "og:title", "Luxury Travel Blog & News | TravelLuxx");
+        setMeta("property", "og:description", desc);
+        setMeta("property", "og:site_name", "TravelLuxx");
+        setMeta("property", "twitter:card", "summary_large_image");
+        setMeta("property", "twitter:url", blogUrl);
+        setMeta("property", "twitter:title", "Luxury Travel Blog & News | TravelLuxx");
+        setMeta("property", "twitter:description", desc);
+        const existingScript = document.getElementById("jsonld-bloglist-schema");
+        if (existingScript) existingScript.remove();
+        const schema = {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": blogUrl,
+          "name": "Luxury Travel Blog & News",
+          "description": desc,
+          "url": blogUrl,
+          "inLanguage": "en-GB",
+          "isPartOf": { "@id": `${baseUrl}/#website` }
+        };
+        const script = document.createElement("script");
+        script.id = "jsonld-bloglist-schema";
+        script.type = "application/ld+json";
+        script.innerHTML = JSON.stringify(schema);
+        document.head.appendChild(script);
+        return () => {
+          const s = document.getElementById("jsonld-bloglist-schema");
+          if (s) s.remove();
+        };
+      }, []);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white text-slate-800 flex flex-col font-sans", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
         } }),
@@ -45012,33 +45066,65 @@ ${escapeText(this.code(index, length))}
       }, [slug]);
       reactExports.useEffect(() => {
         if (post) {
+          const baseUrl = "https://travelluxx.co.uk";
+          const postUrl = `${baseUrl}/blog/${post.slug || slug}`;
           document.title = post.metaTitle || post.title || "Blog | Travelluxx";
-          const meta = document.querySelector("meta[name='description']");
-          if (meta) {
-            meta.setAttribute("content", post.metaDescription || post.excerpt || "");
-          } else {
-            const newMeta = document.createElement("meta");
-            newMeta.setAttribute("name", "description");
-            newMeta.setAttribute("content", post.metaDescription || post.excerpt || "");
-            document.head.appendChild(newMeta);
-          }
-          let robotsMeta = document.querySelector("meta[name='robots']");
-          if (!robotsMeta) {
-            robotsMeta = document.createElement("meta");
-            robotsMeta.setAttribute("name", "robots");
-            document.head.appendChild(robotsMeta);
-          }
+          const setMeta = (attr, attrVal, content) => {
+            let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+            if (!el) {
+              el = document.createElement("meta");
+              el.setAttribute(attr, attrVal);
+              document.head.appendChild(el);
+            }
+            el.setAttribute("content", content);
+          };
+          const desc = post.metaDescription || post.excerpt || "";
+          setMeta("name", "description", desc);
           const isNoIndex = !!(settings == null ? void 0 : settings.search_engine_visibility) || !!post.noIndexNoFollow;
-          robotsMeta.setAttribute("content", isNoIndex ? "noindex, nofollow" : "index, follow");
+          setMeta("name", "robots", isNoIndex ? "noindex, nofollow" : "index, follow");
+          let canonical = document.querySelector("link[rel='canonical']");
+          if (!canonical) {
+            canonical = document.createElement("link");
+            canonical.setAttribute("rel", "canonical");
+            document.head.appendChild(canonical);
+          }
+          canonical.setAttribute("href", postUrl);
+          setMeta("property", "og:type", "article");
+          setMeta("property", "og:url", postUrl);
+          setMeta("property", "og:title", post.metaTitle || post.title || "");
+          setMeta("property", "og:description", desc);
+          setMeta("property", "og:site_name", (settings == null ? void 0 : settings.business_name) || "TravelLuxx");
+          if (post.socialImage || post.image) {
+            const img = post.socialImage || post.image;
+            setMeta("property", "og:image", img.startsWith("http") ? img : baseUrl + img);
+          }
+          if (post.date) setMeta("property", "article:published_time", post.date);
+          setMeta("property", "twitter:card", "summary_large_image");
+          setMeta("property", "twitter:url", postUrl);
+          setMeta("property", "twitter:title", post.metaTitle || post.title || "");
+          setMeta("property", "twitter:description", desc);
+          if (post.xImage || post.socialImage || post.image) {
+            const img = post.xImage || post.socialImage || post.image;
+            setMeta("property", "twitter:image", img.startsWith("http") ? img : baseUrl + img);
+          }
           const existingScript = document.getElementById("jsonld-post-schema");
           if (existingScript) existingScript.remove();
+          const postImage = post.image ? post.image.startsWith("http") ? post.image : baseUrl + post.image : "";
           const schemas = [
             {
               "@context": "https://schema.org",
               "@type": "BlogPosting",
+              "@id": postUrl,
               "headline": post.title,
-              "image": post.image || "",
+              "image": postImage,
               "datePublished": post.date || "",
+              "dateModified": post.updatedAt || post.date || "",
+              "url": postUrl,
+              "inLanguage": "en-GB",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": postUrl
+              },
               "author": {
                 "@type": "Person",
                 "name": post.author || "Travelluxx Editorial"
@@ -45048,10 +45134,10 @@ ${escapeText(this.code(index, length))}
                 "name": (settings == null ? void 0 : settings.business_name) || "Travelluxx",
                 "logo": (settings == null ? void 0 : settings.logo_image) ? {
                   "@type": "ImageObject",
-                  "url": settings.logo_image
+                  "url": settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image
                 } : void 0
               },
-              "description": post.excerpt || post.metaDescription || ""
+              "description": desc
             }
           ];
           if (post.faqs && post.faqs.length > 0) {
@@ -45236,38 +45322,68 @@ ${escapeText(this.code(index, length))}
       }, [slug]);
       reactExports.useEffect(() => {
         if (page) {
+          const baseUrl = "https://travelluxx.co.uk";
+          const pageUrl = `${baseUrl}/${page.slug || slug}`;
           document.title = page.metaTitle || page.title || "Travelluxx";
-          const meta = document.querySelector("meta[name='description']");
-          if (meta) {
-            meta.setAttribute("content", page.metaDescription || "");
-          } else {
-            const newMeta = document.createElement("meta");
-            newMeta.setAttribute("name", "description");
-            newMeta.setAttribute("content", page.metaDescription || "");
-            document.head.appendChild(newMeta);
-          }
-          let robotsMeta = document.querySelector("meta[name='robots']");
-          if (!robotsMeta) {
-            robotsMeta = document.createElement("meta");
-            robotsMeta.setAttribute("name", "robots");
-            document.head.appendChild(robotsMeta);
-          }
+          const setMeta = (attr, attrVal, content) => {
+            let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+            if (!el) {
+              el = document.createElement("meta");
+              el.setAttribute(attr, attrVal);
+              document.head.appendChild(el);
+            }
+            el.setAttribute("content", content);
+          };
+          const desc = page.metaDescription || "";
+          setMeta("name", "description", desc);
           const isNoIndex = !!(settings == null ? void 0 : settings.search_engine_visibility) || !!page.noIndexNoFollow;
-          robotsMeta.setAttribute("content", isNoIndex ? "noindex, nofollow" : "index, follow");
+          setMeta("name", "robots", isNoIndex ? "noindex, nofollow" : "index, follow");
+          let canonical = document.querySelector("link[rel='canonical']");
+          if (!canonical) {
+            canonical = document.createElement("link");
+            canonical.setAttribute("rel", "canonical");
+            document.head.appendChild(canonical);
+          }
+          canonical.setAttribute("href", pageUrl);
+          setMeta("property", "og:type", "website");
+          setMeta("property", "og:url", pageUrl);
+          setMeta("property", "og:title", page.metaTitle || page.title || "");
+          setMeta("property", "og:description", desc);
+          setMeta("property", "og:site_name", (settings == null ? void 0 : settings.business_name) || "TravelLuxx");
+          if (page.socialImage || page.image) {
+            const img = page.socialImage || page.image;
+            setMeta("property", "og:image", img.startsWith("http") ? img : baseUrl + img);
+          }
+          setMeta("property", "twitter:card", "summary_large_image");
+          setMeta("property", "twitter:url", pageUrl);
+          setMeta("property", "twitter:title", page.metaTitle || page.title || "");
+          setMeta("property", "twitter:description", desc);
+          if (page.xImage || page.socialImage || page.image) {
+            const img = page.xImage || page.socialImage || page.image;
+            setMeta("property", "twitter:image", img.startsWith("http") ? img : baseUrl + img);
+          }
           const existingScript = document.getElementById("jsonld-page-schema");
           if (existingScript) existingScript.remove();
           const schema = {
             "@context": "https://schema.org",
             "@type": page.template === "About Page" ? "AboutPage" : page.template === "Contact Page" ? "ContactPage" : "WebPage",
+            "@id": pageUrl,
             "name": page.title,
-            "description": page.metaDescription || "",
-            "url": window.location.href,
+            "description": desc,
+            "url": pageUrl,
+            "inLanguage": "en-GB",
+            "datePublished": page.date || void 0,
+            "dateModified": page.updatedAt || page.date || void 0,
+            "image": page.image ? page.image.startsWith("http") ? page.image : baseUrl + page.image : void 0,
+            "isPartOf": {
+              "@id": `${baseUrl}/#website`
+            },
             "publisher": {
               "@type": "Organization",
               "name": (settings == null ? void 0 : settings.business_name) || "Travelluxx",
               "logo": (settings == null ? void 0 : settings.logo_image) ? {
                 "@type": "ImageObject",
-                "url": settings.logo_image
+                "url": settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image
               } : void 0
             }
           };

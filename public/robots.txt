@@ -1,45 +1,50 @@
 User-agent: *
+Disallow: /admin
+Disallow: /?*
+
+User-agent: AhrefsBot
 Allow: /
 
-# Google Search
-User-agent: Googlebot
-Allow: /
-
-# Google Images
-User-agent: Googlebot-Image
-Allow: /
-
-# Google Ads
-User-agent: AdsBot-Google
-Allow: /
-
-# Bing Search
-User-agent: Bingbot
-Allow: /
-
-# Apple Search
-User-agent: Applebot
-Allow: /
-
-# ChatGPT / OpenAI
 User-agent: GPTBot
 Allow: /
 
-# ChatGPT browsing
 User-agent: ChatGPT-User
 Allow: /
 
-# Anthropic
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: ClaudeBot
 Allow: /
 
-# Perplexity
+User-agent: Claude-Web
+Allow: /
+
 User-agent: PerplexityBot
 Allow: /
 
-# Common Crawl
-User-agent: CCBot
+User-agent: Perplexity-User
 Allow: /
 
-# Sitemap
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
 Sitemap: https://travelluxx.co.uk/sitemap.xml

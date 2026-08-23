@@ -1689,6 +1689,98 @@ app.post("/api/save-asset-image", (req, res) => {
     return res.status(500).json({ error: err.message || "Failed to save asset image" });
   }
 });
+app.get("/sitemap.xml", async (req, res) => {
+  const baseUrl = "https://travelluxx.co.uk";
+  const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+  let pages = [];
+  let posts = [];
+  let mediaImages = [];
+  try {
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) {
+      const dbPages = await PageModel.find({ published: { $ne: false } });
+      pages = dbPages.map((p) => p.toObject ? p.toObject() : p);
+      const dbPosts = await PostModel.find({ published: { $ne: false } });
+      posts = dbPosts.map((p) => p.toObject ? p.toObject() : p);
+    }
+  } catch (e) {
+  }
+  if (pages.length === 0) {
+    pages = readPages().filter((p) => p.published !== false);
+  }
+  if (posts.length === 0) {
+    posts = readPosts().filter((p) => p.published !== false);
+  }
+  try {
+    const uploadsDir = import_path.default.join(process.cwd(), "public", "uploads");
+    if (import_fs.default.existsSync(uploadsDir)) {
+      const files = import_fs.default.readdirSync(uploadsDir);
+      mediaImages = files.filter((f) => /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(f)).map((f) => `${baseUrl}/uploads/${f}`);
+    }
+  } catch (e) {
+  }
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/blog</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+  for (const page of pages) {
+    const slug = page.slug || page.id;
+    const lastmod = page.updatedAt ? new Date(page.updatedAt).toISOString().split("T")[0] : page.date || today;
+    xml += `
+  <url>
+    <loc>${baseUrl}/${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>${page.image ? `
+    <image:image>
+      <image:loc>${page.image.startsWith("http") ? page.image : baseUrl + page.image}</image:loc>
+      <image:title>${(page.title || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")}</image:title>
+    </image:image>` : ""}
+  </url>`;
+  }
+  for (const post of posts) {
+    const slug = post.slug || post.id;
+    const lastmod = post.updatedAt ? new Date(post.updatedAt).toISOString().split("T")[0] : post.date || today;
+    xml += `
+  <url>
+    <loc>${baseUrl}/blog/${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>${post.image ? `
+    <image:image>
+      <image:loc>${post.image.startsWith("http") ? post.image : baseUrl + post.image}</image:loc>
+      <image:title>${(post.title || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")}</image:title>
+    </image:image>` : ""}
+  </url>`;
+  }
+  for (const imgUrl of mediaImages) {
+    xml += `
+  <url>
+    <loc>${imgUrl}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>${imgUrl}</image:loc>
+    </image:image>
+  </url>`;
+  }
+  xml += `
+</urlset>`;
+  res.set("Content-Type", "application/xml");
+  return res.send(xml);
+});
 async function startServer() {
   await connectToDatabase();
   const distPath = import_path.default.join(process.cwd(), "dist");

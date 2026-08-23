@@ -14,6 +14,73 @@ export default function BlogList() {
       .catch(() => setLoading(false));
   }, []);
 
+  // SEO meta tags, canonical, OG, schema
+  useEffect(() => {
+    const baseUrl = "https://travelluxx.co.uk";
+    const blogUrl = `${baseUrl}/blog`;
+
+    document.title = "Luxury Travel Blog & News | TravelLuxx";
+
+    const setMeta = (attr: string, attrVal: string, content: string) => {
+      let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, attrVal);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+
+    const desc = "Read luxury travel insights, airport guides, and executive chauffeur articles from TravelLuxx.";
+    setMeta("name", "description", desc);
+    setMeta("name", "robots", "index, follow");
+
+    let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", blogUrl);
+
+    setMeta("property", "og:type", "website");
+    setMeta("property", "og:url", blogUrl);
+    setMeta("property", "og:title", "Luxury Travel Blog & News | TravelLuxx");
+    setMeta("property", "og:description", desc);
+    setMeta("property", "og:site_name", "TravelLuxx");
+
+    setMeta("property", "twitter:card", "summary_large_image");
+    setMeta("property", "twitter:url", blogUrl);
+    setMeta("property", "twitter:title", "Luxury Travel Blog & News | TravelLuxx");
+    setMeta("property", "twitter:description", desc);
+
+    // Schema
+    const existingScript = document.getElementById("jsonld-bloglist-schema");
+    if (existingScript) existingScript.remove();
+
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": blogUrl,
+      "name": "Luxury Travel Blog & News",
+      "description": desc,
+      "url": blogUrl,
+      "inLanguage": "en-GB",
+      "isPartOf": { "@id": `${baseUrl}/#website` }
+    };
+
+    const script = document.createElement("script");
+    script.id = "jsonld-bloglist-schema";
+    script.type = "application/ld+json";
+    script.innerHTML = JSON.stringify(schema);
+    document.head.appendChild(script);
+
+    return () => {
+      const s = document.getElementById("jsonld-bloglist-schema");
+      if (s) s.remove();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans">
       <Navbar onScrollTo={() => {}} />
