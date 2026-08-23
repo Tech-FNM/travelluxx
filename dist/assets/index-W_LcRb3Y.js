@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BPh253Fx.js"(exports, module) {
+  "assets/index-W_LcRb3Y.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -40823,10 +40823,7 @@ ${escapeText(this.code(index, length))}
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-[#f1f3f4] rounded-full p-1 w-5 h-5 flex items-center justify-center text-[9px] font-bold text-[#5f6368]", children: "T" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "truncate", children: [
                     window.location.origin,
-                    "/",
-                    contentType === "post" ? "blog" : "page",
-                    "/",
-                    finalSlug
+                    contentType === "homepage" ? "" : contentType === "post" ? `/blog/${finalSlug}` : `/${finalSlug}`
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[19px] text-[#1a0dab] font-semibold hover:underline cursor-pointer truncate leading-tight font-sans", children: finalTitle }),
@@ -40847,7 +40844,7 @@ ${escapeText(this.code(index, length))}
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              contentType !== "homepage" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide", children: "Slug" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "input",
@@ -41114,6 +41111,7 @@ ${escapeText(this.code(index, length))}
       const [quickPageForm, setQuickPageForm] = reactExports.useState({ title: "", slug: "", published: true });
       const [yoastPostTab, setYoastPostTab] = reactExports.useState("seo");
       const [yoastPageTab, setYoastPageTab] = reactExports.useState("seo");
+      const [yoastHomeTab, setYoastHomeTab] = reactExports.useState("seo");
       const [focusKeyphrasePost, setFocusKeyphrasePost] = reactExports.useState("");
       const [focusKeyphrasePage, setFocusKeyphrasePage] = reactExports.useState("");
       const [editingHomepage, setEditingHomepage] = reactExports.useState(false);
@@ -43193,48 +43191,26 @@ ${escapeText(this.code(index, length))}
                         ] }, num)) })
                       ] })
                     ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "5. SEO Settings (Homepage)" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Focus Keyphrase" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "input",
-                          {
-                            type: "text",
-                            value: settings.homepage_seo_focus_keyphrase || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_seo_focus_keyphrase: e.target.value }),
-                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
-                            placeholder: "e.g. airport transfers"
-                          }
-                        )
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "SEO Title" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "input",
-                          {
-                            type: "text",
-                            value: settings.homepage_seo_title || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_seo_title: e.target.value }),
-                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
-                            placeholder: "e.g. Travelluxx | Chauffeur & Airport Transfers"
-                          }
-                        )
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Meta Description" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "textarea",
-                          {
-                            rows: 3,
-                            value: settings.homepage_seo_description || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_seo_description: e.target.value }),
-                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
-                            placeholder: "e.g. Book luxury private hire and airport transfer services..."
-                          }
-                        )
-                      ] })
-                    ] })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      YoastSeoBox,
+                      {
+                        tab: yoastHomeTab,
+                        setTab: setYoastHomeTab,
+                        focusKeyphrase: settings.homepage_seo_focus_keyphrase || "",
+                        setFocusKeyphrase: (v) => setSettings((prev) => ({ ...prev, homepage_seo_focus_keyphrase: v })),
+                        title: settings.hero_title || "Travelluxx",
+                        slug: "",
+                        metaTitle: settings.homepage_seo_title || "",
+                        metaDescription: settings.homepage_seo_description || "",
+                        contentType: "homepage",
+                        image: settings.hero_bg_image || "",
+                        excerpt: "",
+                        onMetaTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_title: v })),
+                        onSlugChange: () => {
+                        },
+                        onMetaDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_description: v }))
+                      }
+                    )
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-1 bg-white border border-[#c3c4c7] rounded-sm shadow-sm flex flex-col justify-between overflow-hidden h-fit", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [

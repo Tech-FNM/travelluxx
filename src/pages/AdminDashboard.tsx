@@ -52,7 +52,7 @@ function YoastSeoBox({
   slug: string;
   metaTitle: string;
   metaDescription: string;
-  contentType: "post" | "page";
+  contentType: "post" | "page" | "homepage";
   image?: string;
   excerpt?: string;
   onMetaTitleChange: (v: string) => void;
@@ -122,7 +122,12 @@ function YoastSeoBox({
               <div className="space-y-1">
                 <div className="text-[11px] text-[#202124] flex items-center gap-1.5">
                   <span className="bg-[#f1f3f4] rounded-full p-1 w-5 h-5 flex items-center justify-center text-[9px] font-bold text-[#5f6368]">T</span>
-                  <span className="truncate">{window.location.origin}/{contentType === "post" ? "blog" : "page"}/{finalSlug}</span>
+                  <span className="truncate">
+                    {window.location.origin}
+                    {contentType === "homepage" 
+                      ? "" 
+                      : (contentType === "post" ? `/blog/${finalSlug}` : `/${finalSlug}`)}
+                  </span>
                 </div>
                 <div className="text-[19px] text-[#1a0dab] font-semibold hover:underline cursor-pointer truncate leading-tight font-sans">
                   {finalTitle}
@@ -145,16 +150,18 @@ function YoastSeoBox({
                   className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
                 />
               </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide">Slug</label>
-                <input
-                  type="text"
-                  value={slug}
-                  onChange={e => onSlugChange(e.target.value)}
-                  placeholder="Enter URL slug..."
-                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
-                />
-              </div>
+              {contentType !== "homepage" && (
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide">Slug</label>
+                  <input
+                    type="text"
+                    value={slug}
+                    onChange={e => onSlugChange(e.target.value)}
+                    placeholder="Enter URL slug..."
+                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
+                  />
+                </div>
+              )}
               <div>
                 <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide">Meta description</label>
                 <textarea
@@ -479,6 +486,7 @@ export default function AdminDashboard() {
   // Yoast SEO states
   const [yoastPostTab, setYoastPostTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [yoastPageTab, setYoastPageTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
+  const [yoastHomeTab, setYoastHomeTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [focusKeyphrasePost, setFocusKeyphrasePost] = useState("");
   const [focusKeyphrasePage, setFocusKeyphrasePage] = useState("");
   const [editingHomepage, setEditingHomepage] = useState(false);
@@ -2506,39 +2514,22 @@ export default function AdminDashboard() {
                         </div>
 
                         {/* Section 5: Homepage SEO Settings */}
-                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
-                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">5. SEO Settings (Homepage)</h3>
-                          <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Focus Keyphrase</label>
-                            <input
-                              type="text"
-                              value={settings.homepage_seo_focus_keyphrase || ""}
-                              onChange={e => setSettings({ ...settings, homepage_seo_focus_keyphrase: e.target.value })}
-                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
-                              placeholder="e.g. airport transfers"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">SEO Title</label>
-                            <input
-                              type="text"
-                              value={settings.homepage_seo_title || ""}
-                              onChange={e => setSettings({ ...settings, homepage_seo_title: e.target.value })}
-                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
-                              placeholder="e.g. Travelluxx | Chauffeur & Airport Transfers"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Meta Description</label>
-                            <textarea
-                              rows={3}
-                              value={settings.homepage_seo_description || ""}
-                              onChange={e => setSettings({ ...settings, homepage_seo_description: e.target.value })}
-                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
-                              placeholder="e.g. Book luxury private hire and airport transfer services..."
-                            />
-                          </div>
-                        </div>
+                        <YoastSeoBox
+                          tab={yoastHomeTab}
+                          setTab={setYoastHomeTab}
+                          focusKeyphrase={settings.homepage_seo_focus_keyphrase || ""}
+                          setFocusKeyphrase={v => setSettings(prev => ({ ...prev, homepage_seo_focus_keyphrase: v }))}
+                          title={settings.hero_title || "Travelluxx"}
+                          slug=""
+                          metaTitle={settings.homepage_seo_title || ""}
+                          metaDescription={settings.homepage_seo_description || ""}
+                          contentType="homepage"
+                          image={settings.hero_bg_image || ""}
+                          excerpt=""
+                          onMetaTitleChange={v => setSettings(prev => ({ ...prev, homepage_seo_title: v }))}
+                          onSlugChange={() => {}}
+                          onMetaDescriptionChange={v => setSettings(prev => ({ ...prev, homepage_seo_description: v }))}
+                        />
                       </div>
 
                       {/* Right Sidebar info exactly like standard page */}
