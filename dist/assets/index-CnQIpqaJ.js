@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-D3dA9AjW.js"(exports, module) {
+  "assets/index-CnQIpqaJ.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -15148,18 +15148,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$L = [
+    const __iconNode$N = [
       ["path", { d: "M5 12h14", key: "1ays0h" }],
       ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
     ];
-    const ArrowRight = createLucideIcon("arrow-right", __iconNode$L);
+    const ArrowRight = createLucideIcon("arrow-right", __iconNode$N);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$K = [
+    const __iconNode$M = [
       ["path", { d: "M12 7v14", key: "1akyts" }],
       [
         "path",
@@ -15169,55 +15169,75 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const BookOpen = createLucideIcon("book-open", __iconNode$K);
+    const BookOpen = createLucideIcon("book-open", __iconNode$M);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$J = [
+    const __iconNode$L = [
       ["path", { d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", key: "jecpp" }],
       ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
     ];
-    const Briefcase = createLucideIcon("briefcase", __iconNode$J);
+    const Briefcase = createLucideIcon("briefcase", __iconNode$L);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$I = [
+    const __iconNode$K = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
       ["path", { d: "M3 10h18", key: "8toen8" }]
     ];
-    const Calendar = createLucideIcon("calendar", __iconNode$I);
+    const Calendar = createLucideIcon("calendar", __iconNode$K);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$H = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-    const Check = createLucideIcon("check", __iconNode$H);
+    const __iconNode$J = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+    const Check = createLucideIcon("check", __iconNode$J);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$G = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-    const ChevronDown = createLucideIcon("chevron-down", __iconNode$G);
+    const __iconNode$I = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+    const ChevronDown = createLucideIcon("chevron-down", __iconNode$I);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$F = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-    const ChevronUp = createLucideIcon("chevron-up", __iconNode$F);
+    const __iconNode$H = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+    const ChevronRight = createLucideIcon("chevron-right", __iconNode$H);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$G = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+    const ChevronUp = createLucideIcon("chevron-up", __iconNode$G);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$F = [
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+    ];
+    const CircleAlert = createLucideIcon("circle-alert", __iconNode$F);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15225,11 +15245,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$E = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
     ];
-    const CircleAlert = createLucideIcon("circle-alert", __iconNode$E);
+    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$E);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15237,10 +15256,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$D = [
-      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$D);
+    const CircleCheck = createLucideIcon("circle-check", __iconNode$D);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15249,9 +15268,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      */
     const __iconNode$C = [
       ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+      ["path", { d: "M12 17h.01", key: "p32p05" }]
     ];
-    const CircleCheck = createLucideIcon("circle-check", __iconNode$C);
+    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$C);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15259,11 +15279,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$B = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
-      ["path", { d: "M12 17h.01", key: "p32p05" }]
+      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
     ];
-    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$B);
+    const Clock = createLucideIcon("clock", __iconNode$B);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15271,10 +15290,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$A = [
-      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
+      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
+      ["path", { d: "M7 6h1v4", key: "1obek4" }],
+      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
     ];
-    const Clock = createLucideIcon("clock", __iconNode$A);
+    const Coins = createLucideIcon("coins", __iconNode$A);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15282,12 +15303,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$z = [
-      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
-      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
-      ["path", { d: "M7 6h1v4", key: "1obek4" }],
-      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
+      [
+        "path",
+        {
+          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+          key: "9ktpf1"
+        }
+      ],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
     ];
-    const Coins = createLucideIcon("coins", __iconNode$z);
+    const Compass = createLucideIcon("compass", __iconNode$z);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15298,13 +15323,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
-          key: "9ktpf1"
+          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
+          key: "c7niix"
         }
-      ],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ]
     ];
-    const Compass = createLucideIcon("compass", __iconNode$y);
+    const Droplet = createLucideIcon("droplet", __iconNode$y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15312,15 +15336,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$x = [
-      [
-        "path",
-        {
-          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
-          key: "c7niix"
-        }
-      ]
+      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
     ];
-    const Droplet = createLucideIcon("droplet", __iconNode$x);
+    const ExternalLink = createLucideIcon("external-link", __iconNode$x);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15328,18 +15348,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$w = [
-      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
-    ];
-    const ExternalLink = createLucideIcon("external-link", __iconNode$w);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$v = [
       [
         "path",
         {
@@ -15357,14 +15365,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "m2 2 20 20", key: "1ooewy" }]
     ];
-    const EyeOff = createLucideIcon("eye-off", __iconNode$v);
+    const EyeOff = createLucideIcon("eye-off", __iconNode$w);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$u = [
+    const __iconNode$v = [
       [
         "path",
         {
@@ -15374,7 +15382,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Eye = createLucideIcon("eye", __iconNode$u);
+    const Eye = createLucideIcon("eye", __iconNode$v);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$u = [
+      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+      ["path", { d: "M10 9H8", key: "b1mrlr" }],
+      ["path", { d: "M16 13H8", key: "t4e002" }],
+      ["path", { d: "M16 17H8", key: "z1uh3a" }]
+    ];
+    const FileText = createLucideIcon("file-text", __iconNode$u);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15382,13 +15404,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$t = [
-      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-      ["path", { d: "M10 9H8", key: "b1mrlr" }],
-      ["path", { d: "M16 13H8", key: "t4e002" }],
-      ["path", { d: "M16 17H8", key: "z1uh3a" }]
+      ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
+      [
+        "path",
+        {
+          d: "M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+          key: "r6nss1"
+        }
+      ]
     ];
-    const FileText = createLucideIcon("file-text", __iconNode$t);
+    const House = createLucideIcon("house", __iconNode$t);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -29104,31 +29129,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }, []);
       const fleet = {
         Economy: {
-          name: "Business Economy Class",
-          tagline: "Elegant, clean, and highly efficient travel.",
-          image: getCustomImage("fleet_Economy", mercedesEconomyImg),
+          name: (settings == null ? void 0 : settings.fleet_economy_name) || "Business Economy Class",
+          tagline: (settings == null ? void 0 : settings.fleet_economy_tagline) || "Elegant, clean, and highly efficient travel.",
+          image: (settings == null ? void 0 : settings.fleet_economy_image) || getCustomImage("fleet_Economy", mercedesEconomyImg),
           rate: ((_a = pricing == null ? void 0 : pricing.Economy) == null ? void 0 : _a.perMile) !== void 0 ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
-          description: "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
+          description: (settings == null ? void 0 : settings.fleet_economy_description) || "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
           cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
-          features: ["Complimentary 4G Wi-Fi", "Dual-zone Climate Control", "USB Charging Ports", "Bottle Holders & Newspapers"]
+          features: ((settings == null ? void 0 : settings.fleet_economy_features) || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(",").map((s) => s.trim()).filter(Boolean)
         },
         Luxury: {
-          name: "First Class Luxury Chauffeur",
-          tagline: "The pinnacle of executive comfort and style.",
-          image: getCustomImage("fleet_Luxury", mercedesLuxuryImg),
+          name: (settings == null ? void 0 : settings.fleet_luxury_name) || "First Class Luxury Chauffeur",
+          tagline: (settings == null ? void 0 : settings.fleet_luxury_tagline) || "The pinnacle of executive comfort and style.",
+          image: (settings == null ? void 0 : settings.fleet_luxury_image) || getCustomImage("fleet_Luxury", mercedesLuxuryImg),
           rate: ((_b = pricing == null ? void 0 : pricing.Luxury) == null ? void 0 : _b.perMile) !== void 0 ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
-          description: "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
+          description: (settings == null ? void 0 : settings.fleet_luxury_description) || "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
           cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
-          features: ["Premium Leather Reclining Seats", "Complimentary Bottled Water", "Ambient Lighting Controls", "Rear Seat Entertainment Systems", "Quiet Acoustic Cabins"]
+          features: ((settings == null ? void 0 : settings.fleet_luxury_features) || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(",").map((s) => s.trim()).filter(Boolean)
         },
         Family: {
-          name: "Family & Executive MPV",
-          tagline: "Generous space for luggage and loved ones.",
-          image: getCustomImage("fleet_Family", mercedesFamilyImg),
+          name: (settings == null ? void 0 : settings.fleet_family_name) || "Family & Executive MPV",
+          tagline: (settings == null ? void 0 : settings.fleet_family_tagline) || "Generous space for luggage and loved ones.",
+          image: (settings == null ? void 0 : settings.fleet_family_image) || getCustomImage("fleet_Family", mercedesFamilyImg),
           rate: ((_c = pricing == null ? void 0 : pricing.Family) == null ? void 0 : _c.perMile) !== void 0 ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
-          description: "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
+          description: (settings == null ? void 0 : settings.fleet_family_description) || "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
           cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
-          features: ["Conference Seating Options", "Massive Boot Capacity", "Automatic Sliding Doors", "Privacy Glass", "Individual Air-Con Units", "Child Seats Available (On Request)"]
+          features: ((settings == null ? void 0 : settings.fleet_family_features) || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(",").map((s) => s.trim()).filter(Boolean)
         }
       };
       const selectedClass = fleet[activeTab];
@@ -29230,53 +29255,53 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, []);
       const airports = [
-        { name: "Heathrow", code: "LHR", fullName: "London Heathrow Airport (LHR)" },
-        { name: "Gatwick", code: "LGW", fullName: "London Gatwick Airport (LGW)" },
-        { name: "Luton", code: "LTN", fullName: "London Luton Airport (LTN)" },
-        { name: "Stansted", code: "STN", fullName: "London Stansted Airport (STN)" },
-        { name: "London City", code: "LCY", fullName: "London City Airport (LCY)" },
-        { name: "Southend", code: "SEN", fullName: "Southend Airport" }
+        { name: (settings == null ? void 0 : settings.airport_name_1) || "Heathrow", code: (settings == null ? void 0 : settings.airport_code_1) || "LHR", fullName: `${(settings == null ? void 0 : settings.airport_name_1) || "Heathrow"} Airport (${(settings == null ? void 0 : settings.airport_code_1) || "LHR"})` },
+        { name: (settings == null ? void 0 : settings.airport_name_2) || "Gatwick", code: (settings == null ? void 0 : settings.airport_code_2) || "LGW", fullName: `${(settings == null ? void 0 : settings.airport_name_2) || "Gatwick"} Airport (${(settings == null ? void 0 : settings.airport_code_2) || "LGW"})` },
+        { name: (settings == null ? void 0 : settings.airport_name_3) || "Luton", code: (settings == null ? void 0 : settings.airport_code_3) || "LTN", fullName: `${(settings == null ? void 0 : settings.airport_name_3) || "Luton"} Airport (${(settings == null ? void 0 : settings.airport_code_3) || "LTN"})` },
+        { name: (settings == null ? void 0 : settings.airport_name_4) || "Stansted", code: (settings == null ? void 0 : settings.airport_code_4) || "STN", fullName: `${(settings == null ? void 0 : settings.airport_name_4) || "Stansted"} Airport (${(settings == null ? void 0 : settings.airport_code_4) || "STN"})` },
+        { name: (settings == null ? void 0 : settings.airport_name_5) || "London City", code: (settings == null ? void 0 : settings.airport_code_5) || "LCY", fullName: `${(settings == null ? void 0 : settings.airport_name_5) || "London City"} Airport (${(settings == null ? void 0 : settings.airport_code_5) || "LCY"})` },
+        { name: (settings == null ? void 0 : settings.airport_name_6) || "Southend", code: (settings == null ? void 0 : settings.airport_code_6) || "SEN", fullName: `${(settings == null ? void 0 : settings.airport_name_6) || "Southend"} Airport (${(settings == null ? void 0 : settings.airport_code_6) || "SEN"})` }
       ];
       const services = [
         {
           id: "airport",
-          title: "Airport Transfers",
-          description: "Reliable private transfers to Heathrow, Gatwick, and all major UK airports.",
-          image: getCustomImage("transfer_airport", airportTransfersImg),
-          pickup: "Shirley, Solihull B90",
-          dropoff: "London Heathrow Airport (LHR)"
+          title: (settings == null ? void 0 : settings.service_title_1) || "Airport Transfers",
+          description: (settings == null ? void 0 : settings.service_desc_1) || "Reliable private transfers to Heathrow, Gatwick, and all major UK airports.",
+          image: (settings == null ? void 0 : settings.service_image_1) || getCustomImage("transfer_airport", airportTransfersImg),
+          pickup: (settings == null ? void 0 : settings.service_pickup_1) || "Shirley, Solihull B90",
+          dropoff: (settings == null ? void 0 : settings.service_dropoff_1) || "London Heathrow Airport (LHR)"
         },
         {
           id: "port",
-          title: "Port Transfers",
-          description: "Reliable transfers to and from all major UK ports and cruise terminals.",
-          image: getCustomImage("transfer_port", transferPortImg),
-          pickup: "Shirley, Solihull B90",
-          dropoff: "Southampton Cruise Port"
+          title: (settings == null ? void 0 : settings.service_title_2) || "Port Transfers",
+          description: (settings == null ? void 0 : settings.service_desc_2) || "Reliable transfers to and from all major UK ports and cruise terminals.",
+          image: (settings == null ? void 0 : settings.service_image_2) || getCustomImage("transfer_port", transferPortImg),
+          pickup: (settings == null ? void 0 : settings.service_pickup_2) || "Shirley, Solihull B90",
+          dropoff: (settings == null ? void 0 : settings.service_dropoff_2) || "Southampton Cruise Port"
         },
         {
           id: "station",
-          title: "Station Transfers",
-          description: "Seamless transfers to and from rail stations across London and the UK.",
-          image: getCustomImage("transfer_station", stationTransfersImg),
-          pickup: "Shirley, Solihull B90",
-          dropoff: "London Euston Station"
+          title: (settings == null ? void 0 : settings.service_title_3) || "Station Transfers",
+          description: (settings == null ? void 0 : settings.service_desc_3) || "Seamless transfers to and from rail stations across London and the UK.",
+          image: (settings == null ? void 0 : settings.service_image_3) || getCustomImage("transfer_station", stationTransfersImg),
+          pickup: (settings == null ? void 0 : settings.service_pickup_3) || "Shirley, Solihull B90",
+          dropoff: (settings == null ? void 0 : settings.service_dropoff_3) || "London Euston Station"
         },
         {
           id: "city",
-          title: "Popular Cities",
-          description: "Travel to all major cities across the UK in comfort and style.",
-          image: getCustomImage("transfer_city", popularCitiesImg),
-          pickup: "Shirley, Solihull B90",
-          dropoff: "London Central, UK"
+          title: (settings == null ? void 0 : settings.service_title_4) || "Popular Cities",
+          description: (settings == null ? void 0 : settings.service_desc_4) || "Travel to all major cities across the UK in comfort and style.",
+          image: (settings == null ? void 0 : settings.service_image_4) || getCustomImage("transfer_city", popularCitiesImg),
+          pickup: (settings == null ? void 0 : settings.service_pickup_4) || "Shirley, Solihull B90",
+          dropoff: (settings == null ? void 0 : settings.service_dropoff_4) || "London Central, UK"
         },
         {
           id: "business",
-          title: "Business Travel",
-          description: "Executive travel solutions tailored for business and professionals.",
-          image: getCustomImage("transfer_business", businessTravelImg),
-          pickup: "Shirley, Solihull B90",
-          dropoff: "Birmingham Airport (BHX)"
+          title: (settings == null ? void 0 : settings.service_title_5) || "Business Travel",
+          description: (settings == null ? void 0 : settings.service_desc_5) || "Executive travel solutions tailored for business and professionals.",
+          image: (settings == null ? void 0 : settings.service_image_5) || getCustomImage("transfer_business", businessTravelImg),
+          pickup: (settings == null ? void 0 : settings.service_pickup_5) || "Shirley, Solihull B90",
+          dropoff: (settings == null ? void 0 : settings.service_dropoff_5) || "Birmingham Airport (BHX)"
         }
       ];
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "airports", className: "py-20 bg-white border-t border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
@@ -40754,7 +40779,7 @@ ${escapeText(this.code(index, length))}
       const keyphraseInSlug = focusKeyphrase ? finalSlug.toLowerCase().includes(focusKeyphrase.replace(/\s+/g, "-").toLowerCase()) : false;
       const descriptionLengthOk = finalDesc.length > 50;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm mt-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-xs text-[#2c3338]", children: "Yoast SEO" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-xs text-[#2c3338]", children: "SEO Setting" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex border-b border-[#c3c4c7] bg-[#f6f7f7] text-xs", children: [
           { id: "seo", label: "SEO", color: focusKeyphrase ? "bg-green-600" : "bg-red-500" },
           { id: "readability", label: "Readability", color: "bg-green-600" },
@@ -41000,10 +41025,14 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[11px] leading-relaxed", children: "To customize the appearance of your post specifically for X, please fill out the 'X appearance' settings below. If you leave these settings untouched, the 'Social media appearance' settings mentioned above will also be applied for sharing on X." }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide", children: "X share preview" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border border-[#c3c4c7] rounded-sm aspect-[1.91/1] bg-slate-50 relative flex items-center justify-center overflow-hidden max-w-lg", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "bg-[#f0b01c] hover:bg-[#e0a010] text-[#1d2327] px-4 py-2 rounded-sm font-semibold flex items-center gap-2 shadow-sm transition", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "🔒" }),
-                    " Unlock with Yoast SEO Premium"
-                  ] }) }) })
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded-sm bg-white overflow-hidden max-w-lg shadow-sm", children: [
+                    image ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: image, alt: "X preview", className: "w-full h-full object-cover" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400", children: "No image set" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 bg-white font-sans text-xs", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-[#606770] uppercase tracking-wide", children: "travelluxx.co.uk" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1", children: title || (contentType === "post" ? "Post Title" : "Page Title") }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[#606770] mt-0.5 line-clamp-2 leading-relaxed", children: excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...") })
+                    ] })
+                  ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide", children: "X image" }),
@@ -41039,6 +41068,7 @@ ${escapeText(this.code(index, length))}
       ] });
     }
     function AdminDashboard() {
+      var _a;
       const navigate = useNavigate();
       const { tab: routeTab, subtab: routeSubtab } = useParams();
       const [token, setToken] = reactExports.useState(localStorage.getItem("travelluxx_admin_token"));
@@ -41071,6 +41101,13 @@ ${escapeText(this.code(index, length))}
       const [mediaViewMode, setMediaViewMode] = reactExports.useState("grid");
       const [saveStatus, setSaveStatus] = reactExports.useState("");
       const [isSaving, setIsSaving] = reactExports.useState(false);
+      const [toastMessage, setToastMessage] = reactExports.useState("");
+      const [toastType, setToastType] = reactExports.useState("success");
+      const showToast = (msg, type = "success") => {
+        setToastMessage(msg);
+        setToastType(type);
+        setTimeout(() => setToastMessage(""), 3500);
+      };
       const [quickEditingPostId, setQuickEditingPostId] = reactExports.useState(null);
       const [quickPostForm, setQuickPostForm] = reactExports.useState({ title: "", slug: "", published: true });
       const [quickEditingPageId, setQuickEditingPageId] = reactExports.useState(null);
@@ -41221,7 +41258,11 @@ ${escapeText(this.code(index, length))}
       const deleteInquiry = async (id) => {
         if (!confirm("Are you sure you want to delete this inquiry?")) return;
         const r = await fetch(`/api/admin/inquiries/${id}`, { method: "DELETE" });
-        if (r.ok) window.location.reload();
+        if (r.ok) {
+          setInquiries((prev) => prev.filter((i) => i.id !== id));
+          setSelectedInquiry(null);
+          showToast("Inquiry deleted successfully!");
+        }
       };
       const deleteSelectedInquiries = async () => {
         if (selectedInquiryIds.length === 0) return;
@@ -41229,8 +41270,9 @@ ${escapeText(this.code(index, length))}
         for (const id of selectedInquiryIds) {
           await fetch(`/api/admin/inquiries/${id}`, { method: "DELETE" });
         }
+        setInquiries((prev) => prev.filter((i) => !selectedInquiryIds.includes(i.id)));
         setSelectedInquiryIds([]);
-        window.location.reload();
+        showToast(`${selectedInquiryIds.length} inquiries deleted!`);
       };
       const fetchSettings = async () => {
         const r = await fetch("/api/admin/settings");
@@ -41281,12 +41323,25 @@ ${escapeText(this.code(index, length))}
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: newStatus })
         });
-        if (res.ok) window.location.reload();
+        if (res.ok) {
+          await res.json();
+          setBookings((prev) => prev.map((b) => b.id === id ? { ...b, status: newStatus } : b));
+          if (selectedBooking && selectedBooking.id === id) {
+            setSelectedBooking((prev) => ({ ...prev, status: newStatus }));
+          }
+          showToast(`Booking ${id} status updated to ${newStatus}. Email notification sent!`);
+        } else {
+          showToast("Failed to update booking status.", "error");
+        }
       };
       const deleteBooking = async (id) => {
         if (!confirm("Are you sure you want to delete this booking?")) return;
         const res = await fetch(`/api/admin/bookings/${id}`, { method: "DELETE" });
-        if (res.ok) window.location.reload();
+        if (res.ok) {
+          setBookings((prev) => prev.filter((b) => b.id !== id));
+          setSelectedBooking(null);
+          showToast("Booking deleted successfully!");
+        }
       };
       const deleteSelectedBookings = async () => {
         if (selectedBookingIds.length === 0) return;
@@ -41294,8 +41349,9 @@ ${escapeText(this.code(index, length))}
         for (const id of selectedBookingIds) {
           await fetch(`/api/admin/bookings/${id}`, { method: "DELETE" });
         }
+        setBookings((prev) => prev.filter((b) => !selectedBookingIds.includes(b.id)));
         setSelectedBookingIds([]);
-        window.location.reload();
+        showToast(`${selectedBookingIds.length} bookings deleted!`);
       };
       const filteredBookings = bookings.filter((b) => {
         const q = searchQuery.toLowerCase();
@@ -41357,11 +41413,18 @@ ${escapeText(this.code(index, length))}
             body: JSON.stringify(postForm)
           });
           if (res.ok) {
+            const savedPost = await res.json();
+            if (editingPost) {
+              setPosts((prev) => prev.map((p) => p.id === editingPost.id ? { ...p, ...postForm, ...savedPost } : p));
+            } else {
+              setPosts((prev) => [savedPost, ...prev]);
+            }
             setEditingPost(void 0);
-            window.location.reload();
+            showToast(editingPost ? "Post updated successfully!" : "Post created successfully!");
           }
         } catch (err) {
           console.error(err);
+          showToast("Failed to save post.", "error");
         } finally {
           setIsSaving(false);
         }
@@ -41369,7 +41432,10 @@ ${escapeText(this.code(index, length))}
       const deletePost = async (id) => {
         if (!confirm("Are you sure?")) return;
         const res = await fetch(`/api/admin/posts/${id}`, { method: "DELETE" });
-        if (res.ok) window.location.reload();
+        if (res.ok) {
+          setPosts((prev) => prev.filter((p) => p.id !== id));
+          showToast("Post deleted successfully!");
+        }
       };
       const openNewPage = () => {
         setEditingPage(null);
@@ -41417,11 +41483,18 @@ ${escapeText(this.code(index, length))}
           const method = editingPage ? "PUT" : "POST";
           const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(pageForm) });
           if (res.ok) {
+            const savedPage = await res.json();
+            if (editingPage) {
+              setPages((prev) => prev.map((p) => p.id === editingPage.id ? { ...p, ...pageForm, ...savedPage } : p));
+            } else {
+              setPages((prev) => [savedPage, ...prev]);
+            }
             setEditingPage(void 0);
-            window.location.reload();
+            showToast(editingPage ? "Page updated successfully!" : "Page created successfully!");
           }
         } catch (err) {
           console.error(err);
+          showToast("Failed to save page.", "error");
         } finally {
           setIsSaving(false);
         }
@@ -41429,7 +41502,10 @@ ${escapeText(this.code(index, length))}
       const deletePage = async (id) => {
         if (!confirm("Delete page?")) return;
         const res = await fetch(`/api/admin/pages/${id}`, { method: "DELETE" });
-        if (res.ok) window.location.reload();
+        if (res.ok) {
+          setPages((prev) => prev.filter((p) => p.id !== id));
+          showToast("Page deleted successfully!");
+        }
       };
       const openQuickEditPost = (post) => {
         setQuickEditingPostId(post.id);
@@ -41451,8 +41527,9 @@ ${escapeText(this.code(index, length))}
             body: JSON.stringify(updatedPost)
           });
           if (res.ok) {
+            setPosts((prev) => prev.map((p) => p.id === id ? { ...p, ...quickPostForm } : p));
             setQuickEditingPostId(null);
-            window.location.reload();
+            showToast("Post updated!");
           }
         } catch (err) {
           console.error(err);
@@ -41480,8 +41557,9 @@ ${escapeText(this.code(index, length))}
             body: JSON.stringify(updatedPage)
           });
           if (res.ok) {
+            setPages((prev) => prev.map((p) => p.id === id ? { ...p, ...quickPageForm } : p));
             setQuickEditingPageId(null);
-            window.location.reload();
+            showToast("Page updated!");
           }
         } catch (err) {
           console.error(err);
@@ -41583,8 +41661,7 @@ ${escapeText(this.code(index, length))}
           if (res.ok) {
             setSaveStatus("Homepage updated successfully!");
             setTimeout(() => setSaveStatus(""), 4e3);
-            setEditingHomepage(false);
-            window.location.reload();
+            showToast("Homepage settings saved successfully!");
           } else {
             setSaveStatus("Failed to save homepage settings.");
           }
@@ -41598,8 +41675,8 @@ ${escapeText(this.code(index, length))}
       const stats = {
         leads: bookings.length,
         today: bookings.filter((b) => {
-          var _a;
-          return (_a = b.createdAt) == null ? void 0 : _a.startsWith((/* @__PURE__ */ new Date()).toISOString().slice(0, 10));
+          var _a2;
+          return (_a2 = b.createdAt) == null ? void 0 : _a2.startsWith((/* @__PURE__ */ new Date()).toISOString().slice(0, 10));
         }).length,
         revenue: bookings.reduce((s, b) => s + Number(b.price || 0), 0),
         inquiries: inquiries.length,
@@ -41717,6 +41794,20 @@ ${escapeText(this.code(index, length))}
             ))
           ] }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 p-6 min-h-0 overflow-y-auto", children: [
+            toastMessage && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fixed top-14 right-6 z-[9999] px-5 py-3 rounded-lg shadow-lg text-sm font-semibold flex items-center gap-2 animate-fade-in transition-all ${toastType === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"}`, style: { animation: "fadeInSlide 0.3s ease" }, children: [
+              toastType === "success" ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4" }),
+              toastMessage,
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setToastMessage(""), className: "ml-2 opacity-70 hover:opacity-100", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3.5 h-3.5" }) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "flex items-center gap-1.5 text-xs text-[#646970] mb-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(House, { className: "w-3.5 h-3.5" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("a", { onClick: () => handleTabClick("dashboard"), className: "hover:text-[#2271b1] cursor-pointer transition", children: "Home" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-3 h-3 text-[#a7aaad]" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[#1d2327] font-semibold", children: [
+                ((_a = navItems.find((n) => n.id === activeTab)) == null ? void 0 : _a.label) || "Dashboard",
+                activeTab === "settings" && settingsTab ? ` › ${settingsTab.charAt(0).toUpperCase() + settingsTab.slice(1)}` : ""
+              ] })
+            ] }),
             activeTab === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Dashboard" }),
@@ -43378,8 +43469,8 @@ ${escapeText(this.code(index, length))}
                   "button",
                   {
                     onClick: () => {
-                      var _a;
-                      return (_a = fileInputRef.current) == null ? void 0 : _a.click();
+                      var _a2;
+                      return (_a2 = fileInputRef.current) == null ? void 0 : _a2.click();
                     },
                     className: "border border-[#2271b1] text-[#2271b1] hover:bg-[#f0f6fa] hover:text-[#0a4b78] px-2.5 py-1 rounded text-xs font-semibold transition bg-white shadow-sm",
                     children: "Add New"
@@ -43420,8 +43511,8 @@ ${escapeText(this.code(index, length))}
                 {
                   className: `border-2 border-dashed rounded-sm p-8 text-center cursor-pointer transition ${uploading ? "border-[#2271b1] bg-blue-50" : "border-[#c3c4c7] hover:border-[#2271b1] bg-white"}`,
                   onClick: () => {
-                    var _a;
-                    return (_a = fileInputRef.current) == null ? void 0 : _a.click();
+                    var _a2;
+                    return (_a2 = fileInputRef.current) == null ? void 0 : _a2.click();
                   },
                   onDrop: (e) => {
                     e.preventDefault();

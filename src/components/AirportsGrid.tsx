@@ -23,54 +23,54 @@ export default function AirportsGrid({ onSelectTransfer, settings }: AirportsGri
   }, []);
 
   const airports = [
-    { name: "Heathrow", code: "LHR", fullName: "London Heathrow Airport (LHR)" },
-    { name: "Gatwick", code: "LGW", fullName: "London Gatwick Airport (LGW)" },
-    { name: "Luton", code: "LTN", fullName: "London Luton Airport (LTN)" },
-    { name: "Stansted", code: "STN", fullName: "London Stansted Airport (STN)" },
-    { name: "London City", code: "LCY", fullName: "London City Airport (LCY)" },
-    { name: "Southend", code: "SEN", fullName: "Southend Airport" }
+    { name: settings?.airport_name_1 || "Heathrow", code: settings?.airport_code_1 || "LHR", fullName: `${settings?.airport_name_1 || "Heathrow"} Airport (${settings?.airport_code_1 || "LHR"})` },
+    { name: settings?.airport_name_2 || "Gatwick", code: settings?.airport_code_2 || "LGW", fullName: `${settings?.airport_name_2 || "Gatwick"} Airport (${settings?.airport_code_2 || "LGW"})` },
+    { name: settings?.airport_name_3 || "Luton", code: settings?.airport_code_3 || "LTN", fullName: `${settings?.airport_name_3 || "Luton"} Airport (${settings?.airport_code_3 || "LTN"})` },
+    { name: settings?.airport_name_4 || "Stansted", code: settings?.airport_code_4 || "STN", fullName: `${settings?.airport_name_4 || "Stansted"} Airport (${settings?.airport_code_4 || "STN"})` },
+    { name: settings?.airport_name_5 || "London City", code: settings?.airport_code_5 || "LCY", fullName: `${settings?.airport_name_5 || "London City"} Airport (${settings?.airport_code_5 || "LCY"})` },
+    { name: settings?.airport_name_6 || "Southend", code: settings?.airport_code_6 || "SEN", fullName: `${settings?.airport_name_6 || "Southend"} Airport (${settings?.airport_code_6 || "SEN"})` }
   ];
 
   const services = [
     {
       id: "airport",
-      title: "Airport Transfers",
-      description: "Reliable private transfers to Heathrow, Gatwick, and all major UK airports.",
-      image: getCustomImage("transfer_airport", airportTransfersImg),
-      pickup: "Shirley, Solihull B90",
-      dropoff: "London Heathrow Airport (LHR)"
+      title: settings?.service_title_1 || "Airport Transfers",
+      description: settings?.service_desc_1 || "Reliable private transfers to Heathrow, Gatwick, and all major UK airports.",
+      image: settings?.service_image_1 || getCustomImage("transfer_airport", airportTransfersImg),
+      pickup: settings?.service_pickup_1 || "Shirley, Solihull B90",
+      dropoff: settings?.service_dropoff_1 || "London Heathrow Airport (LHR)"
     },
     {
       id: "port",
-      title: "Port Transfers",
-      description: "Reliable transfers to and from all major UK ports and cruise terminals.",
-      image: getCustomImage("transfer_port", portTransfersImg),
-      pickup: "Shirley, Solihull B90",
-      dropoff: "Southampton Cruise Port"
+      title: settings?.service_title_2 || "Port Transfers",
+      description: settings?.service_desc_2 || "Reliable transfers to and from all major UK ports and cruise terminals.",
+      image: settings?.service_image_2 || getCustomImage("transfer_port", portTransfersImg),
+      pickup: settings?.service_pickup_2 || "Shirley, Solihull B90",
+      dropoff: settings?.service_dropoff_2 || "Southampton Cruise Port"
     },
     {
       id: "station",
-      title: "Station Transfers",
-      description: "Seamless transfers to and from rail stations across London and the UK.",
-      image: getCustomImage("transfer_station", stationTransfersImg),
-      pickup: "Shirley, Solihull B90",
-      dropoff: "London Euston Station"
+      title: settings?.service_title_3 || "Station Transfers",
+      description: settings?.service_desc_3 || "Seamless transfers to and from rail stations across London and the UK.",
+      image: settings?.service_image_3 || getCustomImage("transfer_station", stationTransfersImg),
+      pickup: settings?.service_pickup_3 || "Shirley, Solihull B90",
+      dropoff: settings?.service_dropoff_3 || "London Euston Station"
     },
     {
       id: "city",
-      title: "Popular Cities",
-      description: "Travel to all major cities across the UK in comfort and style.",
-      image: getCustomImage("transfer_city", popularCitiesImg),
-      pickup: "Shirley, Solihull B90",
-      dropoff: "London Central, UK"
+      title: settings?.service_title_4 || "Popular Cities",
+      description: settings?.service_desc_4 || "Travel to all major cities across the UK in comfort and style.",
+      image: settings?.service_image_4 || getCustomImage("transfer_city", popularCitiesImg),
+      pickup: settings?.service_pickup_4 || "Shirley, Solihull B90",
+      dropoff: settings?.service_dropoff_4 || "London Central, UK"
     },
     {
       id: "business",
-      title: "Business Travel",
-      description: "Executive travel solutions tailored for business and professionals.",
-      image: getCustomImage("transfer_business", businessTravelImg),
-      pickup: "Shirley, Solihull B90",
-      dropoff: "Birmingham Airport (BHX)"
+      title: settings?.service_title_5 || "Business Travel",
+      description: settings?.service_desc_5 || "Executive travel solutions tailored for business and professionals.",
+      image: settings?.service_image_5 || getCustomImage("transfer_business", businessTravelImg),
+      pickup: settings?.service_pickup_5 || "Shirley, Solihull B90",
+      dropoff: settings?.service_dropoff_5 || "Birmingham Airport (BHX)"
     }
   ];
 

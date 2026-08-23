@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
@@ -72,7 +72,7 @@ function YoastSeoBox({
     <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm mt-6">
       {/* Title */}
       <div className="border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7]">
-        <h3 className="font-semibold text-xs text-[#2c3338]">Yoast SEO</h3>
+        <h3 className="font-semibold text-xs text-[#2c3338]">SEO Setting</h3>
       </div>
 
       {/* Tabs */}
@@ -354,11 +354,24 @@ function YoastSeoBox({
                 {/* X Share Preview */}
                 <div>
                   <span className="block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide">X share preview</span>
-                  <div className="border border-[#c3c4c7] rounded-sm aspect-[1.91/1] bg-slate-50 relative flex items-center justify-center overflow-hidden max-w-lg">
-                    <div className="text-center p-4">
-                      <button type="button" className="bg-[#f0b01c] hover:bg-[#e0a010] text-[#1d2327] px-4 py-2 rounded-sm font-semibold flex items-center gap-2 shadow-sm transition">
-                        <span>🔒</span> Unlock with Yoast SEO Premium
-                      </button>
+                  <div className="border border-[#c3c4c7] rounded-sm bg-white overflow-hidden max-w-lg shadow-sm">
+                    {image ? (
+                      <div className="aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]">
+                        <img src={image} alt="X preview" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400">
+                        No image set
+                      </div>
+                    )}
+                    <div className="p-3 bg-white font-sans text-xs">
+                      <div className="text-[10px] text-[#606770] uppercase tracking-wide">travelluxx.co.uk</div>
+                      <div className="font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1">
+                        {title || (contentType === "post" ? "Post Title" : "Page Title")}
+                      </div>
+                      <div className="text-[#606770] mt-0.5 line-clamp-2 leading-relaxed">
+                        {excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...")}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -448,6 +461,15 @@ export default function AdminDashboard() {
   const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  // Toast notification
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+  const showToast = (msg: string, type: "success" | "error" = "success") => {
+    setToastMessage(msg);
+    setToastType(type);
+    setTimeout(() => setToastMessage(""), 3500);
+  };
+
   // Quick Edit states
   const [quickEditingPostId, setQuickEditingPostId] = useState<string | null>(null);
   const [quickPostForm, setQuickPostForm] = useState({ title: "", slug: "", published: true });
@@ -464,9 +486,8 @@ export default function AdminDashboard() {
   const [testEmailLoading, setTestEmailLoading] = useState(false);
   const [testEmailResult, setTestEmailResult] = useState<{success: boolean; message: string} | null>(null);
 
-  // In-Editor Media integration states
   const [editorMediaModalOpen, setEditorMediaModalOpen] = useState(false);
-  const [editorTarget, setEditorTarget] = useState<"post" | "page" | "post-featured" | "page-featured" | "yoast-post-social" | "yoast-page-social" | "yoast-post-x" | "yoast-page-x" | "settings-logo" | "settings-hero">("post");
+  const [editorTarget, setEditorTarget] = useState<string>("post");
   const [selectedEditorMediaUrl, setSelectedEditorMediaUrl] = useState<string | null>(null);
   const [editorMediaAltText, setEditorMediaAltText] = useState("");
   const [editorMediaTitleText, setEditorMediaTitleText] = useState("");
@@ -610,7 +631,11 @@ export default function AdminDashboard() {
   const deleteInquiry = async (id: string) => {
     if (!confirm("Are you sure you want to delete this inquiry?")) return;
     const r = await fetch(`/api/admin/inquiries/${id}`, { method: "DELETE" });
-    if (r.ok) window.location.reload();
+    if (r.ok) {
+      setInquiries(prev => prev.filter(i => i.id !== id));
+      setSelectedInquiry(null);
+      showToast("Inquiry deleted successfully!");
+    }
   };
   const deleteSelectedInquiries = async () => {
     if (selectedInquiryIds.length === 0) return;
@@ -618,8 +643,9 @@ export default function AdminDashboard() {
     for (const id of selectedInquiryIds) {
       await fetch(`/api/admin/inquiries/${id}`, { method: "DELETE" });
     }
+    setInquiries(prev => prev.filter(i => !selectedInquiryIds.includes(i.id)));
     setSelectedInquiryIds([]);
-    window.location.reload();
+    showToast(`${selectedInquiryIds.length} inquiries deleted!`);
   };
   const fetchSettings = async () => {
     const r = await fetch("/api/admin/settings"); setSettings(await r.json());
@@ -670,13 +696,26 @@ export default function AdminDashboard() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus })
     });
-    if (res.ok) window.location.reload();
+    if (res.ok) {
+      const data = await res.json();
+      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
+      if (selectedBooking && selectedBooking.id === id) {
+        setSelectedBooking((prev: any) => ({ ...prev, status: newStatus }));
+      }
+      showToast(`Booking ${id} status updated to ${newStatus}. Email notification sent!`);
+    } else {
+      showToast("Failed to update booking status.", "error");
+    }
   };
 
   const deleteBooking = async (id: string) => {
     if (!confirm("Are you sure you want to delete this booking?")) return;
     const res = await fetch(`/api/admin/bookings/${id}`, { method: "DELETE" });
-    if (res.ok) window.location.reload();
+    if (res.ok) {
+      setBookings(prev => prev.filter(b => b.id !== id));
+      setSelectedBooking(null);
+      showToast("Booking deleted successfully!");
+    }
   };
 
   const deleteSelectedBookings = async () => {
@@ -685,8 +724,9 @@ export default function AdminDashboard() {
     for (const id of selectedBookingIds) {
       await fetch(`/api/admin/bookings/${id}`, { method: "DELETE" });
     }
+    setBookings(prev => prev.filter(b => !selectedBookingIds.includes(b.id)));
     setSelectedBookingIds([]);
-    window.location.reload();
+    showToast(`${selectedBookingIds.length} bookings deleted!`);
   };
 
   const filteredBookings = bookings.filter(b => {
@@ -751,11 +791,18 @@ export default function AdminDashboard() {
         body: JSON.stringify(postForm)
       });
       if (res.ok) {
+        const savedPost = await res.json();
+        if (editingPost) {
+          setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...postForm, ...savedPost } : p));
+        } else {
+          setPosts(prev => [savedPost, ...prev]);
+        }
         setEditingPost(undefined);
-        window.location.reload();
+        showToast(editingPost ? "Post updated successfully!" : "Post created successfully!");
       }
     } catch (err) {
       console.error(err);
+      showToast("Failed to save post.", "error");
     } finally {
       setIsSaving(false);
     }
@@ -763,7 +810,10 @@ export default function AdminDashboard() {
   const deletePost = async (id: string) => {
     if (!confirm("Are you sure?")) return;
     const res = await fetch(`/api/admin/posts/${id}`, { method: "DELETE" });
-    if (res.ok) window.location.reload();
+    if (res.ok) {
+      setPosts(prev => prev.filter(p => p.id !== id));
+      showToast("Post deleted successfully!");
+    }
   };
 
   // ─── Pages ───────────────────────────────────────────────────────────────────
@@ -813,11 +863,18 @@ export default function AdminDashboard() {
       const method = editingPage ? "PUT" : "POST";
       const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(pageForm) });
       if (res.ok) {
+        const savedPage = await res.json();
+        if (editingPage) {
+          setPages(prev => prev.map(p => p.id === editingPage.id ? { ...p, ...pageForm, ...savedPage } : p));
+        } else {
+          setPages(prev => [savedPage, ...prev]);
+        }
         setEditingPage(undefined);
-        window.location.reload();
+        showToast(editingPage ? "Page updated successfully!" : "Page created successfully!");
       }
     } catch (err) {
       console.error(err);
+      showToast("Failed to save page.", "error");
     } finally {
       setIsSaving(false);
     }
@@ -825,7 +882,10 @@ export default function AdminDashboard() {
   const deletePage = async (id: string) => {
     if (!confirm("Delete page?")) return;
     const res = await fetch(`/api/admin/pages/${id}`, { method: "DELETE" });
-    if (res.ok) window.location.reload();
+    if (res.ok) {
+      setPages(prev => prev.filter(p => p.id !== id));
+      showToast("Page deleted successfully!");
+    }
   };
 
   // Quick Edit actions
@@ -849,8 +909,9 @@ export default function AdminDashboard() {
         body: JSON.stringify(updatedPost)
       });
       if (res.ok) {
+        setPosts(prev => prev.map(p => p.id === id ? { ...p, ...quickPostForm } : p));
         setQuickEditingPostId(null);
-        window.location.reload();
+        showToast("Post updated!");
       }
     } catch (err) {
       console.error(err);
@@ -878,8 +939,9 @@ export default function AdminDashboard() {
         body: JSON.stringify(updatedPage)
       });
       if (res.ok) {
+        setPages(prev => prev.map(p => p.id === id ? { ...p, ...quickPageForm } : p));
         setQuickEditingPageId(null);
-        window.location.reload();
+        showToast("Page updated!");
       }
     } catch (err) {
       console.error(err);
@@ -984,8 +1046,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         setSaveStatus("Homepage updated successfully!");
         setTimeout(() => setSaveStatus(""), 4000);
-        setEditingHomepage(false);
-        window.location.reload();
+        showToast("Homepage settings saved successfully!");
       } else {
         setSaveStatus("Failed to save homepage settings.");
       }
@@ -1128,6 +1189,28 @@ export default function AdminDashboard() {
 
         {/* Main Content */}
         <main className="flex-1 p-6 min-h-0 overflow-y-auto">
+
+          {/* Toast Notification */}
+          {toastMessage && (
+            <div className={`fixed top-14 right-6 z-[9999] px-5 py-3 rounded-lg shadow-lg text-sm font-semibold flex items-center gap-2 animate-fade-in transition-all ${
+              toastType === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"
+            }`} style={{ animation: "fadeInSlide 0.3s ease" }}>
+              {toastType === "success" ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+              {toastMessage}
+              <button onClick={() => setToastMessage("")} className="ml-2 opacity-70 hover:opacity-100"><X className="w-3.5 h-3.5" /></button>
+            </div>
+          )}
+
+          {/* Breadcrumbs */}
+          <nav className="flex items-center gap-1.5 text-xs text-[#646970] mb-4">
+            <Home className="w-3.5 h-3.5" />
+            <a onClick={() => handleTabClick("dashboard")} className="hover:text-[#2271b1] cursor-pointer transition">Home</a>
+            <ChevronRight className="w-3 h-3 text-[#a7aaad]" />
+            <span className="text-[#1d2327] font-semibold">
+              {navItems.find(n => n.id === activeTab)?.label || "Dashboard"}
+              {activeTab === "settings" && settingsTab ? ` › ${settingsTab.charAt(0).toUpperCase() + settingsTab.slice(1)}` : ""}
+            </span>
+          </nav>
 
           {/* ─── DASHBOARD ──────────────────────────────────────── */}
           {activeTab === "dashboard" && (

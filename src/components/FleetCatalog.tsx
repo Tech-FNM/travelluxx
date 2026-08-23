@@ -51,31 +51,31 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
 
   const fleet = {
     Economy: {
-      name: "Business Economy Class",
-      tagline: "Elegant, clean, and highly efficient travel.",
-      image: getCustomImage("fleet_Economy", mercedesEconomyImg),
+      name: settings?.fleet_economy_name || "Business Economy Class",
+      tagline: settings?.fleet_economy_tagline || "Elegant, clean, and highly efficient travel.",
+      image: settings?.fleet_economy_image || getCustomImage("fleet_Economy", mercedesEconomyImg),
       rate: pricing?.Economy?.perMile !== undefined ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
-      description: "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
+      description: settings?.fleet_economy_description || "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
       cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
-      features: ["Complimentary 4G Wi-Fi", "Dual-zone Climate Control", "USB Charging Ports", "Bottle Holders & Newspapers"]
+      features: (settings?.fleet_economy_features || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(",").map((s: string) => s.trim()).filter(Boolean)
     },
     Luxury: {
-      name: "First Class Luxury Chauffeur",
-      tagline: "The pinnacle of executive comfort and style.",
-      image: getCustomImage("fleet_Luxury", mercedesLuxuryImg),
+      name: settings?.fleet_luxury_name || "First Class Luxury Chauffeur",
+      tagline: settings?.fleet_luxury_tagline || "The pinnacle of executive comfort and style.",
+      image: settings?.fleet_luxury_image || getCustomImage("fleet_Luxury", mercedesLuxuryImg),
       rate: pricing?.Luxury?.perMile !== undefined ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
-      description: "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
+      description: settings?.fleet_luxury_description || "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
       cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
-      features: ["Premium Leather Reclining Seats", "Complimentary Bottled Water", "Ambient Lighting Controls", "Rear Seat Entertainment Systems", "Quiet Acoustic Cabins"]
+      features: (settings?.fleet_luxury_features || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(",").map((s: string) => s.trim()).filter(Boolean)
     },
     Family: {
-      name: "Family & Executive MPV",
-      tagline: "Generous space for luggage and loved ones.",
-      image: getCustomImage("fleet_Family", mercedesFamilyImg),
+      name: settings?.fleet_family_name || "Family & Executive MPV",
+      tagline: settings?.fleet_family_tagline || "Generous space for luggage and loved ones.",
+      image: settings?.fleet_family_image || getCustomImage("fleet_Family", mercedesFamilyImg),
       rate: pricing?.Family?.perMile !== undefined ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
-      description: "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
+      description: settings?.fleet_family_description || "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
       cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
-      features: ["Conference Seating Options", "Massive Boot Capacity", "Automatic Sliding Doors", "Privacy Glass", "Individual Air-Con Units", "Child Seats Available (On Request)"]
+      features: (settings?.fleet_family_features || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(",").map((s: string) => s.trim()).filter(Boolean)
     }
   };
 

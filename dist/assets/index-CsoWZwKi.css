@@ -1188,6 +1188,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     top: calc(var(--spacing) * 9);
   }
 
+  .top-14 {
+    top: calc(var(--spacing) * 14);
+  }
+
   .-right-4 {
     right: calc(var(--spacing) * -4);
   }
@@ -1266,6 +1270,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .z-50 {
     z-index: 50;
+  }
+
+  .z-\[9999\] {
+    z-index: 9999;
   }
 
   .col-span-2 {
@@ -3666,6 +3674,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     opacity: .5;
   }
 
+  .opacity-70 {
+    opacity: .7;
+  }
+
   .opacity-75 {
     opacity: .75;
   }
@@ -4115,6 +4127,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
       color: #135e96;
     }
 
+    .hover\:text-\[\#2271b1\]:hover {
+      color: #2271b1;
+    }
+
     .hover\:text-\[\#b32d2e\]:hover {
       color: #b32d2e;
     }
@@ -4157,6 +4173,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:underline:hover {
       text-decoration-line: underline;
+    }
+
+    .hover\:opacity-100:hover {
+      opacity: 1;
     }
 
     .hover\:shadow-lg:hover {
