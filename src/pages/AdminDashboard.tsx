@@ -2198,6 +2198,207 @@ export default function AdminDashboard() {
                               placeholder="e.g. Our curated fleet features..."
                             />
                           </div>
+
+                          {/* Economy Class Tab */}
+                          <div className="border-t border-[#f0f0f1] pt-4 mt-2">
+                            <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Economy Class Tab Settings</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Class Name</label>
+                                <input
+                                  type="text"
+                                  value={settings.fleet_economy_name || ""}
+                                  onChange={e => setSettings({ ...settings, fleet_economy_name: e.target.value })}
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Tagline / Key Feature</label>
+                                <input
+                                  type="text"
+                                  value={settings.fleet_economy_tagline || ""}
+                                  onChange={e => setSettings({ ...settings, fleet_economy_tagline: e.target.value })}
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                            </div>
+                            <div className="mt-3">
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Description</label>
+                              <textarea
+                                rows={2}
+                                value={settings.fleet_economy_description || ""}
+                                onChange={e => setSettings({ ...settings, fleet_economy_description: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                            <div className="mt-3">
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Amenities (Comma separated)</label>
+                              <input
+                                type="text"
+                                value={settings.fleet_economy_features || ""}
+                                onChange={e => setSettings({ ...settings, fleet_economy_features: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="Complimentary 4G Wi-Fi, USB Charging, etc."
+                              />
+                            </div>
+                            <div className="mt-3">
+                              <span className="block text-xs font-semibold text-[#1d2327] mb-1.5">Vehicle Image</span>
+                              {settings.fleet_economy_image ? (
+                                <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                  <img src={settings.fleet_economy_image} alt="Economy" className="max-w-full max-h-full object-contain" />
+                                  <button type="button" onClick={() => setSettings({ ...settings, fleet_economy_image: "" })}
+                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setEditorTarget("settings-fleet_economy_image");
+                                    setEditorMediaModalOpen(true);
+                                  }}
+                                  className="bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs"
+                                >
+                                  Select Image
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Luxury Class Tab */}
+                          <div className="border-t border-[#f0f0f1] pt-4 mt-4">
+                            <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Luxury Class Tab Settings</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Class Name</label>
+                                <input
+                                  type="text"
+                                  value={settings.fleet_luxury_name || ""}
+                                  onChange={e => setSettings({ ...settings, fleet_luxury_name: e.target.value })}
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Tagline / Key Feature</label>
+                                <input
+                                  type="text"
+                                  value={settings.fleet_luxury_tagline || ""}
+                                  onChange={e => setSettings({ ...settings, fleet_luxury_tagline: e.target.value })}
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                            </div>
+                            <div className="mt-3">
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Description</label>
+                              <textarea
+                                rows={2}
+                                value={settings.fleet_luxury_description || ""}
+                                onChange={e => setSettings({ ...settings, fleet_luxury_description: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                            <div className="mt-3">
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Amenities (Comma separated)</label>
+                              <input
+                                type="text"
+                                value={settings.fleet_luxury_features || ""}
+                                onChange={e => setSettings({ ...settings, fleet_luxury_features: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="Premium Leather Reclining Seats, Ambient Lighting, etc."
+                              />
+                            </div>
+                            <div className="mt-3">
+                              <span className="block text-xs font-semibold text-[#1d2327] mb-1.5">Vehicle Image</span>
+                              {settings.fleet_luxury_image ? (
+                                <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                  <img src={settings.fleet_luxury_image} alt="Luxury" className="max-w-full max-h-full object-contain" />
+                                  <button type="button" onClick={() => setSettings({ ...settings, fleet_luxury_image: "" })}
+                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setEditorTarget("settings-fleet_luxury_image");
+                                    setEditorMediaModalOpen(true);
+                                  }}
+                                  className="bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs"
+                                >
+                                  Select Image
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Family Class Tab */}
+                          <div className="border-t border-[#f0f0f1] pt-4 mt-4">
+                            <h4 className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Family / MPV Class Tab Settings</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Class Name</label>
+                                <input
+                                  type="text"
+                                  value={settings.fleet_family_name || ""}
+                                  onChange={e => setSettings({ ...settings, fleet_family_name: e.target.value })}
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Tagline / Key Feature</label>
+                                <input
+                                  type="text"
+                                  value={settings.fleet_family_tagline || ""}
+                                  onChange={e => setSettings({ ...settings, fleet_family_family: e.target.value })}
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                            </div>
+                            <div className="mt-3">
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Description</label>
+                              <textarea
+                                rows={2}
+                                value={settings.fleet_family_description || ""}
+                                onChange={e => setSettings({ ...settings, fleet_family_description: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                            <div className="mt-3">
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5">Amenities (Comma separated)</label>
+                              <input
+                                type="text"
+                                value={settings.fleet_family_features || ""}
+                                onChange={e => setSettings({ ...settings, fleet_family_features: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="Conference Seating, Massive Boot, etc."
+                              />
+                            </div>
+                            <div className="mt-3">
+                              <span className="block text-xs font-semibold text-[#1d2327] mb-1.5">Vehicle Image</span>
+                              {settings.fleet_family_image ? (
+                                <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                  <img src={settings.fleet_family_image} alt="Family" className="max-w-full max-h-full object-contain" />
+                                  <button type="button" onClick={() => setSettings({ ...settings, fleet_family_image: "" })}
+                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setEditorTarget("settings-fleet_family_image");
+                                    setEditorMediaModalOpen(true);
+                                  }}
+                                  className="bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs"
+                                >
+                                  Select Image
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </div>
 
                         {/* Section 4: Airports/Services Intro */}

@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CnQIpqaJ.js"(exports, module) {
+  "assets/index-DYZY-m43.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -42839,6 +42839,246 @@ ${escapeText(this.code(index, length))}
                             placeholder: "e.g. Our curated fleet features..."
                           }
                         )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-4 mt-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3", children: "Economy Class Tab Settings" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Class Name" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings.fleet_economy_name || "",
+                                onChange: (e) => setSettings({ ...settings, fleet_economy_name: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Tagline / Key Feature" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings.fleet_economy_tagline || "",
+                                onChange: (e) => setSettings({ ...settings, fleet_economy_tagline: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Description" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: settings.fleet_economy_description || "",
+                              onChange: (e) => setSettings({ ...settings, fleet_economy_description: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Amenities (Comma separated)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.fleet_economy_features || "",
+                              onChange: (e) => setSettings({ ...settings, fleet_economy_features: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "Complimentary 4G Wi-Fi, USB Charging, etc."
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Vehicle Image" }),
+                          settings.fleet_economy_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.fleet_economy_image, alt: "Economy", className: "max-w-full max-h-full object-contain" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setSettings({ ...settings, fleet_economy_image: "" }),
+                                className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
+                              }
+                            )
+                          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                setEditorTarget("settings-fleet_economy_image");
+                                setEditorMediaModalOpen(true);
+                              },
+                              className: "bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs",
+                              children: "Select Image"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-4 mt-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3", children: "Luxury Class Tab Settings" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Class Name" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings.fleet_luxury_name || "",
+                                onChange: (e) => setSettings({ ...settings, fleet_luxury_name: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Tagline / Key Feature" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings.fleet_luxury_tagline || "",
+                                onChange: (e) => setSettings({ ...settings, fleet_luxury_tagline: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Description" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: settings.fleet_luxury_description || "",
+                              onChange: (e) => setSettings({ ...settings, fleet_luxury_description: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Amenities (Comma separated)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.fleet_luxury_features || "",
+                              onChange: (e) => setSettings({ ...settings, fleet_luxury_features: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "Premium Leather Reclining Seats, Ambient Lighting, etc."
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Vehicle Image" }),
+                          settings.fleet_luxury_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.fleet_luxury_image, alt: "Luxury", className: "max-w-full max-h-full object-contain" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setSettings({ ...settings, fleet_luxury_image: "" }),
+                                className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
+                              }
+                            )
+                          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                setEditorTarget("settings-fleet_luxury_image");
+                                setEditorMediaModalOpen(true);
+                              },
+                              className: "bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs",
+                              children: "Select Image"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-4 mt-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3", children: "Family / MPV Class Tab Settings" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Class Name" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings.fleet_family_name || "",
+                                onChange: (e) => setSettings({ ...settings, fleet_family_name: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Tagline / Key Feature" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: settings.fleet_family_tagline || "",
+                                onChange: (e) => setSettings({ ...settings, fleet_family_family: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Description" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: settings.fleet_family_description || "",
+                              onChange: (e) => setSettings({ ...settings, fleet_family_description: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Amenities (Comma separated)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.fleet_family_features || "",
+                              onChange: (e) => setSettings({ ...settings, fleet_family_features: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "Conference Seating, Massive Boot, etc."
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Vehicle Image" }),
+                          settings.fleet_family_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.fleet_family_image, alt: "Family", className: "max-w-full max-h-full object-contain" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setSettings({ ...settings, fleet_family_image: "" }),
+                                className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
+                              }
+                            )
+                          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                setEditorTarget("settings-fleet_family_image");
+                                setEditorMediaModalOpen(true);
+                              },
+                              className: "bg-[#f6f7f7] border border-[#c3c4c7] text-[#2271b1] px-3 py-1 rounded text-xs",
+                              children: "Select Image"
+                            }
+                          )
+                        ] })
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [

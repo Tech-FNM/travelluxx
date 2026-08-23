@@ -1683,6 +1683,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     width: calc(var(--spacing) * 32);
   }
 
+  .w-36 {
+    width: calc(var(--spacing) * 36);
+  }
+
   .w-40 {
     width: calc(var(--spacing) * 40);
   }
@@ -2454,10 +2458,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .bg-\[\#ef4444\] {
     background-color: #ef4444;
-  }
-
-  .bg-\[\#f0b01c\] {
-    background-color: #f0b01c;
   }
 
   .bg-\[\#f0f0f1\] {
@@ -4027,10 +4027,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:bg-\[\#dcdcde\]:hover {
       background-color: #dcdcde;
-    }
-
-    .hover\:bg-\[\#e0a010\]:hover {
-      background-color: #e0a010;
     }
 
     .hover\:bg-\[\#f0f0f1\]:hover {
