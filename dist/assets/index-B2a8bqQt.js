@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-UoCYwcss.js"(exports, module) {
+  "assets/index-B2a8bqQt.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -45885,6 +45885,21 @@ ${escapeText(this.code(index, length))}
       }, [settings]);
       reactExports.useEffect(() => {
         if (settings) {
+          const baseUrl = "https://travelluxx.co.uk";
+          const pageUrl = `${baseUrl}/`;
+          const setMeta = (attr, attrVal, content) => {
+            let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+            if (!el) {
+              el = document.createElement("meta");
+              el.setAttribute(attr, attrVal);
+              document.head.appendChild(el);
+            }
+            el.setAttribute("content", content);
+          };
+          const homepageTitle = settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
+          const homepageDesc = settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
+          document.title = homepageTitle;
+          setMeta("name", "description", homepageDesc);
           let robotsMeta = document.querySelector("meta[name='robots']");
           if (!robotsMeta) {
             robotsMeta = document.createElement("meta");
@@ -45898,7 +45913,24 @@ ${escapeText(this.code(index, length))}
             canonical.setAttribute("rel", "canonical");
             document.head.appendChild(canonical);
           }
-          canonical.setAttribute("href", "https://travelluxx.co.uk/");
+          canonical.setAttribute("href", pageUrl);
+          setMeta("property", "og:type", "website");
+          setMeta("property", "og:url", pageUrl);
+          setMeta("property", "og:title", homepageTitle);
+          setMeta("property", "og:description", homepageDesc);
+          setMeta("property", "og:site_name", settings.business_name || "TravelLuxx");
+          if (settings.logo_image) {
+            const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
+            setMeta("property", "og:image", logoUrl);
+          }
+          setMeta("property", "twitter:card", "summary_large_image");
+          setMeta("property", "twitter:url", pageUrl);
+          setMeta("property", "twitter:title", homepageTitle);
+          setMeta("property", "twitter:description", homepageDesc);
+          if (settings.logo_image) {
+            const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
+            setMeta("property", "twitter:image", logoUrl);
+          }
         }
       }, [settings]);
       const handleScrollTo = (elementId) => {

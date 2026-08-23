@@ -43,6 +43,28 @@ function PublicLandingPage() {
 
   useEffect(() => {
     if (settings) {
+      const baseUrl = "https://travelluxx.co.uk";
+      const pageUrl = `${baseUrl}/`;
+
+      // Helper to set/create meta tags
+      const setMeta = (attr: string, attrVal: string, content: string) => {
+        let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+        if (!el) {
+          el = document.createElement("meta");
+          el.setAttribute(attr, attrVal);
+          document.head.appendChild(el);
+        }
+        el.setAttribute("content", content);
+      };
+
+      // Set Title and Description
+      const homepageTitle = settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
+      const homepageDesc = settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
+      
+      document.title = homepageTitle;
+      setMeta("name", "description", homepageDesc);
+
+      // Robots
       let robotsMeta = document.querySelector("meta[name='robots']");
       if (!robotsMeta) {
         robotsMeta = document.createElement("meta");
@@ -58,7 +80,28 @@ function PublicLandingPage() {
         canonical.setAttribute("rel", "canonical");
         document.head.appendChild(canonical);
       }
-      canonical.setAttribute("href", "https://travelluxx.co.uk/");
+      canonical.setAttribute("href", pageUrl);
+
+      // Open Graph
+      setMeta("property", "og:type", "website");
+      setMeta("property", "og:url", pageUrl);
+      setMeta("property", "og:title", homepageTitle);
+      setMeta("property", "og:description", homepageDesc);
+      setMeta("property", "og:site_name", settings.business_name || "TravelLuxx");
+      if (settings.logo_image) {
+        const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
+        setMeta("property", "og:image", logoUrl);
+      }
+
+      // Twitter Card
+      setMeta("property", "twitter:card", "summary_large_image");
+      setMeta("property", "twitter:url", pageUrl);
+      setMeta("property", "twitter:title", homepageTitle);
+      setMeta("property", "twitter:description", homepageDesc);
+      if (settings.logo_image) {
+        const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
+        setMeta("property", "twitter:image", logoUrl);
+      }
     }
   }, [settings]);
 
