@@ -180,6 +180,7 @@ async function connectToDatabase() {
     return;
   }
   try {
+    import_mongoose.default.set("bufferCommands", false);
     await import_mongoose.default.connect(MONGODB_URI, {
       serverSelectionTimeoutMS: 3e3
     });
@@ -756,9 +757,11 @@ app.post("/api/bookings", async (req, res) => {
     bookings.unshift(newBooking);
     writeBookings(bookings);
     try {
-      const dbBooking = new BookingModel(newBooking);
-      await dbBooking.save();
-      console.log("\u{1F4BE} Saved booking to MongoDB!");
+      if (import_mongoose.default.connection.readyState === 1) {
+        const dbBooking = new BookingModel(newBooking);
+        await dbBooking.save();
+        console.log("\u{1F4BE} Saved booking to MongoDB!");
+      }
     } catch (dbErr) {
       console.error("MongoDB Insert error:", dbErr.message);
     }
@@ -1558,6 +1561,7 @@ app.post("/api/save-asset-image", (req, res) => {
   }
 });
 async function startServer() {
+  await connectToDatabase();
   const distPath = import_path.default.join(process.cwd(), "dist");
   const distIndexPath = import_path.default.join(distPath, "index.html");
   const isProduction = process.env.NODE_ENV === "production" || import_fs.default.existsSync(distIndexPath);

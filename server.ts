@@ -175,6 +175,7 @@ async function connectToDatabase() {
   }
 
   try {
+    mongoose.set('bufferCommands', false);
     await mongoose.connect(MONGODB_URI, {
       serverSelectionTimeoutMS: 3000
     });
@@ -830,9 +831,11 @@ app.post("/api/bookings", async (req, res) => {
 
     // Save to MongoDB
     try {
-      const dbBooking = new BookingModel(newBooking);
-      await dbBooking.save();
-      console.log("💾 Saved booking to MongoDB!");
+      if (mongoose.connection.readyState === 1) {
+        const dbBooking = new BookingModel(newBooking);
+        await dbBooking.save();
+        console.log("💾 Saved booking to MongoDB!");
+      }
     } catch (dbErr: any) {
       console.error("MongoDB Insert error:", dbErr.message);
     }
@@ -1743,6 +1746,7 @@ app.post("/api/save-asset-image", (req, res) => {
 });
 
 async function startServer() {
+  await connectToDatabase();
   // Robust production detection: agar dist/index.html mojood hai to production mode
   // hi use karo, chahe NODE_ENV hosting panel mein set ho ya na ho.
   const distPath = path.join(process.cwd(), "dist");
