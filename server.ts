@@ -176,15 +176,15 @@ async function connectToDatabase() {
 
   try {
     mongoose.set('bufferCommands', false);
-    await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 3000
-    });
+    const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/travelluxx";
+    await mongoose.connect(uri);
+    console.log("Connected to MongoDB!");
     isConnected = true;
-    console.log("✅ MongoDB connected successfully!");
     await runMigrations();
     await syncSettingsFromDb();
   } catch (err: any) {
-    console.error("❌ MongoDB connection error:", err.message);
+    console.error("MongoDB connection error:", err.message);
+    throw err;
   }
 }
 
@@ -900,15 +900,17 @@ app.post("/api/bookings", async (req, res) => {
     bookings.unshift(newBooking);
     writeBookings(bookings);
 
-    // Save to MongoDB
-    try {
-      if (mongoose.connection.readyState === 1) {
-        const dbBooking = new BookingModel(newBooking);
-        await dbBooking.save();
-        console.log("💾 Saved booking to MongoDB!");
-      }
-    } catch (dbErr: any) {
-      console.error("MongoDB Insert error:", dbErr.message);
+    // Save to MongoDB (with explicit check)
+    if (mongoose.connection.readyState === 1) {
+      const dbBooking = new BookingModel(newBooking);
+      await dbBooking.save();
+      console.log("💾 Saved booking to MongoDB!");
+    } else {
+      console.warn("⚠️ MongoDB connection not active, trying to connect...");
+      await connectToDatabase();
+      const dbBooking = new BookingModel(newBooking);
+      await dbBooking.save();
+      console.log("💾 Saved booking to MongoDB after reconnect!");
     }
 
     sendBookingEmails(newBooking).catch(err => console.error("Booking email error:", err));
@@ -916,6 +918,7 @@ app.post("/api/bookings", async (req, res) => {
 
     return res.json({ success: true, booking: newBooking });
   } catch (err: any) {
+    console.error("Failed to create booking:", err);
     return res.status(500).json({ error: err.message || "Failed to create booking" });
   }
 });
@@ -1426,16 +1429,29 @@ app.post("/api/admin/register", (req, res) => {
 });
 
 app.post("/api/bookings/payment-simulate", async (req, res) => {
-
   const { bookingId } = req.body;
-  const bookings = readBookings();
-  const booking = bookings.find(b => b.id === bookingId);
-  if (booking) {
-    booking.paymentStatus = "Paid";
-    booking.status = "Confirmed";
-    writeBookings(bookings);
+  try {
+    await connectToDatabase();
+    if (mongoose.connection.readyState === 1) {
+      await BookingModel.findOneAndUpdate(
+        { id: bookingId },
+        { $set: { paymentStatus: "Paid", status: "Pending" } }
+      );
+      console.log(`💾 Simulated payment (Paid, Pending) for ${bookingId} in MongoDB!`);
+    }
+    
+    const bookings = readBookings();
+    const booking = bookings.find(b => b.id === bookingId);
+    if (booking) {
+      booking.paymentStatus = "Paid";
+      booking.status = "Pending";
+      writeBookings(bookings);
+    }
+    return res.json({ success: true, transactionId: `TXN-${Math.random().toString(36).substring(2, 10).toUpperCase()}` });
+  } catch (err: any) {
+    console.error("Simulation error:", err);
+    return res.status(500).json({ error: err.message });
   }
-  return res.json({ success: true, transactionId: `TXN-${Math.random().toString(36).substring(2, 10).toUpperCase()}` });
 });
 
 // Mollie Payment Gateway Routes
@@ -1529,9 +1545,16 @@ app.post("/api/mollie/webhook", async (req, res) => {
       if (booking) {
         if (payment.status === "paid") {
           booking.paymentStatus = "Paid";
-          booking.status = "Confirmed";
+          booking.status = "Pending";
           booking.paymentMethod = "Mollie";
           writeBookings(bookings);
+
+          if (mongoose.connection.readyState === 1) {
+            await BookingModel.findOneAndUpdate(
+              { id: bookingId },
+              { $set: { paymentStatus: "Paid", status: "Pending", paymentMethod: "Mollie" } }
+            );
+          }
 
           sendBookingEmails(booking).catch(err => console.error("Mollie email error:", err));
           sendWhatsAppNotification(booking).catch(err => console.error("Mollie WhatsApp error:", err));
@@ -1539,6 +1562,12 @@ app.post("/api/mollie/webhook", async (req, res) => {
           booking.paymentStatus = "Failed/Canceled";
           booking.status = "Canceled";
           writeBookings(bookings);
+          if (mongoose.connection.readyState === 1) {
+            await BookingModel.findOneAndUpdate(
+              { id: bookingId },
+              { $set: { paymentStatus: "Failed/Canceled", status: "Canceled" } }
+            );
+          }
         }
       }
     }
