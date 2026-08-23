@@ -70,6 +70,11 @@ export default function RenaxLayout({
   });
 
   useEffect(() => {
+    const customSetting = settings?.hero_image || settings?.heroImage;
+    setBgImage((customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : heroImg);
+  }, [settings]);
+
+  useEffect(() => {
     fetch("/api/pricing")
       .then(res => res.json())
       .then(data => setPricing(data))
@@ -79,6 +84,32 @@ export default function RenaxLayout({
   const formattedPhone = whatsappNum.startsWith("44") 
     ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` 
     : whatsappNum;
+
+  const rawTitle = settings?.homepage_hero_title || "Nationwide Airport | Transfers & Private Chauffeur";
+  const titleParts = rawTitle.split("|");
+  const titlePart1 = titleParts[0]?.trim() || "Nationwide Airport";
+  const titlePart2 = titleParts[1]?.trim();
+
+  const badgeText = settings?.homepage_hero_badge || "Premium Chauffeur Service";
+  const heroDesc = settings?.homepage_hero_subtitle || "Experience the pinnacle of luxury private hire. Highly maintained Mercedes-Benz & Audi fleets for your comfort with guaranteed fixed rates.";
+  const ind1 = settings?.homepage_indicator1 || "Licensed Operators";
+  const ind2 = settings?.homepage_indicator2 || "Nationwide Coverage";
+  const ind3 = settings?.homepage_indicator3 || "Zero Surge Pricing";
+
+  const btn1Text = settings?.homepage_hero_btn_text || "Book Chauffeur Now";
+  const btn1Link = settings?.homepage_hero_btn_link || "calculator-section";
+  const btn2Text = settings?.homepage_hero_phone_text || formattedPhone;
+  const btn2Link = settings?.homepage_hero_phone_link || `tel:${whatsappNum}`;
+
+  const handleBtn1Click = () => {
+    if (btn1Link === "calculator-section") {
+      handleScrollTo("calculator-section");
+    } else if (btn1Link.startsWith("#")) {
+      handleScrollTo(btn1Link.substring(1));
+    } else {
+      window.location.href = btn1Link;
+    }
+  };
 
   const fleet = {
     Economy: {
@@ -155,52 +186,54 @@ export default function RenaxLayout({
           <div className="flex justify-center">
             <div className="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full text-xs font-semibold text-emerald-400 tracking-widest uppercase">
               <Sparkles className="w-3 h-3 text-emerald-400 animate-pulse" />
-              <span>Premium Chauffeur Service</span>
+              <span>{badgeText}</span>
             </div>
           </div>
 
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-none uppercase">
-              Nationwide Airport <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                Transfers & Private Chauffeur
-              </span>
+              {titlePart1} <br />
+              {titlePart2 && (
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
+                  {titlePart2}
+                </span>
+              )}
             </h1>
             <p className="text-slate-400 text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed font-light">
-              Experience the pinnacle of luxury private hire. Highly maintained Mercedes-Benz & Audi fleets for your comfort with guaranteed fixed rates.
+              {heroDesc}
             </p>
           </div>
 
           <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto pt-6 border-t border-slate-900">
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Licensed Operators</span>
+              <span>{ind1}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Compass className="w-4 h-4 text-emerald-400" />
-              <span>Nationwide Coverage</span>
+              <span>{ind2}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-emerald-400" />
-              <span>Zero Surge Pricing</span>
+              <span>{ind3}</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
             <button
-              onClick={() => handleScrollTo("calculator-section")}
+              onClick={handleBtn1Click}
               className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold tracking-wide px-8 py-4 rounded-xl text-sm transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-emerald-600/10 hover:shadow-emerald-600/30 w-full sm:w-auto"
             >
-              <span>Book Chauffeur Now</span>
+              <span>{btn1Text}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
             <a
-              href={`tel:${whatsappNum}`}
+              href={btn2Link}
               className="flex items-center justify-center space-x-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold tracking-wide px-8 py-4 rounded-xl text-sm transition-all duration-300 w-full sm:w-auto"
             >
               <Phone className="w-4 h-4 text-emerald-400 fill-current" />
-              <span>{formattedPhone}</span>
+              <span>{btn2Text}</span>
             </a>
           </div>
         </div>

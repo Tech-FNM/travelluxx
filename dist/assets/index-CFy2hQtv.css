@@ -752,6 +752,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --color-red-500: oklch(63.7% .237 25.331);
     --color-red-600: oklch(57.7% .245 27.325);
     --color-red-700: oklch(50.5% .213 27.518);
+    --color-red-800: oklch(44.4% .177 26.899);
     --color-amber-50: oklch(98.7% .022 95.277);
     --color-amber-200: oklch(92.4% .12 95.746);
     --color-amber-700: oklch(55.5% .163 48.998);
@@ -764,6 +765,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --color-green-300: oklch(87.1% .15 154.449);
     --color-green-600: oklch(62.7% .194 149.214);
     --color-green-700: oklch(52.7% .154 150.069);
+    --color-green-800: oklch(44.8% .119 151.328);
     --color-emerald-50: oklch(97.9% .021 166.113);
     --color-emerald-100: oklch(95% .052 163.051);
     --color-emerald-200: oklch(90.5% .093 164.15);
@@ -1547,6 +1549,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .h-\[calc\(100vh-36px\)\] {
     height: calc(100vh - 36px);
+  }
+
+  .h-fit {
+    height: fit-content;
   }
 
   .h-full {
@@ -2542,6 +2548,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     background-color: var(--color-emerald-50);
   }
 
+  .bg-emerald-50\/20 {
+    background-color: #ecfdf533;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-emerald-50\/20 {
+      background-color: color-mix(in oklab, var(--color-emerald-50) 20%, transparent);
+    }
+  }
+
   .bg-emerald-50\/50 {
     background-color: #ecfdf580;
   }
@@ -3278,6 +3294,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     font-size: 11px;
   }
 
+  .text-\[12px\] {
+    font-size: 12px;
+  }
+
   .text-\[13px\] {
     font-size: 13px;
   }
@@ -3541,12 +3561,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
     color: var(--color-green-700);
   }
 
+  .text-green-800 {
+    color: var(--color-green-800);
+  }
+
   .text-red-500 {
     color: var(--color-red-500);
   }
 
   .text-red-700 {
     color: var(--color-red-700);
+  }
+
+  .text-red-800 {
+    color: var(--color-red-800);
   }
 
   .text-rose-600 {
@@ -3865,10 +3893,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
 
-    .group-hover\:rotate-12:is(:where(.group):hover *) {
-      rotate: 12deg;
-    }
-
     .group-hover\:bg-emerald-500\/10:is(:where(.group):hover *) {
       background-color: #00bb7f1a;
     }
@@ -4031,16 +4055,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:bg-slate-50:hover {
       background-color: var(--color-slate-50);
-    }
-
-    .hover\:bg-slate-50\/50:hover {
-      background-color: #f8fafc80;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\:bg-slate-50\/50:hover {
-        background-color: color-mix(in oklab, var(--color-slate-50) 50%, transparent);
-      }
     }
 
     .hover\:bg-slate-100:hover {

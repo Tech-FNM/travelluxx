@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-cNTwg7LC.js"(exports, module) {
+  "assets/index-D3dA9AjW.js"(exports, module) {
     function _mergeNamespaces(n, m) {
       for (var i = 0; i < m.length; i++) {
         const e = m[i];
@@ -16002,6 +16002,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const heroImg = "/assets/hero_background_1786403449488-D8p7z1ht.jpg";
     const FALLBACK_HERO_URL = "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1920&q=80";
     function HeroSection({ onScrollToCalculator, settings }) {
+      var _a, _b;
       const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
       const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
       const getInitialBg = () => {
@@ -16021,6 +16022,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, [settings]);
       const formattedPhone = whatsappNum.startsWith("44") ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` : whatsappNum;
+      const rawTitle = (settings == null ? void 0 : settings.homepage_hero_title) || "Nationwide Airport | Transfers & Private Hire";
+      const titleParts = rawTitle.split("|");
+      const titlePart1 = ((_a = titleParts[0]) == null ? void 0 : _a.trim()) || "Nationwide Airport";
+      const titlePart2 = (_b = titleParts[1]) == null ? void 0 : _b.trim();
+      const badgeText = (settings == null ? void 0 : settings.homepage_hero_badge) || `${brandName.toUpperCase()} PRIVATE HIRE`;
+      const heroDesc = (settings == null ? void 0 : settings.homepage_hero_subtitle) || "Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing.";
+      const ind1 = (settings == null ? void 0 : settings.homepage_indicator1) || "Licensed Professional Operators";
+      const ind2 = (settings == null ? void 0 : settings.homepage_indicator2) || "Guaranteed Nationwide Coverage";
+      const btn1Text = (settings == null ? void 0 : settings.homepage_hero_btn_text) || "Calculate & Get Quote";
+      const btn1Link = (settings == null ? void 0 : settings.homepage_hero_btn_link) || "calculator-section";
+      const btn2Text = (settings == null ? void 0 : settings.homepage_hero_phone_text) || formattedPhone;
+      const btn2Link = (settings == null ? void 0 : settings.homepage_hero_phone_link) || `tel:${whatsappNum}`;
+      const handleBtn1Click = () => {
+        if (btn1Link === "calculator-section") {
+          onScrollToCalculator();
+        } else if (btn1Link.startsWith("#")) {
+          const element = document.getElementById(btn1Link.substring(1));
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        } else {
+          window.location.href = btn1Link;
+        }
+      };
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { id: "hero", className: "relative min-h-[90vh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-slate-950", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -16048,37 +16073,35 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center space-y-10", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center space-x-2 bg-emerald-500/15 border border-emerald-500/30 px-5 py-2.5 rounded-full text-xs font-sans text-emerald-300 font-semibold shadow-inner", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-3.5 h-3.5 text-emerald-400 animate-pulse" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-              brandName.toUpperCase(),
-              " PRIVATE HIRE"
-            ] })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: badgeText })
           ] }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-tight", children: [
-              "Nationwide Airport ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("br", { className: "hidden sm:inline" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 drop-shadow-sm", children: "Transfers & Private Hire" })
+              titlePart1,
+              " ",
+              titlePart2 && /* @__PURE__ */ jsxRuntimeExports.jsx("br", { className: "hidden sm:inline" }),
+              titlePart2 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 drop-shadow-sm", children: titlePart2 })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-sm sm:text-base lg:text-xl leading-relaxed max-w-2xl mx-auto", children: "Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing." })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-sm sm:text-base lg:text-xl leading-relaxed max-w-2xl mx-auto", children: heroDesc })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-slate-300 border-t border-slate-800 pt-8 max-w-xl mx-auto", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2.5", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-5 h-5 text-emerald-400 shrink-0" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "Licensed Professional Operators" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: ind1 })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2.5", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Compass, { className: "w-5 h-5 text-emerald-400 shrink-0" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "Guaranteed Nationwide Coverage" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: ind2 })
             ] })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row justify-center gap-4 pt-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
               "button",
               {
-                onClick: onScrollToCalculator,
-                className: "bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 cursor-pointer border border-emerald-500/20 group transform active:scale-95",
+                onClick: handleBtn1Click,
+                className: "bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 cursor-pointer border border-emerald-500/20 group transform active:scale-95 w-full sm:w-auto",
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Calculate & Get Quote" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: btn1Text }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4 group-hover:translate-x-1 transition-transform" })
                 ]
               }
@@ -16086,11 +16109,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
               "a",
               {
-                href: `tel:${whatsappNum}`,
-                className: "flex items-center justify-center space-x-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white px-8 py-4 rounded-xl text-sm font-semibold transition shadow-sm font-sans backdrop-blur-sm transform active:scale-95",
+                href: btn2Link,
+                className: "flex items-center justify-center space-x-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white px-8 py-4 rounded-xl text-sm font-semibold transition shadow-sm font-sans backdrop-blur-sm transform active:scale-95 w-full sm:w-auto",
                 children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { className: "w-4 h-4 fill-white text-emerald-400" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formattedPhone })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: btn2Text })
                 ]
               }
             )
@@ -29066,7 +29089,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const mercedesEconomyImg = "/assets/fleet_economy_1786403470397-ZbSk7mPw.jpg";
     const mercedesLuxuryImg = "/assets/fleet_luxury_1786403483244-GsvqzRW5.jpg";
     const mercedesFamilyImg = "/assets/fleet_family_1786403496325-DL-h_ExR.jpg";
-    function FleetCatalog({ onSelectClass }) {
+    function FleetCatalog({ onSelectClass, settings }) {
       var _a, _b, _c;
       const [activeTab, setActiveTab] = React.useState("Luxury");
       const [pricing, setPricing] = React.useState(null);
@@ -29126,9 +29149,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "fleet", className: "py-24 bg-slate-50 border-t border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-3xl mx-auto mb-16", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold", children: "Our Premium Fleet" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4", children: "Travel in Premium Comfort" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base leading-relaxed", children: "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers." })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold", children: (settings == null ? void 0 : settings.homepage_fleet_subtitle) || "Our Premium Fleet" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4", children: (settings == null ? void 0 : settings.homepage_fleet_title) || "Travel in Premium Comfort" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base leading-relaxed", children: (settings == null ? void 0 : settings.homepage_fleet_description) || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers." })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-12", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-slate-200 p-1.5 rounded-2xl flex space-x-1 sm:space-x-2 shadow-sm", children: Object.keys(fleet).map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
@@ -29199,7 +29222,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const stationTransfersImg = "/assets/transfer_station_1786403548164-CFCuDDFB.jpg";
     const popularCitiesImg = "/assets/transfer_city_1786403562698-CTOpR5C2.jpg";
     const businessTravelImg = "/assets/transfer_business_1786403576291-d6AxRFiS.jpg";
-    function AirportsGrid({ onSelectTransfer }) {
+    function AirportsGrid({ onSelectTransfer, settings }) {
       const [, setRefreshKey] = reactExports.useState(0);
       reactExports.useEffect(() => {
         const handleUpdate = () => setRefreshKey((prev) => prev + 1);
@@ -29257,7 +29280,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ];
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "airports", className: "py-20 bg-white border-t border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center mb-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: "We cover all major London airports" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center mb-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: (settings == null ? void 0 : settings.homepage_airports_title) || "We cover all major London airports" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm mb-16", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-y lg:divide-y-0 divide-slate-200", children: airports.map((airport, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
@@ -29324,7 +29347,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           const res = await fetch("/api/contact", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, phone, message })
+            body: JSON.stringify({ name, email, phone, message, type: "General Inquiry" })
           });
           if (res.ok) {
             trackClick("contact_submit");
@@ -41056,6 +41079,10 @@ ${escapeText(this.code(index, length))}
       const [yoastPageTab, setYoastPageTab] = reactExports.useState("seo");
       const [focusKeyphrasePost, setFocusKeyphrasePost] = reactExports.useState("");
       const [focusKeyphrasePage, setFocusKeyphrasePage] = reactExports.useState("");
+      const [editingHomepage, setEditingHomepage] = reactExports.useState(false);
+      const [showMollieKey, setShowMollieKey] = reactExports.useState(false);
+      const [testEmailLoading, setTestEmailLoading] = reactExports.useState(false);
+      const [testEmailResult, setTestEmailResult] = reactExports.useState(null);
       const [editorMediaModalOpen, setEditorMediaModalOpen] = reactExports.useState(false);
       const [editorTarget, setEditorTarget] = reactExports.useState("post");
       const [selectedEditorMediaUrl, setSelectedEditorMediaUrl] = reactExports.useState(null);
@@ -41483,6 +41510,8 @@ ${escapeText(this.code(index, length))}
           setPageForm((prev) => ({ ...prev, xImage: imageUrl }));
         } else if (editorTarget === "settings-logo") {
           setSettings((prev) => ({ ...prev, logo_url: imageUrl }));
+        } else if (editorTarget === "settings-hero") {
+          setSettings((prev) => ({ ...prev, hero_image: imageUrl }));
         }
         setEditorMediaModalOpen(false);
         setSelectedEditorMediaUrl(null);
@@ -41542,6 +41571,26 @@ ${escapeText(this.code(index, length))}
         } catch (err) {
           console.error(err);
           setSaveStatus("Failed to save.");
+        } finally {
+          setIsSaving(false);
+        }
+      };
+      const saveHomepageSettings = async (e) => {
+        setSaveStatus("Saving...");
+        setIsSaving(true);
+        try {
+          const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings) });
+          if (res.ok) {
+            setSaveStatus("Homepage updated successfully!");
+            setTimeout(() => setSaveStatus(""), 4e3);
+            setEditingHomepage(false);
+            window.location.reload();
+          } else {
+            setSaveStatus("Failed to save homepage settings.");
+          }
+        } catch (err) {
+          console.error(err);
+          setSaveStatus("Failed to save homepage settings.");
         } finally {
           setIsSaving(false);
         }
@@ -42454,7 +42503,305 @@ ${escapeText(this.code(index, length))}
                   }
                 )
               ] }),
-              editingPage !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
+              editingHomepage ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-slate-800 text-[13px]", children: "Homepage (Front Page Layout)" }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => saveHomepageSettings(),
+                        disabled: isSaving,
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                        children: [
+                          isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3.5 w-3.5 text-white", fill: "none", viewBox: "0 0 24 24", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
+                          ] }),
+                          "Save Homepage Content"
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setEditingHomepage(false),
+                        className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition",
+                        children: "Cancel"
+                      }
+                    )
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-6", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "1. Hero Section Content" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Hero Badge Text" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_hero_badge || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_badge: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. TRAVELLUXX PRIVATE HIRE"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Hero Title (Use | to split for colored text)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_hero_title || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_title: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Nationwide Airport | Transfers & Private Hire"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Hero Subtitle / Description" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "textarea",
+                          {
+                            rows: 3,
+                            value: settings.homepage_hero_subtitle || "",
+                            onChange: (e) => setSettings({ ...settings, homepage_hero_subtitle: e.target.value }),
+                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                            placeholder: "e.g. Experience premium private hire..."
+                          }
+                        )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "CTA Button 1 Text" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_hero_btn_text || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_text: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Calculate & Get Quote"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "CTA Button 1 Target / Link" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_hero_btn_link || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_link: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. calculator-section"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "CTA Button 2 Text / Phone" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_hero_phone_text || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_text: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. +44 121 714 0876"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "CTA Button 2 Target / Link" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_hero_phone_link || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_link: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. tel:441217140876"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-2 uppercase tracking-wide", children: "Hero Background Image" }),
+                        settings.hero_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center max-w-md", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.hero_image, alt: "preview", className: "max-w-full max-h-full object-cover" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => setSettings({ ...settings, hero_image: "" }),
+                              className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700",
+                              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
+                            }
+                          )
+                        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => {
+                              setEditorTarget("settings-hero");
+                              setEditorMediaModalOpen(true);
+                            },
+                            className: "bg-[#f6f7f7] hover:bg-[#f0f0f1] border border-[#c3c4c7] text-[#2271b1] hover:text-[#0a4b78] px-4 py-2.5 rounded font-semibold transition text-xs",
+                            children: "Select background image from Media"
+                          }
+                        )
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "2. Value Indicator Tags" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Indicator 1" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_indicator1 || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_indicator1: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Licensed Professional Operators"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Indicator 2" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_indicator2 || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_indicator2: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Guaranteed Nationwide Coverage"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Indicator 3 (Renax Theme Only)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_indicator3 || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_indicator3: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Zero Surge Pricing"
+                            }
+                          )
+                        ] })
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "3. Fleet Section Intro" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Fleet Subtitle" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_fleet_subtitle || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_fleet_subtitle: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Our Premium Fleet"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Fleet Main Title" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_fleet_title || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_fleet_title: e.target.value }),
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                              placeholder: "e.g. Travel in Premium Comfort"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Fleet Description" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "textarea",
+                          {
+                            rows: 3,
+                            value: settings.homepage_fleet_description || "",
+                            onChange: (e) => setSettings({ ...settings, homepage_fleet_description: e.target.value }),
+                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                            placeholder: "e.g. Our curated fleet features..."
+                          }
+                        )
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "4. Airports & Services Intro" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Airports Grid Section Title" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "input",
+                          {
+                            type: "text",
+                            value: settings.homepage_airports_title || "",
+                            onChange: (e) => setSettings({ ...settings, homepage_airports_title: e.target.value }),
+                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
+                            placeholder: "e.g. We cover all major London airports"
+                          }
+                        )
+                      ] })
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-1 bg-white border border-[#c3c4c7] rounded-sm shadow-sm flex flex-col justify-between overflow-hidden h-fit", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex border-b border-[#c3c4c7] text-xs font-semibold text-[#646970] bg-[#f6f7f7]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "flex-1 py-2 text-center bg-white text-[#2c3338] border-b-2 border-b-[#2271b1]", children: "Homepage Layout" }) }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 space-y-4 text-xs text-[#2c3338]", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pb-2 border-b border-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-bold text-[#1d2327] text-[13px]", children: "Front Page Settings" }) }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[11px] leading-relaxed", children: "Use this interface to manage all custom texts, indicators, links, and background banners for the front page layout." }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "py-2 border-t border-[#f0f0f1] text-[12px] space-y-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970]", children: "Active Theme:" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold uppercase text-emerald-700", children: settings.active_theme || "default" })
+                        ] }) })
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 border-t border-[#f0f0f1] bg-[#f6f7f7] space-y-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => saveHomepageSettings(),
+                          className: "w-full text-center bg-[#2271b1] hover:bg-[#135e96] text-white py-2 rounded font-semibold transition",
+                          children: "Save Content"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => setEditingHomepage(false),
+                          className: "w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition",
+                          children: "Cancel"
+                        }
+                      )
+                    ] })
+                  ] })
+                ] }) })
+              ] }) : editingPage !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold text-slate-800 text-[13px]", children: [
@@ -42761,152 +43108,171 @@ ${escapeText(this.code(index, length))}
                     /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3", children: "Author" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3", children: "Date" })
                   ] }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { className: "divide-y divide-[#f0f0f1] text-[#2c3338]", children: pages.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "text-center py-8 text-[#646970]", children: "No pages found." }) }) : pages.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map((p) => quickEditingPageId === p.id ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "bg-[#f5f7fa] border-y-2 border-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 text-xs text-[#2c3338]", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wider text-[#646970] border-b border-[#ddd] pb-1 mb-2", children: "Quick Edit" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Title" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "input",
-                            {
-                              type: "text",
-                              value: quickPageForm.title,
-                              onChange: (e) => setQuickPageForm({ ...quickPageForm, title: e.target.value }),
-                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
-                            }
-                          )
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Slug" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "input",
-                            {
-                              type: "text",
-                              value: quickPageForm.slug,
-                              onChange: (e) => setQuickPageForm({ ...quickPageForm, slug: e.target.value }),
-                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
-                            }
-                          )
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Date" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1 items-center", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-xs text-[#2c3338] outline-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "08-Aug" }) }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "15", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "," }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "2026", className: "w-12 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "@" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "21", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ":" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "35", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" })
-                          ] })
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { className: "divide-y divide-[#f0f0f1] text-[#2c3338]", children: [
+                    (!searchQuery || "homepage".includes(searchQuery.toLowerCase()) || "front page".includes(searchQuery.toLowerCase())) && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group bg-emerald-50/20", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center text-emerald-600 font-bold", children: "★" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-semibold text-[#2271b1] max-w-xs", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => setEditingHomepage(true), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800", children: "Homepage (Front Page Layout)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setEditingHomepage(true), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit Content" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/", target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View Live" })
                         ] })
                       ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Parent Page" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "(no parent)" }),
-                            pages.filter((item) => item.id !== p.id).map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: item.id, children: item.title }, item.id))
-                          ] })
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Order" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "input",
-                            {
-                              type: "number",
-                              defaultValue: 0,
-                              className: "w-20 border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338]"
-                            }
-                          )
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Template" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Default Template" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Full Width Page" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Landing Page" })
-                          ] })
-                        ] })
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Status" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                            "select",
-                            {
-                              value: quickPageForm.published ? "published" : "draft",
-                              onChange: (e) => setQuickPageForm({ ...quickPageForm, published: e.target.value === "published" }),
-                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]",
-                              children: [
-                                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "published", children: "Published" }),
-                                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "draft", children: "Draft" })
-                              ]
-                            }
-                          )
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 pt-2", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", defaultChecked: true, className: "rounded-sm border-[#8c8f94]" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Allow Comments" })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: "/ (Root)" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "System" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 text-[#50575e] font-semibold text-emerald-700", children: [
+                        "Active Theme: ",
+                        settings.active_theme || "default"
+                      ] })
+                    ] }),
+                    pages.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "text-center py-8 text-[#646970]", children: "No pages found." }) }) : pages.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map((p) => quickEditingPageId === p.id ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "bg-[#f5f7fa] border-y-2 border-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 text-xs text-[#2c3338]", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wider text-[#646970] border-b border-[#ddd] pb-1 mb-2", children: "Quick Edit" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Title" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: quickPageForm.title,
+                                onChange: (e) => setQuickPageForm({ ...quickPageForm, title: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
+                              }
+                            )
                           ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Make this page private" })
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Slug" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: quickPageForm.slug,
+                                onChange: (e) => setQuickPageForm({ ...quickPageForm, slug: e.target.value }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Date" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1 items-center", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-xs text-[#2c3338] outline-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "08-Aug" }) }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "15", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "," }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "2026", className: "w-12 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "@" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "21", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ":" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "35", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" })
+                            ] })
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Parent Page" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "(no parent)" }),
+                              pages.filter((item) => item.id !== p.id).map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: item.id, children: item.title }, item.id))
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Order" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "number",
+                                defaultValue: 0,
+                                className: "w-20 border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338]"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Template" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Default Template" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Full Width Page" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Landing Page" })
+                            ] })
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Status" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                              "select",
+                              {
+                                value: quickPageForm.published ? "published" : "draft",
+                                onChange: (e) => setQuickPageForm({ ...quickPageForm, published: e.target.value === "published" }),
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]",
+                                children: [
+                                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "published", children: "Published" }),
+                                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "draft", children: "Draft" })
+                                ]
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 pt-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", defaultChecked: true, className: "rounded-sm border-[#8c8f94]" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Allow Comments" })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Make this page private" })
+                            ] })
                           ] })
                         ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 text-xs border-t border-[#ddd] pt-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => setQuickEditingPageId(null),
+                            className: "border border-[#c3c4c7] hover:bg-slate-100 text-[#50575e] px-3 py-1.5 rounded-sm font-semibold transition bg-white",
+                            children: "Cancel"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => saveQuickPage(p.id),
+                            disabled: isSaving,
+                            className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm",
+                            children: [
+                              isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3 w-3 mr-1 text-white inline-block", fill: "none", viewBox: "0 0 24 24", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
+                              ] }),
+                              "Update"
+                            ]
+                          }
+                        )
                       ] })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 text-xs border-t border-[#ddd] pt-3", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "button",
-                        {
-                          type: "button",
-                          onClick: () => setQuickEditingPageId(null),
-                          className: "border border-[#c3c4c7] hover:bg-slate-100 text-[#50575e] px-3 py-1.5 rounded-sm font-semibold transition bg-white",
-                          children: "Cancel"
-                        }
-                      ),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                        "button",
-                        {
-                          type: "button",
-                          onClick: () => saveQuickPage(p.id),
-                          disabled: isSaving,
-                          className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm",
-                          children: [
-                            isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3 w-3 mr-1 text-white inline-block", fill: "none", viewBox: "0 0 24 24", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
-                            ] }),
-                            "Update"
-                          ]
-                        }
-                      )
-                    ] })
-                  ] }) }) }, p.id) : /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-semibold text-[#2271b1] max-w-xs", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => openEditPage(p), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1", children: p.title }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openQuickEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Quick Edit" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(p.id), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/page/${p.slug}`, target: "_blank", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
-                      ] })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: [
-                      "/page/",
-                      p.slug
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "Travelluxx Admin" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: p.published !== false ? "Published" : "Draft" })
-                  ] }, p.id)) })
+                    ] }) }) }, p.id) : /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }) }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-semibold text-[#2271b1] max-w-xs", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => openEditPage(p), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1", children: p.title }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openQuickEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Quick Edit" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(p.id), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/page/${p.slug}`, target: "_blank", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: [
+                        "/page/",
+                        p.slug
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "Travelluxx Admin" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: p.published !== false ? "Published" : "Draft" })
+                    ] }, p.id))
+                  ] })
                 ] }) })
               ] })
             ] }),
@@ -43233,7 +43599,8 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full md:w-48 bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden shrink-0", children: [
                   { key: "general", label: "General" },
                   { key: "connectors", label: "Connectors" },
-                  { key: "writing", label: "Writing" }
+                  { key: "writing", label: "Writing" },
+                  { key: "snippets", label: "Code Snippets" }
                 ].map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "button",
                   {
@@ -43429,17 +43796,78 @@ ${escapeText(this.code(index, length))}
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1] flex items-center gap-2", children: "💳 Mollie Payment Gateway" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Mollie API Key (Live / Test)" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "input",
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "input",
+                          {
+                            type: showMollieKey ? "text" : "password",
+                            value: settings.mollie_api_key || "",
+                            onChange: (e) => setSettings({ ...settings, mollie_api_key: e.target.value }),
+                            placeholder: "live_... or test_...",
+                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => setShowMollieKey(!showMollieKey),
+                            className: "absolute right-3 top-1/2 -translate-y-1/2 text-[#50575e] hover:text-[#1d2327] transition",
+                            children: showMollieKey ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-4 h-4" })
+                          }
+                        )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "This updates your local .env file MOLLIE_API_KEY automatically." })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 border-t border-[#f0f0f1] pt-4 space-y-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-2 flex items-center gap-2", children: "📧 Email (SMTP) Diagnostics" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] leading-relaxed", children: "Click the button below to send a test email to your Business Email address. If the test fails, check your SMTP credentials in your hosting control panel (cPanel → Email Accounts)." }),
+                      testEmailResult && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `text-xs px-3 py-2 rounded border ${testEmailResult.success ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"}`, children: [
+                        testEmailResult.success ? "✅ " : "❌ ",
+                        testEmailResult.message
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "button",
                         {
-                          type: "password",
-                          value: settings.mollie_api_key || "",
-                          onChange: (e) => setSettings({ ...settings, mollie_api_key: e.target.value }),
-                          placeholder: "live_... or test_...",
-                          className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                          type: "button",
+                          disabled: testEmailLoading,
+                          onClick: async () => {
+                            setTestEmailLoading(true);
+                            setTestEmailResult(null);
+                            try {
+                              const r = await fetch("/api/test-email", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({})
+                              });
+                              const data = await r.json();
+                              if (r.ok && data.success) {
+                                setTestEmailResult({ success: true, message: data.message || "Test email sent successfully!" });
+                              } else {
+                                setTestEmailResult({ success: false, message: data.error || "Email failed. Check SMTP credentials." });
+                              }
+                            } catch (err) {
+                              setTestEmailResult({ success: false, message: err.message || "Connection error." });
+                            } finally {
+                              setTestEmailLoading(false);
+                            }
+                          },
+                          className: "bg-[#2271b1] hover:bg-[#135e96] disabled:opacity-50 text-white px-4 py-2 rounded-sm text-xs font-semibold flex items-center gap-2 transition",
+                          children: [
+                            testEmailLoading ? /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3.5 w-3.5", fill: "none", viewBox: "0 0 24 24", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
+                            ] }) : "📨",
+                            testEmailLoading ? "Sending..." : "Send Test Email"
+                          ]
                         }
                       ),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "This updates your local .env file MOLLIE_API_KEY automatically." })
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[#646970] text-[10px]", children: [
+                        "SMTP: ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "mail.travelluxx.co.uk:465" }),
+                        " · User: ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "info@travelluxx.co.uk" })
+                      ] })
                     ] })
                   ] }),
                   settingsTab === "writing" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
@@ -43464,6 +43892,40 @@ ${escapeText(this.code(index, length))}
                         }
                       )
                     ] }, f.key)) })
+                  ] }),
+                  settingsTab === "snippets" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-2 pb-2 border-b border-[#f0f0f1]", children: "💻 Custom Code Snippets" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs leading-relaxed mb-4", children: "Inject custom script tags, meta tags, style sheets, or tracking integrations (like Google Search Console verification meta, Google Analytics tag, Facebook Pixel, etc.) into your site." }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Header Custom Code (in <head>)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "textarea",
+                          {
+                            rows: 8,
+                            value: settings.custom_header_code || "",
+                            onChange: (e) => setSettings({ ...settings, custom_header_code: e.target.value }),
+                            placeholder: "<!-- e.g. <meta name='google-site-verification' content='...' /> or <script async src='https://www.googletagmanager.com/gtag/js?id=...'><\/script> -->",
+                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "This code will be injected inside the header <head> element of all pages." })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Footer Custom Code (before </body>)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "textarea",
+                          {
+                            rows: 8,
+                            value: settings.custom_footer_code || "",
+                            onChange: (e) => setSettings({ ...settings, custom_footer_code: e.target.value }),
+                            placeholder: "<!-- e.g. live chat widget scripts or custom analytics script integrations -->",
+                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "This code will be injected right before the closing </body> tag of all pages." })
+                      ] })
+                    ] })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-4 border-t border-[#f0f0f1] flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
                     "button",
@@ -44325,7 +44787,7 @@ ${escapeText(this.code(index, length))}
       handleSelectTransferPreset,
       handleSelectClassPreset
     }) {
-      var _a, _b, _c;
+      var _a, _b, _c, _d, _e;
       const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
       const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
       const emailAddr = (settings == null ? void 0 : settings.business_email) || "info@travelluxx.co.uk";
@@ -44337,15 +44799,41 @@ ${escapeText(this.code(index, length))}
         return customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : heroImg;
       });
       reactExports.useEffect(() => {
+        const customSetting = (settings == null ? void 0 : settings.hero_image) || (settings == null ? void 0 : settings.heroImage);
+        setBgImage(customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : heroImg);
+      }, [settings]);
+      reactExports.useEffect(() => {
         fetch("/api/pricing").then((res) => res.json()).then((data) => setPricing(data)).catch((err) => console.error("Failed to fetch fleet pricing:", err));
       }, []);
       const formattedPhone = whatsappNum.startsWith("44") ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` : whatsappNum;
+      const rawTitle = (settings == null ? void 0 : settings.homepage_hero_title) || "Nationwide Airport | Transfers & Private Chauffeur";
+      const titleParts = rawTitle.split("|");
+      const titlePart1 = ((_a = titleParts[0]) == null ? void 0 : _a.trim()) || "Nationwide Airport";
+      const titlePart2 = (_b = titleParts[1]) == null ? void 0 : _b.trim();
+      const badgeText = (settings == null ? void 0 : settings.homepage_hero_badge) || "Premium Chauffeur Service";
+      const heroDesc = (settings == null ? void 0 : settings.homepage_hero_subtitle) || "Experience the pinnacle of luxury private hire. Highly maintained Mercedes-Benz & Audi fleets for your comfort with guaranteed fixed rates.";
+      const ind1 = (settings == null ? void 0 : settings.homepage_indicator1) || "Licensed Operators";
+      const ind2 = (settings == null ? void 0 : settings.homepage_indicator2) || "Nationwide Coverage";
+      const ind3 = (settings == null ? void 0 : settings.homepage_indicator3) || "Zero Surge Pricing";
+      const btn1Text = (settings == null ? void 0 : settings.homepage_hero_btn_text) || "Book Chauffeur Now";
+      const btn1Link = (settings == null ? void 0 : settings.homepage_hero_btn_link) || "calculator-section";
+      const btn2Text = (settings == null ? void 0 : settings.homepage_hero_phone_text) || formattedPhone;
+      const btn2Link = (settings == null ? void 0 : settings.homepage_hero_phone_link) || `tel:${whatsappNum}`;
+      const handleBtn1Click = () => {
+        if (btn1Link === "calculator-section") {
+          handleScrollTo("calculator-section");
+        } else if (btn1Link.startsWith("#")) {
+          handleScrollTo(btn1Link.substring(1));
+        } else {
+          window.location.href = btn1Link;
+        }
+      };
       const fleet = {
         Economy: {
           name: "Business Economy Class",
           tagline: "Elegant, clean, and highly efficient travel.",
           image: getCustomImage("fleet_Economy", mercedesEconomyImg),
-          rate: ((_a = pricing == null ? void 0 : pricing.Economy) == null ? void 0 : _a.perMile) !== void 0 ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
+          rate: ((_c = pricing == null ? void 0 : pricing.Economy) == null ? void 0 : _c.perMile) !== void 0 ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
           description: "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
           cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
           features: ["Complimentary 4G Wi-Fi", "Dual-zone Climate Control", "USB Charging Ports", "Bottle Holders & Newspapers"],
@@ -44357,7 +44845,7 @@ ${escapeText(this.code(index, length))}
           name: "First Chauffeur Class",
           tagline: "The pinnacle of executive comfort and style.",
           image: getCustomImage("fleet_Luxury", mercedesLuxuryImg),
-          rate: ((_b = pricing == null ? void 0 : pricing.Luxury) == null ? void 0 : _b.perMile) !== void 0 ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
+          rate: ((_d = pricing == null ? void 0 : pricing.Luxury) == null ? void 0 : _d.perMile) !== void 0 ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
           description: "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
           cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
           features: ["Premium Leather Reclining Seats", "Complimentary Bottled Water", "Ambient Lighting Controls", "Rear Seat Entertainment Systems", "Quiet Acoustic Cabins"],
@@ -44369,7 +44857,7 @@ ${escapeText(this.code(index, length))}
           name: "Family & Executive MPV",
           tagline: "Generous space for luggage and loved ones.",
           image: getCustomImage("fleet_Family", mercedesFamilyImg),
-          rate: ((_c = pricing == null ? void 0 : pricing.Family) == null ? void 0 : _c.perMile) !== void 0 ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
+          rate: ((_e = pricing == null ? void 0 : pricing.Family) == null ? void 0 : _e.perMile) !== void 0 ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
           description: "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
           cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
           features: ["Conference Seating Options", "Massive Boot Capacity", "Automatic Sliding Doors", "Privacy Glass", "Individual Air-Con Units", "Child Seats Available (On Request)"],
@@ -44410,38 +44898,39 @@ ${escapeText(this.code(index, length))}
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center space-y-8", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full text-xs font-semibold text-emerald-400 tracking-widest uppercase", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-3 h-3 text-emerald-400 animate-pulse" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Premium Chauffeur Service" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: badgeText })
             ] }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-4xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-none uppercase", children: [
-                "Nationwide Airport ",
+                titlePart1,
+                " ",
                 /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400", children: "Transfers & Private Chauffeur" })
+                titlePart2 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400", children: titlePart2 })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed font-light", children: "Experience the pinnacle of luxury private hire. Highly maintained Mercedes-Benz & Audi fleets for your comfort with guaranteed fixed rates." })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed font-light", children: heroDesc })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap justify-center items-center gap-6 sm:gap-10 text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto pt-6 border-t border-slate-900", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-4 h-4 text-emerald-400" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Licensed Operators" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ind1 })
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Compass, { className: "w-4 h-4 text-emerald-400" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Nationwide Coverage" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ind2 })
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-4 h-4 text-emerald-400" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Zero Surge Pricing" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ind3 })
               ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row justify-center items-center gap-4 pt-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "button",
                 {
-                  onClick: () => handleScrollTo("calculator-section"),
+                  onClick: handleBtn1Click,
                   className: "bg-emerald-600 hover:bg-emerald-500 text-white font-semibold tracking-wide px-8 py-4 rounded-xl text-sm transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-emerald-600/10 hover:shadow-emerald-600/30 w-full sm:w-auto",
                   children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Book Chauffeur Now" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: btn1Text }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4" })
                   ]
                 }
@@ -44449,11 +44938,11 @@ ${escapeText(this.code(index, length))}
               /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "a",
                 {
-                  href: `tel:${whatsappNum}`,
+                  href: btn2Link,
                   className: "flex items-center justify-center space-x-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold tracking-wide px-8 py-4 rounded-xl text-sm transition-all duration-300 w-full sm:w-auto",
                   children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { className: "w-4 h-4 text-emerald-400 fill-current" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formattedPhone })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: btn2Text })
                   ]
                 }
               )
@@ -44866,8 +45355,8 @@ ${escapeText(this.code(index, length))}
               settings
             }
           ) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(FleetCatalog, { onSelectClass: handleSelectClassPreset }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(AirportsGrid, { onSelectTransfer: handleSelectTransferPreset }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(FleetCatalog, { onSelectClass: handleSelectClassPreset, settings }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(AirportsGrid, { onSelectTransfer: handleSelectTransferPreset, settings }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(ContactForm, { settings }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Footer,
@@ -44894,7 +45383,39 @@ ${escapeText(this.code(index, length))}
         )
       ] });
     }
+    function injectCustomCode(htmlString, target, identifierClass) {
+      const existing = target.querySelectorAll(`.${identifierClass}`);
+      existing.forEach((el) => el.remove());
+      if (!htmlString) return;
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = htmlString;
+      Array.from(tempDiv.childNodes).forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node;
+          let newEl;
+          if (el.tagName === "SCRIPT") {
+            newEl = document.createElement("script");
+            Array.from(el.attributes).forEach((attr) => {
+              newEl.setAttribute(attr.name, attr.value);
+            });
+            newEl.textContent = el.textContent;
+          } else {
+            newEl = el.cloneNode(true);
+          }
+          newEl.classList.add(identifierClass);
+          target.appendChild(newEl);
+        }
+      });
+    }
     function App() {
+      reactExports.useEffect(() => {
+        fetch("/api/settings").then((res) => res.json()).then((data) => {
+          if (data) {
+            injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
+            injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
+          }
+        }).catch((err) => console.error("Failed to load settings in App:", err));
+      }, []);
       return /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/", element: /* @__PURE__ */ jsxRuntimeExports.jsx(PublicLandingPage, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/admin", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),

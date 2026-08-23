@@ -28,9 +28,10 @@ import { getCustomImage } from "../utils/customImages";
 
 interface FleetCatalogProps {
   onSelectClass: (carClass: "Economy" | "Luxury" | "Family") => void;
+  settings?: any;
 }
 
-export default function FleetCatalog({ onSelectClass }: FleetCatalogProps) {
+export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogProps) {
   const [activeTab, setActiveTab] = React.useState<"Economy" | "Luxury" | "Family">("Luxury");
   const [pricing, setPricing] = React.useState<any>(null);
   const [, setRefreshKey] = useState(0);
@@ -103,12 +104,14 @@ export default function FleetCatalog({ onSelectClass }: FleetCatalogProps) {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold">Our Premium Fleet</span>
+          <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold">
+            {settings?.homepage_fleet_subtitle || "Our Premium Fleet"}
+          </span>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4">
-            Travel in Premium Comfort
+            {settings?.homepage_fleet_title || "Travel in Premium Comfort"}
           </h2>
           <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-            Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers.
+            {settings?.homepage_fleet_description || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers."}
           </p>
         </div>
 

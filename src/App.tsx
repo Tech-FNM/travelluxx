@@ -164,9 +164,9 @@ function PublicLandingPage() {
           />
         </div>
 
-        <FleetCatalog onSelectClass={handleSelectClassPreset} />
+        <FleetCatalog onSelectClass={handleSelectClassPreset} settings={settings} />
 
-        <AirportsGrid onSelectTransfer={handleSelectTransferPreset} />
+        <AirportsGrid onSelectTransfer={handleSelectTransferPreset} settings={settings} />
 
         <ContactForm settings={settings} />
 
@@ -196,8 +196,48 @@ function PublicLandingPage() {
   );
 }
 
+function injectCustomCode(htmlString: string | undefined, target: HTMLElement, identifierClass: string) {
+  const existing = target.querySelectorAll(`.${identifierClass}`);
+  existing.forEach(el => el.remove());
+
+  if (!htmlString) return;
+
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = htmlString;
+
+  Array.from(tempDiv.childNodes).forEach(node => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      let newEl: HTMLElement;
+      if (el.tagName === "SCRIPT") {
+        newEl = document.createElement("script");
+        Array.from(el.attributes).forEach(attr => {
+          newEl.setAttribute(attr.name, attr.value);
+        });
+        newEl.textContent = el.textContent;
+      } else {
+        newEl = el.cloneNode(true) as HTMLElement;
+      }
+      newEl.classList.add(identifierClass);
+      target.appendChild(newEl);
+    }
+  });
+}
+
 // MAIN APP ROUTER ENTRY POINT
 export default function App() {
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
+          injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
+        }
+      })
+      .catch(err => console.error("Failed to load settings in App:", err));
+  }, []);
+
   return (
     <Router>
       <Routes>

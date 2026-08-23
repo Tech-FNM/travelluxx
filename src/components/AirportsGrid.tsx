@@ -10,9 +10,10 @@ import { getCustomImage } from "../utils/customImages";
 
 interface AirportsGridProps {
   onSelectTransfer: (pickup: string, dropoff: string) => void;
+  settings?: any;
 }
 
-export default function AirportsGrid({ onSelectTransfer }: AirportsGridProps) {
+export default function AirportsGrid({ onSelectTransfer, settings }: AirportsGridProps) {
   const [, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -80,7 +81,7 @@ export default function AirportsGrid({ onSelectTransfer }: AirportsGridProps) {
         {/* Section Heading */}
         <div className="text-center mb-10">
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
-            We cover all major London airports
+            {settings?.homepage_airports_title || "We cover all major London airports"}
           </h2>
         </div>
 

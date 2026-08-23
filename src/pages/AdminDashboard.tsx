@@ -436,7 +436,7 @@ export default function AdminDashboard() {
   const [media, setMedia] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>({});
-  const [settingsTab, setSettingsTab] = useState<"general" | "connectors" | "writing" | "reading" | "discussion" | "media" | "permalinks" | "privacy">("general");
+  const [settingsTab, setSettingsTab] = useState<"general" | "connectors" | "writing" | "snippets" | "reading" | "discussion" | "media" | "permalinks" | "privacy">("general");
 
   // UI states
   const [searchQuery, setSearchQuery] = useState("");
@@ -459,10 +459,14 @@ export default function AdminDashboard() {
   const [yoastPageTab, setYoastPageTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [focusKeyphrasePost, setFocusKeyphrasePost] = useState("");
   const [focusKeyphrasePage, setFocusKeyphrasePage] = useState("");
+  const [editingHomepage, setEditingHomepage] = useState(false);
+  const [showMollieKey, setShowMollieKey] = useState(false);
+  const [testEmailLoading, setTestEmailLoading] = useState(false);
+  const [testEmailResult, setTestEmailResult] = useState<{success: boolean; message: string} | null>(null);
 
   // In-Editor Media integration states
   const [editorMediaModalOpen, setEditorMediaModalOpen] = useState(false);
-  const [editorTarget, setEditorTarget] = useState<"post" | "page" | "post-featured" | "page-featured" | "yoast-post-social" | "yoast-page-social" | "yoast-post-x" | "yoast-page-x" | "settings-logo">("post");
+  const [editorTarget, setEditorTarget] = useState<"post" | "page" | "post-featured" | "page-featured" | "yoast-post-social" | "yoast-page-social" | "yoast-post-x" | "yoast-page-x" | "settings-logo" | "settings-hero">("post");
   const [selectedEditorMediaUrl, setSelectedEditorMediaUrl] = useState<string | null>(null);
   const [editorMediaAltText, setEditorMediaAltText] = useState("");
   const [editorMediaTitleText, setEditorMediaTitleText] = useState("");
@@ -905,6 +909,8 @@ export default function AdminDashboard() {
       setPageForm(prev => ({ ...prev, xImage: imageUrl }));
     } else if (editorTarget === "settings-logo") {
       setSettings((prev: any) => ({ ...prev, logo_url: imageUrl }));
+    } else if (editorTarget === "settings-hero") {
+      setSettings((prev: any) => ({ ...prev, hero_image: imageUrl }));
     }
     setEditorMediaModalOpen(false);
     setSelectedEditorMediaUrl(null);
@@ -964,6 +970,28 @@ export default function AdminDashboard() {
     } catch (err) {
       console.error(err);
       setSaveStatus("Failed to save.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const saveHomepageSettings = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    setSaveStatus("Saving...");
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings) });
+      if (res.ok) {
+        setSaveStatus("Homepage updated successfully!");
+        setTimeout(() => setSaveStatus(""), 4000);
+        setEditingHomepage(false);
+        window.location.reload();
+      } else {
+        setSaveStatus("Failed to save homepage settings.");
+      }
+    } catch (err) {
+      console.error(err);
+      setSaveStatus("Failed to save homepage settings.");
     } finally {
       setIsSaving(false);
     }
@@ -1870,7 +1898,283 @@ export default function AdminDashboard() {
                 )}
               </div>
 
-              {editingPage !== undefined ? (
+              {editingHomepage ? (
+                <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
+                  {/* WordPress Style Editor Top Bar */}
+                  <div className="bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none">
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold text-slate-800 text-[13px]">Homepage (Front Page Layout)</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => saveHomepageSettings()}
+                        disabled={isSaving}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        {isSaving && (
+                          <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                        )}
+                        Save Homepage Content
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingHomepage(false)}
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-[#f0f0f1]">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                      {/* Left Main Content (3 cols) */}
+                      <div className="lg:col-span-3 space-y-6">
+                        {/* Section 1: Hero Section */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">1. Hero Section Content</h3>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Hero Badge Text</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_hero_badge || ""}
+                                onChange={e => setSettings({ ...settings, homepage_hero_badge: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. TRAVELLUXX PRIVATE HIRE"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Hero Title (Use | to split for colored text)</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_hero_title || ""}
+                                onChange={e => setSettings({ ...settings, homepage_hero_title: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Nationwide Airport | Transfers & Private Hire"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Hero Subtitle / Description</label>
+                            <textarea
+                              rows={3}
+                              value={settings.homepage_hero_subtitle || ""}
+                              onChange={e => setSettings({ ...settings, homepage_hero_subtitle: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              placeholder="e.g. Experience premium private hire..."
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">CTA Button 1 Text</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_hero_btn_text || ""}
+                                onChange={e => setSettings({ ...settings, homepage_hero_btn_text: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Calculate & Get Quote"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">CTA Button 1 Target / Link</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_hero_btn_link || ""}
+                                onChange={e => setSettings({ ...settings, homepage_hero_btn_link: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. calculator-section"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">CTA Button 2 Text / Phone</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_hero_phone_text || ""}
+                                onChange={e => setSettings({ ...settings, homepage_hero_phone_text: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. +44 121 714 0876"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">CTA Button 2 Target / Link</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_hero_phone_link || ""}
+                                onChange={e => setSettings({ ...settings, homepage_hero_phone_link: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. tel:441217140876"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <span className="block text-xs font-semibold text-[#1d2327] mb-2 uppercase tracking-wide">Hero Background Image</span>
+                            {settings.hero_image ? (
+                              <div className="relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center max-w-md">
+                                <img src={settings.hero_image} alt="preview" className="max-w-full max-h-full object-cover" />
+                                <button type="button" onClick={() => setSettings({ ...settings, hero_image: "" })}
+                                  className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700">
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditorTarget("settings-hero");
+                                  setEditorMediaModalOpen(true);
+                                }}
+                                className="bg-[#f6f7f7] hover:bg-[#f0f0f1] border border-[#c3c4c7] text-[#2271b1] hover:text-[#0a4b78] px-4 py-2.5 rounded font-semibold transition text-xs"
+                              >
+                                Select background image from Media
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Section 2: Indicators */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">2. Value Indicator Tags</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Indicator 1</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_indicator1 || ""}
+                                onChange={e => setSettings({ ...settings, homepage_indicator1: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Licensed Professional Operators"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Indicator 2</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_indicator2 || ""}
+                                onChange={e => setSettings({ ...settings, homepage_indicator2: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Guaranteed Nationwide Coverage"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Indicator 3 (Renax Theme Only)</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_indicator3 || ""}
+                                onChange={e => setSettings({ ...settings, homepage_indicator3: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Zero Surge Pricing"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Section 3: Fleet Intro */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">3. Fleet Section Intro</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Fleet Subtitle</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_fleet_subtitle || ""}
+                                onChange={e => setSettings({ ...settings, homepage_fleet_subtitle: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Our Premium Fleet"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Fleet Main Title</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_fleet_title || ""}
+                                onChange={e => setSettings({ ...settings, homepage_fleet_title: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Travel in Premium Comfort"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Fleet Description</label>
+                            <textarea
+                              rows={3}
+                              value={settings.homepage_fleet_description || ""}
+                              onChange={e => setSettings({ ...settings, homepage_fleet_description: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              placeholder="e.g. Our curated fleet features..."
+                            />
+                          </div>
+                        </div>
+
+                        {/* Section 4: Airports/Services Intro */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <h3 className="text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider">4. Airports & Services Intro</h3>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Airports Grid Section Title</label>
+                            <input
+                              type="text"
+                              value={settings.homepage_airports_title || ""}
+                              onChange={e => setSettings({ ...settings, homepage_airports_title: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              placeholder="e.g. We cover all major London airports"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Sidebar info exactly like standard page */}
+                      <div className="lg:col-span-1 bg-white border border-[#c3c4c7] rounded-sm shadow-sm flex flex-col justify-between overflow-hidden h-fit">
+                        <div>
+                          <div className="flex border-b border-[#c3c4c7] text-xs font-semibold text-[#646970] bg-[#f6f7f7]">
+                            <button type="button" className="flex-1 py-2 text-center bg-white text-[#2c3338] border-b-2 border-b-[#2271b1]">Homepage Layout</button>
+                          </div>
+                          <div className="p-4 space-y-4 text-xs text-[#2c3338]">
+                            <div className="pb-2 border-b border-[#f0f0f1]">
+                              <span className="font-bold text-[#1d2327] text-[13px]">Front Page Settings</span>
+                            </div>
+                            <p className="text-[#646970] text-[11px] leading-relaxed">
+                              Use this interface to manage all custom texts, indicators, links, and background banners for the front page layout.
+                            </p>
+                            <div className="py-2 border-t border-[#f0f0f1] text-[12px] space-y-1.5">
+                              <div className="flex justify-between">
+                                <span className="text-[#646970]">Active Theme:</span>
+                                <span className="font-semibold uppercase text-emerald-700">{settings.active_theme || "default"}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-4 border-t border-[#f0f0f1] bg-[#f6f7f7] space-y-2">
+                          <button
+                            type="button"
+                            onClick={() => saveHomepageSettings()}
+                            className="w-full text-center bg-[#2271b1] hover:bg-[#135e96] text-white py-2 rounded font-semibold transition"
+                          >
+                            Save Content
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingHomepage(false)}
+                            className="w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : editingPage !== undefined ? (
                 <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
                   {/* WordPress Style Editor Top Bar */}
                   <div className="bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none">
@@ -2189,6 +2493,25 @@ export default function AdminDashboard() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#f0f0f1] text-[#2c3338]">
+                        {/* Special Row: Homepage Management */}
+                        {(!searchQuery || "homepage".includes(searchQuery.toLowerCase()) || "front page".includes(searchQuery.toLowerCase())) && (
+                          <tr className="hover:bg-[#f6f7f7] transition group bg-emerald-50/20">
+                            <td className="py-3 px-3 text-center text-emerald-600 font-bold">★</td>
+                            <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
+                              <span onClick={() => setEditingHomepage(true)} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800">
+                                Homepage (Front Page Layout)
+                              </span>
+                              <div className="hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none">
+                                <button onClick={() => setEditingHomepage(true)} className="text-[#2271b1] hover:text-[#00a0d2]">Edit Content</button>
+                                <span className="text-[#ddd]">|</span>
+                                <a href="/" target="_blank" rel="noreferrer" className="text-[#2271b1] hover:text-[#00a0d2]">View Live</a>
+                              </div>
+                            </td>
+                            <td className="py-3 px-3 font-mono text-[#2271b1]">/ (Root)</td>
+                            <td className="py-3 px-3 text-[#50575e]">System</td>
+                            <td className="py-3 px-3 text-[#50575e] font-semibold text-emerald-700">Active Theme: {settings.active_theme || "default"}</td>
+                          </tr>
+                        )}
                         {pages.length === 0 ? (
                           <tr><td colSpan={5} className="text-center py-8 text-[#646970]">No pages found.</td></tr>
                         ) : pages.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map(p => (
@@ -2652,7 +2975,8 @@ export default function AdminDashboard() {
                   {[
                     { key: "general", label: "General" },
                     { key: "connectors", label: "Connectors" },
-                    { key: "writing", label: "Writing" }
+                    { key: "writing", label: "Writing" },
+                    { key: "snippets", label: "Code Snippets" }
                   ].map(tab => (
                     <button
                       key={tab.key}
@@ -2842,11 +3166,74 @@ export default function AdminDashboard() {
                         </h2>
                         <div>
                           <label className="block text-xs font-semibold text-[#1d2327] mb-1">Mollie API Key (Live / Test)</label>
-                          <input type="password" value={settings.mollie_api_key || ""}
-                            onChange={e => setSettings({ ...settings, mollie_api_key: e.target.value })}
-                            placeholder="live_... or test_..."
-                            className="w-full border border-[#8c8f94] rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black" />
+                          <div className="relative">
+                            <input
+                              type={showMollieKey ? "text" : "password"}
+                              value={settings.mollie_api_key || ""}
+                              onChange={e => setSettings({ ...settings, mollie_api_key: e.target.value })}
+                              placeholder="live_... or test_..."
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowMollieKey(!showMollieKey)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#50575e] hover:text-[#1d2327] transition"
+                            >
+                              {showMollieKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
                           <p className="text-[#646970] text-[10px] mt-1">This updates your local .env file MOLLIE_API_KEY automatically.</p>
+                        </div>
+                        <div className="mt-6 border-t border-[#f0f0f1] pt-4 space-y-3">
+                          <h2 className="font-bold text-[#1d2327] text-sm mb-2 flex items-center gap-2">
+                            📧 Email (SMTP) Diagnostics
+                          </h2>
+                          <p className="text-[#646970] text-[10px] leading-relaxed">
+                            Click the button below to send a test email to your Business Email address. If the test fails, check your SMTP credentials in your hosting control panel (cPanel → Email Accounts).
+                          </p>
+                          {testEmailResult && (
+                            <div className={`text-xs px-3 py-2 rounded border ${
+                              testEmailResult.success
+                                ? "bg-green-50 border-green-200 text-green-800"
+                                : "bg-red-50 border-red-200 text-red-800"
+                            }`}>
+                              {testEmailResult.success ? "✅ " : "❌ "}{testEmailResult.message}
+                            </div>
+                          )}
+                          <button
+                            type="button"
+                            disabled={testEmailLoading}
+                            onClick={async () => {
+                              setTestEmailLoading(true);
+                              setTestEmailResult(null);
+                              try {
+                                const r = await fetch("/api/test-email", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({})
+                                });
+                                const data = await r.json();
+                                if (r.ok && data.success) {
+                                  setTestEmailResult({ success: true, message: data.message || "Test email sent successfully!" });
+                                } else {
+                                  setTestEmailResult({ success: false, message: data.error || "Email failed. Check SMTP credentials." });
+                                }
+                              } catch (err: any) {
+                                setTestEmailResult({ success: false, message: err.message || "Connection error." });
+                              } finally {
+                                setTestEmailLoading(false);
+                              }
+                            }}
+                            className="bg-[#2271b1] hover:bg-[#135e96] disabled:opacity-50 text-white px-4 py-2 rounded-sm text-xs font-semibold flex items-center gap-2 transition"
+                          >
+                            {testEmailLoading ? (
+                              <svg className="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+                            ) : "📨"}
+                            {testEmailLoading ? "Sending..." : "Send Test Email"}
+                          </button>
+                          <p className="text-[#646970] text-[10px]">
+                            SMTP: <span className="font-mono">mail.travelluxx.co.uk:465</span> · User: <span className="font-mono">info@travelluxx.co.uk</span>
+                          </p>
                         </div>
                       </div>
                     )}
@@ -2869,6 +3256,43 @@ export default function AdminDashboard() {
                                 className="w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black" />
                             </div>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {settingsTab === "snippets" && (
+                      <div className="space-y-4">
+                        <h2 className="font-bold text-[#1d2327] text-sm mb-2 pb-2 border-b border-[#f0f0f1]">
+                          💻 Custom Code Snippets
+                        </h2>
+                        <p className="text-[#646970] text-xs leading-relaxed mb-4">
+                          Inject custom script tags, meta tags, style sheets, or tracking integrations (like Google Search Console verification meta, Google Analytics tag, Facebook Pixel, etc.) into your site.
+                        </p>
+                        
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">Header Custom Code (in &lt;head&gt;)</label>
+                            <textarea
+                              rows={8}
+                              value={settings.custom_header_code || ""}
+                              onChange={e => setSettings({ ...settings, custom_header_code: e.target.value })}
+                              placeholder="<!-- e.g. <meta name='google-site-verification' content='...' /> or <script async src='https://www.googletagmanager.com/gtag/js?id=...'></script> -->"
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            />
+                            <p className="text-[#646970] text-[10px] mt-1">This code will be injected inside the header &lt;head&gt; element of all pages.</p>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">Footer Custom Code (before &lt;/body&gt;)</label>
+                            <textarea
+                              rows={8}
+                              value={settings.custom_footer_code || ""}
+                              onChange={e => setSettings({ ...settings, custom_footer_code: e.target.value })}
+                              placeholder="<!-- e.g. live chat widget scripts or custom analytics script integrations -->"
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            />
+                            <p className="text-[#646970] text-[10px] mt-1">This code will be injected right before the closing &lt;/body&gt; tag of all pages.</p>
+                          </div>
                         </div>
                       </div>
                     )}

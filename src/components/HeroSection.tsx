@@ -39,6 +39,34 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
     ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` 
     : whatsappNum;
 
+  const rawTitle = settings?.homepage_hero_title || "Nationwide Airport | Transfers & Private Hire";
+  const titleParts = rawTitle.split("|");
+  const titlePart1 = titleParts[0]?.trim() || "Nationwide Airport";
+  const titlePart2 = titleParts[1]?.trim();
+
+  const badgeText = settings?.homepage_hero_badge || `${brandName.toUpperCase()} PRIVATE HIRE`;
+  const heroDesc = settings?.homepage_hero_subtitle || "Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing.";
+  const ind1 = settings?.homepage_indicator1 || "Licensed Professional Operators";
+  const ind2 = settings?.homepage_indicator2 || "Guaranteed Nationwide Coverage";
+
+  const btn1Text = settings?.homepage_hero_btn_text || "Calculate & Get Quote";
+  const btn1Link = settings?.homepage_hero_btn_link || "calculator-section";
+  const btn2Text = settings?.homepage_hero_phone_text || formattedPhone;
+  const btn2Link = settings?.homepage_hero_phone_link || `tel:${whatsappNum}`;
+
+  const handleBtn1Click = () => {
+    if (btn1Link === "calculator-section") {
+      onScrollToCalculator();
+    } else if (btn1Link.startsWith("#")) {
+      const element = document.getElementById(btn1Link.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } else {
+      window.location.href = btn1Link;
+    }
+  };
+
   return (
     <section id="hero" className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-slate-950">
       
@@ -72,22 +100,24 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
         <div className="flex justify-center">
           <div className="inline-flex items-center space-x-2 bg-emerald-500/15 border border-emerald-500/30 px-5 py-2.5 rounded-full text-xs font-sans text-emerald-300 font-semibold shadow-inner">
             <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-            <span>{brandName.toUpperCase()} PRIVATE HIRE</span>
+            <span>{badgeText}</span>
           </div>
         </div>
 
         {/* Heading */}
         <div className="space-y-6">
           <h1 className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-tight">
-            Nationwide Airport <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 drop-shadow-sm">
-              Transfers & Private Hire
-            </span>
+            {titlePart1} {titlePart2 && <br className="hidden sm:inline" />}
+            {titlePart2 && (
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 drop-shadow-sm">
+                {titlePart2}
+              </span>
+            )}
           </h1>
 
           {/* Description */}
           <p className="text-slate-300 text-sm sm:text-base lg:text-xl leading-relaxed max-w-2xl mx-auto">
-            Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing.
+            {heroDesc}
           </p>
         </div>
 
@@ -95,30 +125,30 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-slate-300 border-t border-slate-800 pt-8 max-w-xl mx-auto">
           <div className="flex items-center space-x-2.5">
             <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span className="font-medium">Licensed Professional Operators</span>
+            <span className="font-medium">{ind1}</span>
           </div>
           <div className="flex items-center space-x-2.5">
             <Compass className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span className="font-medium">Guaranteed Nationwide Coverage</span>
+            <span className="font-medium">{ind2}</span>
           </div>
         </div>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
           <button
-            onClick={onScrollToCalculator}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 cursor-pointer border border-emerald-500/20 group transform active:scale-95"
+            onClick={handleBtn1Click}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 cursor-pointer border border-emerald-500/20 group transform active:scale-95 w-full sm:w-auto"
           >
-            <span>Calculate & Get Quote</span>
+            <span>{btn1Text}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
 
           <a
-            href={`tel:${whatsappNum}`}
-            className="flex items-center justify-center space-x-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white px-8 py-4 rounded-xl text-sm font-semibold transition shadow-sm font-sans backdrop-blur-sm transform active:scale-95"
+            href={btn2Link}
+            className="flex items-center justify-center space-x-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white px-8 py-4 rounded-xl text-sm font-semibold transition shadow-sm font-sans backdrop-blur-sm transform active:scale-95 w-full sm:w-auto"
           >
             <Phone className="w-4 h-4 fill-white text-emerald-400" />
-            <span>{formattedPhone}</span>
+            <span>{btn2Text}</span>
           </a>
         </div>
 

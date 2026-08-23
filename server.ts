@@ -334,7 +334,21 @@ function getCurrentWebsiteSettings() {
     homepage_page_id: "",
     posts_page_id: "",
     search_engine_visibility: false,
-    active_theme: "default"
+    active_theme: "default",
+    homepage_hero_badge: "",
+    homepage_hero_title: "",
+    homepage_hero_subtitle: "",
+    homepage_hero_btn_text: "",
+    homepage_hero_btn_link: "",
+    homepage_hero_phone_text: "",
+    homepage_hero_phone_link: "",
+    homepage_indicator1: "",
+    homepage_indicator2: "",
+    homepage_indicator3: "",
+    homepage_fleet_subtitle: "",
+    homepage_fleet_title: "",
+    homepage_fleet_description: "",
+    homepage_airports_title: ""
   };
   try {
     const webSettingsPath = path.join(process.cwd(), "website_settings.json");
@@ -853,9 +867,17 @@ app.get("/api/admin/bookings", async (req, res) => {
   try {
     await connectToDatabase();
     const rows = await BookingModel.find().sort({ createdAt: -1 });
-    if (rows && rows.length > 0) {
-      return res.json(rows);
+    // Also include any local-JSON bookings not yet in MongoDB
+    const localBookings = readBookings();
+    const mongoIds = new Set(rows.map((r: any) => r.id));
+    const localOnly = localBookings.filter((b: any) => !mongoIds.has(b.id));
+    // Save local-only ones to Mongo for future consistency
+    for (const bk of localOnly) {
+      try { await new BookingModel(bk).save(); } catch (_) {}
     }
+    const merged = [...rows.map((r: any) => r.toObject ? r.toObject() : r), ...localOnly];
+    merged.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return res.json(merged);
   } catch (e: any) {
     console.error("Error reading from MongoDB bookings:", e.message);
   }
@@ -1500,7 +1522,17 @@ app.get("/api/admin/inquiries", async (req, res) => {
     await connectToDatabase();
     if (mongoose.connection.readyState === 1) {
       const rows = await InquiryModel.find().sort({ createdAt: -1 });
-      if (rows && rows.length > 0) return res.json(rows);
+      // Also include any local-JSON inquiries not yet in MongoDB
+      const localInquiries = readInquiries();
+      const mongoIds = new Set(rows.map((r: any) => r.id));
+      const localOnly = localInquiries.filter((i: any) => !mongoIds.has(i.id));
+      // Save local-only ones to Mongo for future consistency
+      for (const inq of localOnly) {
+        try { await new InquiryModel(inq).save(); } catch (_) {}
+      }
+      const merged = [...rows.map((r: any) => r.toObject ? r.toObject() : r), ...localOnly];
+      merged.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      return res.json(merged);
     }
   } catch (e: any) {
     console.error("Error reading from MongoDB inquiries:", e.message);
