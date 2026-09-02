@@ -550,42 +550,48 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         type: loc.name.includes("Airport") ? "airport" : "city"
       }));
 
+    // Try Google Places Autocomplete (with 3s timeout)
     if (autocompleteService && window.google?.maps?.places) {
       try {
-        const googlePredictions = await new Promise<SuggestionItem[]>((resolve) => {
-          autocompleteService.getPlacePredictions(
-            {
-              input: query,
-              componentRestrictions: { country: ["gb"] },
-            },
-            (predictions: any, status: any) => {
-              if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
-                resolve(
-                  predictions.map((p: any) => ({
-                    lat: 0,
-                    lng: 0,
-                    name: p.description,
-                    placeId: p.place_id,
-                    mainText: p.structured_formatting?.main_text || p.description,
-                    secondaryText: p.structured_formatting?.secondary_text || "",
-                    type: p.types?.includes("airport") ? "airport" : "address"
-                  }))
-                );
-              } else {
-                resolve([]);
+        const googlePredictions = await Promise.race([
+          new Promise<SuggestionItem[]>((resolve) => {
+            autocompleteService.getPlacePredictions(
+              {
+                input: query,
+                componentRestrictions: { country: ["gb"] },
+              },
+              (predictions: any, status: any) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                  resolve(
+                    predictions.map((p: any) => ({
+                      lat: 0,
+                      lng: 0,
+                      name: p.description,
+                      placeId: p.place_id,
+                      mainText: p.structured_formatting?.main_text || p.description,
+                      secondaryText: p.structured_formatting?.secondary_text || "",
+                      type: p.types?.includes("airport") ? "airport" : "address"
+                    }))
+                  );
+                } else {
+                  console.warn("Google Places status:", status);
+                  resolve([]);
+                }
               }
-            }
-          );
-        });
+            );
+          }),
+          new Promise<SuggestionItem[]>((resolve) => setTimeout(() => resolve([]), 3000))
+        ]);
         if (googlePredictions.length > 0) {
           const combined = [...defaultMatches, ...googlePredictions];
           return Array.from(new Map(combined.map(item => [item.name, item])).values());
         }
       } catch (err) {
-        // fallback
+        console.warn("Google Places autocomplete error:", err);
       }
     }
 
+    // Fallback: OpenStreetMap Nominatim
     try {
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
         headers: { 'Accept-Language': 'en' }

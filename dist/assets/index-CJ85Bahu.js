@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BI9IDUok.js"(exports, module) {
+  "assets/index-CJ85Bahu.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16646,39 +16646,44 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }));
         if (autocompleteService && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.places)) {
           try {
-            const googlePredictions = await new Promise((resolve) => {
-              autocompleteService.getPlacePredictions(
-                {
-                  input: query,
-                  componentRestrictions: { country: ["gb"] }
-                },
-                (predictions, status) => {
-                  if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
-                    resolve(
-                      predictions.map((p) => {
-                        var _a2, _b2, _c;
-                        return {
-                          lat: 0,
-                          lng: 0,
-                          name: p.description,
-                          placeId: p.place_id,
-                          mainText: ((_a2 = p.structured_formatting) == null ? void 0 : _a2.main_text) || p.description,
-                          secondaryText: ((_b2 = p.structured_formatting) == null ? void 0 : _b2.secondary_text) || "",
-                          type: ((_c = p.types) == null ? void 0 : _c.includes("airport")) ? "airport" : "address"
-                        };
-                      })
-                    );
-                  } else {
-                    resolve([]);
+            const googlePredictions = await Promise.race([
+              new Promise((resolve) => {
+                autocompleteService.getPlacePredictions(
+                  {
+                    input: query,
+                    componentRestrictions: { country: ["gb"] }
+                  },
+                  (predictions, status) => {
+                    if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                      resolve(
+                        predictions.map((p) => {
+                          var _a2, _b2, _c;
+                          return {
+                            lat: 0,
+                            lng: 0,
+                            name: p.description,
+                            placeId: p.place_id,
+                            mainText: ((_a2 = p.structured_formatting) == null ? void 0 : _a2.main_text) || p.description,
+                            secondaryText: ((_b2 = p.structured_formatting) == null ? void 0 : _b2.secondary_text) || "",
+                            type: ((_c = p.types) == null ? void 0 : _c.includes("airport")) ? "airport" : "address"
+                          };
+                        })
+                      );
+                    } else {
+                      console.warn("Google Places status:", status);
+                      resolve([]);
+                    }
                   }
-                }
-              );
-            });
+                );
+              }),
+              new Promise((resolve) => setTimeout(() => resolve([]), 3e3))
+            ]);
             if (googlePredictions.length > 0) {
               const combined = [...defaultMatches, ...googlePredictions];
               return Array.from(new Map(combined.map((item) => [item.name, item])).values());
             }
           } catch (err) {
+            console.warn("Google Places autocomplete error:", err);
           }
         }
         try {
