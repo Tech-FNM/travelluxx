@@ -16,7 +16,8 @@ export default defineConfig(() => {
       },
     },
     define: {
-      'process.env.GOOGLE_MAPS_PLATFORM_KEY': JSON.stringify(process.env.GOOGLE_MAPS_PLATFORM_KEY || ''),
+      'process.env.GOOGLE_MAPS_PLATFORM_KEY': JSON.stringify(process.env.GOOGLE_MAPS_PLATFORM_KEY || process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDoifKToOK0u8KPcYS8FhvAMVMSHYSKVdE'),
+      'import.meta.env.VITE_GOOGLE_MAPS_API_KEY': JSON.stringify(process.env.VITE_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDoifKToOK0u8KPcYS8FhvAMVMSHYSKVdE'),
       'process.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL || ''),
       'process.env.SUPABASE_ANON_KEY': JSON.stringify(process.env.SUPABASE_ANON_KEY || ''),
     },

@@ -283,6 +283,17 @@ export default function App() {
       .then(res => res.json())
       .then(data => {
         if (data) {
+          // Dynamic Favicon Injection
+          if (data.favicon_url) {
+            let faviconLink = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+            if (!faviconLink) {
+              faviconLink = document.createElement("link");
+              faviconLink.rel = "icon";
+              document.head.appendChild(faviconLink);
+            }
+            faviconLink.href = data.favicon_url;
+          }
+
           injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
           injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
         }

@@ -329,6 +329,8 @@ function getCurrentWebsiteSettings() {
     minimum_distance: 10.00,
     hero_image: "",
     logo_image: "",
+    logo_url: "",
+    favicon_url: "",
     footer_info: "© 2026 Travelluxx. All rights reserved.",
     homepage_displays: "latest",
     homepage_page_id: "",

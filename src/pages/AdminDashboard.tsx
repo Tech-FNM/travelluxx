@@ -1028,6 +1028,8 @@ export default function AdminDashboard() {
       setPageForm(prev => ({ ...prev, xImage: imageUrl }));
     } else if (editorTarget === "settings-logo") {
       setSettings((prev: any) => ({ ...prev, logo_url: imageUrl }));
+    } else if (editorTarget === "settings-favicon") {
+      setSettings((prev: any) => ({ ...prev, favicon_url: imageUrl }));
     } else if (editorTarget === "settings-hero") {
       setSettings((prev: any) => ({ ...prev, hero_image: imageUrl }));
     }
@@ -3492,7 +3494,7 @@ export default function AdminDashboard() {
                           {/* Logo Management */}
                           <div className="md:col-span-2 border-t border-[#f0f0f1] pt-4">
                             <h2 className="font-bold text-[#1d2327] text-sm mb-4">
-                              🎨 Logo Management
+                              🎨 Logo &amp; Favicon Management
                             </h2>
                             <label className="block text-xs font-semibold text-[#1d2327] mb-2">Site Logo</label>
                             
@@ -3511,21 +3513,60 @@ export default function AdminDashboard() {
                                     setEditorTarget("settings-logo");
                                     setEditorMediaModalOpen(true);
                                   }}
-                                  className="bg-white border border-[#2271b1] text-[#2271b1] hover:bg-[#f6f7f7] px-3 py-1.5 rounded-sm text-xs font-semibold transition"
+                                  className="bg-white border border-[#2271b1] text-[#2271b1] hover:bg-[#f6f7f7] px-3 py-1.5 rounded-sm text-xs font-semibold transition cursor-pointer"
                                 >
-                                  {settings.logo_url ? "Replace Image" : "Select Image"}
+                                  {settings.logo_url ? "Replace Logo" : "Select Logo"}
                                 </button>
                                 {settings.logo_url && (
                                   <button
                                     type="button"
                                     onClick={() => setSettings({ ...settings, logo_url: "" })}
-                                    className="block text-[#d63638] hover:text-[#b32d2e] text-xs underline"
+                                    className="block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer"
                                   >
                                     Remove Logo
                                   </button>
                                 )}
                                 <p className="text-[#646970] text-[10px] max-w-xs">
                                   Upload a high-resolution logo. Transparent PNG or SVG is recommended.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Favicon Management */}
+                          <div className="md:col-span-2 border-t border-[#f0f0f1] pt-4">
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-2">Site Favicon (Browser Tab Icon)</label>
+                            
+                            <div className="flex items-start gap-4">
+                              <div className="w-16 h-16 bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm flex items-center justify-center overflow-hidden shrink-0">
+                                {settings.favicon_url ? (
+                                  <img src={settings.favicon_url} alt="Site Favicon" className="w-10 h-10 object-contain" />
+                                ) : (
+                                  <span className="text-[#646970] text-[10px] text-center px-1">No Favicon</span>
+                                )}
+                              </div>
+                              <div className="space-y-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setEditorTarget("settings-favicon");
+                                    setEditorMediaModalOpen(true);
+                                  }}
+                                  className="bg-white border border-[#2271b1] text-[#2271b1] hover:bg-[#f6f7f7] px-3 py-1.5 rounded-sm text-xs font-semibold transition cursor-pointer"
+                                >
+                                  {settings.favicon_url ? "Replace Favicon" : "Select Favicon"}
+                                </button>
+                                {settings.favicon_url && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setSettings({ ...settings, favicon_url: "" })}
+                                    className="block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer"
+                                  >
+                                    Remove Favicon
+                                  </button>
+                                )}
+                                <p className="text-[#646970] text-[10px] max-w-xs">
+                                  Favicons display in the browser address bar, tab and bookmarks. A square PNG, ICO, or SVG (32×32, 64×64 or 512×512) is recommended.
                                 </p>
                               </div>
                             </div>

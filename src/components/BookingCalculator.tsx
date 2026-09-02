@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { DistanceResult } from "../types";
 import { trackClick } from "../utils/analytics";
-import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import GoogleBookingMap from "./GoogleBookingMap";
 
 interface BookingCalculatorProps {
@@ -213,25 +212,38 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
   const whatsappNum = settings?.whatsapp_number || "441217140876";
 
-  // Google Places search handled via Google AutocompleteService with OSM fallback
-  const placesLibrary = useMapsLibrary("places");
-  const [autocompleteService, setAutocompleteService] = useState<google.maps.places.AutocompleteService | null>(null);
+  // Native Google Places Autocomplete Service
+  const [autocompleteService, setAutocompleteService] = useState<any>(null);
+  const [placesService, setPlacesService] = useState<any>(null);
 
   useEffect(() => {
-    if (placesLibrary) {
-      try {
-        setAutocompleteService(new google.maps.places.AutocompleteService());
-      } catch (err) {
-        // ignore
+    const checkGoogle = () => {
+      if (typeof window !== "undefined" && window.google && window.google.maps && window.google.maps.places) {
+        try {
+          setAutocompleteService(new window.google.maps.places.AutocompleteService());
+          const dummyDiv = document.createElement("div");
+          setPlacesService(new window.google.maps.places.PlacesService(dummyDiv));
+        } catch (e) {
+          console.warn("Places init error:", e);
+        }
       }
-    }
-  }, [placesLibrary]);
+    };
+
+    checkGoogle();
+    const timer = setInterval(() => {
+      if (window.google?.maps?.places) {
+        checkGoogle();
+        clearInterval(timer);
+      }
+    }, 300);
+    return () => clearInterval(timer);
+  }, []);
 
   // Input states
   const [pickupInput, setPickupInput] = useState(initialPickup);
   const [dropoffInput, setDropoffInput] = useState(initialDropoff);
-  const [pickupSuggestions, setPickupSuggestions] = useState<{ lat: number, lng: number, name: string }[]>([]);
-  const [dropoffSuggestions, setDropoffSuggestions] = useState<{ lat: number, lng: number, name: string }[]>([]);
+  const [pickupSuggestions, setPickupSuggestions] = useState<any[]>([]);
+  const [dropoffSuggestions, setDropoffSuggestions] = useState<any[]>([]);
   const [loadingRoute, setLoadingRoute] = useState(false);
   const [distanceResult, setDistanceResult] = useState<DistanceResult | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
@@ -307,7 +319,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
   const [stops, setStops] = useState<{ id: string; address: string; duration: number; waiting: number; lat?: number; lng?: number }[]>([]);
   const [activeStopIndex, setActiveStopIndex] = useState<number | null>(null);
-  const [stopSuggestions, setStopSuggestions] = useState<{ lat: number, lng: number, name: string }[]>([]);
+  const [stopSuggestions, setStopSuggestions] = useState<any[]>([]);
 
   const mapClickModeRef = useRef(mapClickMode);
   useEffect(() => {
@@ -454,23 +466,55 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     );
   };
 
-  const geocodeAddress = async (address: string): Promise<{ lat: number; lng: number } | null> => {
-    if (typeof google !== "undefined" && google.maps && google.maps.Geocoder) {
-      try {
-        const geocoder = new google.maps.Geocoder();
-        return new Promise((resolve) => {
-          geocoder.geocode({ address }, (results, status) => {
-            if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
-              const location = results[0].geometry.location;
-              resolve({ lat: location.lat(), lng: location.lng() });
-            } else {
-              console.warn("Google Geocoder failed with status:", status);
-              resolve(null);
-            }
+  interface SuggestionItem {
+    lat: number;
+    lng: number;
+    name: string;
+    placeId?: string;
+    mainText?: string;
+    secondaryText?: string;
+    type?: "airport" | "city" | "station" | "address";
+  }
+
+  const geocodeAddress = async (address: string, placeId?: string): Promise<{ lat: number; lng: number } | null> => {
+    if (typeof window !== "undefined" && window.google?.maps) {
+      if (placeId && placesService) {
+        try {
+          const res = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
+            placesService.getDetails(
+              { placeId, fields: ["geometry", "formatted_address"] },
+              (place: any, status: any) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && place?.geometry?.location) {
+                  resolve({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
+                } else {
+                  resolve(null);
+                }
+              }
+            );
           });
-        });
-      } catch (err) {
-        console.warn("Google Geocoder threw error:", err);
+          if (res) return res;
+        } catch (e) {
+          console.warn("Places getDetails error:", e);
+        }
+      }
+
+      if (window.google.maps.Geocoder) {
+        try {
+          const geocoder = new window.google.maps.Geocoder();
+          const res = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
+            geocoder.geocode({ address }, (results: any, status: any) => {
+              if (status === window.google.maps.GeocoderStatus.OK && results && results[0]) {
+                const location = results[0].geometry.location;
+                resolve({ lat: location.lat(), lng: location.lng() });
+              } else {
+                resolve(null);
+              }
+            });
+          });
+          if (res) return res;
+        } catch (err) {
+          console.warn("Google Geocoder error:", err);
+        }
       }
     }
 
@@ -491,25 +535,42 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     return null;
   };
 
-  const fetchSuggestions = async (query: string): Promise<{ lat: number, lng: number, name: string }[]> => {
+  const fetchSuggestions = async (query: string): Promise<SuggestionItem[]> => {
     if (!query || query.length < 2) return [];
 
     const queryLower = query.toLowerCase();
-    const defaultMatches = Object.values(UK_LOCATIONS).filter(loc => 
-      loc.name.toLowerCase().includes(queryLower)
-    );
+    const defaultMatches: SuggestionItem[] = Object.values(UK_LOCATIONS)
+      .filter(loc => loc.name.toLowerCase().includes(queryLower))
+      .map(loc => ({
+        lat: loc.lat,
+        lng: loc.lng,
+        name: loc.name,
+        mainText: loc.name.split(",")[0],
+        secondaryText: loc.name.split(",").slice(1).join(",").trim() || "UK",
+        type: loc.name.includes("Airport") ? "airport" : "city"
+      }));
 
-    if (autocompleteService) {
+    if (autocompleteService && window.google?.maps?.places) {
       try {
-        const googlePredictions = await new Promise<{ lat: number, lng: number, name: string }[]>((resolve) => {
+        const googlePredictions = await new Promise<SuggestionItem[]>((resolve) => {
           autocompleteService.getPlacePredictions(
             {
               input: query,
-              componentRestrictions: { country: ["gb", "pk"] },
+              componentRestrictions: { country: ["gb"] },
             },
-            (predictions, status) => {
-              if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
-                resolve(predictions.map(p => ({ lat: 0, lng: 0, name: p.description })));
+            (predictions: any, status: any) => {
+              if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                resolve(
+                  predictions.map((p: any) => ({
+                    lat: 0,
+                    lng: 0,
+                    name: p.description,
+                    placeId: p.place_id,
+                    mainText: p.structured_formatting?.main_text || p.description,
+                    secondaryText: p.structured_formatting?.secondary_text || "",
+                    type: p.types?.includes("airport") ? "airport" : "address"
+                  }))
+                );
               } else {
                 resolve([]);
               }
@@ -526,16 +587,22 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     }
 
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb,pk&limit=6&addressdetails=1`, {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
         headers: { 'Accept-Language': 'en' }
       });
       if (res.ok) {
         const data = await res.json();
-        const osmResults = data.map((item: any) => ({
-          lat: parseFloat(item.lat),
-          lng: parseFloat(item.lon),
-          name: item.display_name
-        }));
+        const osmResults: SuggestionItem[] = data.map((item: any) => {
+          const parts = (item.display_name || "").split(",");
+          return {
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lon),
+            name: item.display_name,
+            mainText: parts[0]?.trim() || item.display_name,
+            secondaryText: parts.slice(1, 3).map((p: any) => p.trim()).join(", "),
+            type: "address"
+          };
+        });
         const combined = [...defaultMatches, ...osmResults];
         if (combined.length > 0) {
           return Array.from(new Map(combined.map(item => [item.name, item])).values());
@@ -545,16 +612,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       // ignore
     }
 
-    // Smart fallback if API returns nothing so users always see suggestions
-    return [
-      ...defaultMatches,
-      { lat: 51.5074, lng: -0.1278, name: `${query}, UK` },
-      { lat: 52.4862, lng: -1.8904, name: `${query}, Birmingham, UK` },
-      { lat: 24.8607, lng: 67.0011, name: `${query}, Karachi, Pakistan` }
-    ];
+    return defaultMatches;
   };
 
-  const handleSelectSuggestion = async (loc: { lat: number; lng: number; name: string }, type: 'pickup' | 'dropoff') => {
+  const handleSelectSuggestion = async (loc: SuggestionItem, type: 'pickup' | 'dropoff') => {
     if (type === 'pickup') {
       setPickupInput(loc.name);
       setPickupSuggestions([]);
@@ -565,7 +626,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
     let coords = { lat: loc.lat, lng: loc.lng };
     if (coords.lat === 0 && coords.lng === 0) {
-      const resolved = await geocodeAddress(loc.name);
+      const resolved = await geocodeAddress(loc.name, loc.placeId);
       if (resolved) {
         coords = resolved;
       }
@@ -588,7 +649,14 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     }
 
     if (val.length < 2) {
-      const defaults = Object.values(UK_LOCATIONS);
+      const defaults: SuggestionItem[] = Object.values(UK_LOCATIONS).map(loc => ({
+        lat: loc.lat,
+        lng: loc.lng,
+        name: loc.name,
+        mainText: loc.name.split(",")[0],
+        secondaryText: loc.name.split(",").slice(1).join(",").trim() || "UK",
+        type: loc.name.includes("Airport") ? "airport" : "city"
+      }));
       if (type === 'pickup') setPickupSuggestions(defaults);
       else setDropoffSuggestions(defaults);
       return;
@@ -596,9 +664,17 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
     // Instantly show local matches while fetching async suggestions
     const queryLower = val.toLowerCase();
-    const immediateMatches = Object.values(UK_LOCATIONS).filter(loc => 
-      loc.name.toLowerCase().includes(queryLower)
-    );
+    const immediateMatches: SuggestionItem[] = Object.values(UK_LOCATIONS)
+      .filter(loc => loc.name.toLowerCase().includes(queryLower))
+      .map(loc => ({
+        lat: loc.lat,
+        lng: loc.lng,
+        name: loc.name,
+        mainText: loc.name.split(",")[0],
+        secondaryText: loc.name.split(",").slice(1).join(",").trim() || "UK",
+        type: loc.name.includes("Airport") ? "airport" : "city"
+      }));
+
     if (type === 'pickup') setPickupSuggestions(immediateMatches);
     else setDropoffSuggestions(immediateMatches);
 
@@ -1351,11 +1427,31 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         />
                         <button type="button" onClick={useMyLocation} className="absolute right-3 top-2.5 text-slate-400 hover:text-emerald-600"><Compass className="w-5 h-5"/></button>
                         {pickupSuggestions.length > 0 && (
-                          <div className="absolute z-50 w-full bg-white border border-slate-200 mt-1 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                          <div className="absolute z-50 w-full bg-white border border-slate-200 mt-1.5 rounded-2xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100">
                             {pickupSuggestions.map((loc, idx) => (
-                              <div key={idx} className="p-3 text-sm hover:bg-slate-50 cursor-pointer" onClick={() => {
-                                handleSelectSuggestion(loc, 'pickup');
-                              }}>{loc.name}</div>
+                              <div
+                                key={idx}
+                                className="p-3 text-sm hover:bg-emerald-50/60 cursor-pointer flex items-center space-x-3 transition group"
+                                onClick={() => handleSelectSuggestion(loc, 'pickup')}
+                              >
+                                <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-emerald-100 text-slate-500 group-hover:text-emerald-700 flex items-center justify-center shrink-0">
+                                  {loc.type === "airport" ? (
+                                    <Plane className="w-4 h-4" />
+                                  ) : (
+                                    <MapPin className="w-4 h-4" />
+                                  )}
+                                </div>
+                                <div className="flex flex-col min-w-0 flex-1">
+                                  <span className="font-semibold text-slate-900 text-xs truncate">
+                                    {loc.mainText || loc.name}
+                                  </span>
+                                  {loc.secondaryText && (
+                                    <span className="text-[11px] text-slate-500 truncate">
+                                      {loc.secondaryText}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             ))}
                           </div>
                         )}
@@ -1378,11 +1474,31 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         />
                         <button type="button" onClick={useMyDropoffLocation} className="absolute right-3 top-2.5 text-slate-400 hover:text-emerald-600"><Compass className="w-5 h-5"/></button>
                         {dropoffSuggestions.length > 0 && (
-                          <div className="absolute z-50 w-full bg-white border border-slate-200 mt-1 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                          <div className="absolute z-50 w-full bg-white border border-slate-200 mt-1.5 rounded-2xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100">
                             {dropoffSuggestions.map((loc, idx) => (
-                              <div key={idx} className="p-3 text-sm hover:bg-slate-50 cursor-pointer" onClick={() => {
-                                handleSelectSuggestion(loc, 'dropoff');
-                              }}>{loc.name}</div>
+                              <div
+                                key={idx}
+                                className="p-3 text-sm hover:bg-rose-50/60 cursor-pointer flex items-center space-x-3 transition group"
+                                onClick={() => handleSelectSuggestion(loc, 'dropoff')}
+                              >
+                                <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-rose-100 text-slate-500 group-hover:text-rose-600 flex items-center justify-center shrink-0">
+                                  {loc.type === "airport" ? (
+                                    <Plane className="w-4 h-4" />
+                                  ) : (
+                                    <MapPin className="w-4 h-4" />
+                                  )}
+                                </div>
+                                <div className="flex flex-col min-w-0 flex-1">
+                                  <span className="font-semibold text-slate-900 text-xs truncate">
+                                    {loc.mainText || loc.name}
+                                  </span>
+                                  {loc.secondaryText && (
+                                    <span className="text-[11px] text-slate-500 truncate">
+                                      {loc.secondaryText}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             ))}
                           </div>
                         )}
