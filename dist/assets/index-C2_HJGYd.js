@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BcO9Y6SY.js"(exports, module) {
+  "assets/index-C2_HJGYd.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -25706,6 +25706,48 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     var leafletSrcExports = requireLeafletSrc();
     const L$1 = /* @__PURE__ */ getDefaultExportFromCjs(leafletSrcExports);
+    const GOOGLE_MAP_STYLES = [
+      {
+        featureType: "administrative",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#444444" }]
+      },
+      {
+        featureType: "landscape",
+        elementType: "all",
+        stylers: [{ color: "#f2f4f7" }]
+      },
+      {
+        featureType: "poi",
+        elementType: "all",
+        stylers: [{ visibility: "off" }]
+      },
+      {
+        featureType: "road",
+        elementType: "all",
+        stylers: [{ saturation: -100 }, { lightness: 45 }]
+      },
+      {
+        featureType: "road.highway",
+        elementType: "all",
+        stylers: [{ visibility: "simplified" }]
+      },
+      {
+        featureType: "road.arterial",
+        elementType: "labels.icon",
+        stylers: [{ visibility: "off" }]
+      },
+      {
+        featureType: "transit",
+        elementType: "all",
+        stylers: [{ visibility: "off" }]
+      },
+      {
+        featureType: "water",
+        elementType: "all",
+        stylers: [{ color: "#cbd5e1" }, { visibility: "on" }]
+      }
+    ];
     function GoogleBookingMap({
       pickupCoords,
       dropoffCoords,
@@ -25714,196 +25756,341 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       onMapClick,
       onRouteCalculated
     }) {
-      const mapContainerRef = reactExports.useRef(null);
-      const mapRef = reactExports.useRef(null);
-      const pickupMarkerRef = reactExports.useRef(null);
-      const dropoffMarkerRef = reactExports.useRef(null);
-      const distanceMarkerRef = reactExports.useRef(null);
-      const routePolylineRef = reactExports.useRef(null);
+      const containerRef = reactExports.useRef(null);
+      const googleMapRef = reactExports.useRef(null);
+      const googlePickupMarkerRef = reactExports.useRef(null);
+      const googleDropoffMarkerRef = reactExports.useRef(null);
+      const googleDirectionsRendererRef = reactExports.useRef(null);
+      const googlePolylineRef = reactExports.useRef(null);
+      const leafletMapRef = reactExports.useRef(null);
+      const leafletPickupMarkerRef = reactExports.useRef(null);
+      const leafletDropoffMarkerRef = reactExports.useRef(null);
+      const leafletPolylineRef = reactExports.useRef(null);
+      const leafletDistanceMarkerRef = reactExports.useRef(null);
+      const [useGoogleMaps, setUseGoogleMaps] = reactExports.useState(true);
       reactExports.useEffect(() => {
-        if (!mapContainerRef.current) return;
-        if (mapRef.current) return;
-        const map = L$1.map(mapContainerRef.current, {
-          zoomControl: false,
-          // Zoom buttons removed as requested!
-          attributionControl: false
-        }).setView([52.414, -1.815], 10);
-        L$1.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
-          maxZoom: 19,
-          attribution: "© Google Maps"
-        }).addTo(map);
-        map.on("click", (e) => {
-          onMapClick(e.latlng.lat, e.latlng.lng);
-        });
-        mapRef.current = map;
+        var _a, _b;
+        if (!containerRef.current) return;
+        if (typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Map)) {
+          try {
+            const map = new window.google.maps.Map(containerRef.current, {
+              center: { lat: 52.414, lng: -1.815 },
+              zoom: 11,
+              disableDefaultUI: true,
+              // No zoom buttons, no street view, no map type controls
+              zoomControl: false,
+              // Explicitly no zoom buttons
+              mapTypeControl: false,
+              streetViewControl: false,
+              fullscreenControl: false,
+              styles: GOOGLE_MAP_STYLES
+              // Matching clean theme
+            });
+            map.addListener("click", (e) => {
+              if (e.latLng) {
+                onMapClick(e.latLng.lat(), e.latLng.lng());
+              }
+            });
+            googleMapRef.current = map;
+            setUseGoogleMaps(true);
+            return;
+          } catch (err) {
+            console.warn("Failed initializing Google Maps, falling back to Leaflet:", err);
+          }
+        }
+        initLeaflet();
+        function initLeaflet() {
+          if (!containerRef.current || leafletMapRef.current) return;
+          const map = L$1.map(containerRef.current, {
+            zoomControl: false,
+            // Zoom buttons removed!
+            attributionControl: false
+          }).setView([52.414, -1.815], 11);
+          L$1.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
+            maxZoom: 19,
+            attribution: "© Google Maps"
+          }).addTo(map);
+          map.on("click", (e) => {
+            onMapClick(e.latlng.lat, e.latlng.lng);
+          });
+          leafletMapRef.current = map;
+          setUseGoogleMaps(false);
+        }
         return () => {
-          map.remove();
-          mapRef.current = null;
+          if (leafletMapRef.current) {
+            leafletMapRef.current.remove();
+            leafletMapRef.current = null;
+          }
         };
       }, []);
       reactExports.useEffect(() => {
-        if (!mapContainerRef.current) return;
-        const resizeObserver = new ResizeObserver(() => {
-          if (mapRef.current) {
-            mapRef.current.invalidateSize();
+        if (!containerRef.current) return;
+        const observer = new ResizeObserver(() => {
+          var _a, _b;
+          if (googleMapRef.current && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.event)) {
+            window.google.maps.event.trigger(googleMapRef.current, "resize");
+          }
+          if (leafletMapRef.current) {
+            leafletMapRef.current.invalidateSize();
           }
         });
-        resizeObserver.observe(mapContainerRef.current);
-        return () => resizeObserver.disconnect();
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
       }, []);
       reactExports.useEffect(() => {
-        const map = mapRef.current;
-        if (!map) return;
-        if (pickupMarkerRef.current) {
-          pickupMarkerRef.current.remove();
-          pickupMarkerRef.current = null;
+        var _a;
+        if (useGoogleMaps && googleMapRef.current && ((_a = window.google) == null ? void 0 : _a.maps)) {
+          const gMap = googleMapRef.current;
+          if (googlePickupMarkerRef.current) {
+            googlePickupMarkerRef.current.setMap(null);
+            googlePickupMarkerRef.current = null;
+          }
+          if (googleDropoffMarkerRef.current) {
+            googleDropoffMarkerRef.current.setMap(null);
+            googleDropoffMarkerRef.current = null;
+          }
+          if (googleDirectionsRendererRef.current) {
+            googleDirectionsRendererRef.current.setMap(null);
+            googleDirectionsRendererRef.current = null;
+          }
+          if (googlePolylineRef.current) {
+            googlePolylineRef.current.setMap(null);
+            googlePolylineRef.current = null;
+          }
+          const bounds = new window.google.maps.LatLngBounds();
+          if (pickupCoords) {
+            const pickupIcon = {
+              url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="42" viewBox="0 0 36 42">
+              <path fill="#059669" stroke="#ffffff" stroke-width="2" d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 24 18 24s18-10.5 18-24c0-9.94-8.06-18-18-18z"/>
+              <circle cx="18" cy="18" r="6" fill="#ffffff"/>
+            </svg>
+          `),
+              scaledSize: new window.google.maps.Size(32, 38),
+              anchor: new window.google.maps.Point(16, 38)
+            };
+            const marker = new window.google.maps.Marker({
+              position: pickupCoords,
+              map: gMap,
+              title: "Pickup",
+              icon: pickupIcon
+            });
+            googlePickupMarkerRef.current = marker;
+            bounds.extend(pickupCoords);
+          }
+          if (dropoffCoords) {
+            const dropoffIcon = {
+              url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="42" viewBox="0 0 36 42">
+              <path fill="#e11d48" stroke="#ffffff" stroke-width="2" d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 24 18 24s18-10.5 18-24c0-9.94-8.06-18-18-18z"/>
+              <circle cx="18" cy="18" r="6" fill="#ffffff"/>
+            </svg>
+          `),
+              scaledSize: new window.google.maps.Size(32, 38),
+              anchor: new window.google.maps.Point(16, 38)
+            };
+            const marker = new window.google.maps.Marker({
+              position: dropoffCoords,
+              map: gMap,
+              title: "Dropoff",
+              icon: dropoffIcon
+            });
+            googleDropoffMarkerRef.current = marker;
+            bounds.extend(dropoffCoords);
+          }
+          if (pickupCoords && dropoffCoords) {
+            if (window.google.maps.DirectionsService) {
+              const directionsService = new window.google.maps.DirectionsService();
+              directionsService.route(
+                {
+                  origin: pickupCoords,
+                  destination: dropoffCoords,
+                  travelMode: window.google.maps.TravelMode.DRIVING
+                },
+                (result, status) => {
+                  var _a2, _b;
+                  if (status === window.google.maps.DirectionsStatus.OK && result) {
+                    const renderer = new window.google.maps.DirectionsRenderer({
+                      map: gMap,
+                      directions: result,
+                      suppressMarkers: true,
+                      // Keep our custom emerald & rose markers
+                      polylineOptions: {
+                        strokeColor: "#059669",
+                        strokeWeight: 5,
+                        strokeOpacity: 0.9
+                      }
+                    });
+                    googleDirectionsRendererRef.current = renderer;
+                    const route = result.routes[0];
+                    const leg = route.legs[0];
+                    const distanceMiles = (((_a2 = leg.distance) == null ? void 0 : _a2.value) || 0) / 1609.34;
+                    const timeMinutes = (((_b = leg.duration) == null ? void 0 : _b.value) || 0) / 60;
+                    const routePoints = (route.overview_path || []).map((pt) => ({
+                      lat: pt.lat(),
+                      lng: pt.lng()
+                    }));
+                    onRouteCalculated({
+                      distanceMiles,
+                      timeMinutes,
+                      routePoints,
+                      instructions: [
+                        `Route via Google Maps (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
+                      ]
+                    });
+                    gMap.fitBounds(route.bounds, 50);
+                  } else {
+                    calculateOsrmRouteForGoogle(pickupCoords, dropoffCoords, gMap);
+                  }
+                }
+              );
+            } else {
+              calculateOsrmRouteForGoogle(pickupCoords, dropoffCoords, gMap);
+            }
+          } else if (pickupCoords || dropoffCoords) {
+            gMap.setCenter(pickupCoords || dropoffCoords);
+            gMap.setZoom(13);
+          }
+          return;
         }
-        if (dropoffMarkerRef.current) {
-          dropoffMarkerRef.current.remove();
-          dropoffMarkerRef.current = null;
-        }
-        if (distanceMarkerRef.current) {
-          distanceMarkerRef.current.remove();
-          distanceMarkerRef.current = null;
-        }
-        if (routePolylineRef.current) {
-          routePolylineRef.current.remove();
-          routePolylineRef.current = null;
-        }
-        const bounds = L$1.latLngBounds([]);
-        let hasBounds = false;
-        if (pickupCoords) {
-          const pickupIcon = L$1.divIcon({
-            className: "custom-leaflet-marker",
-            html: `
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #059669; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
-              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+        if (!useGoogleMaps && leafletMapRef.current) {
+          const lMap = leafletMapRef.current;
+          if (leafletPickupMarkerRef.current) {
+            leafletPickupMarkerRef.current.remove();
+            leafletPickupMarkerRef.current = null;
+          }
+          if (leafletDropoffMarkerRef.current) {
+            leafletDropoffMarkerRef.current.remove();
+            leafletDropoffMarkerRef.current = null;
+          }
+          if (leafletPolylineRef.current) {
+            leafletPolylineRef.current.remove();
+            leafletPolylineRef.current = null;
+          }
+          if (leafletDistanceMarkerRef.current) {
+            leafletDistanceMarkerRef.current.remove();
+            leafletDistanceMarkerRef.current = null;
+          }
+          const bounds = L$1.latLngBounds([]);
+          if (pickupCoords) {
+            const pickupIcon = L$1.divIcon({
+              className: "custom-leaflet-marker",
+              html: `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #059669; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+              </div>
+              <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">PICKUP</div>
             </div>
-            <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">PICKUP</div>
-          </div>
-        `,
-            iconSize: [28, 48],
-            iconAnchor: [14, 24]
-          });
-          const marker = L$1.marker([pickupCoords.lat, pickupCoords.lng], { icon: pickupIcon }).addTo(map);
-          pickupMarkerRef.current = marker;
-          bounds.extend([pickupCoords.lat, pickupCoords.lng]);
-          hasBounds = true;
-        }
-        if (dropoffCoords) {
-          const dropoffIcon = L$1.divIcon({
-            className: "custom-leaflet-marker",
-            html: `
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #e11d48; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
-              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+          `,
+              iconSize: [28, 48],
+              iconAnchor: [14, 24]
+            });
+            leafletPickupMarkerRef.current = L$1.marker([pickupCoords.lat, pickupCoords.lng], { icon: pickupIcon }).addTo(lMap);
+            bounds.extend([pickupCoords.lat, pickupCoords.lng]);
+          }
+          if (dropoffCoords) {
+            const dropoffIcon = L$1.divIcon({
+              className: "custom-leaflet-marker",
+              html: `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #e11d48; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+              </div>
+              <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">DROPOFF</div>
             </div>
-            <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">DROPOFF</div>
-          </div>
-        `,
-            iconSize: [28, 48],
-            iconAnchor: [14, 24]
-          });
-          const marker = L$1.marker([dropoffCoords.lat, dropoffCoords.lng], { icon: dropoffIcon }).addTo(map);
-          dropoffMarkerRef.current = marker;
-          bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
-          hasBounds = true;
+          `,
+              iconSize: [28, 48],
+              iconAnchor: [14, 24]
+            });
+            leafletDropoffMarkerRef.current = L$1.marker([dropoffCoords.lat, dropoffCoords.lng], { icon: dropoffIcon }).addTo(lMap);
+            bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
+          }
+          if (pickupCoords && dropoffCoords) {
+            const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
+            fetch(osrmUrl).then((res) => res.json()).then((data) => {
+              if (data.routes && data.routes[0]) {
+                const route = data.routes[0];
+                const coordinates = route.geometry.coordinates;
+                const latLngs = coordinates.map((c) => [c[1], c[0]]);
+                const distanceMiles = route.distance / 1609.34;
+                const timeMinutes = route.duration / 60;
+                const polyline = L$1.polyline(latLngs, {
+                  color: "#059669",
+                  weight: 5,
+                  opacity: 0.85
+                }).addTo(lMap);
+                leafletPolylineRef.current = polyline;
+                onRouteCalculated({
+                  distanceMiles,
+                  timeMinutes,
+                  routePoints: coordinates.map((c) => ({ lng: c[0], lat: c[1] })),
+                  instructions: [`Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`]
+                });
+              }
+            }).catch(() => {
+              const polyline = L$1.polyline([[pickupCoords.lat, pickupCoords.lng], [dropoffCoords.lat, dropoffCoords.lng]], {
+                color: "#059669",
+                weight: 5,
+                opacity: 0.85
+              }).addTo(lMap);
+              leafletPolylineRef.current = polyline;
+            });
+            lMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+          } else if (pickupCoords || dropoffCoords) {
+            lMap.setView([pickupCoords ? pickupCoords.lat : dropoffCoords.lat, pickupCoords ? pickupCoords.lng : dropoffCoords.lng], 13);
+          }
         }
-        if (pickupCoords && dropoffCoords) {
-          const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
+        function calculateOsrmRouteForGoogle(pCoords, dCoords, gMap) {
+          const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pCoords.lng},${pCoords.lat};${dCoords.lng},${dCoords.lat}?overview=full&geometries=geojson`;
           fetch(osrmUrl).then((res) => res.json()).then((data) => {
             if (data.routes && data.routes[0]) {
               const route = data.routes[0];
               const coordinates = route.geometry.coordinates;
-              const latLngs = coordinates.map((c) => [c[1], c[0]]);
-              const distanceMeters = route.distance;
-              const durationSeconds = route.duration;
-              const distanceMiles = distanceMeters / 1609.34;
-              const timeMinutes = durationSeconds / 60;
-              const routePoints = coordinates.map((c) => ({
-                lng: c[0],
-                lat: c[1]
+              const path = coordinates.map((c) => ({
+                lat: c[1],
+                lng: c[0]
               }));
-              const polyline = L$1.polyline(latLngs, {
-                color: "#059669",
-                weight: 5,
-                opacity: 0.85
-              }).addTo(map);
-              routePolylineRef.current = polyline;
-              const midIndex = Math.floor(latLngs.length / 2);
-              const midPoint = latLngs[midIndex] || latLngs[0];
-              const badgeIcon = L$1.divIcon({
-                className: "custom-distance-badge",
-                html: `
-                <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
-                  ${distanceMiles.toFixed(1)} mi
-                </div>
-              `,
-                iconSize: [60, 24],
-                iconAnchor: [30, 12]
+              const distanceMiles = route.distance / 1609.34;
+              const timeMinutes = route.duration / 60;
+              const polyline = new window.google.maps.Polyline({
+                path,
+                geodesic: true,
+                strokeColor: "#059669",
+                strokeOpacity: 0.9,
+                strokeWeight: 5,
+                map: gMap
               });
-              distanceMarkerRef.current = L$1.marker(midPoint, { icon: badgeIcon, interactive: false }).addTo(map);
+              googlePolylineRef.current = polyline;
+              const b = new window.google.maps.LatLngBounds();
+              path.forEach((pt) => b.extend(pt));
+              gMap.fitBounds(b, 50);
               onRouteCalculated({
                 distanceMiles,
                 timeMinutes,
-                routePoints,
+                routePoints: path,
                 instructions: [
                   `Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
                 ]
               });
             }
           }).catch(() => {
-            const R = 3958.8;
-            const dLat = (dropoffCoords.lat - pickupCoords.lat) * Math.PI / 180;
-            const dLon = (dropoffCoords.lng - pickupCoords.lng) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(pickupCoords.lat * Math.PI / 180) * Math.cos(dropoffCoords.lat * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            const distanceMiles = R * c * 1.3;
-            const timeMinutes = distanceMiles / 35 * 60;
-            const latLngs = [
-              [pickupCoords.lat, pickupCoords.lng],
-              [dropoffCoords.lat, dropoffCoords.lng]
-            ];
-            const polyline = L$1.polyline(latLngs, {
-              color: "#059669",
-              weight: 5,
-              opacity: 0.85
-            }).addTo(map);
-            routePolylineRef.current = polyline;
-            const midLat = (pickupCoords.lat + dropoffCoords.lat) / 2;
-            const midLng = (pickupCoords.lng + dropoffCoords.lng) / 2;
-            const badgeIcon = L$1.divIcon({
-              className: "custom-distance-badge",
-              html: `
-              <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
-                ${distanceMiles.toFixed(1)} mi
-              </div>
-            `,
-              iconSize: [60, 24],
-              iconAnchor: [30, 12]
+            const directPath = [pCoords, dCoords];
+            const polyline = new window.google.maps.Polyline({
+              path: directPath,
+              strokeColor: "#059669",
+              strokeWeight: 5,
+              map: gMap
             });
-            distanceMarkerRef.current = L$1.marker([midLat, midLng], { icon: badgeIcon, interactive: false }).addTo(map);
-            onRouteCalculated({
-              distanceMiles,
-              timeMinutes,
-              routePoints: [
-                { lat: pickupCoords.lat, lng: pickupCoords.lng },
-                { lat: dropoffCoords.lat, lng: dropoffCoords.lng }
-              ],
-              instructions: [`Direct Route (~${distanceMiles.toFixed(1)} miles)`]
-            });
+            googlePolylineRef.current = polyline;
           });
-          map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
-        } else if (hasBounds) {
-          map.setView([pickupCoords ? pickupCoords.lat : dropoffCoords.lat, pickupCoords ? pickupCoords.lng : dropoffCoords.lng], 13);
         }
-      }, [pickupCoords, dropoffCoords]);
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full h-full min-h-[350px] bg-slate-100", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      }, [pickupCoords, dropoffCoords, useGoogleMaps]);
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full h-full min-h-[350px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
         {
-          ref: mapContainerRef,
-          className: "w-full h-full min-h-[350px] rounded-2xl overflow-hidden border border-slate-200 z-0",
+          ref: containerRef,
+          className: "w-full h-full min-h-[350px] z-0",
           style: { minHeight: "350px", width: "100%", height: "100%" }
         }
       ) });
@@ -26165,6 +26352,45 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           secondaryText: loc.name.split(",").slice(1).join(",").trim() || "UK",
           type: loc.name.includes("Airport") ? "airport" : "city"
         }));
+        try {
+          const photonRes = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=8`);
+          if (photonRes.ok) {
+            const pdata = await photonRes.json();
+            if (pdata && pdata.features && pdata.features.length > 0) {
+              const photonResults = pdata.features.map((f) => {
+                const p = f.properties || {};
+                const name = p.name || "";
+                const street = [p.housenumber, p.street].filter(Boolean).join(" ");
+                const locParts = [street, p.city || p.town || p.district, p.postcode, p.country].filter(Boolean);
+                const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
+                const isAirport = name.toLowerCase().includes("airport") || p.osm_value && p.osm_value.includes("aerodrome");
+                return {
+                  lat: f.geometry.coordinates[1],
+                  lng: f.geometry.coordinates[0],
+                  name: fullLabel || name,
+                  mainText: name || locParts[0] || fullLabel,
+                  secondaryText: locParts.join(", "),
+                  type: isAirport ? "airport" : "address"
+                };
+              });
+              const combined = [...defaultMatches, ...photonResults];
+              return Array.from(new Map(combined.map((item) => [item.name, item])).values());
+            }
+          }
+        } catch (e) {
+          console.warn("Photon search error:", e);
+        }
+        try {
+          const bRes = await fetch(`/api/places/autocomplete?q=${encodeURIComponent(query)}`);
+          if (bRes.ok) {
+            const bData = await bRes.json();
+            if (bData && bData.length > 0) {
+              const combined = [...defaultMatches, ...bData];
+              return Array.from(new Map(combined.map((item) => [item.name, item])).values());
+            }
+          }
+        } catch (e) {
+        }
         if (autocompleteService && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.places)) {
           try {
             const googlePredictions = await Promise.race([
@@ -26191,34 +26417,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                         })
                       );
                     } else {
-                      autocompleteService.getPlacePredictions(
-                        { input: query },
-                        (pred2, status2) => {
-                          if (status2 === window.google.maps.places.PlacesServiceStatus.OK && pred2 && pred2.length > 0) {
-                            resolve(
-                              pred2.map((p) => {
-                                var _a2, _b2, _c;
-                                return {
-                                  lat: 0,
-                                  lng: 0,
-                                  name: p.description,
-                                  placeId: p.place_id,
-                                  mainText: ((_a2 = p.structured_formatting) == null ? void 0 : _a2.main_text) || p.description,
-                                  secondaryText: ((_b2 = p.structured_formatting) == null ? void 0 : _b2.secondary_text) || "",
-                                  type: ((_c = p.types) == null ? void 0 : _c.includes("airport")) ? "airport" : "address"
-                                };
-                              })
-                            );
-                          } else {
-                            resolve([]);
-                          }
-                        }
-                      );
+                      resolve([]);
                     }
                   }
                 );
               }),
-              new Promise((resolve) => setTimeout(() => resolve([]), 2e3))
+              new Promise((resolve) => setTimeout(() => resolve([]), 500))
             ]);
             if (googlePredictions.length > 0) {
               const combined = [...defaultMatches, ...googlePredictions];
@@ -26229,16 +26433,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
         }
         try {
-          let res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
             headers: { "Accept-Language": "en" }
           });
-          let data = res.ok ? await res.json() : [];
-          if (!data || data.length === 0) {
-            res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=6&addressdetails=1`, {
-              headers: { "Accept-Language": "en" }
-            });
-            data = res.ok ? await res.json() : [];
-          }
+          const data = res.ok ? await res.json() : [];
           if (data && data.length > 0) {
             const osmResults = data.map((item) => {
               var _a2;

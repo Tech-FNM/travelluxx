@@ -1451,6 +1451,70 @@ app.get("/uploads/:filename", async (req, res, next) => {
 // Serve uploads directory fallback
 app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
 
+// --- Location Search / Places Autocomplete Proxy ---
+app.get("/api/places/autocomplete", async (req, res) => {
+  const query = (req.query.q as string || "").trim();
+  if (!query || query.length < 2) {
+    return res.json([]);
+  }
+
+  try {
+    // 1. Query Photon API (fast, OSM based, UK prioritized)
+    const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=8`;
+    const response = await fetch(photonUrl);
+    if (response.ok) {
+      const data: any = await response.json();
+      if (data && data.features && data.features.length > 0) {
+        const results = data.features.map((f: any) => {
+          const p = f.properties || {};
+          const name = p.name || "";
+          const street = [p.housenumber, p.street].filter(Boolean).join(" ");
+          const locParts = [street, p.city || p.town || p.district, p.postcode, p.country].filter(Boolean);
+          const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
+          const isAirport = name.toLowerCase().includes("airport") || (p.osm_value && p.osm_value.includes("aerodrome"));
+          
+          return {
+            lat: f.geometry.coordinates[1],
+            lng: f.geometry.coordinates[0],
+            name: fullLabel || name,
+            mainText: name || locParts[0] || fullLabel,
+            secondaryText: locParts.join(", "),
+            type: isAirport ? "airport" : "address"
+          };
+        });
+        return res.json(results);
+      }
+    }
+  } catch (err) {
+    console.warn("Backend Photon search error:", err);
+  }
+
+  // Fallback to Nominatim
+  try {
+    const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`;
+    const nomRes = await fetch(nomUrl, { headers: { 'User-Agent': 'TravelluxxApp/1.0', 'Accept-Language': 'en' } });
+    if (nomRes.ok) {
+      const nomData: any = await nomRes.json();
+      const results = nomData.map((item: any) => {
+        const parts = (item.display_name || "").split(",");
+        return {
+          lat: parseFloat(item.lat),
+          lng: parseFloat(item.lon),
+          name: item.display_name,
+          mainText: parts[0]?.trim() || item.display_name,
+          secondaryText: parts.slice(1, 3).map((p: any) => p.trim()).join(", "),
+          type: item.display_name.toLowerCase().includes("airport") ? "airport" : "address"
+        };
+      });
+      return res.json(results);
+    }
+  } catch (e) {
+    console.warn("Backend Nominatim fallback error:", e);
+  }
+
+  return res.json([]);
+});
+
 // --- Admin Register (Sign Up - DISABLED) ---
 app.post("/api/admin/register", (req, res) => {
   return res.status(403).json({ error: "Registration is disabled" });

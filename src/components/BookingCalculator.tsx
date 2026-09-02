@@ -550,12 +550,58 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         type: loc.name.includes("Airport") ? "airport" : "city"
       }));
 
-    // Try Google Places Autocomplete (with 2s timeout)
+    // 1. First, check backend proxy /api/places/autocomplete or Photon directly
+    try {
+      // Direct Photon API query (fast, responsive, zero-CORS)
+      const photonRes = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=8`);
+      if (photonRes.ok) {
+        const pdata = await photonRes.json();
+        if (pdata && pdata.features && pdata.features.length > 0) {
+          const photonResults: SuggestionItem[] = pdata.features.map((f: any) => {
+            const p = f.properties || {};
+            const name = p.name || "";
+            const street = [p.housenumber, p.street].filter(Boolean).join(" ");
+            const locParts = [street, p.city || p.town || p.district, p.postcode, p.country].filter(Boolean);
+            const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
+            const isAirport = name.toLowerCase().includes("airport") || (p.osm_value && p.osm_value.includes("aerodrome"));
+            
+            return {
+              lat: f.geometry.coordinates[1],
+              lng: f.geometry.coordinates[0],
+              name: fullLabel || name,
+              mainText: name || locParts[0] || fullLabel,
+              secondaryText: locParts.join(", "),
+              type: isAirport ? "airport" : "address"
+            };
+          });
+
+          const combined = [...defaultMatches, ...photonResults];
+          return Array.from(new Map(combined.map(item => [item.name, item])).values());
+        }
+      }
+    } catch (e) {
+      console.warn("Photon search error:", e);
+    }
+
+    // 2. Try Backend Autocomplete proxy
+    try {
+      const bRes = await fetch(`/api/places/autocomplete?q=${encodeURIComponent(query)}`);
+      if (bRes.ok) {
+        const bData = await bRes.json();
+        if (bData && bData.length > 0) {
+          const combined = [...defaultMatches, ...bData];
+          return Array.from(new Map(combined.map(item => [item.name, item])).values());
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // 3. Try Google Places Autocomplete (with 500ms max timeout)
     if (autocompleteService && window.google?.maps?.places) {
       try {
         const googlePredictions = await Promise.race([
           new Promise<SuggestionItem[]>((resolve) => {
-            // First attempt with UK restriction
             autocompleteService.getPlacePredictions(
               {
                 input: query,
@@ -575,32 +621,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     }))
                   );
                 } else {
-                  // If no UK predictions or blocked, try without country restriction
-                  autocompleteService.getPlacePredictions(
-                    { input: query },
-                    (pred2: any, status2: any) => {
-                      if (status2 === window.google.maps.places.PlacesServiceStatus.OK && pred2 && pred2.length > 0) {
-                        resolve(
-                          pred2.map((p: any) => ({
-                            lat: 0,
-                            lng: 0,
-                            name: p.description,
-                            placeId: p.place_id,
-                            mainText: p.structured_formatting?.main_text || p.description,
-                            secondaryText: p.structured_formatting?.secondary_text || "",
-                            type: p.types?.includes("airport") ? "airport" : "address"
-                          }))
-                        );
-                      } else {
-                        resolve([]);
-                      }
-                    }
-                  );
+                  resolve([]);
                 }
               }
             );
           }),
-          new Promise<SuggestionItem[]>((resolve) => setTimeout(() => resolve([]), 2000))
+          new Promise<SuggestionItem[]>((resolve) => setTimeout(() => resolve([]), 500))
         ]);
         if (googlePredictions.length > 0) {
           const combined = [...defaultMatches, ...googlePredictions];
@@ -611,21 +637,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       }
     }
 
-    // High-speed fallback: OpenStreetMap Nominatim (works for UK and everywhere)
+    // 4. OpenStreetMap Nominatim fallback
     try {
-      // Try UK search first
-      let res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
         headers: { 'Accept-Language': 'en' }
       });
-      let data = res.ok ? await res.json() : [];
-
-      // If nothing found in UK (e.g. user entered non-UK address like "korangi"), search globally
-      if (!data || data.length === 0) {
-        res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=6&addressdetails=1`, {
-          headers: { 'Accept-Language': 'en' }
-        });
-        data = res.ok ? await res.json() : [];
-      }
+      const data = res.ok ? await res.json() : [];
 
       if (data && data.length > 0) {
         const osmResults: SuggestionItem[] = data.map((item: any) => {
