@@ -550,18 +550,19 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         type: loc.name.includes("Airport") ? "airport" : "city"
       }));
 
-    // Try Google Places Autocomplete (with 3s timeout)
+    // Try Google Places Autocomplete (with 2s timeout)
     if (autocompleteService && window.google?.maps?.places) {
       try {
         const googlePredictions = await Promise.race([
           new Promise<SuggestionItem[]>((resolve) => {
+            // First attempt with UK restriction
             autocompleteService.getPlacePredictions(
               {
                 input: query,
                 componentRestrictions: { country: ["gb"] },
               },
               (predictions: any, status: any) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
                   resolve(
                     predictions.map((p: any) => ({
                       lat: 0,
@@ -574,13 +575,32 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     }))
                   );
                 } else {
-                  console.warn("Google Places status:", status);
-                  resolve([]);
+                  // If no UK predictions or blocked, try without country restriction
+                  autocompleteService.getPlacePredictions(
+                    { input: query },
+                    (pred2: any, status2: any) => {
+                      if (status2 === window.google.maps.places.PlacesServiceStatus.OK && pred2 && pred2.length > 0) {
+                        resolve(
+                          pred2.map((p: any) => ({
+                            lat: 0,
+                            lng: 0,
+                            name: p.description,
+                            placeId: p.place_id,
+                            mainText: p.structured_formatting?.main_text || p.description,
+                            secondaryText: p.structured_formatting?.secondary_text || "",
+                            type: p.types?.includes("airport") ? "airport" : "address"
+                          }))
+                        );
+                      } else {
+                        resolve([]);
+                      }
+                    }
+                  );
                 }
               }
             );
           }),
-          new Promise<SuggestionItem[]>((resolve) => setTimeout(() => resolve([]), 3000))
+          new Promise<SuggestionItem[]>((resolve) => setTimeout(() => resolve([]), 2000))
         ]);
         if (googlePredictions.length > 0) {
           const combined = [...defaultMatches, ...googlePredictions];
@@ -591,13 +611,23 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       }
     }
 
-    // Fallback: OpenStreetMap Nominatim
+    // High-speed fallback: OpenStreetMap Nominatim (works for UK and everywhere)
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
+      // Try UK search first
+      let res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
         headers: { 'Accept-Language': 'en' }
       });
-      if (res.ok) {
-        const data = await res.json();
+      let data = res.ok ? await res.json() : [];
+
+      // If nothing found in UK (e.g. user entered non-UK address like "korangi"), search globally
+      if (!data || data.length === 0) {
+        res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=6&addressdetails=1`, {
+          headers: { 'Accept-Language': 'en' }
+        });
+        data = res.ok ? await res.json() : [];
+      }
+
+      if (data && data.length > 0) {
         const osmResults: SuggestionItem[] = data.map((item: any) => {
           const parts = (item.display_name || "").split(",");
           return {
