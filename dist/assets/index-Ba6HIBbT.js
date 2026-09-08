@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DYfCyOYs.js"(exports, module) {
+  "assets/index-Ba6HIBbT.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -15124,18 +15124,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$Q = [
+    const __iconNode$O = [
       ["path", { d: "M5 12h14", key: "1ays0h" }],
       ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
     ];
-    const ArrowRight = createLucideIcon("arrow-right", __iconNode$Q);
+    const ArrowRight = createLucideIcon("arrow-right", __iconNode$O);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$P = [
+    const __iconNode$N = [
       ["path", { d: "M12 7v14", key: "1akyts" }],
       [
         "path",
@@ -15145,86 +15145,63 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const BookOpen = createLucideIcon("book-open", __iconNode$P);
+    const BookOpen = createLucideIcon("book-open", __iconNode$N);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$O = [
+    const __iconNode$M = [
       ["path", { d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", key: "jecpp" }],
       ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
     ];
-    const Briefcase = createLucideIcon("briefcase", __iconNode$O);
+    const Briefcase = createLucideIcon("briefcase", __iconNode$M);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$N = [
+    const __iconNode$L = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
       ["path", { d: "M3 10h18", key: "8toen8" }]
     ];
-    const Calendar = createLucideIcon("calendar", __iconNode$N);
+    const Calendar = createLucideIcon("calendar", __iconNode$L);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$M = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-    const Check = createLucideIcon("check", __iconNode$M);
+    const __iconNode$K = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+    const Check = createLucideIcon("check", __iconNode$K);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$L = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-    const ChevronDown = createLucideIcon("chevron-down", __iconNode$L);
+    const __iconNode$J = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+    const ChevronDown = createLucideIcon("chevron-down", __iconNode$J);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$K = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-    const ChevronRight = createLucideIcon("chevron-right", __iconNode$K);
+    const __iconNode$I = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+    const ChevronRight = createLucideIcon("chevron-right", __iconNode$I);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$J = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-    const ChevronUp = createLucideIcon("chevron-up", __iconNode$J);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$I = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-    ];
-    const CircleAlert = createLucideIcon("circle-alert", __iconNode$I);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$H = [
-      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
-    ];
-    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$H);
+    const __iconNode$H = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+    const ChevronUp = createLucideIcon("chevron-up", __iconNode$H);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15233,9 +15210,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      */
     const __iconNode$G = [
       ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
     ];
-    const CircleCheck = createLucideIcon("circle-check", __iconNode$G);
+    const CircleAlert = createLucideIcon("circle-alert", __iconNode$G);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15243,11 +15221,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$F = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
-      ["path", { d: "M12 17h.01", key: "p32p05" }]
+      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
     ];
-    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$F);
+    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$F);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15255,10 +15232,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$E = [
-      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const Clock = createLucideIcon("clock", __iconNode$E);
+    const CircleCheck = createLucideIcon("circle-check", __iconNode$E);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15266,12 +15243,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$D = [
-      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
-      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
-      ["path", { d: "M7 6h1v4", key: "1obek4" }],
-      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+      ["path", { d: "M12 17h.01", key: "p32p05" }]
     ];
-    const Coins = createLucideIcon("coins", __iconNode$D);
+    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$D);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15279,6 +15255,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$C = [
+      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+    ];
+    const Clock = createLucideIcon("clock", __iconNode$C);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$B = [
+      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
+      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
+      ["path", { d: "M7 6h1v4", key: "1obek4" }],
+      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
+    ];
+    const Coins = createLucideIcon("coins", __iconNode$B);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$A = [
       [
         "path",
         {
@@ -15288,14 +15288,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
     ];
-    const Compass = createLucideIcon("compass", __iconNode$C);
+    const Compass = createLucideIcon("compass", __iconNode$A);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$B = [
+    const __iconNode$z = [
       [
         "path",
         {
@@ -15304,26 +15304,26 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Droplet = createLucideIcon("droplet", __iconNode$B);
+    const Droplet = createLucideIcon("droplet", __iconNode$z);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$A = [
+    const __iconNode$y = [
       ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
       ["path", { d: "M10 14 21 3", key: "gplh6r" }],
       ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
     ];
-    const ExternalLink = createLucideIcon("external-link", __iconNode$A);
+    const ExternalLink = createLucideIcon("external-link", __iconNode$y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$z = [
+    const __iconNode$x = [
       [
         "path",
         {
@@ -15341,14 +15341,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "m2 2 20 20", key: "1ooewy" }]
     ];
-    const EyeOff = createLucideIcon("eye-off", __iconNode$z);
+    const EyeOff = createLucideIcon("eye-off", __iconNode$x);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$y = [
+    const __iconNode$w = [
       [
         "path",
         {
@@ -15358,28 +15358,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Eye = createLucideIcon("eye", __iconNode$y);
+    const Eye = createLucideIcon("eye", __iconNode$w);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$x = [
+    const __iconNode$v = [
       ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
       ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
       ["path", { d: "M10 9H8", key: "b1mrlr" }],
       ["path", { d: "M16 13H8", key: "t4e002" }],
       ["path", { d: "M16 17H8", key: "z1uh3a" }]
     ];
-    const FileText = createLucideIcon("file-text", __iconNode$x);
+    const FileText = createLucideIcon("file-text", __iconNode$v);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$w = [
+    const __iconNode$u = [
       ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
       [
         "path",
@@ -15389,31 +15389,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const House = createLucideIcon("house", __iconNode$w);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$v = [
-      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
-    ];
-    const Image$1 = createLucideIcon("image", __iconNode$v);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$u = [
-      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
-      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
-      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
-    ];
-    const Instagram = createLucideIcon("instagram", __iconNode$u);
+    const House = createLucideIcon("house", __iconNode$u);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15421,6 +15397,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$t = [
+      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+    ];
+    const Image$1 = createLucideIcon("image", __iconNode$t);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$s = [
+      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
+      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
+      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
+    ];
+    const Instagram = createLucideIcon("instagram", __iconNode$s);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$r = [
       [
         "path",
         {
@@ -15443,32 +15443,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Layers = createLucideIcon("layers", __iconNode$t);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$s = [
-      ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-      ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-      ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-      ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
-    ];
-    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$s);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$r = [
-      ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-      ["path", { d: "M21 12H9", key: "dn1m92" }],
-      ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
-    ];
-    const LogOut = createLucideIcon("log-out", __iconNode$r);
+    const Layers = createLucideIcon("layers", __iconNode$r);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15476,10 +15451,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$q = [
-      ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-      ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+      ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+      ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+      ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+      ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
     ];
-    const Mail = createLucideIcon("mail", __iconNode$q);
+    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$q);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15487,16 +15464,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$p = [
-      [
-        "path",
-        {
-          d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
-          key: "1r0f0z"
-        }
-      ],
-      ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
+      ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+      ["path", { d: "M21 12H9", key: "dn1m92" }],
+      ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
     ];
-    const MapPin = createLucideIcon("map-pin", __iconNode$p);
+    const LogOut = createLucideIcon("log-out", __iconNode$p);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15504,11 +15476,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$o = [
-      ["path", { d: "M4 5h16", key: "1tepv9" }],
-      ["path", { d: "M4 12h16", key: "1lakjw" }],
-      ["path", { d: "M4 19h16", key: "1djgab" }]
+      ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+      ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
     ];
-    const Menu = createLucideIcon("menu", __iconNode$o);
+    const Mail = createLucideIcon("mail", __iconNode$o);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15519,12 +15490,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
-          key: "18887p"
+          d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
+          key: "1r0f0z"
         }
-      ]
+      ],
+      ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
     ];
-    const MessageSquare = createLucideIcon("message-square", __iconNode$n);
+    const MapPin = createLucideIcon("map-pin", __iconNode$n);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15532,6 +15504,34 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$m = [
+      ["path", { d: "M4 5h16", key: "1tepv9" }],
+      ["path", { d: "M4 12h16", key: "1lakjw" }],
+      ["path", { d: "M4 19h16", key: "1djgab" }]
+    ];
+    const Menu = createLucideIcon("menu", __iconNode$m);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$l = [
+      [
+        "path",
+        {
+          d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
+          key: "18887p"
+        }
+      ]
+    ];
+    const MessageSquare = createLucideIcon("message-square", __iconNode$l);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$k = [
       ["path", { d: "M15 18h-5", key: "95g1m2" }],
       ["path", { d: "M18 14h-8", key: "sponae" }],
       [
@@ -15543,14 +15543,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["rect", { width: "8", height: "4", x: "10", y: "6", rx: "1", key: "aywv1n" }]
     ];
-    const Newspaper = createLucideIcon("newspaper", __iconNode$m);
+    const Newspaper = createLucideIcon("newspaper", __iconNode$k);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$l = [
+    const __iconNode$j = [
       [
         "path",
         {
@@ -15559,34 +15559,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Phone = createLucideIcon("phone", __iconNode$l);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$k = [
-      [
-        "path",
-        {
-          d: "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z",
-          key: "1v9wt8"
-        }
-      ]
-    ];
-    const Plane = createLucideIcon("plane", __iconNode$k);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$j = [
-      ["path", { d: "M5 12h14", key: "1ays0h" }],
-      ["path", { d: "M12 5v14", key: "s699le" }]
-    ];
-    const Plus = createLucideIcon("plus", __iconNode$j);
+    const Phone = createLucideIcon("phone", __iconNode$j);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15597,14 +15570,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
-          key: "1c8476"
+          d: "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z",
+          key: "1v9wt8"
         }
-      ],
-      ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
-      ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
+      ]
     ];
-    const Save = createLucideIcon("save", __iconNode$i);
+    const Plane = createLucideIcon("plane", __iconNode$i);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15612,16 +15583,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$h = [
-      [
-        "path",
-        {
-          d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-          key: "1ffxy3"
-        }
-      ],
-      ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+      ["path", { d: "M5 12h14", key: "1ays0h" }],
+      ["path", { d: "M12 5v14", key: "s699le" }]
     ];
-    const Send = createLucideIcon("send", __iconNode$h);
+    const Plus = createLucideIcon("plus", __iconNode$h);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15632,13 +15597,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
-          key: "1i5ecw"
+          d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+          key: "1c8476"
         }
       ],
-      ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+      ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
+      ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
     ];
-    const Settings = createLucideIcon("settings", __iconNode$g);
+    const Save = createLucideIcon("save", __iconNode$g);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15649,13 +15615,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-          key: "oel41y"
+          d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+          key: "1ffxy3"
         }
       ],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
     ];
-    const ShieldCheck = createLucideIcon("shield-check", __iconNode$f);
+    const Send = createLucideIcon("send", __iconNode$f);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15666,12 +15632,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-          key: "oel41y"
+          d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+          key: "1i5ecw"
         }
-      ]
+      ],
+      ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Shield = createLucideIcon("shield", __iconNode$e);
+    const Settings = createLucideIcon("settings", __iconNode$e);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15679,10 +15646,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$d = [
-      ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
-      ["path", { d: "M12 18h.01", key: "mhygvu" }]
+      [
+        "path",
+        {
+          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+          key: "oel41y"
+        }
+      ],
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const Smartphone = createLucideIcon("smartphone", __iconNode$d);
+    const ShieldCheck = createLucideIcon("shield-check", __iconNode$d);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15690,6 +15663,33 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$c = [
+      [
+        "path",
+        {
+          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+          key: "oel41y"
+        }
+      ]
+    ];
+    const Shield = createLucideIcon("shield", __iconNode$c);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$b = [
+      ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+      ["path", { d: "M12 18h.01", key: "mhygvu" }]
+    ];
+    const Smartphone = createLucideIcon("smartphone", __iconNode$b);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$a = [
       [
         "path",
         {
@@ -15701,14 +15701,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M22 4h-4", key: "gwowj6" }],
       ["circle", { cx: "4", cy: "20", r: "2", key: "6kqj1y" }]
     ];
-    const Sparkles = createLucideIcon("sparkles", __iconNode$c);
+    const Sparkles = createLucideIcon("sparkles", __iconNode$a);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$b = [
+    const __iconNode$9 = [
       [
         "path",
         {
@@ -15717,14 +15717,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Star = createLucideIcon("star", __iconNode$b);
+    const Star = createLucideIcon("star", __iconNode$9);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$a = [
+    const __iconNode$8 = [
       ["path", { d: "M7 10v12", key: "1qc93n" }],
       [
         "path",
@@ -15734,32 +15734,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const ThumbsUp = createLucideIcon("thumbs-up", __iconNode$a);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$9 = [
-      ["path", { d: "M10 11v6", key: "nco0om" }],
-      ["path", { d: "M14 11v6", key: "outv1u" }],
-      ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
-      ["path", { d: "M3 6h18", key: "d0wm0j" }],
-      ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
-    ];
-    const Trash2 = createLucideIcon("trash-2", __iconNode$9);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$8 = [
-      ["path", { d: "m17 2-5 5-5-5", key: "16satq" }],
-      ["rect", { width: "20", height: "15", x: "2", y: "7", rx: "2", key: "1e6viu" }]
-    ];
-    const Tv = createLucideIcon("tv", __iconNode$8);
+    const ThumbsUp = createLucideIcon("thumbs-up", __iconNode$8);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15767,11 +15742,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$7 = [
-      ["path", { d: "M12 3v12", key: "1x0j5s" }],
-      ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
-      ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+      ["path", { d: "M10 11v6", key: "nco0om" }],
+      ["path", { d: "M14 11v6", key: "outv1u" }],
+      ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
+      ["path", { d: "M3 6h18", key: "d0wm0j" }],
+      ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
     ];
-    const Upload = createLucideIcon("upload", __iconNode$7);
+    const Trash2 = createLucideIcon("trash-2", __iconNode$7);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15779,12 +15756,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$6 = [
-      ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-      ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-      ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-      ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+      ["path", { d: "m17 2-5 5-5-5", key: "16satq" }],
+      ["rect", { width: "20", height: "15", x: "2", y: "7", rx: "2", key: "1e6viu" }]
     ];
-    const Users = createLucideIcon("users", __iconNode$6);
+    const Tv = createLucideIcon("tv", __iconNode$6);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15792,6 +15767,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$5 = [
+      ["path", { d: "M12 3v12", key: "1x0j5s" }],
+      ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
+      ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }]
+    ];
+    const Upload = createLucideIcon("upload", __iconNode$5);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$4 = [
+      ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+      ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+      ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+      ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+    ];
+    const Users = createLucideIcon("users", __iconNode$4);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$3 = [
       [
         "path",
         {
@@ -15802,32 +15802,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M16 9a5 5 0 0 1 0 6", key: "1q6k2b" }],
       ["path", { d: "M19.364 18.364a9 9 0 0 0 0-12.728", key: "ijwkga" }]
     ];
-    const Volume2 = createLucideIcon("volume-2", __iconNode$5);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$4 = [
-      ["path", { d: "M12 20h.01", key: "zekei9" }],
-      ["path", { d: "M2 8.82a15 15 0 0 1 20 0", key: "dnpr2z" }],
-      ["path", { d: "M5 12.859a10 10 0 0 1 14 0", key: "1x1e6c" }],
-      ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }]
-    ];
-    const Wifi = createLucideIcon("wifi", __iconNode$4);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$3 = [
-      ["path", { d: "M12.8 19.6A2 2 0 1 0 14 16H2", key: "148xed" }],
-      ["path", { d: "M17.5 8a2.5 2.5 0 1 1 2 4H2", key: "1u4tom" }],
-      ["path", { d: "M9.8 4.4A2 2 0 1 1 11 8H2", key: "75valh" }]
-    ];
-    const Wind = createLucideIcon("wind", __iconNode$3);
+    const Volume2 = createLucideIcon("volume-2", __iconNode$3);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15835,10 +15810,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$2 = [
-      ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-      ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+      ["path", { d: "M12 20h.01", key: "zekei9" }],
+      ["path", { d: "M2 8.82a15 15 0 0 1 20 0", key: "dnpr2z" }],
+      ["path", { d: "M5 12.859a10 10 0 0 1 14 0", key: "1x1e6c" }],
+      ["path", { d: "M8.5 16.429a5 5 0 0 1 7 0", key: "1bycff" }]
     ];
-    const X = createLucideIcon("x", __iconNode$2);
+    const Wifi = createLucideIcon("wifi", __iconNode$2);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15846,12 +15823,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$1 = [
-      ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
-      ["line", { x1: "21", x2: "16.65", y1: "21", y2: "16.65", key: "13gj7c" }],
-      ["line", { x1: "11", x2: "11", y1: "8", y2: "14", key: "1vmskp" }],
-      ["line", { x1: "8", x2: "14", y1: "11", y2: "11", key: "durymu" }]
+      ["path", { d: "M12.8 19.6A2 2 0 1 0 14 16H2", key: "148xed" }],
+      ["path", { d: "M17.5 8a2.5 2.5 0 1 1 2 4H2", key: "1u4tom" }],
+      ["path", { d: "M9.8 4.4A2 2 0 1 1 11 8H2", key: "75valh" }]
     ];
-    const ZoomIn = createLucideIcon("zoom-in", __iconNode$1);
+    const Wind = createLucideIcon("wind", __iconNode$1);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15859,11 +15835,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode = [
-      ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
-      ["line", { x1: "21", x2: "16.65", y1: "21", y2: "16.65", key: "13gj7c" }],
-      ["line", { x1: "8", x2: "14", y1: "11", y2: "11", key: "durymu" }]
+      ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+      ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
     ];
-    const ZoomOut = createLucideIcon("zoom-out", __iconNode);
+    const X = createLucideIcon("x", __iconNode);
     const travelluxxLogo = "/assets/travelluxx_logo_1786403432815-CscAlFeQ.jpg";
     function getCustomImage(key, defaultSrc) {
       try {
@@ -25743,54 +25718,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     var leafletSrcExports = requireLeafletSrc();
     const L$1 = /* @__PURE__ */ getDefaultExportFromCjs(leafletSrcExports);
-    const GOOGLE_MAP_STYLES = [
-      {
-        featureType: "poi",
-        elementType: "geometry",
-        stylers: [{ visibility: "on" }]
-      },
-      {
-        featureType: "poi.business",
-        elementType: "all",
-        stylers: [{ visibility: "on" }]
-      },
-      {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [{ color: "#dcfce7" }, { visibility: "on" }]
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [{ visibility: "on" }]
-      },
-      {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [{ color: "#bfdbfe" }]
-      }
-    ];
-    const getGoogleMarkerIcon = (color) => {
-      var _a, _b, _c, _d;
-      const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 36 48">
-      <defs>
-        <filter id="shadow" x="0" y="0" width="36" height="48" filterUnits="userSpaceOnUse">
-          <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
-        </filter>
-      </defs>
-      <g filter="url(#shadow)">
-        <path d="M18 4C10.82 4 5 9.82 5 17C5 26.5 18 42 18 42C18 42 31 26.5 31 17C31 9.82 25.18 4 18 4Z" fill="${color}" stroke="#ffffff" stroke-width="2.5"/>
-        <circle cx="18" cy="17" r="5" fill="#ffffff"/>
-      </g>
-    </svg>
-  `.trim();
-      return {
-        url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
-        scaledSize: typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Size) ? new window.google.maps.Size(34, 44) : void 0,
-        anchor: typeof window !== "undefined" && ((_d = (_c = window.google) == null ? void 0 : _c.maps) == null ? void 0 : _d.Point) ? new window.google.maps.Point(17, 42) : void 0
-      };
-    };
     function GoogleBookingMap({
       pickupCoords,
       dropoffCoords,
@@ -25799,378 +25726,200 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       onMapClick,
       onRouteCalculated
     }) {
-      const containerRef = reactExports.useRef(null);
-      const [useGoogleMap, setUseGoogleMap] = reactExports.useState(false);
-      const googleMapRef = reactExports.useRef(null);
-      const infoWindowRef = reactExports.useRef(null);
-      const googlePickupMarkerRef = reactExports.useRef(null);
-      const googleDropoffMarkerRef = reactExports.useRef(null);
-      const googlePolylineRef = reactExports.useRef(null);
-      const googlePolylineOutlineRef = reactExports.useRef(null);
-      const leafletMapRef = reactExports.useRef(null);
-      const leafletPickupMarkerRef = reactExports.useRef(null);
-      const leafletDropoffMarkerRef = reactExports.useRef(null);
-      const leafletPolylineRef = reactExports.useRef(null);
+      const mapContainerRef = reactExports.useRef(null);
+      const mapRef = reactExports.useRef(null);
+      const pickupMarkerRef = reactExports.useRef(null);
+      const dropoffMarkerRef = reactExports.useRef(null);
+      const distanceMarkerRef = reactExports.useRef(null);
+      const routePolylineRef = reactExports.useRef(null);
       reactExports.useEffect(() => {
-        if (!containerRef.current) return;
-        const purgeOverlays = () => {
-          const container = containerRef.current;
-          if (!container) return;
-          const pbcElements = container.querySelectorAll(".gm-style-pbc, .gm-style-pbt, .gm-style-moc");
-          pbcElements.forEach((el) => {
-            el.style.setProperty("display", "none", "important");
-            el.style.setProperty("opacity", "0", "important");
-          });
-          const darkOverlays = container.querySelectorAll(".gm-style > div:first-child > div:last-child");
-          darkOverlays.forEach((el) => {
-            const bg = el.style.backgroundColor;
-            if (bg && bg.includes("rgba(0, 0, 0")) {
-              el.style.setProperty("display", "none", "important");
-            }
-          });
-          const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
-          let node;
-          const textNodesToHide = [];
-          while (node = walker.nextNode()) {
-            if (node.nodeValue && node.nodeValue.includes("For development purposes only")) {
-              if (node.parentElement) {
-                textNodesToHide.push(node.parentElement);
-              }
-            }
-          }
-          textNodesToHide.forEach((el) => {
-            el.style.setProperty("display", "none", "important");
-            el.style.setProperty("opacity", "0", "important");
-            el.style.setProperty("visibility", "hidden", "important");
-          });
-        };
-        purgeOverlays();
-        const observer = new MutationObserver(purgeOverlays);
-        observer.observe(containerRef.current, {
-          childList: true,
-          subtree: true,
-          attributes: true
+        if (!mapContainerRef.current) return;
+        if (mapRef.current) return;
+        const map = L$1.map(mapContainerRef.current, {
+          zoomControl: false,
+          attributionControl: false
+        }).setView([52.414, -1.815], 10);
+        L$1.control.zoom({ position: "bottomright" }).addTo(map);
+        L$1.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
+          maxZoom: 19,
+          attribution: "© Google Maps"
+        }).addTo(map);
+        map.on("click", (e) => {
+          onMapClick(e.latlng.lat, e.latlng.lng);
         });
-        const interval = setInterval(purgeOverlays, 250);
+        mapRef.current = map;
         return () => {
-          observer.disconnect();
-          clearInterval(interval);
+          map.remove();
+          mapRef.current = null;
         };
-      }, [useGoogleMap]);
-      reactExports.useEffect(() => {
-        if (!containerRef.current) return;
-        const initMap = () => {
-          var _a, _b;
-          if (typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Map)) {
-            setUseGoogleMap(true);
-            if (!googleMapRef.current) {
-              const map = new window.google.maps.Map(containerRef.current, {
-                center: { lat: 52.414, lng: -1.815 },
-                zoom: 12,
-                styles: GOOGLE_MAP_STYLES,
-                disableDefaultUI: true,
-                zoomControl: false,
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false,
-                clickableIcons: true,
-                // CRITICAL: Enables Google Business POI click events!
-                gestureHandling: "greedy"
-              });
-              const infoWindow = new window.google.maps.InfoWindow();
-              infoWindowRef.current = infoWindow;
-              window.__setPoiCoords = (lat, lng) => {
-                onMapClick(lat, lng);
-                infoWindow.close();
-              };
-              map.addListener("click", (e) => {
-                var _a2, _b2, _c, _d, _e, _f, _g, _h, _i;
-                if (e.placeId) {
-                  e.stop();
-                  const lat = e.latLng.lat();
-                  const lng = e.latLng.lng();
-                  const handlePlaceDetails = (placeName, address) => {
-                    infoWindow.setContent(`
-                  <div style="font-family: 'Inter', system-ui, sans-serif; padding: 4px 6px; min-width: 170px;">
-                    <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Google Business</div>
-                    <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${placeName}</div>
-                    ${address ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${address}</div>` : ""}
-                    <div style="margin-top: 8px; display: flex; gap: 6px;">
-                      <button onclick="window.__setPoiCoords && window.__setPoiCoords(${lat}, ${lng})" style="background: #059669; color: #ffffff; border: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Select Location</button>
-                    </div>
-                  </div>
-                `);
-                    infoWindow.setPosition(e.latLng);
-                    infoWindow.open(map);
-                  };
-                  if ((_c = (_b2 = (_a2 = window.google) == null ? void 0 : _a2.maps) == null ? void 0 : _b2.places) == null ? void 0 : _c.Place) {
-                    try {
-                      const placeObj = new window.google.maps.places.Place({ id: e.placeId });
-                      placeObj.fetchFields({ fields: ["displayName", "formattedAddress"] }).then(() => {
-                        handlePlaceDetails(placeObj.displayName || "Business Location", placeObj.formattedAddress || "");
-                      }).catch(() => {
-                        var _a3, _b3, _c2;
-                        if ((_c2 = (_b3 = (_a3 = window.google) == null ? void 0 : _a3.maps) == null ? void 0 : _b3.places) == null ? void 0 : _c2.PlacesService) {
-                          const placesService = new window.google.maps.places.PlacesService(map);
-                          placesService.getDetails(
-                            { placeId: e.placeId, fields: ["name", "formatted_address"] },
-                            (place) => {
-                              handlePlaceDetails((place == null ? void 0 : place.name) || "Business Location", (place == null ? void 0 : place.formatted_address) || "");
-                            }
-                          );
-                        }
-                      });
-                    } catch (err) {
-                      if ((_f = (_e = (_d = window.google) == null ? void 0 : _d.maps) == null ? void 0 : _e.places) == null ? void 0 : _f.PlacesService) {
-                        const placesService = new window.google.maps.places.PlacesService(map);
-                        placesService.getDetails(
-                          { placeId: e.placeId, fields: ["name", "formatted_address"] },
-                          (place) => {
-                            handlePlaceDetails((place == null ? void 0 : place.name) || "Business Location", (place == null ? void 0 : place.formatted_address) || "");
-                          }
-                        );
-                      }
-                    }
-                  } else if ((_i = (_h = (_g = window.google) == null ? void 0 : _g.maps) == null ? void 0 : _h.places) == null ? void 0 : _i.PlacesService) {
-                    const placesService = new window.google.maps.places.PlacesService(map);
-                    placesService.getDetails(
-                      { placeId: e.placeId, fields: ["name", "formatted_address"] },
-                      (place) => {
-                        handlePlaceDetails((place == null ? void 0 : place.name) || "Business Location", (place == null ? void 0 : place.formatted_address) || "");
-                      }
-                    );
-                  }
-                  onMapClick(lat, lng);
-                } else if (e.latLng) {
-                  infoWindow.close();
-                  onMapClick(e.latLng.lat(), e.latLng.lng());
-                }
-              });
-              googleMapRef.current = map;
-            }
-          } else {
-            if (!leafletMapRef.current) {
-              const map = L$1.map(containerRef.current, {
-                center: [52.414, -1.815],
-                zoom: 11,
-                zoomControl: false,
-                attributionControl: false
-              });
-              L$1.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
-                maxZoom: 20,
-                subdomains: ["mt0", "mt1", "mt2", "mt3"]
-              }).addTo(map);
-              map.on("click", (e) => {
-                onMapClick(e.latlng.lat, e.latlng.lng);
-              });
-              leafletMapRef.current = map;
-            }
-          }
-        };
-        initMap();
-        const timer = setInterval(() => {
-          var _a, _b;
-          if (typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Map) && !googleMapRef.current) {
-            if (leafletMapRef.current) {
-              leafletMapRef.current.remove();
-              leafletMapRef.current = null;
-            }
-            initMap();
-            clearInterval(timer);
-          }
-        }, 400);
-        return () => clearInterval(timer);
       }, []);
       reactExports.useEffect(() => {
-        var _a;
-        if (useGoogleMap && googleMapRef.current && ((_a = window.google) == null ? void 0 : _a.maps)) {
-          const gMap = googleMapRef.current;
-          if (googlePickupMarkerRef.current) {
-            googlePickupMarkerRef.current.setMap(null);
-            googlePickupMarkerRef.current = null;
+        if (!mapContainerRef.current) return;
+        const resizeObserver = new ResizeObserver(() => {
+          if (mapRef.current) {
+            mapRef.current.invalidateSize();
           }
-          if (googleDropoffMarkerRef.current) {
-            googleDropoffMarkerRef.current.setMap(null);
-            googleDropoffMarkerRef.current = null;
-          }
-          if (googlePolylineRef.current) {
-            googlePolylineRef.current.setMap(null);
-            googlePolylineRef.current = null;
-          }
-          if (googlePolylineOutlineRef.current) {
-            googlePolylineOutlineRef.current.setMap(null);
-            googlePolylineOutlineRef.current = null;
-          }
-          const bounds = new window.google.maps.LatLngBounds();
-          if (pickupCoords) {
-            const pickupLatLng = new window.google.maps.LatLng(pickupCoords.lat, pickupCoords.lng);
-            const marker = new window.google.maps.Marker({
-              position: pickupLatLng,
-              map: gMap,
-              title: pickupInput || "Pickup Location",
-              icon: getGoogleMarkerIcon("#10b981"),
-              zIndex: 999
+        });
+        resizeObserver.observe(mapContainerRef.current);
+        return () => resizeObserver.disconnect();
+      }, []);
+      reactExports.useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+        if (pickupMarkerRef.current) {
+          pickupMarkerRef.current.remove();
+          pickupMarkerRef.current = null;
+        }
+        if (dropoffMarkerRef.current) {
+          dropoffMarkerRef.current.remove();
+          dropoffMarkerRef.current = null;
+        }
+        if (distanceMarkerRef.current) {
+          distanceMarkerRef.current.remove();
+          distanceMarkerRef.current = null;
+        }
+        if (routePolylineRef.current) {
+          routePolylineRef.current.remove();
+          routePolylineRef.current = null;
+        }
+        const bounds = L$1.latLngBounds([]);
+        let hasBounds = false;
+        if (pickupCoords) {
+          const pickupIcon = L$1.divIcon({
+            className: "custom-leaflet-marker",
+            html: `
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #059669; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+            </div>
+            <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">PICKUP</div>
+          </div>
+        `,
+            iconSize: [28, 48],
+            iconAnchor: [14, 24]
+          });
+          const marker = L$1.marker([pickupCoords.lat, pickupCoords.lng], { icon: pickupIcon }).addTo(map);
+          pickupMarkerRef.current = marker;
+          bounds.extend([pickupCoords.lat, pickupCoords.lng]);
+          hasBounds = true;
+        }
+        if (dropoffCoords) {
+          const dropoffIcon = L$1.divIcon({
+            className: "custom-leaflet-marker",
+            html: `
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #e11d48; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+            </div>
+            <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">DROPOFF</div>
+          </div>
+        `,
+            iconSize: [28, 48],
+            iconAnchor: [14, 24]
+          });
+          const marker = L$1.marker([dropoffCoords.lat, dropoffCoords.lng], { icon: dropoffIcon }).addTo(map);
+          dropoffMarkerRef.current = marker;
+          bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
+          hasBounds = true;
+        }
+        if (pickupCoords && dropoffCoords) {
+          const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
+          fetch(osrmUrl).then((res) => res.json()).then((data) => {
+            if (data.routes && data.routes[0]) {
+              const route = data.routes[0];
+              const coordinates = route.geometry.coordinates;
+              const latLngs = coordinates.map((c) => [c[1], c[0]]);
+              const distanceMeters = route.distance;
+              const durationSeconds = route.duration;
+              const distanceMiles = distanceMeters / 1609.34;
+              const timeMinutes = durationSeconds / 60;
+              const routePoints = coordinates.map((c) => ({
+                lng: c[0],
+                lat: c[1]
+              }));
+              const polyline = L$1.polyline(latLngs, {
+                color: "#059669",
+                weight: 5,
+                opacity: 0.85
+              }).addTo(map);
+              routePolylineRef.current = polyline;
+              const midIndex = Math.floor(latLngs.length / 2);
+              const midPoint = latLngs[midIndex] || latLngs[0];
+              const badgeIcon = L$1.divIcon({
+                className: "custom-distance-badge",
+                html: `
+                <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
+                  ${distanceMiles.toFixed(1)} mi
+                </div>
+              `,
+                iconSize: [60, 24],
+                iconAnchor: [30, 12]
+              });
+              distanceMarkerRef.current = L$1.marker(midPoint, { icon: badgeIcon, interactive: false }).addTo(map);
+              onRouteCalculated({
+                distanceMiles,
+                timeMinutes,
+                routePoints,
+                instructions: [
+                  `Route via OpenStreetMap (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
+                ]
+              });
+            }
+          }).catch((err) => {
+            console.warn("OSRM Routing fetch error, using fallback Haversine:", err);
+            const R = 3958.8;
+            const dLat = (dropoffCoords.lat - pickupCoords.lat) * Math.PI / 180;
+            const dLon = (dropoffCoords.lng - pickupCoords.lng) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(pickupCoords.lat * Math.PI / 180) * Math.cos(dropoffCoords.lat * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distanceMiles = R * c * 1.3;
+            const timeMinutes = distanceMiles / 35 * 60;
+            const latLngs = [
+              [pickupCoords.lat, pickupCoords.lng],
+              [dropoffCoords.lat, dropoffCoords.lng]
+            ];
+            const polyline = L$1.polyline(latLngs, {
+              color: "#059669",
+              weight: 5,
+              opacity: 0.85
+            }).addTo(map);
+            routePolylineRef.current = polyline;
+            const midLat = (pickupCoords.lat + dropoffCoords.lat) / 2;
+            const midLng = (pickupCoords.lng + dropoffCoords.lng) / 2;
+            const badgeIcon = L$1.divIcon({
+              className: "custom-distance-badge",
+              html: `
+              <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
+                ${distanceMiles.toFixed(1)} mi
+              </div>
+            `,
+              iconSize: [60, 24],
+              iconAnchor: [30, 12]
             });
-            googlePickupMarkerRef.current = marker;
-            bounds.extend(pickupLatLng);
-          }
-          if (dropoffCoords) {
-            const dropoffLatLng = new window.google.maps.LatLng(dropoffCoords.lat, dropoffCoords.lng);
-            const marker = new window.google.maps.Marker({
-              position: dropoffLatLng,
-              map: gMap,
-              title: dropoffInput || "Drop-off Location",
-              icon: getGoogleMarkerIcon("#f43f5e"),
-              zIndex: 999
-            });
-            googleDropoffMarkerRef.current = marker;
-            bounds.extend(dropoffLatLng);
-          }
-          if (pickupCoords && dropoffCoords) {
-            const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
-            fetch(osrmUrl).then((res) => res.json()).then((data) => {
-              if (data.routes && data.routes[0]) {
-                const route = data.routes[0];
-                const coordinates = route.geometry.coordinates;
-                const path = coordinates.map((c) => ({
-                  lat: c[1],
-                  lng: c[0]
-                }));
-                const distanceMiles = route.distance / 1609.34;
-                const timeMinutes = route.duration / 60;
-                const outline = new window.google.maps.Polyline({
-                  path,
-                  geodesic: true,
-                  strokeColor: "#064e3b",
-                  strokeOpacity: 0.35,
-                  strokeWeight: 7,
-                  map: gMap
-                });
-                googlePolylineOutlineRef.current = outline;
-                const polyline = new window.google.maps.Polyline({
-                  path,
-                  geodesic: true,
-                  strokeColor: "#059669",
-                  strokeOpacity: 0.95,
-                  strokeWeight: 4.5,
-                  map: gMap
-                });
-                googlePolylineRef.current = polyline;
-                path.forEach((pt) => bounds.extend(pt));
-                gMap.fitBounds(bounds, { top: 45, right: 45, bottom: 45, left: 45 });
-                onRouteCalculated({
-                  distanceMiles,
-                  timeMinutes,
-                  routePoints: path,
-                  instructions: [
-                    `Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
-                  ]
-                });
-              }
-            }).catch(() => {
-              const directPath = [
+            distanceMarkerRef.current = L$1.marker([midLat, midLng], { icon: badgeIcon, interactive: false }).addTo(map);
+            onRouteCalculated({
+              distanceMiles,
+              timeMinutes,
+              routePoints: [
                 { lat: pickupCoords.lat, lng: pickupCoords.lng },
                 { lat: dropoffCoords.lat, lng: dropoffCoords.lng }
-              ];
-              const polyline = new window.google.maps.Polyline({
-                path: directPath,
-                strokeColor: "#059669",
-                strokeOpacity: 0.9,
-                strokeWeight: 4.5,
-                map: gMap
-              });
-              googlePolylineRef.current = polyline;
-              gMap.fitBounds(bounds, 50);
+              ],
+              instructions: [`Direct Route (~${distanceMiles.toFixed(1)} miles)`]
             });
-          } else if (pickupCoords || dropoffCoords) {
-            const single = pickupCoords || dropoffCoords;
-            gMap.setCenter({ lat: single.lat, lng: single.lng });
-            gMap.setZoom(13);
-          }
-        } else if (leafletMapRef.current) {
-          const lMap = leafletMapRef.current;
-          if (leafletPickupMarkerRef.current) leafletPickupMarkerRef.current.remove();
-          if (leafletDropoffMarkerRef.current) leafletDropoffMarkerRef.current.remove();
-          if (leafletPolylineRef.current) leafletPolylineRef.current.remove();
-          const bounds = L$1.latLngBounds([]);
-          if (pickupCoords) {
-            const marker = L$1.circleMarker([pickupCoords.lat, pickupCoords.lng], {
-              radius: 8,
-              fillColor: "#10b981",
-              color: "#ffffff",
-              weight: 2,
-              fillOpacity: 1
-            }).addTo(lMap);
-            leafletPickupMarkerRef.current = marker;
-            bounds.extend([pickupCoords.lat, pickupCoords.lng]);
-          }
-          if (dropoffCoords) {
-            const marker = L$1.circleMarker([dropoffCoords.lat, dropoffCoords.lng], {
-              radius: 8,
-              fillColor: "#f43f5e",
-              color: "#ffffff",
-              weight: 2,
-              fillOpacity: 1
-            }).addTo(lMap);
-            leafletDropoffMarkerRef.current = marker;
-            bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
-          }
-          if (pickupCoords && dropoffCoords) {
-            const polyline = L$1.polyline(
-              [[pickupCoords.lat, pickupCoords.lng], [dropoffCoords.lat, dropoffCoords.lng]],
-              { color: "#059669", weight: 4.5 }
-            ).addTo(lMap);
-            leafletPolylineRef.current = polyline;
-            lMap.fitBounds(bounds, { padding: [40, 40] });
-          }
+          });
+          map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+        } else if (hasBounds) {
+          map.setView([pickupCoords ? pickupCoords.lat : dropoffCoords.lat, pickupCoords ? pickupCoords.lng : dropoffCoords.lng], 13);
         }
-      }, [pickupCoords, dropoffCoords, useGoogleMap]);
-      const handleZoomIn = () => {
-        if (googleMapRef.current) {
-          googleMapRef.current.setZoom((googleMapRef.current.getZoom() || 11) + 1);
-        } else if (leafletMapRef.current) {
-          leafletMapRef.current.zoomIn();
+      }, [pickupCoords, dropoffCoords]);
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative w-full h-full min-h-[250px]", style: { filter: "none", backgroundColor: "#e5e3df" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          ref: mapContainerRef,
+          className: "w-full h-full min-h-[250px] rounded-2xl overflow-hidden border border-slate-200 z-0",
+          style: { filter: "none", backgroundColor: "#e5e3df" }
         }
-      };
-      const handleZoomOut = () => {
-        if (googleMapRef.current) {
-          googleMapRef.current.setZoom((googleMapRef.current.getZoom() || 11) - 1);
-        } else if (leafletMapRef.current) {
-          leafletMapRef.current.zoomOut();
-        }
-      };
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-full min-h-[350px] bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 shadow-inner", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            ref: containerRef,
-            className: "w-full h-full min-h-[350px] z-0",
-            style: { minHeight: "350px", width: "100%", height: "100%" }
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-4 right-4 z-10 flex items-center space-x-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl flex flex-col shadow-sm overflow-hidden", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: handleZoomIn,
-              "aria-label": "Zoom In",
-              className: "p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 transition-colors border-b border-slate-100",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ZoomIn, { className: "w-3.5 h-3.5" })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: handleZoomOut,
-              "aria-label": "Zoom Out",
-              className: "p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 transition-colors",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ZoomOut, { className: "w-3.5 h-3.5" })
-            }
-          )
-        ] }) })
-      ] });
+      ) });
     }
     const UK_LOCATIONS = {
       "shirley": { lat: 52.414, lng: -1.815, name: "Shirley, Solihull B90" },
