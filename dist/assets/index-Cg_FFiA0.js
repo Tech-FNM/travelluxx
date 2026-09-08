@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Dijxo0Np.js"(exports, module) {
+  "assets/index-Cg_FFiA0.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -44226,44 +44226,7 @@ ${escapeText(this.code(index, length))}
                 !isLast && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden lg:flex absolute top-10 -right-4 transform -translate-y-1/2 text-slate-300", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-5 h-5" }) })
               ] }, step.number);
             }) })
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative py-16 lg:py-20 bg-[#070b14] overflow-hidden", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "div",
-              {
-                className: "absolute inset-0 bg-cover bg-center bg-no-repeat z-0",
-                style: {
-                  backgroundImage: "url('https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1800&q=80')"
-                },
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/85 to-[#070b14]/50" })
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-2xl space-y-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.2em] block", children: "READY TO TRAVEL?" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug", children: "Book your journey with TravelLuxx today and experience comfortable, reliable and professional transportation." }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-3 flex flex-wrap items-center gap-4", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "a",
-                  {
-                    href: "/#calculator",
-                    className: "bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-[#d4a359]/20 transition-all duration-300 hover:scale-105 active:scale-95 inline-flex items-center gap-2 cursor-pointer",
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Book Now" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4" })
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "a",
-                  {
-                    href: "/#calculator",
-                    className: "border border-slate-600 hover:border-slate-400 bg-slate-900/60 hover:bg-slate-900 text-white font-semibold px-6 py-3.5 rounded-full text-sm transition-all duration-300 cursor-pointer",
-                    children: "Get a Quote"
-                  }
-                )
-              ] })
-            ] }) })
-          ] })
+          ] }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
         }, settings })

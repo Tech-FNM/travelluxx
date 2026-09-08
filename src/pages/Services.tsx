@@ -430,51 +430,7 @@ export default function Services() {
           </div>
         </section>
 
-        {/* ========================================================= */}
-        {/* 5. READY TO TRAVEL? (BOTTOM CTA BANNER)                   */}
-        {/* ========================================================= */}
-        <section className="relative py-16 lg:py-20 bg-[#070b14] overflow-hidden">
-          {/* Scenic Mercedes On Road Background */}
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1800&q=80')",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/85 to-[#070b14]/50"></div>
-          </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl space-y-4">
-              <span className="text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.2em] block">
-                READY TO TRAVEL?
-              </span>
-
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug">
-                Book your journey with TravelLuxx today and experience comfortable, reliable and
-                professional transportation.
-              </h2>
-
-              <div className="pt-3 flex flex-wrap items-center gap-4">
-                <a
-                  href="/#calculator"
-                  className="bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-[#d4a359]/20 transition-all duration-300 hover:scale-105 active:scale-95 inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <span>Book Now</span>
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-
-                <a
-                  href="/#calculator"
-                  className="border border-slate-600 hover:border-slate-400 bg-slate-900/60 hover:bg-slate-900 text-white font-semibold px-6 py-3.5 rounded-full text-sm transition-all duration-300 cursor-pointer"
-                >
-                  Get a Quote
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* Global Footer */}
