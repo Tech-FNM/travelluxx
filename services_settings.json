@@ -1,0 +1,76 @@
+{
+  "hero_tag": "OUR SERVICES",
+  "hero_title": "Premium, Reliable & Comfortable Travel Services",
+  "hero_description": "From airport transfers to long-distance journeys, TravelLuxx provides professional private transportation tailored around your needs.",
+  "hero_button_text": "Book Your Journey",
+  "hero_button_url": "/#calculator",
+  "hero_image": "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+  "catalog_tag": "OUR SERVICES",
+  "catalog_title": "Travel Solutions for Every Journey",
+  "catalog_description": "Whether it's a quick airport transfer or a long-distance trip, we offer a range of services designed to make your journey smooth, safe and stress-free.",
+  "why_choose_tag": "WHY CHOOSE TRAVELLUXX",
+  "why_choose_title": "Your Trusted Travel Partner",
+  "why_choose_description": "We go the extra mile to ensure your journey is comfortable, safe and hassle-free.",
+  "why_choose_bg_image": "https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80",
+  "why_choose_items": [
+    {
+      "icon": "UserCheck",
+      "title": "Professional & Experienced Drivers",
+      "description": "Skilled, courteous and fully licensed."
+    },
+    {
+      "icon": "Car",
+      "title": "Comfortable Vehicles",
+      "description": "Modern, clean and well-maintained fleet."
+    },
+    {
+      "icon": "Tag",
+      "title": "Fixed & Transparent Pricing",
+      "description": "No hidden charges, no surprises."
+    },
+    {
+      "icon": "Clock",
+      "title": "24/7 Booking Support",
+      "description": "We're always here to help you."
+    },
+    {
+      "icon": "MapPin",
+      "title": "Airport & Nationwide Coverage",
+      "description": "All major airports and locations across the UK."
+    },
+    {
+      "icon": "ShieldCheck",
+      "title": "Punctual & Reliable Service",
+      "description": "On time, every time."
+    }
+  ],
+  "how_it_works_tag": "HOW IT WORKS",
+  "how_it_works_title": "Simple Steps to Your Destination",
+  "how_it_works_description": "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+  "how_it_works_steps": [
+    {
+      "number": "01",
+      "icon": "CalendarDays",
+      "title": "Book Your Journey",
+      "description": "Enter your pickup, destination and journey details."
+    },
+    {
+      "number": "02",
+      "icon": "CheckCircle2",
+      "title": "Get Your Confirmation",
+      "description": "Receive your booking confirmation with all journey details."
+    },
+    {
+      "number": "03",
+      "icon": "UserCheck",
+      "title": "Meet Your Driver",
+      "description": "Your professional driver arrives at the agreed pickup location."
+    },
+    {
+      "number": "04",
+      "icon": "Car",
+      "title": "Enjoy Your Journey",
+      "description": "Sit back, relax and travel comfortably to your destination."
+    }
+  ]
+}

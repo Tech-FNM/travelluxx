@@ -12,6 +12,7 @@ import BlogList from "./pages/BlogList";
 import BlogPostDetail from "./pages/BlogPostDetail";
 import DynamicPage from "./pages/DynamicPage";
 import Services from "./pages/Services";
+import ServiceDetail from "./pages/ServiceDetail";
 import RenaxLayout from "./components/RenaxLayout";
 import { trackVisit, trackClick } from "./utils/analytics";
 
@@ -322,8 +323,9 @@ export default function App() {
         <Route path="/blog" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogPostDetail />} />
 
-        {/* SERVICES PAGE */}
+        {/* SERVICES PAGES */}
         <Route path="/services" element={<Services />} />
+        <Route path="/services/:slug" element={<ServiceDetail />} />
 
         {/* DYNAMIC CMS PAGES */}
         <Route path="/:slug" element={<DynamicPage />} />

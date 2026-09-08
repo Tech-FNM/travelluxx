@@ -17,6 +17,8 @@ const POSTS_PATH = path.join(process.cwd(), "posts.json");
 const ADMINS_PATH = path.join(process.cwd(), "admins.json");
 const PAGES_PATH = path.join(process.cwd(), "pages.json");
 const INQUIRIES_PATH = path.join(process.cwd(), "inquiries.json");
+const SERVICES_PATH = path.join(process.cwd(), "services.json");
+const SERVICES_SETTINGS_PATH = path.join(process.cwd(), "services_settings.json");
 
 import mongoose from "mongoose";
 
@@ -75,6 +77,28 @@ const PageSchema = new mongoose.Schema({
 }, { strict: false });
 
 const PageModel = mongoose.model("Page", PageSchema);
+
+const ServiceSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  title: String,
+  slug: { type: String, required: true, unique: true },
+  excerpt: String,
+  content: String,
+  image: String,
+  heroImage: String,
+  icon: { type: String, default: "Car" },
+  features: { type: [String], default: [] },
+  priceText: String,
+  published: { type: Boolean, default: true },
+  order: { type: Number, default: 0 },
+  metaTitle: String,
+  metaDescription: String,
+  noIndexNoFollow: { type: Boolean, default: false },
+  createdAt: { type: String, default: () => new Date().toISOString() },
+  updatedAt: { type: String, default: () => new Date().toISOString() }
+}, { strict: false });
+
+const ServiceModel = mongoose.model("Service", ServiceSchema);
 
 const InquirySchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
@@ -160,6 +184,19 @@ async function runMigrations() {
   } catch (err: any) {
     console.error("Error migrating inquiries to MongoDB:", err.message);
   }
+
+  // Migrate existing services.json into MongoDB if empty
+  try {
+    const count = await ServiceModel.countDocuments();
+    if (count === 0 && fs.existsSync(SERVICES_PATH)) {
+      console.log("📥 Migrating services.json into MongoDB...");
+      const jsonServices = JSON.parse(fs.readFileSync(SERVICES_PATH, "utf8"));
+      await ServiceModel.insertMany(jsonServices, { ordered: false }).catch(() => {});
+      console.log("✅ MongoDB populated with all services!");
+    }
+  } catch (err: any) {
+    console.error("Error migrating services to MongoDB:", err.message);
+  }
 }
 
 async function connectToDatabase() {
@@ -232,6 +269,52 @@ function writePages(pages: any[]) {
     fs.writeFileSync(PAGES_PATH, JSON.stringify(pages, null, 2));
   } catch (err) {
     console.error("Error writing pages.json:", err);
+  }
+}
+
+function readServices(): any[] {
+  try {
+    if (fs.existsSync(SERVICES_PATH)) {
+      return JSON.parse(fs.readFileSync(SERVICES_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading services.json:", err);
+  }
+  return [];
+}
+
+function writeServices(services: any[]) {
+  if (process.env.VERCEL) {
+    console.log("ℹ️ Skipping writeServices to local file on Vercel.");
+    return;
+  }
+  try {
+    fs.writeFileSync(SERVICES_PATH, JSON.stringify(services, null, 2));
+  } catch (err) {
+    console.error("Error writing services.json:", err);
+  }
+}
+
+function readServicesSettings(): any {
+  try {
+    if (fs.existsSync(SERVICES_SETTINGS_PATH)) {
+      return JSON.parse(fs.readFileSync(SERVICES_SETTINGS_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading services_settings.json:", err);
+  }
+  return {};
+}
+
+function writeServicesSettings(settingsData: any) {
+  if (process.env.VERCEL) {
+    console.log("ℹ️ Skipping writeServicesSettings to local file on Vercel.");
+    return;
+  }
+  try {
+    fs.writeFileSync(SERVICES_SETTINGS_PATH, JSON.stringify(settingsData, null, 2));
+  } catch (err) {
+    console.error("Error writing services_settings.json:", err);
   }
 }
 
@@ -1304,6 +1387,132 @@ app.delete("/api/admin/pages/:id", async (req, res) => {
   } catch (e) {}
   writePages(readPages().filter(p => p.id !== req.params.id));
   return res.json({ success: true });
+});
+
+// --- Services CRUD & Page Settings ---
+app.get("/api/services", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const services = await ServiceModel.find({ published: true }).sort({ order: 1, createdAt: 1 });
+    if (services && services.length > 0) return res.json(services);
+  } catch (e) {}
+  const local = readServices().filter(s => s.published !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
+  return res.json(local);
+});
+
+app.get("/api/services/:slug", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const service = await ServiceModel.findOne({ slug: req.params.slug });
+    if (service) return res.json(service);
+  } catch (e) {}
+  const service = readServices().find(s => s.slug === req.params.slug);
+  if (service) return res.json(service);
+  return res.status(404).json({ error: "Service not found" });
+});
+
+app.get("/api/admin/services", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const services = await ServiceModel.find().sort({ order: 1, createdAt: 1 });
+    if (services && services.length > 0) return res.json(services);
+  } catch (e) {}
+  return res.json(readServices().sort((a, b) => (a.order || 0) - (b.order || 0)));
+});
+
+app.post("/api/admin/services", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const services = readServices();
+    const rawSlug = req.body.slug || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `service-${Date.now()}`;
+    const newService = {
+      id: `service-${Date.now()}`,
+      slug: rawSlug,
+      title: req.body.title || "Untitled Service",
+      excerpt: req.body.excerpt || "",
+      content: req.body.content || "",
+      image: req.body.image || "",
+      heroImage: req.body.heroImage || "",
+      icon: req.body.icon || "Car",
+      features: Array.isArray(req.body.features) ? req.body.features : [],
+      priceText: req.body.priceText || "",
+      published: req.body.published !== false,
+      order: Number(req.body.order || services.length + 1),
+      metaTitle: req.body.metaTitle || req.body.title,
+      metaDescription: req.body.metaDescription || req.body.excerpt,
+      noIndexNoFollow: !!req.body.noIndexNoFollow,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    services.push(newService);
+    writeServices(services);
+
+    try {
+      await ServiceModel.findOneAndUpdate({ id: newService.id }, newService, { upsert: true });
+      console.log("💾 Saved Service to MongoDB!");
+    } catch (e) {}
+
+    return res.json({ success: true, service: newService });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || "Failed to create service" });
+  }
+});
+
+app.put("/api/admin/services/:id", async (req, res) => {
+  const updateData = { ...req.body };
+  delete updateData._id;
+  delete updateData.__v;
+  updateData.updatedAt = new Date().toISOString();
+  if (updateData.order !== undefined) updateData.order = Number(updateData.order);
+  if (updateData.published !== undefined) updateData.published = !!updateData.published;
+
+  try {
+    await connectToDatabase();
+    await ServiceModel.findOneAndUpdate({ id: req.params.id }, updateData);
+  } catch (e) {
+    console.error("Error updating MongoDB service:", e);
+  }
+
+  const services = readServices();
+  const idx = services.findIndex(s => s.id === req.params.id);
+  if (idx !== -1) {
+    services[idx] = { ...services[idx], ...updateData };
+    writeServices(services);
+    return res.json({ success: true, service: services[idx] });
+  }
+  return res.status(404).json({ error: "Service not found" });
+});
+
+app.delete("/api/admin/services/:id", async (req, res) => {
+  try {
+    await connectToDatabase();
+    await ServiceModel.deleteOne({ id: req.params.id });
+  } catch (e) {}
+  writeServices(readServices().filter(s => s.id !== req.params.id));
+  return res.json({ success: true });
+});
+
+app.get("/api/services-page-settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const doc = await SettingModel.findOne({ key: "services_page_settings" });
+    if (doc && doc.value) return res.json(doc.value);
+  } catch (e) {}
+  return res.json(readServicesSettings());
+});
+
+app.post("/api/admin/services-page-settings", async (req, res) => {
+  const newSettings = req.body || {};
+  try {
+    await connectToDatabase();
+    await SettingModel.findOneAndUpdate(
+      { key: "services_page_settings" },
+      { key: "services_page_settings", value: newSettings },
+      { upsert: true }
+    );
+  } catch (e) {}
+  writeServicesSettings(newSettings);
+  return res.json({ success: true, settings: newSettings });
 });
 
 // --- Menu Manager ---

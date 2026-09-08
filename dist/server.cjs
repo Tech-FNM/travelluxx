@@ -48,6 +48,8 @@ var POSTS_PATH = import_path.default.join(process.cwd(), "posts.json");
 var ADMINS_PATH = import_path.default.join(process.cwd(), "admins.json");
 var PAGES_PATH = import_path.default.join(process.cwd(), "pages.json");
 var INQUIRIES_PATH = import_path.default.join(process.cwd(), "inquiries.json");
+var SERVICES_PATH = import_path.default.join(process.cwd(), "services.json");
+var SERVICES_SETTINGS_PATH = import_path.default.join(process.cwd(), "services_settings.json");
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://info_db_user:rexkTuz4elj0srRx@cluster0.utakxdh.mongodb.net/travelluxx?retryWrites=true&w=majority&appName=Cluster0";
 var BookingSchema = new import_mongoose.default.Schema({
   id: { type: String, required: true, unique: true },
@@ -96,6 +98,26 @@ var PageSchema = new import_mongoose.default.Schema({
   updatedAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
 }, { strict: false });
 var PageModel = import_mongoose.default.model("Page", PageSchema);
+var ServiceSchema = new import_mongoose.default.Schema({
+  id: { type: String, required: true, unique: true },
+  title: String,
+  slug: { type: String, required: true, unique: true },
+  excerpt: String,
+  content: String,
+  image: String,
+  heroImage: String,
+  icon: { type: String, default: "Car" },
+  features: { type: [String], default: [] },
+  priceText: String,
+  published: { type: Boolean, default: true },
+  order: { type: Number, default: 0 },
+  metaTitle: String,
+  metaDescription: String,
+  noIndexNoFollow: { type: Boolean, default: false },
+  createdAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() },
+  updatedAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
+}, { strict: false });
+var ServiceModel = import_mongoose.default.model("Service", ServiceSchema);
 var InquirySchema = new import_mongoose.default.Schema({
   id: { type: String, required: true, unique: true },
   name: String,
@@ -168,6 +190,18 @@ async function runMigrations() {
   } catch (err) {
     console.error("Error migrating inquiries to MongoDB:", err.message);
   }
+  try {
+    const count = await ServiceModel.countDocuments();
+    if (count === 0 && import_fs.default.existsSync(SERVICES_PATH)) {
+      console.log("\u{1F4E5} Migrating services.json into MongoDB...");
+      const jsonServices = JSON.parse(import_fs.default.readFileSync(SERVICES_PATH, "utf8"));
+      await ServiceModel.insertMany(jsonServices, { ordered: false }).catch(() => {
+      });
+      console.log("\u2705 MongoDB populated with all services!");
+    }
+  } catch (err) {
+    console.error("Error migrating services to MongoDB:", err.message);
+  }
 }
 async function connectToDatabase() {
   if (isConnected || import_mongoose.default.connection.readyState === 1) {
@@ -231,6 +265,48 @@ function writePages(pages) {
     import_fs.default.writeFileSync(PAGES_PATH, JSON.stringify(pages, null, 2));
   } catch (err) {
     console.error("Error writing pages.json:", err);
+  }
+}
+function readServices() {
+  try {
+    if (import_fs.default.existsSync(SERVICES_PATH)) {
+      return JSON.parse(import_fs.default.readFileSync(SERVICES_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading services.json:", err);
+  }
+  return [];
+}
+function writeServices(services) {
+  if (process.env.VERCEL) {
+    console.log("\u2139\uFE0F Skipping writeServices to local file on Vercel.");
+    return;
+  }
+  try {
+    import_fs.default.writeFileSync(SERVICES_PATH, JSON.stringify(services, null, 2));
+  } catch (err) {
+    console.error("Error writing services.json:", err);
+  }
+}
+function readServicesSettings() {
+  try {
+    if (import_fs.default.existsSync(SERVICES_SETTINGS_PATH)) {
+      return JSON.parse(import_fs.default.readFileSync(SERVICES_SETTINGS_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading services_settings.json:", err);
+  }
+  return {};
+}
+function writeServicesSettings(settingsData) {
+  if (process.env.VERCEL) {
+    console.log("\u2139\uFE0F Skipping writeServicesSettings to local file on Vercel.");
+    return;
+  }
+  try {
+    import_fs.default.writeFileSync(SERVICES_SETTINGS_PATH, JSON.stringify(settingsData, null, 2));
+  } catch (err) {
+    console.error("Error writing services_settings.json:", err);
   }
 }
 function readPosts() {
@@ -1175,6 +1251,126 @@ app.delete("/api/admin/pages/:id", async (req, res) => {
   }
   writePages(readPages().filter((p) => p.id !== req.params.id));
   return res.json({ success: true });
+});
+app.get("/api/services", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const services = await ServiceModel.find({ published: true }).sort({ order: 1, createdAt: 1 });
+    if (services && services.length > 0) return res.json(services);
+  } catch (e) {
+  }
+  const local = readServices().filter((s) => s.published !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
+  return res.json(local);
+});
+app.get("/api/services/:slug", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const service2 = await ServiceModel.findOne({ slug: req.params.slug });
+    if (service2) return res.json(service2);
+  } catch (e) {
+  }
+  const service = readServices().find((s) => s.slug === req.params.slug);
+  if (service) return res.json(service);
+  return res.status(404).json({ error: "Service not found" });
+});
+app.get("/api/admin/services", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const services = await ServiceModel.find().sort({ order: 1, createdAt: 1 });
+    if (services && services.length > 0) return res.json(services);
+  } catch (e) {
+  }
+  return res.json(readServices().sort((a, b) => (a.order || 0) - (b.order || 0)));
+});
+app.post("/api/admin/services", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const services = readServices();
+    const rawSlug = req.body.slug || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `service-${Date.now()}`;
+    const newService = {
+      id: `service-${Date.now()}`,
+      slug: rawSlug,
+      title: req.body.title || "Untitled Service",
+      excerpt: req.body.excerpt || "",
+      content: req.body.content || "",
+      image: req.body.image || "",
+      heroImage: req.body.heroImage || "",
+      icon: req.body.icon || "Car",
+      features: Array.isArray(req.body.features) ? req.body.features : [],
+      priceText: req.body.priceText || "",
+      published: req.body.published !== false,
+      order: Number(req.body.order || services.length + 1),
+      metaTitle: req.body.metaTitle || req.body.title,
+      metaDescription: req.body.metaDescription || req.body.excerpt,
+      noIndexNoFollow: !!req.body.noIndexNoFollow,
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    services.push(newService);
+    writeServices(services);
+    try {
+      await ServiceModel.findOneAndUpdate({ id: newService.id }, newService, { upsert: true });
+      console.log("\u{1F4BE} Saved Service to MongoDB!");
+    } catch (e) {
+    }
+    return res.json({ success: true, service: newService });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Failed to create service" });
+  }
+});
+app.put("/api/admin/services/:id", async (req, res) => {
+  const updateData = { ...req.body };
+  delete updateData._id;
+  delete updateData.__v;
+  updateData.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+  if (updateData.order !== void 0) updateData.order = Number(updateData.order);
+  if (updateData.published !== void 0) updateData.published = !!updateData.published;
+  try {
+    await connectToDatabase();
+    await ServiceModel.findOneAndUpdate({ id: req.params.id }, updateData);
+  } catch (e) {
+    console.error("Error updating MongoDB service:", e);
+  }
+  const services = readServices();
+  const idx = services.findIndex((s) => s.id === req.params.id);
+  if (idx !== -1) {
+    services[idx] = { ...services[idx], ...updateData };
+    writeServices(services);
+    return res.json({ success: true, service: services[idx] });
+  }
+  return res.status(404).json({ error: "Service not found" });
+});
+app.delete("/api/admin/services/:id", async (req, res) => {
+  try {
+    await connectToDatabase();
+    await ServiceModel.deleteOne({ id: req.params.id });
+  } catch (e) {
+  }
+  writeServices(readServices().filter((s) => s.id !== req.params.id));
+  return res.json({ success: true });
+});
+app.get("/api/services-page-settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const doc = await SettingModel.findOne({ key: "services_page_settings" });
+    if (doc && doc.value) return res.json(doc.value);
+  } catch (e) {
+  }
+  return res.json(readServicesSettings());
+});
+app.post("/api/admin/services-page-settings", async (req, res) => {
+  const newSettings = req.body || {};
+  try {
+    await connectToDatabase();
+    await SettingModel.findOneAndUpdate(
+      { key: "services_page_settings" },
+      { key: "services_page_settings", value: newSettings },
+      { upsert: true }
+    );
+  } catch (e) {
+  }
+  writeServicesSettings(newSettings);
+  return res.json({ success: true, settings: newSettings });
 });
 var MENU_PATH = import_path.default.join(process.cwd(), "menu.json");
 function readMenu() {

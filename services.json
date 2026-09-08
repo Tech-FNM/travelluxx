@@ -1,0 +1,134 @@
+[
+  {
+    "id": "service-airport-transfers",
+    "title": "Airport Transfers",
+    "slug": "airport-transfers",
+    "excerpt": "Reliable airport transportation with punctual pickup and drop-off services to major airports across the UK.",
+    "content": "<h2>First-Class Airport Transfers Across The UK</h2><p>Experience seamless, stress-free airport travel with TravelLuxx. Whether you are departing on an international business flight or arriving home from a holiday, our professional chauffeurs ensure prompt, comfortable and discreet door-to-door transportation.</p><h3>Flight Monitoring & Complimentary Wait Time</h3><p>We monitor your flight status in real time to accommodate any delays or early arrivals. Our airport transfer service includes 60 minutes of complimentary waiting time from the moment your aircraft touches down, giving you ample time to clear baggage claim and customs without rushing.</p><h3>Meet & Greet Service</h3><p>Your chauffeur will meet you inside the arrivals terminal holding a personalised name board, assist with all your luggage, and escort you smoothly to your waiting luxury vehicle.</p>",
+    "image": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Plane",
+    "features": [
+      "Real-time flight status monitoring",
+      "Complimentary 60 mins wait time",
+      "Meet & Greet terminal service included",
+      "Fixed, all-inclusive transparent pricing",
+      "Luggage assistance to and from vehicle"
+    ],
+    "priceText": "From £45",
+    "published": true,
+    "order": 1,
+    "metaTitle": "Luxury Airport Transfers UK | TravelLuxx Chauffeurs",
+    "metaDescription": "Book reliable airport transfers across Heathrow, Gatwick, Birmingham, Manchester & all UK airports with TravelLuxx. Fixed rates & flight monitoring."
+  },
+  {
+    "id": "service-private-transfers",
+    "title": "Private Transfers",
+    "slug": "private-transfers",
+    "excerpt": "Comfortable door-to-door transportation for individuals, couples, families and groups.",
+    "content": "<h2>Tailored Door-to-Door Private Chauffeur Transfers</h2><p>Travel in absolute privacy and comfort. TravelLuxx offers bespoke private transfers designed around your schedule and destination. From city-to-city rides to personal day hire, our fleet of immaculate Mercedes-Benz executive sedans and MPVs guarantees a tranquil journey.</p><h3>Bespoke Itinerary & Total Flexibility</h3><p>Enjoy door-to-door travel without the hassles of train delays or crowded public transport. With our private chauffeur hire, you set the schedule, stops, and pace.</p>",
+    "image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Car",
+    "features": [
+      "Door-to-door private chauffeur service",
+      "Immaculate executive sedans and MPVs",
+      "Flexible pickup times and route stops",
+      "Complimentary bottled water & Wi-Fi",
+      "Professional, DBS-checked drivers"
+    ],
+    "priceText": "Fixed Rates",
+    "published": true,
+    "order": 2,
+    "metaTitle": "Private Chauffeur Transfers UK | TravelLuxx",
+    "metaDescription": "Premium private door-to-door chauffeur transfers across the UK. Travel in executive luxury with TravelLuxx."
+  },
+  {
+    "id": "service-long-distance-travel",
+    "title": "Long Distance Travel",
+    "slug": "long-distance-travel",
+    "excerpt": "Travel anywhere across the UK with a comfortable and professional private transfer service.",
+    "content": "<h2>Effortless Long Distance Journeys Across The UK</h2><p>Skip crowded train platforms and rail strikes with TravelLuxx's long-distance private hire service. We connect London, Birmingham, Manchester, Edinburgh, and every destination in between with direct, restful journeys.</p><h3>Work, Relax, or Rest in Comfort</h3><p>Our long-distance journeys provide a mobile office environment or a restful haven with leather reclining seating, climate control, charging ports, and whisper-quiet vehicle cabins.</p>",
+    "image": "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Route",
+    "features": [
+      "Nationwide direct travel with zero changes",
+      "Comfort stops at your convenience",
+      "Spacious legroom and luggage space",
+      "Competitive long-distance fixed rates",
+      "Experienced motorway chauffeurs"
+    ],
+    "priceText": "Fixed Rates",
+    "published": true,
+    "order": 3,
+    "metaTitle": "Long Distance Chauffeur Service UK | TravelLuxx",
+    "metaDescription": "Direct, nationwide long-distance travel in executive comfort. Book comfortable intercity private transfers across the UK."
+  },
+  {
+    "id": "service-business-travel",
+    "title": "Business Travel",
+    "slug": "business-travel",
+    "excerpt": "Professional transportation for meetings, corporate events, business trips and executive travel.",
+    "content": "<h2>Executive Travel Solutions for Corporate Professionals</h2><p>Make the right impression every time. TravelLuxx provides corporate chauffeur services tailored for business executives, delegates, and corporate teams. We understand the importance of punctuality, discretion, and reliability.</p><h3>Corporate Accounts & Multi-Vehicle Hire</h3><p>We provide unified corporate billing, detailed monthly statements, priority bookings, and multi-vehicle coordination for large corporate conferences and VIP roadshows.</p>",
+    "image": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Briefcase",
+    "features": [
+      "Punctuality guarantee for all meetings",
+      "Discreet and suited professional drivers",
+      "Quiet cabin environment for calls & work",
+      "Corporate account billing available",
+      "VIP multi-car roadshow coordination"
+    ],
+    "priceText": "Corporate Rates",
+    "published": true,
+    "order": 4,
+    "metaTitle": "Corporate Chauffeur & Business Travel UK | TravelLuxx",
+    "metaDescription": "Executive chauffeur transportation for meetings, corporate events, and VIP clients across the UK."
+  },
+  {
+    "id": "service-family-transfers",
+    "title": "Family Transfers",
+    "slug": "family-transfers",
+    "excerpt": "Spacious and comfortable travel solutions designed for families and passengers travelling with extra luggage.",
+    "content": "<h2>Stress-Free Travel for Families & Group Holidays</h2><p>Travelling with family should be an exciting journey, not a stressful struggle with luggage and connections. TravelLuxx offers luxury MPVs (such as the Mercedes V-Class) accommodating up to 7-8 passengers with generous luggage capacities.</p><h3>Child Seats & Safety First</h3><p>Child safety seats (infant, toddler, booster) are available upon advance request. Our polite drivers assist with heavy strollers, pushchairs, and excess luggage every step of the way.</p>",
+    "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Users",
+    "features": [
+      "Spacious 7 to 8 passenger luxury MPVs",
+      "Child, toddler, and infant seats available",
+      "Ample capacity for multiple large suitcases",
+      "Smooth and gentle driving style",
+      "Friendly, accommodating assistance"
+    ],
+    "priceText": "Group Rates",
+    "published": true,
+    "order": 5,
+    "metaTitle": "Family & Group Holiday Transfers UK | TravelLuxx",
+    "metaDescription": "Spacious luxury MPV transfers for families and groups across the UK. Large luggage capacity and child seats available."
+  },
+  {
+    "id": "service-luxury-travel",
+    "title": "Luxury Travel",
+    "slug": "luxury-travel",
+    "excerpt": "Travel in comfort and style with our premium vehicle options and professional service.",
+    "content": "<h2>Ultimate Luxury Chauffeur Experiences</h2><p>For special occasions, VIP guests, luxury weddings, or high-end celebrations, TravelLuxx offers our flagship luxury travel service. Arrive in sheer style in top-tier luxury flagships including the Mercedes-Benz S-Class and bespoke VIP coaches.</p><h3>Impeccable Presentation</h3><p>Polished vehicles, immaculate chauffeurs, chilled refreshments, and customized itineraries guarantee an unforgettable first-class experience.</p>",
+    "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Crown",
+    "features": [
+      "Flagship luxury vehicles (Mercedes S-Class)",
+      "Uniformed, white-glove chauffeur service",
+      "Complimentary premium refreshments",
+      "Perfect for weddings, VIP events & galas",
+      "Personalised concierge coordination"
+    ],
+    "priceText": "VIP Rates",
+    "published": true,
+    "order": 6,
+    "metaTitle": "VIP Luxury Chauffeur Service UK | TravelLuxx",
+    "metaDescription": "Unrivalled luxury chauffeur services in the UK. Flagship executive fleet for weddings, VIP events, and special occasions."
+  }
+]

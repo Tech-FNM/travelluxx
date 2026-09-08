@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { getServiceIcon } from "../utils/serviceIcons";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Tab = "dashboard" | "leads" | "posts" | "pages" | "media" | "menus" | "settings" | "inquiries";
+type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "media" | "menus" | "settings" | "inquiries";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function toBase64(file: File): Promise<string> {
@@ -446,10 +447,52 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [pages, setPages] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [bookingsLoading, setBookingsLoading] = useState(false);
   const [postsLoading, setPostsLoading] = useState(false);
   const [pagesLoading, setPagesLoading] = useState(false);
+  const [servicesLoading, setServicesLoading] = useState(false);
+  const [editingService, setEditingService] = useState<any>(undefined);
+  const [serviceForm, setServiceForm] = useState({
+    title: "",
+    slug: "",
+    excerpt: "",
+    content: "",
+    image: "",
+    heroImage: "",
+    icon: "Car",
+    features: [] as string[],
+    newFeatureText: "",
+    priceText: "From £45",
+    published: true,
+    order: 0,
+    metaTitle: "",
+    metaDescription: "",
+    noIndexNoFollow: false
+  });
+  const [servicesPageSettings, setServicesPageSettings] = useState<any>({
+    hero_tag: "OUR SERVICES",
+    hero_title: "Premium, Reliable & Comfortable Travel Services",
+    hero_description: "From airport transfers to long-distance journeys, TravelLuxx provides professional private transportation tailored around your needs.",
+    hero_button_text: "Book Your Journey",
+    hero_button_url: "/#calculator",
+    hero_image: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+    catalog_tag: "OUR SERVICES",
+    catalog_title: "Travel Solutions for Every Journey",
+    catalog_description: "Whether it's a quick airport transfer or a long-distance trip, we offer a range of services designed to make your journey smooth, safe and stress-free.",
+    why_choose_tag: "WHY CHOOSE TRAVELLUXX",
+    why_choose_title: "Your Trusted Travel Partner",
+    why_choose_description: "We go the extra mile to ensure your journey is comfortable, safe and hassle-free.",
+    why_choose_bg_image: "https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80",
+    why_choose_items: [],
+    how_it_works_tag: "HOW IT WORKS",
+    how_it_works_title: "Simple Steps to Your Destination",
+    how_it_works_description: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+    how_it_works_steps: []
+  });
+  const [yoastServiceTab, setYoastServiceTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
+  const [focusKeyphraseService, setFocusKeyphraseService] = useState("");
   const [inquiriesLoading, setInquiriesLoading] = useState(false);
   const [selectedBookingIds, setSelectedBookingIds] = useState<string[]>([]);
   const [selectedInquiryIds, setSelectedInquiryIds] = useState<string[]>([]);
@@ -565,7 +608,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!token) return;
     if (routeTab) {
-      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "media", "menus", "settings", "inquiries"];
+      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "services", "media", "menus", "settings", "inquiries"];
       if (validTabs.includes(routeTab as Tab)) {
         setActiveTab(routeTab as Tab);
       }
@@ -687,12 +730,73 @@ export default function AdminDashboard() {
     }
   }, [routeTab, routeSubtab, routeId, pages, token]);
 
+  // Synchronize service editor state with URL
+  useEffect(() => {
+    if (!token) return;
+    if (routeTab === "services") {
+      if (routeSubtab === "edit" && routeId) {
+        const found = services.find(s => s.id === routeId);
+        if (found) {
+          setEditingService(found);
+          setServiceForm({
+            title: found.title || "",
+            slug: found.slug || "",
+            excerpt: found.excerpt || "",
+            content: found.content || "",
+            image: found.image || "",
+            heroImage: found.heroImage || "",
+            icon: found.icon || "Car",
+            features: Array.isArray(found.features) ? found.features : [],
+            newFeatureText: "",
+            priceText: found.priceText || "",
+            published: found.published !== false,
+            order: found.order !== undefined ? found.order : 0,
+            metaTitle: found.metaTitle || "",
+            metaDescription: found.metaDescription || "",
+            noIndexNoFollow: !!found.noIndexNoFollow
+          });
+        }
+      } else if (routeSubtab === "new") {
+        setEditingService(null);
+        setServiceForm({
+          title: "",
+          slug: "",
+          excerpt: "",
+          content: "",
+          image: "",
+          heroImage: "",
+          icon: "Car",
+          features: [
+            "Real-time flight status monitoring",
+            "Complimentary 60 mins wait time",
+            "Meet & Greet terminal service included",
+            "Fixed, all-inclusive transparent pricing"
+          ],
+          newFeatureText: "",
+          priceText: "From £45",
+          published: true,
+          order: services.length + 1,
+          metaTitle: "",
+          metaDescription: "",
+          noIndexNoFollow: false
+        });
+      } else if (routeSubtab === "page-settings") {
+        setEditingService("page-settings");
+      } else {
+        setEditingService(undefined);
+      }
+    }
+  }, [routeTab, routeSubtab, routeId, services, token]);
+
   const handleTabClick = (tabId: Tab) => {
     if (tabId === "posts") {
       setEditingPost(undefined);
     }
     if (tabId === "pages") {
       setEditingPage(undefined);
+    }
+    if (tabId === "services") {
+      setEditingService(undefined);
     }
     setActiveTab(tabId);
     if (tabId === "settings") {
@@ -703,7 +807,7 @@ export default function AdminDashboard() {
   };
 
   const fetchAll = () => {
-    fetchBookings(); fetchPosts(); fetchPages(); fetchSettings(); fetchMenu(); fetchInquiries(); fetchMedia();
+    fetchBookings(); fetchPosts(); fetchPages(); fetchServices(); fetchServicesPageSettings(); fetchSettings(); fetchMenu(); fetchInquiries(); fetchMedia();
   };
 
   const fetchBookings = async () => {
@@ -945,6 +1049,120 @@ export default function AdminDashboard() {
     }
   };
 
+  // ─── Services ───────────────────────────────────────────────────────────────
+  const fetchServices = async () => {
+    setServicesLoading(true);
+    try {
+      const r = await fetch("/api/admin/services");
+      const data = await r.json();
+      if (Array.isArray(data)) setServices(data);
+    } catch (err) {}
+    setServicesLoading(false);
+  };
+
+  const fetchServicesPageSettings = async () => {
+    try {
+      const r = await fetch("/api/services-page-settings");
+      const data = await r.json();
+      if (data && typeof data === "object") setServicesPageSettings(data);
+    } catch (err) {}
+  };
+
+  const openNewService = () => {
+    navigate("/admin/services/new");
+  };
+
+  const openEditService = (service: any) => {
+    navigate(`/admin/services/edit/${service.id}`);
+  };
+
+  const saveService = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!serviceForm.title.trim()) {
+      showToast("Service title is required!", "error");
+      return;
+    }
+    setIsSaving(true);
+    const slug = serviceForm.slug.trim() || serviceForm.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const payload = {
+      ...serviceForm,
+      slug,
+      order: Number(serviceForm.order || 0)
+    };
+
+    try {
+      const url = editingService && editingService.id ? `/api/admin/services/${editingService.id}` : "/api/admin/services";
+      const method = editingService && editingService.id ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const saved = json.service || json;
+        if (editingService && editingService.id) {
+          setServices(prev => prev.map(s => s.id === editingService.id ? { ...s, ...saved } : s));
+        } else {
+          setServices(prev => [...prev, saved]);
+        }
+        showToast(editingService?.id ? "Service updated successfully!" : "Service created successfully!");
+        navigate(`/admin/services`);
+      } else {
+        showToast("Failed to save service.", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error saving service.", "error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const deleteService = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this service?")) return;
+    const res = await fetch(`/api/admin/services/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setServices(prev => prev.filter(s => s.id !== id));
+      showToast("Service deleted successfully!");
+    }
+  };
+
+  const toggleServiceStatus = async (svc: any) => {
+    const updated = !svc.published;
+    const res = await fetch(`/api/admin/services/${svc.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ published: updated })
+    });
+    if (res.ok) {
+      setServices(prev => prev.map(s => s.id === svc.id ? { ...s, published: updated } : s));
+      showToast(`Service set to ${updated ? "Published" : "Draft"}`);
+    }
+  };
+
+  const saveServicesPageSettings = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/admin/services-page-settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(servicesPageSettings)
+      });
+      if (res.ok) {
+        showToast("Services page settings saved successfully!");
+      } else {
+        showToast("Failed to save page settings.", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Error saving page settings.", "error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Quick Edit actions
   const openQuickEditPost = (post: any) => {
     setQuickEditingPostId(post.id);
@@ -1032,6 +1250,14 @@ export default function AdminDashboard() {
       setSettings((prev: any) => ({ ...prev, favicon_url: imageUrl }));
     } else if (editorTarget === "settings-hero") {
       setSettings((prev: any) => ({ ...prev, hero_image: imageUrl }));
+    } else if (editorTarget === "service-card") {
+      setServiceForm(prev => ({ ...prev, image: imageUrl }));
+    } else if (editorTarget === "service-hero") {
+      setServiceForm(prev => ({ ...prev, heroImage: imageUrl }));
+    } else if (editorTarget === "services-page-hero") {
+      setServicesPageSettings((prev: any) => ({ ...prev, hero_image: imageUrl }));
+    } else if (editorTarget === "services-page-why-bg") {
+      setServicesPageSettings((prev: any) => ({ ...prev, why_choose_bg_image: imageUrl }));
     }
     setEditorMediaModalOpen(false);
     setSelectedEditorMediaUrl(null);
@@ -1186,6 +1412,7 @@ export default function AdminDashboard() {
     { id: "inquiries", icon: <MessageSquare className="w-4 h-4" />, label: "Contact Inquiries" },
     { id: "posts", icon: <Newspaper className="w-4 h-4" />, label: "Posts (Blog)" },
     { id: "pages", icon: <FileText className="w-4 h-4" />, label: "Pages" },
+    { id: "services", icon: <Car className="w-4 h-4" />, label: "Services" },
     { id: "media", icon: <Image className="w-4 h-4" />, label: "Media" },
     { id: "menus", icon: <Menu className="w-4 h-4" />, label: "Menus" },
     { id: "settings", icon: <Settings className="w-4 h-4" />, label: "Settings" },
@@ -3077,7 +3304,7 @@ export default function AdminDashboard() {
                                     >
                                       Cancel
                                     </button>
-                                    <button
+                                  <button
                                       type="button"
                                       onClick={() => saveQuickPage(p.id)} disabled={isSaving}
                                       className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm"
@@ -3109,6 +3336,841 @@ export default function AdminDashboard() {
                             </tr>
                           )
                         ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ─── SERVICES ───────────────────────────────────────── */}
+          {activeTab === "services" && (
+            <div className="space-y-4">
+              {/* Top Header & Breadcrumbs */}
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
+                <div>
+                  <h1 className="text-2xl font-bold text-[#1d2327]">
+                    {editingService === "page-settings"
+                      ? "Services Page Settings"
+                      : editingService !== undefined
+                      ? (editingService?.id ? `Edit Service: ${serviceForm.title}` : "Add New Service")
+                      : "Services Management"}
+                  </h1>
+                  <p className="text-[#646970] text-xs mt-0.5">
+                    {editingService === "page-settings"
+                      ? "Manage the Hero, Why Choose, and How It Works sections of the public /services page."
+                      : editingService !== undefined
+                      ? "Every new service automatically uses the luxury dark & gold template."
+                      : "Create and manage your luxury services catalog. All changes reflect instantly on the public website."}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {editingService === undefined ? (
+                    <>
+                      <button
+                        onClick={openNewService}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        Add New Service
+                      </button>
+                      <button
+                        onClick={() => navigate("/admin/services/page-settings")}
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2c3338] px-3.5 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                      >
+                        <Settings className="w-3.5 h-3.5 text-slate-600" />
+                        Page Settings
+                      </button>
+                      <a
+                        href="/services"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2271b1] px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        View /services
+                      </a>
+                    </>
+                  ) : editingService === "page-settings" ? (
+                    <>
+                      <button
+                        onClick={saveServicesPageSettings}
+                        disabled={isSaving}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        <Save className="w-3.5 h-3.5" />
+                        {isSaving ? "Saving..." : "Save Page Settings"}
+                      </button>
+                      <button
+                        onClick={() => navigate("/admin/services")}
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-3.5 py-1.5 rounded text-xs font-semibold transition"
+                      >
+                        Back to Services
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={saveService}
+                        disabled={isSaving}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        <Save className="w-3.5 h-3.5" />
+                        {isSaving ? "Saving..." : (editingService?.id ? "Update Service" : "Publish Service")}
+                      </button>
+                      {editingService?.id && (
+                        <a
+                          href={`/services/${serviceForm.slug}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2271b1] px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          View Live
+                        </a>
+                      )}
+                      <button
+                        onClick={() => navigate("/admin/services")}
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-3.5 py-1.5 rounded text-xs font-semibold transition"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* 1. EDITING SERVICES PAGE SETTINGS */}
+              {editingService === "page-settings" ? (
+                <div className="bg-white border border-[#c3c4c7] rounded-sm p-6 shadow-sm space-y-8">
+                  {/* Hero Settings */}
+                  <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#d4a359]" />
+                      1. Main Services Page Hero Section
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Badge Tag</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.hero_tag || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_tag: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="OUR SERVICES"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Headline</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.hero_title || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_title: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="Premium, Reliable & Comfortable Travel Services"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Subtitle / Description</label>
+                      <textarea
+                        rows={2}
+                        value={servicesPageSettings.hero_description || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_description: e.target.value })}
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Button Text</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.hero_button_text || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_button_text: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="Book Your Journey"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Button Target URL</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.hero_button_url || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_button_url: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="/#calculator"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Hero Background Image</span>
+                      {servicesPageSettings.hero_image ? (
+                        <div className="relative group aspect-[3/1] max-w-lg rounded border border-[#c3c4c7] overflow-hidden bg-slate-900 flex items-center justify-center">
+                          <img src={servicesPageSettings.hero_image} alt="Hero preview" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setServicesPageSettings({ ...servicesPageSettings, hero_image: "" })}
+                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditorTarget("services-page-hero");
+                            setEditorMediaModalOpen(true);
+                          }}
+                          className="border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] px-4 py-3 rounded text-xs font-semibold transition"
+                        >
+                          + Select Hero Background Image from Media
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Catalog Header Settings */}
+                  <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                      <Car className="w-4 h-4 text-[#d4a359]" />
+                      2. Catalog Section Header
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Tag</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.catalog_tag || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_tag: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Title</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.catalog_title || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_title: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Description</label>
+                      <textarea
+                        rows={2}
+                        value={servicesPageSettings.catalog_description || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_description: e.target.value })}
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Why Choose Section */}
+                  <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-[#d4a359]" />
+                      3. Why Choose TravelLuxx Section
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Tag</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.why_choose_tag || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_tag: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Title</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.why_choose_title || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_title: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Description</label>
+                      <textarea
+                        rows={2}
+                        value={servicesPageSettings.why_choose_description || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_description: e.target.value })}
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Save Button */}
+                  <div className="pt-4 flex justify-end">
+                    <button
+                      onClick={saveServicesPageSettings}
+                      disabled={isSaving}
+                      className="bg-[#2271b1] hover:bg-[#135e96] text-white px-6 py-2 rounded text-sm font-semibold shadow-sm transition disabled:opacity-50"
+                    >
+                      {isSaving ? "Saving Settings..." : "Save All Page Settings"}
+                    </button>
+                  </div>
+                </div>
+              ) : editingService !== undefined ? (
+                /* 2. ADD / EDIT SERVICE FORM */
+                <form onSubmit={saveService} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  {/* Left Column (Main Content - 3 cols) */}
+                  <div className="lg:col-span-3 space-y-6">
+                    {/* Title & Slug */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">
+                          Service Title <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={serviceForm.title}
+                          onChange={e => {
+                            const newTitle = e.target.value;
+                            setServiceForm(prev => ({
+                              ...prev,
+                              title: newTitle,
+                              slug: (!editingService?.id && (!prev.slug || prev.slug === prev.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")))
+                                ? newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+                                : prev.slug
+                            }));
+                          }}
+                          placeholder="e.g. Airport Transfers, Corporate Travel, Wedding Chauffeur..."
+                          className="w-full border border-[#8c8f94] rounded-sm px-3 py-2 text-sm font-semibold text-[#1d2327] focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+
+                      {/* Permalink / Slug */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide">
+                          Permalink (URL Slug)
+                        </label>
+                        <div className="flex items-center gap-1.5 text-xs text-[#50575e] bg-slate-50 border border-[#c3c4c7] px-3 py-1.5 rounded-sm">
+                          <span>https://travelluxx.co.uk/services/</span>
+                          <input
+                            type="text"
+                            value={serviceForm.slug}
+                            onChange={e => setServiceForm({ ...serviceForm, slug: e.target.value })}
+                            placeholder="airport-transfers"
+                            className="flex-1 bg-transparent font-mono text-[#2271b1] font-semibold outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Excerpt / Short Description */}
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">
+                          Short Excerpt / Card Description
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={serviceForm.excerpt}
+                          onChange={e => setServiceForm({ ...serviceForm, excerpt: e.target.value })}
+                          placeholder="Brief 1-2 sentence overview displayed on the service card in /services catalog..."
+                          className="w-full border border-[#8c8f94] rounded-sm px-3 py-2 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Key Highlights / Features List */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
+                      <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                        <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider flex items-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          Key Highlights &amp; Inclusions (Bullet Points)
+                        </h3>
+                        <span className="text-[11px] text-slate-500">
+                          {serviceForm.features.length} highlights added
+                        </span>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={serviceForm.newFeatureText}
+                          onChange={e => setServiceForm({ ...serviceForm, newFeatureText: e.target.value })}
+                          onKeyDown={e => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              if (serviceForm.newFeatureText.trim()) {
+                                setServiceForm({
+                                  ...serviceForm,
+                                  features: [...serviceForm.features, serviceForm.newFeatureText.trim()],
+                                  newFeatureText: ""
+                                });
+                              }
+                            }
+                          }}
+                          placeholder="e.g. Complimentary 60 mins wait time, Flight monitoring in real time..."
+                          className="flex-1 border border-[#8c8f94] rounded-sm px-3 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (serviceForm.newFeatureText.trim()) {
+                              setServiceForm({
+                                ...serviceForm,
+                                features: [...serviceForm.features, serviceForm.newFeatureText.trim()],
+                                newFeatureText: ""
+                              });
+                            }
+                          }}
+                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 py-1.5 rounded-sm text-xs font-semibold transition"
+                        >
+                          + Add Highlight
+                        </button>
+                      </div>
+
+                      {/* Highlights Badges */}
+                      <div className="space-y-2 pt-1">
+                        {serviceForm.features.map((feat, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between bg-slate-50 border border-slate-200 px-3 py-1.5 rounded text-xs text-slate-800"
+                          >
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#d4a359]" />
+                              <span>{feat}</span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setServiceForm({
+                                  ...serviceForm,
+                                  features: serviceForm.features.filter((_, i) => i !== idx)
+                                });
+                              }}
+                              className="text-slate-400 hover:text-red-600 transition"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Rich Text Editor for Detailed Page Content */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-3">
+                      <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                        <label className="block text-xs font-semibold text-[#1d2327] uppercase tracking-wide">
+                          Full Page Content &amp; Details (/services/:slug)
+                        </label>
+                      </div>
+                      <div className="min-h-[300px]">
+                        <ReactQuill
+                          theme="snow"
+                          value={serviceForm.content}
+                          onChange={val => setServiceForm({ ...serviceForm, content: val })}
+                          modules={quillModules}
+                          className="h-64 mb-12"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Yoast SEO Box */}
+                    <YoastSeoBox
+                      tab={yoastServiceTab}
+                      setTab={setYoastServiceTab}
+                      focusKeyphrase={focusKeyphraseService}
+                      setFocusKeyphrase={setFocusKeyphraseService}
+                      title={serviceForm.title}
+                      slug={serviceForm.slug}
+                      metaTitle={serviceForm.metaTitle}
+                      metaDescription={serviceForm.metaDescription}
+                      contentType="page"
+                      image={serviceForm.image}
+                      excerpt={serviceForm.excerpt}
+                      onMetaTitleChange={v => setServiceForm(prev => ({ ...prev, metaTitle: v }))}
+                      onSlugChange={v => setServiceForm(prev => ({ ...prev, slug: v }))}
+                      onMetaDescriptionChange={v => setServiceForm(prev => ({ ...prev, metaDescription: v }))}
+                    />
+                  </div>
+
+                  {/* Right Column (Sidebar Controls - 1 col) */}
+                  <div className="space-y-6">
+                    {/* Publish Box */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
+                      <div className="bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338]">
+                        Publish Settings
+                      </div>
+                      <div className="p-4 space-y-4 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#646970]">Status</span>
+                          <select
+                            value={serviceForm.published ? "published" : "draft"}
+                            onChange={e => setServiceForm({ ...serviceForm, published: e.target.value === "published" })}
+                            className="border border-[#8c8f94] rounded px-2 py-1 text-xs"
+                          >
+                            <option value="published">Published</option>
+                            <option value="draft">Draft</option>
+                          </select>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#646970]">Display Order</span>
+                          <input
+                            type="number"
+                            value={serviceForm.order}
+                            onChange={e => setServiceForm({ ...serviceForm, order: Number(e.target.value) })}
+                            className="w-16 border border-[#8c8f94] rounded px-2 py-1 text-xs text-right"
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#646970]">Rate / Price Text</span>
+                          <input
+                            type="text"
+                            value={serviceForm.priceText}
+                            onChange={e => setServiceForm({ ...serviceForm, priceText: e.target.value })}
+                            placeholder="From £45"
+                            className="w-24 border border-[#8c8f94] rounded px-2 py-1 text-xs text-right"
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-[#f0f0f1]">
+                          <span className="text-[#646970]">Search Index</span>
+                          <label className="flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={!!serviceForm.noIndexNoFollow}
+                              onChange={e => setServiceForm({ ...serviceForm, noIndexNoFollow: e.target.checked })}
+                              className="rounded-sm border-[#8c8f94]"
+                            />
+                            <span>Noindex</span>
+                          </label>
+                        </div>
+
+                        <div className="pt-2 border-t border-[#f0f0f1] flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={isSaving}
+                            className="w-full bg-[#2271b1] hover:bg-[#135e96] text-white py-2 rounded font-semibold transition disabled:opacity-50"
+                          >
+                            {isSaving ? "Saving..." : (editingService?.id ? "Update Service" : "Publish Service")}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Visual Icon Selector */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
+                      <div className="bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338] flex items-center justify-between">
+                        <span>Service Icon</span>
+                        <span className="text-[#2271b1] font-bold">{serviceForm.icon}</span>
+                      </div>
+                      <div className="p-4 space-y-3">
+                        <p className="text-[11px] text-slate-500">
+                          Select the icon displayed on the service card and detail banner:
+                        </p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {[
+                            "Car", "Plane", "Route", "Briefcase",
+                            "Users", "Crown", "ShieldCheck", "MapPin",
+                            "Clock", "Star", "Award", "CalendarDays"
+                          ].map(iconName => {
+                            const SvcIcon = getServiceIcon(iconName);
+                            const isSelected = serviceForm.icon === iconName;
+                            return (
+                              <button
+                                key={iconName}
+                                type="button"
+                                onClick={() => setServiceForm({ ...serviceForm, icon: iconName })}
+                                className={`p-2.5 rounded flex flex-col items-center justify-center gap-1 border transition ${
+                                  isSelected
+                                    ? "bg-[#0c1322] text-[#d4a359] border-[#d4a359] shadow-sm"
+                                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                                }`}
+                                title={iconName}
+                              >
+                                <SvcIcon className="w-5 h-5" />
+                                <span className="text-[9px] font-semibold truncate w-full text-center">
+                                  {iconName}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Featured Card Image */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
+                      <div className="bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338]">
+                        Featured Card Image
+                      </div>
+                      <div className="p-4 space-y-3">
+                        {serviceForm.image ? (
+                          <div className="space-y-2">
+                            <div className="relative aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-100">
+                              <img src={serviceForm.image} alt="Featured" className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditorTarget("service-card");
+                                  setEditorMediaModalOpen(true);
+                                }}
+                                className="flex-1 border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 py-1 rounded text-xs font-semibold transition"
+                              >
+                                Replace
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setServiceForm({ ...serviceForm, image: "" })}
+                                className="text-red-600 hover:text-red-800 text-xs px-2"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditorTarget("service-card");
+                              setEditorMediaModalOpen(true);
+                            }}
+                            className="w-full border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] py-4 rounded text-xs font-semibold transition text-center"
+                          >
+                            + Set Featured Card Image
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Detail Page Hero Banner Image */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
+                      <div className="bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338]">
+                        Detail Page Hero Banner (Optional)
+                      </div>
+                      <div className="p-4 space-y-3">
+                        {serviceForm.heroImage ? (
+                          <div className="space-y-2">
+                            <div className="relative aspect-[3/1] rounded border border-[#c3c4c7] overflow-hidden bg-slate-900">
+                              <img src={serviceForm.heroImage} alt="Hero" className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditorTarget("service-hero");
+                                  setEditorMediaModalOpen(true);
+                                }}
+                                className="flex-1 border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 py-1 rounded text-xs font-semibold transition"
+                              >
+                                Replace
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setServiceForm({ ...serviceForm, heroImage: "" })}
+                                className="text-red-600 hover:text-red-800 text-xs px-2"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditorTarget("service-hero");
+                              setEditorMediaModalOpen(true);
+                            }}
+                            className="w-full border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] py-3 rounded text-xs font-semibold transition text-center"
+                          >
+                            + Set Custom Hero Banner
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              ) : (
+                /* 3. SERVICES LIST TABLE VIEW */
+                <div className="space-y-3">
+                  {/* Status Filters & Search */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 text-xs">
+                    <div className="space-x-2 text-[#50575e]">
+                      <span className="font-semibold text-black">
+                        All ({services.length})
+                      </span>
+                      <span className="text-[#c3c4c7]">|</span>
+                      <span className="text-[#2271b1] hover:underline cursor-pointer">
+                        Published ({services.filter(s => s.published !== false).length})
+                      </span>
+                      <span className="text-[#c3c4c7]">|</span>
+                      <span className="text-[#2271b1] hover:underline cursor-pointer">
+                        Drafts ({services.filter(s => s.published === false).length})
+                      </span>
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Search services..."
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs outline-none focus:border-[#2271b1] w-48"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Services Table */}
+                  <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
+                    <table className="w-full text-xs">
+                      <thead className="bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]">
+                        <tr>
+                          <th className="py-2.5 px-3 text-left w-14">Image</th>
+                          <th className="py-2.5 px-3 text-left">Service Title</th>
+                          <th className="py-2.5 px-3 text-left">URL Slug</th>
+                          <th className="py-2.5 px-3 text-center">Icon</th>
+                          <th className="py-2.5 px-3 text-center">Highlights</th>
+                          <th className="py-2.5 px-3 text-left">Rates</th>
+                          <th className="py-2.5 px-3 text-center">Order</th>
+                          <th className="py-2.5 px-3 text-center">Status</th>
+                          <th className="py-2.5 px-3 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#f0f0f1] text-[#2c3338]">
+                        {services.length === 0 ? (
+                          <tr>
+                            <td colSpan={9} className="text-center py-10 text-slate-500">
+                              No services found. Click "Add New Service" to create one.
+                            </td>
+                          </tr>
+                        ) : (
+                          services
+                            .filter(s => s.title?.toLowerCase().includes(searchQuery.toLowerCase()) || s.slug?.toLowerCase().includes(searchQuery.toLowerCase()))
+                            .map(svc => {
+                              const SvcIcon = getServiceIcon(svc.icon);
+                              return (
+                                <tr key={svc.id} className="hover:bg-[#f6f7f7] transition group">
+                                  {/* Thumbnail */}
+                                  <td className="py-2 px-3">
+                                    <div className="w-12 h-9 rounded bg-slate-100 overflow-hidden border border-slate-200">
+                                      {svc.image ? (
+                                        <img src={svc.image} alt={svc.title} className="w-full h-full object-cover" />
+                                      ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                          <Car className="w-4 h-4" />
+                                        </div>
+                                      )}
+                                    </div>
+                                  </td>
+
+                                  {/* Title & Quick Actions */}
+                                  <td className="py-2 px-3">
+                                    <div className="font-semibold text-sm text-[#2271b1]">
+                                      <span onClick={() => openEditService(svc)} className="hover:underline cursor-pointer">
+                                        {svc.title}
+                                      </span>
+                                    </div>
+                                    <div className="hidden group-hover:flex items-center gap-1.5 text-[11px] text-[#555] pt-0.5">
+                                      <button onClick={() => openEditService(svc)} className="text-[#2271b1] hover:underline">
+                                        Edit
+                                      </button>
+                                      <span className="text-[#ddd]">|</span>
+                                      <button onClick={() => toggleServiceStatus(svc)} className="text-slate-600 hover:underline">
+                                        {svc.published !== false ? "Draft" : "Publish"}
+                                      </button>
+                                      <span className="text-[#ddd]">|</span>
+                                      <button onClick={() => deleteService(svc.id)} className="text-red-600 hover:underline">
+                                        Delete
+                                      </button>
+                                      <span className="text-[#ddd]">|</span>
+                                      <a href={`/services/${svc.slug}`} target="_blank" rel="noreferrer" className="text-emerald-700 hover:underline">
+                                        View Live
+                                      </a>
+                                    </div>
+                                  </td>
+
+                                  {/* Slug */}
+                                  <td className="py-2 px-3 font-mono text-[#2271b1] text-xs">
+                                    /services/{svc.slug}
+                                  </td>
+
+                                  {/* Icon */}
+                                  <td className="py-2 px-3 text-center">
+                                    <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0c1322] text-[#d4a359]">
+                                      <SvcIcon className="w-3.5 h-3.5" />
+                                    </div>
+                                  </td>
+
+                                  {/* Highlights Count */}
+                                  <td className="py-2 px-3 text-center">
+                                    <span className="bg-slate-100 text-slate-700 font-semibold px-2 py-0.5 rounded-full text-[10px]">
+                                      {Array.isArray(svc.features) ? svc.features.length : 0} items
+                                    </span>
+                                  </td>
+
+                                  {/* Rates */}
+                                  <td className="py-2 px-3 font-semibold text-slate-800">
+                                    {svc.priceText || "—"}
+                                  </td>
+
+                                  {/* Order */}
+                                  <td className="py-2 px-3 text-center font-mono text-xs">
+                                    {svc.order || 0}
+                                  </td>
+
+                                  {/* Status */}
+                                  <td className="py-2 px-3 text-center">
+                                    <button
+                                      type="button"
+                                      onClick={() => toggleServiceStatus(svc)}
+                                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition ${
+                                        svc.published !== false
+                                          ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                      }`}
+                                    >
+                                      {svc.published !== false ? "Published" : "Draft"}
+                                    </button>
+                                  </td>
+
+                                  {/* Actions */}
+                                  <td className="py-2 px-3 text-right">
+                                    <div className="flex items-center justify-end gap-1.5">
+                                      <button
+                                        onClick={() => openEditService(svc)}
+                                        className="p-1 text-slate-500 hover:text-[#2271b1] transition"
+                                        title="Edit Service"
+                                      >
+                                        <Edit2 className="w-3.5 h-3.5" />
+                                      </button>
+                                      <a
+                                        href={`/services/${svc.slug}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="p-1 text-slate-500 hover:text-emerald-600 transition"
+                                        title="View Live"
+                                      >
+                                        <ExternalLink className="w-3.5 h-3.5" />
+                                      </a>
+                                      <button
+                                        onClick={() => deleteService(svc.id)}
+                                        className="p-1 text-slate-500 hover:text-red-600 transition"
+                                        title="Delete Service"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                        )}
                       </tbody>
                     </table>
                   </div>
