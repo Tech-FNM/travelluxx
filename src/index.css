@@ -56,17 +56,26 @@
   background: #ffffff !important;
 }
 
-/* Suppress any Google Maps internal error overlays and dev popups */
+/* Suppress any Google Maps internal error overlays, policy covers, and dev watermarks */
 .gm-err-container,
 .gm-err-content,
 .gm-err-message,
 .gm-err-autocomplete,
 .dismissButton,
-.gm-style-cc {
+.gm-style-cc,
+.gm-style-pbc,
+.gm-style-pbt,
+.gm-style-moc {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+}
+
+/* Remove dark overlay applied by Google Maps unbilled mode */
+.gm-style > div:first-child > div:last-child[style*="rgba(0, 0, 0"],
+.gm-style > div:first-child > div:last-child[style*="background-color: rgba(0, 0, 0"] {
+  display: none !important;
 }
 
 /* Highway road animation */

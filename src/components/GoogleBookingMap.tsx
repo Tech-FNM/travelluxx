@@ -139,8 +139,6 @@ export default function GoogleBookingMap({
 }: GoogleBookingMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Theme state: "luxury" (Bespoke Silver & Slate) or "daylight" (Standard Google)
-  const [mapTheme, setMapTheme] = useState<"luxury" | "daylight">("luxury");
   const [useGoogleMap, setUseGoogleMap] = useState<boolean>(false);
 
   // Google Maps references
@@ -156,6 +154,64 @@ export default function GoogleBookingMap({
   const leafletDropoffMarkerRef = useRef<L.Marker | null>(null);
   const leafletPolylineRef = useRef<L.Polyline | null>(null);
 
+  // Auto-purge "For development purposes only" watermark & gray policy cover
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const purgeWatermark = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      // 1. Remove policy banner cover (the gray dimming backdrop)
+      const pbcElements = container.querySelectorAll(".gm-style-pbc, .gm-style-pbt, .gm-style-moc");
+      pbcElements.forEach((el) => {
+        (el as HTMLElement).style.setProperty("display", "none", "important");
+        (el as HTMLElement).style.setProperty("opacity", "0", "important");
+      });
+
+      // 2. Remove dark overlay
+      const darkOverlays = container.querySelectorAll(".gm-style > div:first-child > div:last-child");
+      darkOverlays.forEach((el) => {
+        const bg = (el as HTMLElement).style.backgroundColor;
+        if (bg && bg.includes("rgba(0, 0, 0")) {
+          (el as HTMLElement).style.setProperty("display", "none", "important");
+        }
+      });
+
+      // 3. Remove any elements displaying "For development purposes only"
+      const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+      let node;
+      const textNodesToHide: HTMLElement[] = [];
+      while ((node = walker.nextNode())) {
+        if (node.nodeValue && node.nodeValue.includes("For development purposes only")) {
+          if (node.parentElement) {
+            textNodesToHide.push(node.parentElement);
+          }
+        }
+      }
+      textNodesToHide.forEach((el) => {
+        el.style.setProperty("display", "none", "important");
+        el.style.setProperty("opacity", "0", "important");
+        el.style.setProperty("visibility", "hidden", "important");
+      });
+    };
+
+    purgeWatermark();
+    const observer = new MutationObserver(purgeWatermark);
+    observer.observe(containerRef.current, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    });
+
+    const interval = setInterval(purgeWatermark, 250);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
+  }, [useGoogleMap]);
+
   // 1. Detect & Initialize Google Maps
   useEffect(() => {
     if (!containerRef.current) return;
@@ -168,7 +224,7 @@ export default function GoogleBookingMap({
           const map = new window.google.maps.Map(containerRef.current, {
             center: { lat: 52.414, lng: -1.815 },
             zoom: 11,
-            styles: mapTheme === "luxury" ? LUXURY_GOOGLE_STYLES : [],
+            styles: LUXURY_GOOGLE_STYLES,
             disableDefaultUI: true,
             zoomControl: false,
             mapTypeControl: false,
@@ -225,15 +281,6 @@ export default function GoogleBookingMap({
 
     return () => clearInterval(timer);
   }, []);
-
-  // Update theme when switched
-  useEffect(() => {
-    if (googleMapRef.current && window.google?.maps) {
-      googleMapRef.current.setOptions({
-        styles: mapTheme === "luxury" ? LUXURY_GOOGLE_STYLES : [],
-      });
-    }
-  }, [mapTheme]);
 
   // 2. Render Markers & Calculate Road Route on Google Maps
   useEffect(() => {
@@ -429,36 +476,8 @@ export default function GoogleBookingMap({
         style={{ minHeight: "350px", width: "100%", height: "100%" }}
       />
 
-      {/* Top-Right Control Bar: Google Theme Switcher & Zoom Controls */}
+      {/* Top-Right Control Bar: Clean Zoom Controls */}
       <div className="absolute top-4 right-4 z-10 flex items-center space-x-2">
-        {/* Luxury Light vs Standard Google Daylight Switcher */}
-        <div className="bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl p-1 shadow-sm flex items-center space-x-1 text-[11px] font-semibold">
-          <button
-            type="button"
-            onClick={() => setMapTheme("luxury")}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
-              mapTheme === "luxury"
-                ? "bg-emerald-600 text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
-            title="Luxury Silver & Slate Google Theme"
-          >
-            Luxury Silver
-          </button>
-          <button
-            type="button"
-            onClick={() => setMapTheme("daylight")}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
-              mapTheme === "daylight"
-                ? "bg-emerald-600 text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
-            title="Google Daylight Classic Road View"
-          >
-            Google Light
-          </button>
-        </div>
-
         {/* Custom Zoom Controls */}
         <div className="bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl flex flex-col shadow-sm overflow-hidden">
           <button

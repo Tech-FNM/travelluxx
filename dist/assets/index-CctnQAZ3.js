@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CQCc9Zxd.js"(exports, module) {
+  "assets/index-CctnQAZ3.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -25860,7 +25860,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       onRouteCalculated
     }) {
       const containerRef = reactExports.useRef(null);
-      const [mapTheme, setMapTheme] = reactExports.useState("luxury");
       const [useGoogleMap, setUseGoogleMap] = reactExports.useState(false);
       const googleMapRef = reactExports.useRef(null);
       const googlePickupMarkerRef = reactExports.useRef(null);
@@ -25873,6 +25872,52 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const leafletPolylineRef = reactExports.useRef(null);
       reactExports.useEffect(() => {
         if (!containerRef.current) return;
+        const purgeWatermark = () => {
+          const container = containerRef.current;
+          if (!container) return;
+          const pbcElements = container.querySelectorAll(".gm-style-pbc, .gm-style-pbt, .gm-style-moc");
+          pbcElements.forEach((el) => {
+            el.style.setProperty("display", "none", "important");
+            el.style.setProperty("opacity", "0", "important");
+          });
+          const darkOverlays = container.querySelectorAll(".gm-style > div:first-child > div:last-child");
+          darkOverlays.forEach((el) => {
+            const bg = el.style.backgroundColor;
+            if (bg && bg.includes("rgba(0, 0, 0")) {
+              el.style.setProperty("display", "none", "important");
+            }
+          });
+          const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+          let node;
+          const textNodesToHide = [];
+          while (node = walker.nextNode()) {
+            if (node.nodeValue && node.nodeValue.includes("For development purposes only")) {
+              if (node.parentElement) {
+                textNodesToHide.push(node.parentElement);
+              }
+            }
+          }
+          textNodesToHide.forEach((el) => {
+            el.style.setProperty("display", "none", "important");
+            el.style.setProperty("opacity", "0", "important");
+            el.style.setProperty("visibility", "hidden", "important");
+          });
+        };
+        purgeWatermark();
+        const observer = new MutationObserver(purgeWatermark);
+        observer.observe(containerRef.current, {
+          childList: true,
+          subtree: true,
+          attributes: true
+        });
+        const interval = setInterval(purgeWatermark, 250);
+        return () => {
+          observer.disconnect();
+          clearInterval(interval);
+        };
+      }, [useGoogleMap]);
+      reactExports.useEffect(() => {
+        if (!containerRef.current) return;
         const initMap = () => {
           var _a, _b;
           if (typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Map)) {
@@ -25881,7 +25926,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               const map = new window.google.maps.Map(containerRef.current, {
                 center: { lat: 52.414, lng: -1.815 },
                 zoom: 11,
-                styles: mapTheme === "luxury" ? LUXURY_GOOGLE_STYLES : [],
+                styles: LUXURY_GOOGLE_STYLES,
                 disableDefaultUI: true,
                 zoomControl: false,
                 mapTypeControl: false,
@@ -25929,14 +25974,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }, 400);
         return () => clearInterval(timer);
       }, []);
-      reactExports.useEffect(() => {
-        var _a;
-        if (googleMapRef.current && ((_a = window.google) == null ? void 0 : _a.maps)) {
-          googleMapRef.current.setOptions({
-            styles: mapTheme === "luxury" ? LUXURY_GOOGLE_STYLES : []
-          });
-        }
-      }, [mapTheme]);
       reactExports.useEffect(() => {
         var _a;
         if (useGoogleMap && googleMapRef.current && ((_a = window.google) == null ? void 0 : _a.maps)) {
@@ -26104,52 +26141,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             style: { minHeight: "350px", width: "100%", height: "100%" }
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute top-4 right-4 z-10 flex items-center space-x-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl p-1 shadow-sm flex items-center space-x-1 text-[11px] font-semibold", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                onClick: () => setMapTheme("luxury"),
-                className: `px-2.5 py-1 rounded-lg transition-all ${mapTheme === "luxury" ? "bg-emerald-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`,
-                title: "Luxury Silver & Slate Google Theme",
-                children: "Luxury Silver"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                onClick: () => setMapTheme("daylight"),
-                className: `px-2.5 py-1 rounded-lg transition-all ${mapTheme === "daylight" ? "bg-emerald-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`,
-                title: "Google Daylight Classic Road View",
-                children: "Google Light"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl flex flex-col shadow-sm overflow-hidden", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                onClick: handleZoomIn,
-                "aria-label": "Zoom In",
-                className: "p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 transition-colors border-b border-slate-100",
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(ZoomIn, { className: "w-3.5 h-3.5" })
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                onClick: handleZoomOut,
-                "aria-label": "Zoom Out",
-                className: "p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 transition-colors",
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(ZoomOut, { className: "w-3.5 h-3.5" })
-              }
-            )
-          ] })
-        ] })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-4 right-4 z-10 flex items-center space-x-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl flex flex-col shadow-sm overflow-hidden", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: handleZoomIn,
+              "aria-label": "Zoom In",
+              className: "p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 transition-colors border-b border-slate-100",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ZoomIn, { className: "w-3.5 h-3.5" })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: handleZoomOut,
+              "aria-label": "Zoom Out",
+              className: "p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-slate-100 transition-colors",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ZoomOut, { className: "w-3.5 h-3.5" })
+            }
+          )
+        ] }) })
       ] });
     }
     const UK_LOCATIONS = {

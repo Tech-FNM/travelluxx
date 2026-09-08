@@ -4932,10 +4932,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
   background: #fff !important;
 }
 
-.gm-err-container, .gm-err-content, .gm-err-message, .gm-err-autocomplete, .dismissButton, .gm-style-cc {
+.gm-err-container, .gm-err-content, .gm-err-message, .gm-err-autocomplete, .dismissButton, .gm-style-cc, .gm-style-pbc, .gm-style-pbt, .gm-style-moc {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+  display: none !important;
+}
+
+.gm-style > div:first-child > div:last-child[style*="rgba(0, 0, 0"], .gm-style > div:first-child > div:last-child[style*="background-color: rgba(0, 0, 0"] {
   display: none !important;
 }
 

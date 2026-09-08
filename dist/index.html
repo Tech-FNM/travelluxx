@@ -104,18 +104,18 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css' rel='stylesheet' />
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script type="module" crossorigin src="/assets/index-CQCc9Zxd.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DEGGSEuj.css">
+    <script type="module" crossorigin src="/assets/index-CctnQAZ3.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-gu8vXskO.css">
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950">
     <div id="root"></div>
-    <!-- Global Google Maps Error Suppression & Auto-Dismiss -->
+    <!-- Global Google Maps Error & Watermark Suppression -->
     <script>
       window.gm_authFailure = function() {
         console.warn("Google Maps notice handled.");
       };
       if (typeof window !== "undefined") {
-        const observer = new MutationObserver(function(mutations) {
+        function suppressGoogleOverlays() {
           const errModal = document.querySelector('.gm-err-container, .dismissButton');
           if (errModal) {
             const btn = document.querySelector('.dismissButton');
@@ -124,8 +124,14 @@
             }
             try { errModal.remove(); } catch(e) {}
           }
-        });
+          const pbc = document.querySelectorAll('.gm-style-pbc, .gm-style-pbt, .gm-style-moc');
+          pbc.forEach(function(el) {
+            el.style.setProperty('display', 'none', 'important');
+          });
+        }
+        const observer = new MutationObserver(suppressGoogleOverlays);
         observer.observe(document.documentElement, { childList: true, subtree: true });
+        setInterval(suppressGoogleOverlays, 300);
       }
     </script>
     <!-- Leaflet Map JS (Fallback) -->
