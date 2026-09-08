@@ -1319,8 +1319,9 @@ function readMenu(): any[] {
   } catch (e) {}
   cachedMenu = [
     { id: "1", label: "Book Now", href: "/#calculator", target: "_self" },
-    { id: "2", label: "Blog", href: "/blog", target: "_self" },
-    { id: "3", label: "Contact", href: "/#contact", target: "_self" }
+    { id: "2", label: "Services", href: "/services", target: "_self" },
+    { id: "3", label: "Blog", href: "/blog", target: "_self" },
+    { id: "4", label: "Contact", href: "/#contact", target: "_self" }
   ];
   return cachedMenu;
 }
