@@ -24,16 +24,16 @@
 
 /* Leaflet light theme styles */
 .leaflet-container {
-  background: #e5e3df !important;
+  background: #f8fafc !important;
   font-family: inherit;
 }
 .leaflet-tile {
-  filter: none !important;
+  filter: brightness(1.02) contrast(1.02) !important;
 }
 .leaflet-bar {
   border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important;
-  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+  border-radius: 10px !important;
   overflow: hidden;
 }
 .leaflet-bar a {
@@ -54,6 +54,14 @@
 }
 .leaflet-popup-tip {
   background: #ffffff !important;
+}
+
+/* Suppress any Google Maps internal error overlays */
+.gm-err-container,
+.gm-err-autocomplete,
+.dismissButton,
+.gm-style-cc {
+  display: none !important;
 }
 
 /* Highway road animation */

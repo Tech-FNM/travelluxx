@@ -189,6 +189,10 @@ function PublicLandingPage() {
           handleSelectTransferPreset={handleSelectTransferPreset}
           handleSelectClassPreset={handleSelectClassPreset}
         />
+        <Footer
+          onScrollTo={handleScrollTo}
+          settings={settings}
+        />
       </div>
     );
   }
