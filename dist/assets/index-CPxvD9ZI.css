@@ -714,7 +714,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
-      --tw-outline-style: solid;
       --tw-blur: initial;
       --tw-brightness: initial;
       --tw-contrast: initial;
@@ -1224,10 +1223,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .right-3 {
     right: calc(var(--spacing) * 3);
-  }
-
-  .right-4 {
-    right: calc(var(--spacing) * 4);
   }
 
   .right-6 {
@@ -2397,16 +2392,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @supports (color: color-mix(in lab, red, red)) {
     .border-slate-200\/80 {
       border-color: color-mix(in oklab, var(--color-slate-200) 80%, transparent);
-    }
-  }
-
-  .border-slate-200\/90 {
-    border-color: #e2e8f0e6;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .border-slate-200\/90 {
-      border-color: color-mix(in oklab, var(--color-slate-200) 90%, transparent);
     }
   }
 
@@ -3911,11 +3896,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     }
   }
 
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
-  }
-
   .blur {
     --tw-blur: blur(8px);
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
@@ -5193,12 +5173,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
-}
-
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
 }
 
 @property --tw-blur {
