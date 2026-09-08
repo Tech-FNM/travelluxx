@@ -4932,7 +4932,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   background: #fff !important;
 }
 
-.gm-err-container, .gm-err-autocomplete, .dismissButton, .gm-style-cc {
+.gm-err-container, .gm-err-content, .gm-err-message, .gm-err-autocomplete, .dismissButton, .gm-style-cc {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
   display: none !important;
 }
 

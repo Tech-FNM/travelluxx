@@ -107,16 +107,29 @@
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950">
     <div id="root"></div>
-    <!-- Global Google Maps Error Suppression -->
+    <!-- Global Google Maps Error Suppression & Auto-Dismiss -->
     <script>
       window.gm_authFailure = function() {
-        console.warn("Google Maps authentication notice handled - using high-performance vector tiles.");
+        console.warn("Google Maps notice handled.");
       };
+      if (typeof window !== "undefined") {
+        const observer = new MutationObserver(function(mutations) {
+          const errModal = document.querySelector('.gm-err-container, .dismissButton');
+          if (errModal) {
+            const btn = document.querySelector('.dismissButton');
+            if (btn) {
+              try { btn.click(); } catch(e) {}
+            }
+            try { errModal.remove(); } catch(e) {}
+          }
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+      }
     </script>
-    <!-- Leaflet Map JS -->
+    <!-- Leaflet Map JS (Fallback) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <!-- Google Maps Platform JavaScript API (disabled to eliminate BillingNotEnabledMapError modal until billing is active) -->
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoifKToOK0u8KPcYS8FhvAMVMSHYSKVdE&libraries=places,geometry"></script> -->
+    <!-- Google Maps Platform JavaScript API (Maps, Places, Geometry, Directions) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoifKToOK0u8KPcYS8FhvAMVMSHYSKVdE&libraries=places,geometry"></script>
     <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

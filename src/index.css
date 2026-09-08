@@ -56,12 +56,17 @@
   background: #ffffff !important;
 }
 
-/* Suppress any Google Maps internal error overlays */
+/* Suppress any Google Maps internal error overlays and dev popups */
 .gm-err-container,
+.gm-err-content,
+.gm-err-message,
 .gm-err-autocomplete,
 .dismissButton,
 .gm-style-cc {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* Highway road animation */

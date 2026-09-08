@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Layers, ZoomIn, ZoomOut } from "lucide-react";
+import { ZoomIn, ZoomOut } from "lucide-react";
 
 interface GoogleBookingMapProps {
   pickupCoords: { lat: number; lng: number } | null;
@@ -17,6 +17,118 @@ interface GoogleBookingMapProps {
   }) => void;
 }
 
+// Bespoke Luxury Chauffeur styling for Google Maps
+const LUXURY_GOOGLE_STYLES: any[] = [
+  {
+    elementType: "geometry",
+    stylers: [{ color: "#f8fafc" }],
+  },
+  {
+    elementType: "labels.icon",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#475569" }],
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#ffffff" }],
+  },
+  {
+    featureType: "administrative.country",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#cbd5e1" }, { visibility: "on" }],
+  },
+  {
+    featureType: "administrative.province",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#e2e8f0" }],
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [{ color: "#f1f5f9" }],
+  },
+  {
+    featureType: "poi",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#64748b" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#ecfdf5" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#059669" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#ffffff" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#e2e8f0" }],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#334155" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#ffffff" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#cbd5e1" }],
+  },
+  {
+    featureType: "transit",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#cbd5e1" }],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#64748b" }],
+  },
+];
+
+// Helper to generate SVG marker icons for Google Maps
+const getGoogleMarkerIcon = (color: string, label: string) => {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="52" viewBox="0 0 40 52">
+      <defs>
+        <filter id="shadow" x="0" y="0" width="40" height="52" filterUnits="userSpaceOnUse">
+          <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+        </filter>
+      </defs>
+      <g filter="url(#shadow)">
+        <path d="M20 4C12.268 4 6 10.268 6 18C6 28 20 44 20 44C20 44 34 28 34 18C34 10.268 27.732 4 20 4Z" fill="${color}" stroke="#ffffff" stroke-width="2.5"/>
+        <circle cx="20" cy="18" r="5" fill="#ffffff"/>
+      </g>
+    </svg>
+  `.trim();
+
+  return {
+    url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
+    scaledSize: typeof window !== "undefined" && window.google?.maps?.Size ? new window.google.maps.Size(36, 46) : undefined,
+    anchor: typeof window !== "undefined" && window.google?.maps?.Point ? new window.google.maps.Point(18, 44) : undefined,
+  };
+};
+
 export default function GoogleBookingMap({
   pickupCoords,
   dropoffCoords,
@@ -26,236 +138,313 @@ export default function GoogleBookingMap({
   onRouteCalculated,
 }: GoogleBookingMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Theme state: "luxury" (Bespoke Silver & Slate) or "daylight" (Standard Google)
+  const [mapTheme, setMapTheme] = useState<"luxury" | "daylight">("luxury");
+  const [useGoogleMap, setUseGoogleMap] = useState<boolean>(false);
+
+  // Google Maps references
+  const googleMapRef = useRef<any>(null);
+  const googlePickupMarkerRef = useRef<any>(null);
+  const googleDropoffMarkerRef = useRef<any>(null);
+  const googlePolylineRef = useRef<any>(null);
+  const googlePolylineOutlineRef = useRef<any>(null);
+
+  // Leaflet fallback references (used only if Google is unavailable)
   const leafletMapRef = useRef<L.Map | null>(null);
-  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const leafletPickupMarkerRef = useRef<L.Marker | null>(null);
+  const leafletDropoffMarkerRef = useRef<L.Marker | null>(null);
+  const leafletPolylineRef = useRef<L.Polyline | null>(null);
 
-  const pickupMarkerRef = useRef<L.Marker | null>(null);
-  const dropoffMarkerRef = useRef<L.Marker | null>(null);
-  const polylineRef = useRef<L.Polyline | null>(null);
-  const polylineOutlineRef = useRef<L.Polyline | null>(null);
-
-  // Map theme: "daylight" (Google Daylight Roads) or "voyager" (Clean Luxury Light)
-  const [mapTheme, setMapTheme] = useState<"daylight" | "voyager">("daylight");
-
-  // Tile sources
-  const TILE_SOURCES = {
-    daylight: {
-      url: "https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}",
-      options: {
-        maxZoom: 20,
-        subdomains: ["mt0", "mt1", "mt2", "mt3"],
-        attribution: "© Google Maps",
-      },
-    },
-    voyager: {
-      url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-      options: {
-        maxZoom: 20,
-        subdomains: "abcd",
-        attribution: "© CARTO, © OpenStreetMap",
-      },
-    },
-  };
-
-  // 1. Initialize Map
-  useEffect(() => {
-    if (!containerRef.current || leafletMapRef.current) return;
-
-    // Center on UK (West Midlands / Birmingham / Solihull area)
-    const map = L.map(containerRef.current, {
-      center: [52.414, -1.815],
-      zoom: 11,
-      zoomControl: false, // Custom clean zoom controls
-      attributionControl: false,
-    });
-
-    const activeTileConfig = TILE_SOURCES[mapTheme];
-    const tiles = L.tileLayer(activeTileConfig.url, activeTileConfig.options).addTo(map);
-    tileLayerRef.current = tiles;
-
-    map.on("click", (e: L.LeafletMouseEvent) => {
-      onMapClick(e.latlng.lat, e.latlng.lng);
-    });
-
-    leafletMapRef.current = map;
-
-    return () => {
-      if (leafletMapRef.current) {
-        leafletMapRef.current.remove();
-        leafletMapRef.current = null;
-      }
-    };
-  }, []);
-
-  // Switch Tile Layer when theme changes
-  useEffect(() => {
-    if (!leafletMapRef.current) return;
-    if (tileLayerRef.current) {
-      tileLayerRef.current.remove();
-    }
-    const activeTileConfig = TILE_SOURCES[mapTheme];
-    const newTiles = L.tileLayer(activeTileConfig.url, activeTileConfig.options).addTo(leafletMapRef.current);
-    tileLayerRef.current = newTiles;
-  }, [mapTheme]);
-
-  // Resize handling
+  // 1. Detect & Initialize Google Maps
   useEffect(() => {
     if (!containerRef.current) return;
-    const observer = new ResizeObserver(() => {
-      if (leafletMapRef.current) {
-        leafletMapRef.current.invalidateSize();
+
+    const initMap = () => {
+      if (typeof window !== "undefined" && window.google?.maps?.Map) {
+        setUseGoogleMap(true);
+
+        if (!googleMapRef.current) {
+          const map = new window.google.maps.Map(containerRef.current, {
+            center: { lat: 52.414, lng: -1.815 },
+            zoom: 11,
+            styles: mapTheme === "luxury" ? LUXURY_GOOGLE_STYLES : [],
+            disableDefaultUI: true,
+            zoomControl: false,
+            mapTypeControl: false,
+            streetViewControl: false,
+            fullscreenControl: false,
+            gestureHandling: "greedy",
+          });
+
+          map.addListener("click", (e: any) => {
+            if (e.latLng) {
+              onMapClick(e.latLng.lat(), e.latLng.lng());
+            }
+          });
+
+          googleMapRef.current = map;
+        }
+      } else {
+        // Fallback to Leaflet if Google script is still downloading
+        if (!leafletMapRef.current) {
+          const map = L.map(containerRef.current, {
+            center: [52.414, -1.815],
+            zoom: 11,
+            zoomControl: false,
+            attributionControl: false,
+          });
+
+          L.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
+            maxZoom: 20,
+            subdomains: ["mt0", "mt1", "mt2", "mt3"],
+          }).addTo(map);
+
+          map.on("click", (e: L.LeafletMouseEvent) => {
+            onMapClick(e.latlng.lat, e.latlng.lng);
+          });
+
+          leafletMapRef.current = map;
+        }
       }
-    });
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
+    };
+
+    initMap();
+
+    // Check periodically if Google Maps script finishes loading
+    const timer = setInterval(() => {
+      if (typeof window !== "undefined" && window.google?.maps?.Map && !googleMapRef.current) {
+        if (leafletMapRef.current) {
+          leafletMapRef.current.remove();
+          leafletMapRef.current = null;
+        }
+        initMap();
+        clearInterval(timer);
+      }
+    }, 400);
+
+    return () => clearInterval(timer);
   }, []);
 
-  // 2. Sync Coordinates, Markers, and Driving Route
+  // Update theme when switched
   useEffect(() => {
-    if (!leafletMapRef.current) return;
-    const lMap = leafletMapRef.current;
-
-    // Clear previous markers & polylines
-    if (pickupMarkerRef.current) {
-      pickupMarkerRef.current.remove();
-      pickupMarkerRef.current = null;
-    }
-    if (dropoffMarkerRef.current) {
-      dropoffMarkerRef.current.remove();
-      dropoffMarkerRef.current = null;
-    }
-    if (polylineRef.current) {
-      polylineRef.current.remove();
-      polylineRef.current = null;
-    }
-    if (polylineOutlineRef.current) {
-      polylineOutlineRef.current.remove();
-      polylineOutlineRef.current = null;
-    }
-
-    const bounds = L.latLngBounds([]);
-
-    // Pickup Marker (Emerald Chauffeur Pin)
-    if (pickupCoords) {
-      const pickupIcon = L.divIcon({
-        className: "custom-leaflet-marker",
-        html: `
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));">
-            <div style="width: 30px; height: 30px; border-radius: 9999px; background: linear-gradient(135deg, #10b981, #059669); border: 3px solid #ffffff; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
-            </div>
-            <div style="margin-top: 2px; background-color: #064e3b; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.4); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;">PICKUP</div>
-          </div>
-        `,
-        iconSize: [30, 50],
-        iconAnchor: [15, 25],
+    if (googleMapRef.current && window.google?.maps) {
+      googleMapRef.current.setOptions({
+        styles: mapTheme === "luxury" ? LUXURY_GOOGLE_STYLES : [],
       });
-      pickupMarkerRef.current = L.marker([pickupCoords.lat, pickupCoords.lng], { icon: pickupIcon }).addTo(lMap);
-      bounds.extend([pickupCoords.lat, pickupCoords.lng]);
     }
+  }, [mapTheme]);
 
-    // Dropoff Marker (Rose / Red Destination Pin)
-    if (dropoffCoords) {
-      const dropoffIcon = L.divIcon({
-        className: "custom-leaflet-marker",
-        html: `
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));">
-            <div style="width: 30px; height: 30px; border-radius: 9999px; background: linear-gradient(135deg, #f43f5e, #e11d48); border: 3px solid #ffffff; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
-            </div>
-            <div style="margin-top: 2px; background-color: #881337; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.4); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;">DROPOFF</div>
-          </div>
-        `,
-        iconSize: [30, 50],
-        iconAnchor: [15, 25],
-      });
-      dropoffMarkerRef.current = L.marker([dropoffCoords.lat, dropoffCoords.lng], { icon: dropoffIcon }).addTo(lMap);
-      bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
-    }
+  // 2. Render Markers & Calculate Road Route on Google Maps
+  useEffect(() => {
+    // If using Google Maps
+    if (useGoogleMap && googleMapRef.current && window.google?.maps) {
+      const gMap = googleMapRef.current;
 
-    // Calculate Route if both coordinates exist
-    if (pickupCoords && dropoffCoords) {
-      const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
+      // Clear previous markers
+      if (googlePickupMarkerRef.current) {
+        googlePickupMarkerRef.current.setMap(null);
+        googlePickupMarkerRef.current = null;
+      }
+      if (googleDropoffMarkerRef.current) {
+        googleDropoffMarkerRef.current.setMap(null);
+        googleDropoffMarkerRef.current = null;
+      }
+      if (googlePolylineRef.current) {
+        googlePolylineRef.current.setMap(null);
+        googlePolylineRef.current = null;
+      }
+      if (googlePolylineOutlineRef.current) {
+        googlePolylineOutlineRef.current.setMap(null);
+        googlePolylineOutlineRef.current = null;
+      }
 
-      fetch(osrmUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.routes && data.routes[0]) {
-            const route = data.routes[0];
-            const coordinates = route.geometry.coordinates;
-            const latLngs = coordinates.map((c: [number, number]) => [c[1], c[0]] as [number, number]);
-            const distanceMiles = route.distance / 1609.34;
-            const timeMinutes = route.duration / 60;
+      const bounds = new window.google.maps.LatLngBounds();
 
-            // Route background outline for contrast
-            const outline = L.polyline(latLngs, {
-              color: "#064e3b",
-              weight: 7,
-              opacity: 0.35,
-            }).addTo(lMap);
-            polylineOutlineRef.current = outline;
-
-            // Main vibrant emerald route polyline
-            const polyline = L.polyline(latLngs, {
-              color: "#059669",
-              weight: 4.5,
-              opacity: 0.95,
-            }).addTo(lMap);
-            polylineRef.current = polyline;
-
-            onRouteCalculated({
-              distanceMiles,
-              timeMinutes,
-              routePoints: coordinates.map((c: [number, number]) => ({ lng: c[0], lat: c[1] })),
-              instructions: [
-                `Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`,
-              ],
-            });
-          }
-        })
-        .catch(() => {
-          // Direct straight-line fallback if OSRM is offline
-          const directLatLngs: [number, number][] = [
-            [pickupCoords.lat, pickupCoords.lng],
-            [dropoffCoords.lat, dropoffCoords.lng],
-          ];
-          const polyline = L.polyline(directLatLngs, {
-            color: "#059669",
-            weight: 4.5,
-            opacity: 0.9,
-          }).addTo(lMap);
-          polylineRef.current = polyline;
+      // Pickup Marker (Emerald)
+      if (pickupCoords) {
+        const pickupLatLng = new window.google.maps.LatLng(pickupCoords.lat, pickupCoords.lng);
+        const marker = new window.google.maps.Marker({
+          position: pickupLatLng,
+          map: gMap,
+          title: pickupInput || "Pickup Location",
+          icon: getGoogleMarkerIcon("#10b981", "PICKUP"),
+          zIndex: 999,
         });
+        googlePickupMarkerRef.current = marker;
+        bounds.extend(pickupLatLng);
+      }
 
-      lMap.fitBounds(bounds, { padding: [45, 45], maxZoom: 14 });
-    } else if (pickupCoords || dropoffCoords) {
-      const single = pickupCoords || dropoffCoords!;
-      lMap.setView([single.lat, single.lng], 13);
+      // Dropoff Marker (Rose)
+      if (dropoffCoords) {
+        const dropoffLatLng = new window.google.maps.LatLng(dropoffCoords.lat, dropoffCoords.lng);
+        const marker = new window.google.maps.Marker({
+          position: dropoffLatLng,
+          map: gMap,
+          title: dropoffInput || "Drop-off Location",
+          icon: getGoogleMarkerIcon("#f43f5e", "DROPOFF"),
+          zIndex: 999,
+        });
+        googleDropoffMarkerRef.current = marker;
+        bounds.extend(dropoffLatLng);
+      }
+
+      // Route computation
+      if (pickupCoords && dropoffCoords) {
+        const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
+
+        fetch(osrmUrl)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.routes && data.routes[0]) {
+              const route = data.routes[0];
+              const coordinates = route.geometry.coordinates;
+              const path = coordinates.map((c: [number, number]) => ({
+                lat: c[1],
+                lng: c[0],
+              }));
+              const distanceMiles = route.distance / 1609.34;
+              const timeMinutes = route.duration / 60;
+
+              // Darker outline for contrast
+              const outline = new window.google.maps.Polyline({
+                path,
+                geodesic: true,
+                strokeColor: "#064e3b",
+                strokeOpacity: 0.35,
+                strokeWeight: 7,
+                map: gMap,
+              });
+              googlePolylineOutlineRef.current = outline;
+
+              // Vibrant Emerald Route Polyline
+              const polyline = new window.google.maps.Polyline({
+                path,
+                geodesic: true,
+                strokeColor: "#059669",
+                strokeOpacity: 0.95,
+                strokeWeight: 4.5,
+                map: gMap,
+              });
+              googlePolylineRef.current = polyline;
+
+              path.forEach((pt: any) => bounds.extend(pt));
+              gMap.fitBounds(bounds, { top: 45, right: 45, bottom: 45, left: 45 });
+
+              onRouteCalculated({
+                distanceMiles,
+                timeMinutes,
+                routePoints: path,
+                instructions: [
+                  `Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`,
+                ],
+              });
+            }
+          })
+          .catch(() => {
+            // Direct straight fallback
+            const directPath = [
+              { lat: pickupCoords.lat, lng: pickupCoords.lng },
+              { lat: dropoffCoords.lat, lng: dropoffCoords.lng },
+            ];
+            const polyline = new window.google.maps.Polyline({
+              path: directPath,
+              strokeColor: "#059669",
+              strokeOpacity: 0.9,
+              strokeWeight: 4.5,
+              map: gMap,
+            });
+            googlePolylineRef.current = polyline;
+            gMap.fitBounds(bounds, 50);
+          });
+      } else if (pickupCoords || dropoffCoords) {
+        const single = pickupCoords || dropoffCoords!;
+        gMap.setCenter({ lat: single.lat, lng: single.lng });
+        gMap.setZoom(13);
+      }
+    } else if (leafletMapRef.current) {
+      // Leaflet fallback handling
+      const lMap = leafletMapRef.current;
+      if (leafletPickupMarkerRef.current) leafletPickupMarkerRef.current.remove();
+      if (leafletDropoffMarkerRef.current) leafletDropoffMarkerRef.current.remove();
+      if (leafletPolylineRef.current) leafletPolylineRef.current.remove();
+
+      const bounds = L.latLngBounds([]);
+      if (pickupCoords) {
+        const marker = L.circleMarker([pickupCoords.lat, pickupCoords.lng], {
+          radius: 8,
+          fillColor: "#10b981",
+          color: "#ffffff",
+          weight: 2,
+          fillOpacity: 1,
+        }).addTo(lMap);
+        leafletPickupMarkerRef.current = marker;
+        bounds.extend([pickupCoords.lat, pickupCoords.lng]);
+      }
+      if (dropoffCoords) {
+        const marker = L.circleMarker([dropoffCoords.lat, dropoffCoords.lng], {
+          radius: 8,
+          fillColor: "#f43f5e",
+          color: "#ffffff",
+          weight: 2,
+          fillOpacity: 1,
+        }).addTo(lMap);
+        leafletDropoffMarkerRef.current = marker;
+        bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
+      }
+      if (pickupCoords && dropoffCoords) {
+        const polyline = L.polyline(
+          [[pickupCoords.lat, pickupCoords.lng], [dropoffCoords.lat, dropoffCoords.lng]],
+          { color: "#059669", weight: 4.5 }
+        ).addTo(lMap);
+        leafletPolylineRef.current = polyline;
+        lMap.fitBounds(bounds, { padding: [40, 40] });
+      }
     }
-  }, [pickupCoords, dropoffCoords]);
+  }, [pickupCoords, dropoffCoords, useGoogleMap]);
 
   // Zoom helpers
   const handleZoomIn = () => {
-    if (leafletMapRef.current) leafletMapRef.current.zoomIn();
+    if (googleMapRef.current) {
+      googleMapRef.current.setZoom((googleMapRef.current.getZoom() || 11) + 1);
+    } else if (leafletMapRef.current) {
+      leafletMapRef.current.zoomIn();
+    }
   };
 
   const handleZoomOut = () => {
-    if (leafletMapRef.current) leafletMapRef.current.zoomOut();
+    if (googleMapRef.current) {
+      googleMapRef.current.setZoom((googleMapRef.current.getZoom() || 11) - 1);
+    } else if (leafletMapRef.current) {
+      leafletMapRef.current.zoomOut();
+    }
   };
 
   return (
     <div className="relative w-full h-full min-h-[350px] bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
-      {/* Interactive Map DOM */}
+      {/* Native Map DOM Container */}
       <div
         ref={containerRef}
         className="w-full h-full min-h-[350px] z-0"
         style={{ minHeight: "350px", width: "100%", height: "100%" }}
       />
 
-      {/* Top-Right Control Bar: Light Theme Toggle & Zoom */}
+      {/* Top-Right Control Bar: Google Theme Switcher & Zoom Controls */}
       <div className="absolute top-4 right-4 z-10 flex items-center space-x-2">
-        {/* Light Theme Pill Switcher */}
+        {/* Luxury Light vs Standard Google Daylight Switcher */}
         <div className="bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl p-1 shadow-sm flex items-center space-x-1 text-[11px] font-semibold">
+          <button
+            type="button"
+            onClick={() => setMapTheme("luxury")}
+            className={`px-2.5 py-1 rounded-lg transition-all ${
+              mapTheme === "luxury"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            }`}
+            title="Luxury Silver & Slate Google Theme"
+          >
+            Luxury Silver
+          </button>
           <button
             type="button"
             onClick={() => setMapTheme("daylight")}
@@ -264,25 +453,13 @@ export default function GoogleBookingMap({
                 ? "bg-emerald-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
-            title="Google Daylight Road View"
+            title="Google Daylight Classic Road View"
           >
             Google Light
           </button>
-          <button
-            type="button"
-            onClick={() => setMapTheme("voyager")}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
-              mapTheme === "voyager"
-                ? "bg-emerald-600 text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
-            title="Ultra-Clean Voyager Light View"
-          >
-            Voyager
-          </button>
         </div>
 
-        {/* Zoom Controls */}
+        {/* Custom Zoom Controls */}
         <div className="bg-white/95 backdrop-blur border border-slate-200/90 rounded-xl flex flex-col shadow-sm overflow-hidden">
           <button
             type="button"
