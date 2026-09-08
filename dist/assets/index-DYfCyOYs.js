@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-ChxWIhNP.js"(exports, module) {
+  "assets/index-DYfCyOYs.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -25884,30 +25884,59 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 infoWindow.close();
               };
               map.addListener("click", (e) => {
-                var _a2, _b2, _c;
+                var _a2, _b2, _c, _d, _e, _f, _g, _h, _i;
                 if (e.placeId) {
                   e.stop();
                   const lat = e.latLng.lat();
                   const lng = e.latLng.lng();
-                  if ((_c = (_b2 = (_a2 = window.google) == null ? void 0 : _a2.maps) == null ? void 0 : _b2.places) == null ? void 0 : _c.PlacesService) {
+                  const handlePlaceDetails = (placeName, address) => {
+                    infoWindow.setContent(`
+                  <div style="font-family: 'Inter', system-ui, sans-serif; padding: 4px 6px; min-width: 170px;">
+                    <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Google Business</div>
+                    <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${placeName}</div>
+                    ${address ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${address}</div>` : ""}
+                    <div style="margin-top: 8px; display: flex; gap: 6px;">
+                      <button onclick="window.__setPoiCoords && window.__setPoiCoords(${lat}, ${lng})" style="background: #059669; color: #ffffff; border: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Select Location</button>
+                    </div>
+                  </div>
+                `);
+                    infoWindow.setPosition(e.latLng);
+                    infoWindow.open(map);
+                  };
+                  if ((_c = (_b2 = (_a2 = window.google) == null ? void 0 : _a2.maps) == null ? void 0 : _b2.places) == null ? void 0 : _c.Place) {
+                    try {
+                      const placeObj = new window.google.maps.places.Place({ id: e.placeId });
+                      placeObj.fetchFields({ fields: ["displayName", "formattedAddress"] }).then(() => {
+                        handlePlaceDetails(placeObj.displayName || "Business Location", placeObj.formattedAddress || "");
+                      }).catch(() => {
+                        var _a3, _b3, _c2;
+                        if ((_c2 = (_b3 = (_a3 = window.google) == null ? void 0 : _a3.maps) == null ? void 0 : _b3.places) == null ? void 0 : _c2.PlacesService) {
+                          const placesService = new window.google.maps.places.PlacesService(map);
+                          placesService.getDetails(
+                            { placeId: e.placeId, fields: ["name", "formatted_address"] },
+                            (place) => {
+                              handlePlaceDetails((place == null ? void 0 : place.name) || "Business Location", (place == null ? void 0 : place.formatted_address) || "");
+                            }
+                          );
+                        }
+                      });
+                    } catch (err) {
+                      if ((_f = (_e = (_d = window.google) == null ? void 0 : _d.maps) == null ? void 0 : _e.places) == null ? void 0 : _f.PlacesService) {
+                        const placesService = new window.google.maps.places.PlacesService(map);
+                        placesService.getDetails(
+                          { placeId: e.placeId, fields: ["name", "formatted_address"] },
+                          (place) => {
+                            handlePlaceDetails((place == null ? void 0 : place.name) || "Business Location", (place == null ? void 0 : place.formatted_address) || "");
+                          }
+                        );
+                      }
+                    }
+                  } else if ((_i = (_h = (_g = window.google) == null ? void 0 : _g.maps) == null ? void 0 : _h.places) == null ? void 0 : _i.PlacesService) {
                     const placesService = new window.google.maps.places.PlacesService(map);
                     placesService.getDetails(
-                      { placeId: e.placeId, fields: ["name", "formatted_address", "geometry"] },
-                      (place, status) => {
-                        const placeName = (place == null ? void 0 : place.name) || "Business Location";
-                        const address = (place == null ? void 0 : place.formatted_address) || "";
-                        infoWindow.setContent(`
-                      <div style="font-family: 'Inter', system-ui, sans-serif; padding: 4px 6px; min-width: 170px;">
-                        <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Google Business</div>
-                        <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${placeName}</div>
-                        ${address ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${address}</div>` : ""}
-                        <div style="margin-top: 8px; display: flex; gap: 6px;">
-                          <button onclick="window.__setPoiCoords && window.__setPoiCoords(${lat}, ${lng})" style="background: #059669; color: #ffffff; border: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Select Location</button>
-                        </div>
-                      </div>
-                    `);
-                        infoWindow.setPosition(e.latLng);
-                        infoWindow.open(map);
+                      { placeId: e.placeId, fields: ["name", "formatted_address"] },
+                      (place) => {
+                        handlePlaceDetails((place == null ? void 0 : place.name) || "Business Location", (place == null ? void 0 : place.formatted_address) || "");
                       }
                     );
                   }

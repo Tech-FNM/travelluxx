@@ -188,26 +188,57 @@ export default function GoogleBookingMap({
               const lat = e.latLng.lat();
               const lng = e.latLng.lng();
 
-              if (window.google?.maps?.places?.PlacesService) {
+              const handlePlaceDetails = (placeName: string, address: string) => {
+                infoWindow.setContent(`
+                  <div style="font-family: 'Inter', system-ui, sans-serif; padding: 4px 6px; min-width: 170px;">
+                    <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Google Business</div>
+                    <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${placeName}</div>
+                    ${address ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${address}</div>` : ""}
+                    <div style="margin-top: 8px; display: flex; gap: 6px;">
+                      <button onclick="window.__setPoiCoords && window.__setPoiCoords(${lat}, ${lng})" style="background: #059669; color: #ffffff; border: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Select Location</button>
+                    </div>
+                  </div>
+                `);
+                infoWindow.setPosition(e.latLng);
+                infoWindow.open(map);
+              };
+
+              // Try Places API (New) first, fallback to PlacesService
+              if (window.google?.maps?.places?.Place) {
+                try {
+                  const placeObj = new window.google.maps.places.Place({ id: e.placeId });
+                  placeObj.fetchFields({ fields: ["displayName", "formattedAddress"] })
+                    .then(() => {
+                      handlePlaceDetails(placeObj.displayName || "Business Location", placeObj.formattedAddress || "");
+                    })
+                    .catch(() => {
+                      if (window.google?.maps?.places?.PlacesService) {
+                        const placesService = new window.google.maps.places.PlacesService(map);
+                        placesService.getDetails(
+                          { placeId: e.placeId, fields: ["name", "formatted_address"] },
+                          (place: any) => {
+                            handlePlaceDetails(place?.name || "Business Location", place?.formatted_address || "");
+                          }
+                        );
+                      }
+                    });
+                } catch(err) {
+                  if (window.google?.maps?.places?.PlacesService) {
+                    const placesService = new window.google.maps.places.PlacesService(map);
+                    placesService.getDetails(
+                      { placeId: e.placeId, fields: ["name", "formatted_address"] },
+                      (place: any) => {
+                        handlePlaceDetails(place?.name || "Business Location", place?.formatted_address || "");
+                      }
+                    );
+                  }
+                }
+              } else if (window.google?.maps?.places?.PlacesService) {
                 const placesService = new window.google.maps.places.PlacesService(map);
                 placesService.getDetails(
-                  { placeId: e.placeId, fields: ["name", "formatted_address", "geometry"] },
-                  (place: any, status: any) => {
-                    const placeName = place?.name || "Business Location";
-                    const address = place?.formatted_address || "";
-
-                    infoWindow.setContent(`
-                      <div style="font-family: 'Inter', system-ui, sans-serif; padding: 4px 6px; min-width: 170px;">
-                        <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Google Business</div>
-                        <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${placeName}</div>
-                        ${address ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${address}</div>` : ""}
-                        <div style="margin-top: 8px; display: flex; gap: 6px;">
-                          <button onclick="window.__setPoiCoords && window.__setPoiCoords(${lat}, ${lng})" style="background: #059669; color: #ffffff; border: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Select Location</button>
-                        </div>
-                      </div>
-                    `);
-                    infoWindow.setPosition(e.latLng);
-                    infoWindow.open(map);
+                  { placeId: e.placeId, fields: ["name", "formatted_address"] },
+                  (place: any) => {
+                    handlePlaceDetails(place?.name || "Business Location", place?.formatted_address || "");
                   }
                 );
               }
