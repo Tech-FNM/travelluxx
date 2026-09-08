@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-v9JbJIZ8.js"(exports, module) {
+  "assets/index-ChxWIhNP.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -25743,13 +25743,54 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     var leafletSrcExports = requireLeafletSrc();
     const L$1 = /* @__PURE__ */ getDefaultExportFromCjs(leafletSrcExports);
-    const POPULAR_UK_HUBS = [
-      { name: "Birmingham Airport (BHX)", type: "International Airport", lat: 52.4539, lng: -1.7481 },
-      { name: "The NEC Birmingham", type: "Exhibition & Business Centre", lat: 52.4526, lng: -1.7169 },
-      { name: "Solihull Town Centre", type: "Luxury Shopping & Chauffeur Hub", lat: 52.4132, lng: -1.7774 },
-      { name: "Grand Central / New Street", type: "Central Business District", lat: 52.4777, lng: -1.8986 },
-      { name: "London Heathrow (LHR)", type: "VIP Airport Terminal", lat: 51.47, lng: -0.4543 }
+    const GOOGLE_MAP_STYLES = [
+      {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [{ visibility: "on" }]
+      },
+      {
+        featureType: "poi.business",
+        elementType: "all",
+        stylers: [{ visibility: "on" }]
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [{ color: "#dcfce7" }, { visibility: "on" }]
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ visibility: "on" }]
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#bfdbfe" }]
+      }
     ];
+    const getGoogleMarkerIcon = (color) => {
+      var _a, _b, _c, _d;
+      const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 36 48">
+      <defs>
+        <filter id="shadow" x="0" y="0" width="36" height="48" filterUnits="userSpaceOnUse">
+          <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+        </filter>
+      </defs>
+      <g filter="url(#shadow)">
+        <path d="M18 4C10.82 4 5 9.82 5 17C5 26.5 18 42 18 42C18 42 31 26.5 31 17C31 9.82 25.18 4 18 4Z" fill="${color}" stroke="#ffffff" stroke-width="2.5"/>
+        <circle cx="18" cy="17" r="5" fill="#ffffff"/>
+      </g>
+    </svg>
+  `.trim();
+      return {
+        url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
+        scaledSize: typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Size) ? new window.google.maps.Size(34, 44) : void 0,
+        anchor: typeof window !== "undefined" && ((_d = (_c = window.google) == null ? void 0 : _c.maps) == null ? void 0 : _d.Point) ? new window.google.maps.Point(17, 42) : void 0
+      };
+    };
     function GoogleBookingMap({
       pickupCoords,
       dropoffCoords,
@@ -25758,249 +25799,322 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       onMapClick,
       onRouteCalculated
     }) {
-      const mapContainerRef = reactExports.useRef(null);
-      const mapRef = reactExports.useRef(null);
-      const pickupMarkerRef = reactExports.useRef(null);
-      const dropoffMarkerRef = reactExports.useRef(null);
-      const distanceMarkerRef = reactExports.useRef(null);
-      const routePolylineRef = reactExports.useRef(null);
-      const routeOutlineRef = reactExports.useRef(null);
-      const hubMarkersRef = reactExports.useRef([]);
+      const containerRef = reactExports.useRef(null);
+      const [useGoogleMap, setUseGoogleMap] = reactExports.useState(false);
+      const googleMapRef = reactExports.useRef(null);
+      const infoWindowRef = reactExports.useRef(null);
+      const googlePickupMarkerRef = reactExports.useRef(null);
+      const googleDropoffMarkerRef = reactExports.useRef(null);
+      const googlePolylineRef = reactExports.useRef(null);
+      const googlePolylineOutlineRef = reactExports.useRef(null);
+      const leafletMapRef = reactExports.useRef(null);
+      const leafletPickupMarkerRef = reactExports.useRef(null);
+      const leafletDropoffMarkerRef = reactExports.useRef(null);
+      const leafletPolylineRef = reactExports.useRef(null);
       reactExports.useEffect(() => {
-        if (!mapContainerRef.current || mapRef.current) return;
-        const map = L$1.map(mapContainerRef.current, {
-          center: [52.414, -1.815],
-          zoom: 11,
-          zoomControl: false,
-          attributionControl: false
-        });
-        L$1.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
-          maxZoom: 20,
-          subdomains: ["mt0", "mt1", "mt2", "mt3"],
-          attribution: "© Google Maps"
-        }).addTo(map);
-        const createdHubMarkers = [];
-        POPULAR_UK_HUBS.forEach((hub) => {
-          const hubIcon = L$1.divIcon({
-            className: "custom-hub-marker",
-            html: `
-          <div style="cursor: pointer; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.25)); transition: transform 0.2s;">
-            <div style="width: 26px; height: 26px; border-radius: 9999px; background: #ffffff; border: 2.5px solid #0f172a; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 8px; height: 8px; border-radius: 9999px; background: #059669;"></div>
-            </div>
-          </div>
-        `,
-            iconSize: [26, 26],
-            iconAnchor: [13, 13]
+        if (!containerRef.current) return;
+        const purgeOverlays = () => {
+          const container = containerRef.current;
+          if (!container) return;
+          const pbcElements = container.querySelectorAll(".gm-style-pbc, .gm-style-pbt, .gm-style-moc");
+          pbcElements.forEach((el) => {
+            el.style.setProperty("display", "none", "important");
+            el.style.setProperty("opacity", "0", "important");
           });
-          const marker = L$1.marker([hub.lat, hub.lng], { icon: hubIcon }).addTo(map);
-          marker.bindPopup(`
-        <div style="min-width: 180px; font-family: 'Inter', system-ui, sans-serif; padding: 3px 1px;">
-          <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">${hub.type}</div>
-          <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 3px; line-height: 1.3;">${hub.name}</div>
-          <div style="margin-top: 8px; display: flex; gap: 6px;">
-            <button onclick="window.__setMapPickup && window.__setMapPickup(${hub.lat}, ${hub.lng}, '${hub.name.replace(/'/g, "\\'")}')" style="background: #059669; color: #ffffff; border: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Set Location</button>
-          </div>
-        </div>
-      `, {
-            closeButton: true,
-            className: "luxury-custom-popup"
-          });
-          createdHubMarkers.push(marker);
-        });
-        hubMarkersRef.current = createdHubMarkers;
-        window.__setMapPickup = (lat, lng) => {
-          onMapClick(lat, lng);
-        };
-        map.on("click", async (e) => {
-          onMapClick(e.latlng.lat, e.latlng.lng);
-          try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}&zoom=18&addressdetails=1`);
-            if (res.ok) {
-              const data = await res.json();
-              const placeName = data.display_name ? data.display_name.split(",").slice(0, 2).join(",") : "Selected Location";
-              L$1.popup().setLatLng(e.latlng).setContent(`
-              <div style="min-width: 160px; font-family: 'Inter', system-ui, sans-serif; padding: 2px;">
-                <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Pinned Location</div>
-                <div style="font-size: 12px; font-weight: 700; color: #0f172a; margin-top: 2px;">${placeName}</div>
-              </div>
-            `).openOn(map);
+          const darkOverlays = container.querySelectorAll(".gm-style > div:first-child > div:last-child");
+          darkOverlays.forEach((el) => {
+            const bg = el.style.backgroundColor;
+            if (bg && bg.includes("rgba(0, 0, 0")) {
+              el.style.setProperty("display", "none", "important");
             }
-          } catch (err) {
+          });
+          const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+          let node;
+          const textNodesToHide = [];
+          while (node = walker.nextNode()) {
+            if (node.nodeValue && node.nodeValue.includes("For development purposes only")) {
+              if (node.parentElement) {
+                textNodesToHide.push(node.parentElement);
+              }
+            }
           }
+          textNodesToHide.forEach((el) => {
+            el.style.setProperty("display", "none", "important");
+            el.style.setProperty("opacity", "0", "important");
+            el.style.setProperty("visibility", "hidden", "important");
+          });
+        };
+        purgeOverlays();
+        const observer = new MutationObserver(purgeOverlays);
+        observer.observe(containerRef.current, {
+          childList: true,
+          subtree: true,
+          attributes: true
         });
-        mapRef.current = map;
+        const interval = setInterval(purgeOverlays, 250);
         return () => {
-          if (mapRef.current) {
-            mapRef.current.remove();
-            mapRef.current = null;
+          observer.disconnect();
+          clearInterval(interval);
+        };
+      }, [useGoogleMap]);
+      reactExports.useEffect(() => {
+        if (!containerRef.current) return;
+        const initMap = () => {
+          var _a, _b;
+          if (typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Map)) {
+            setUseGoogleMap(true);
+            if (!googleMapRef.current) {
+              const map = new window.google.maps.Map(containerRef.current, {
+                center: { lat: 52.414, lng: -1.815 },
+                zoom: 12,
+                styles: GOOGLE_MAP_STYLES,
+                disableDefaultUI: true,
+                zoomControl: false,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false,
+                clickableIcons: true,
+                // CRITICAL: Enables Google Business POI click events!
+                gestureHandling: "greedy"
+              });
+              const infoWindow = new window.google.maps.InfoWindow();
+              infoWindowRef.current = infoWindow;
+              window.__setPoiCoords = (lat, lng) => {
+                onMapClick(lat, lng);
+                infoWindow.close();
+              };
+              map.addListener("click", (e) => {
+                var _a2, _b2, _c;
+                if (e.placeId) {
+                  e.stop();
+                  const lat = e.latLng.lat();
+                  const lng = e.latLng.lng();
+                  if ((_c = (_b2 = (_a2 = window.google) == null ? void 0 : _a2.maps) == null ? void 0 : _b2.places) == null ? void 0 : _c.PlacesService) {
+                    const placesService = new window.google.maps.places.PlacesService(map);
+                    placesService.getDetails(
+                      { placeId: e.placeId, fields: ["name", "formatted_address", "geometry"] },
+                      (place, status) => {
+                        const placeName = (place == null ? void 0 : place.name) || "Business Location";
+                        const address = (place == null ? void 0 : place.formatted_address) || "";
+                        infoWindow.setContent(`
+                      <div style="font-family: 'Inter', system-ui, sans-serif; padding: 4px 6px; min-width: 170px;">
+                        <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Google Business</div>
+                        <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${placeName}</div>
+                        ${address ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">${address}</div>` : ""}
+                        <div style="margin-top: 8px; display: flex; gap: 6px;">
+                          <button onclick="window.__setPoiCoords && window.__setPoiCoords(${lat}, ${lng})" style="background: #059669; color: #ffffff; border: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Select Location</button>
+                        </div>
+                      </div>
+                    `);
+                        infoWindow.setPosition(e.latLng);
+                        infoWindow.open(map);
+                      }
+                    );
+                  }
+                  onMapClick(lat, lng);
+                } else if (e.latLng) {
+                  infoWindow.close();
+                  onMapClick(e.latLng.lat(), e.latLng.lng());
+                }
+              });
+              googleMapRef.current = map;
+            }
+          } else {
+            if (!leafletMapRef.current) {
+              const map = L$1.map(containerRef.current, {
+                center: [52.414, -1.815],
+                zoom: 11,
+                zoomControl: false,
+                attributionControl: false
+              });
+              L$1.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}", {
+                maxZoom: 20,
+                subdomains: ["mt0", "mt1", "mt2", "mt3"]
+              }).addTo(map);
+              map.on("click", (e) => {
+                onMapClick(e.latlng.lat, e.latlng.lng);
+              });
+              leafletMapRef.current = map;
+            }
           }
         };
-      }, []);
-      reactExports.useEffect(() => {
-        if (!mapContainerRef.current) return;
-        const observer = new ResizeObserver(() => {
-          if (mapRef.current) {
-            mapRef.current.invalidateSize();
-          }
-        });
-        observer.observe(mapContainerRef.current);
-        return () => observer.disconnect();
-      }, []);
-      reactExports.useEffect(() => {
-        if (!mapRef.current) return;
-        const map = mapRef.current;
-        if (pickupMarkerRef.current) {
-          pickupMarkerRef.current.remove();
-          pickupMarkerRef.current = null;
-        }
-        if (dropoffMarkerRef.current) {
-          dropoffMarkerRef.current.remove();
-          dropoffMarkerRef.current = null;
-        }
-        if (distanceMarkerRef.current) {
-          distanceMarkerRef.current.remove();
-          distanceMarkerRef.current = null;
-        }
-        if (routePolylineRef.current) {
-          routePolylineRef.current.remove();
-          routePolylineRef.current = null;
-        }
-        if (routeOutlineRef.current) {
-          routeOutlineRef.current.remove();
-          routeOutlineRef.current = null;
-        }
-        const bounds = L$1.latLngBounds([]);
-        let hasBounds = false;
-        if (pickupCoords) {
-          const pickupIcon = L$1.divIcon({
-            className: "custom-leaflet-marker",
-            html: `
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-            <div style="width: 32px; height: 32px; border-radius: 9999px; background: linear-gradient(135deg, #10b981, #059669); border: 3px solid #ffffff; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 9px; height: 9px; border-radius: 9999px; background-color: #ffffff;"></div>
-            </div>
-            <div style="margin-top: 2px; background-color: #064e3b; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.4); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;">PICKUP</div>
-          </div>
-        `,
-            iconSize: [32, 52],
-            iconAnchor: [16, 26]
-          });
-          const marker = L$1.marker([pickupCoords.lat, pickupCoords.lng], { icon: pickupIcon }).addTo(map);
-          marker.bindPopup(`
-        <div style="min-width: 170px; font-family: 'Inter', system-ui, sans-serif; padding: 3px 2px;">
-          <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">Pickup Location</div>
-          <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${pickupInput || "Selected Pickup Location"}</div>
-        </div>
-      `, { className: "luxury-custom-popup" });
-          pickupMarkerRef.current = marker;
-          bounds.extend([pickupCoords.lat, pickupCoords.lng]);
-          hasBounds = true;
-        }
-        if (dropoffCoords) {
-          const dropoffIcon = L$1.divIcon({
-            className: "custom-leaflet-marker",
-            html: `
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-            <div style="width: 32px; height: 32px; border-radius: 9999px; background: linear-gradient(135deg, #f43f5e, #e11d48); border: 3px solid #ffffff; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 9px; height: 9px; border-radius: 9999px; background-color: #ffffff;"></div>
-            </div>
-            <div style="margin-top: 2px; background-color: #881337; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.4); text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;">DROPOFF</div>
-          </div>
-        `,
-            iconSize: [32, 52],
-            iconAnchor: [16, 26]
-          });
-          const marker = L$1.marker([dropoffCoords.lat, dropoffCoords.lng], { icon: dropoffIcon }).addTo(map);
-          marker.bindPopup(`
-        <div style="min-width: 170px; font-family: 'Inter', system-ui, sans-serif; padding: 3px 2px;">
-          <div style="font-size: 10px; font-weight: 800; color: #e11d48; text-transform: uppercase; letter-spacing: 0.5px;">Destination</div>
-          <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px; line-height: 1.3;">${dropoffInput || "Selected Destination"}</div>
-        </div>
-      `, { className: "luxury-custom-popup" });
-          dropoffMarkerRef.current = marker;
-          bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
-          hasBounds = true;
-        }
-        if (pickupCoords && dropoffCoords) {
-          const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
-          fetch(osrmUrl).then((res) => res.json()).then((data) => {
-            if (data.routes && data.routes[0]) {
-              const route = data.routes[0];
-              const coordinates = route.geometry.coordinates;
-              const latLngs = coordinates.map((c) => [c[1], c[0]]);
-              const distanceMiles = route.distance / 1609.34;
-              const timeMinutes = route.duration / 60;
-              const outline = L$1.polyline(latLngs, {
-                color: "#064e3b",
-                weight: 7.5,
-                opacity: 0.35
-              }).addTo(map);
-              routeOutlineRef.current = outline;
-              const polyline = L$1.polyline(latLngs, {
-                color: "#059669",
-                weight: 5,
-                opacity: 0.95
-              }).addTo(map);
-              routePolylineRef.current = polyline;
-              const midIndex = Math.floor(latLngs.length / 2);
-              const midPoint = latLngs[midIndex] || latLngs[0];
-              const badgeIcon = L$1.divIcon({
-                className: "custom-distance-badge",
-                html: `
-                <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 3px 8px rgba(0,0,0,0.2); font-family: 'Inter', sans-serif; white-space: nowrap; cursor: pointer;">
-                  ${distanceMiles.toFixed(1)} mi (${Math.round(timeMinutes)} mins)
-                </div>
-              `,
-                iconSize: [90, 26],
-                iconAnchor: [45, 13]
-              });
-              const dMarker = L$1.marker(midPoint, { icon: badgeIcon }).addTo(map);
-              dMarker.bindPopup(`
-              <div style="font-family: 'Inter', sans-serif; padding: 2px; text-align: center;">
-                <div style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase;">Direct Driving Route</div>
-                <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 2px;">${distanceMiles.toFixed(1)} miles • ~${Math.round(timeMinutes)} minutes</div>
-              </div>
-            `);
-              distanceMarkerRef.current = dMarker;
-              onRouteCalculated({
-                distanceMiles,
-                timeMinutes,
-                routePoints: coordinates.map((c) => ({ lng: c[0], lat: c[1] })),
-                instructions: [
-                  `Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
-                ]
-              });
+        initMap();
+        const timer = setInterval(() => {
+          var _a, _b;
+          if (typeof window !== "undefined" && ((_b = (_a = window.google) == null ? void 0 : _a.maps) == null ? void 0 : _b.Map) && !googleMapRef.current) {
+            if (leafletMapRef.current) {
+              leafletMapRef.current.remove();
+              leafletMapRef.current = null;
             }
-          }).catch(() => {
-            const directLatLngs = [
-              [pickupCoords.lat, pickupCoords.lng],
-              [dropoffCoords.lat, dropoffCoords.lng]
-            ];
-            const polyline = L$1.polyline(directLatLngs, {
-              color: "#059669",
-              weight: 5,
-              opacity: 0.9
-            }).addTo(map);
-            routePolylineRef.current = polyline;
-          });
-          map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
-        } else if (hasBounds) {
-          const single = pickupCoords || dropoffCoords;
-          map.setView([single.lat, single.lng], 13);
+            initMap();
+            clearInterval(timer);
+          }
+        }, 400);
+        return () => clearInterval(timer);
+      }, []);
+      reactExports.useEffect(() => {
+        var _a;
+        if (useGoogleMap && googleMapRef.current && ((_a = window.google) == null ? void 0 : _a.maps)) {
+          const gMap = googleMapRef.current;
+          if (googlePickupMarkerRef.current) {
+            googlePickupMarkerRef.current.setMap(null);
+            googlePickupMarkerRef.current = null;
+          }
+          if (googleDropoffMarkerRef.current) {
+            googleDropoffMarkerRef.current.setMap(null);
+            googleDropoffMarkerRef.current = null;
+          }
+          if (googlePolylineRef.current) {
+            googlePolylineRef.current.setMap(null);
+            googlePolylineRef.current = null;
+          }
+          if (googlePolylineOutlineRef.current) {
+            googlePolylineOutlineRef.current.setMap(null);
+            googlePolylineOutlineRef.current = null;
+          }
+          const bounds = new window.google.maps.LatLngBounds();
+          if (pickupCoords) {
+            const pickupLatLng = new window.google.maps.LatLng(pickupCoords.lat, pickupCoords.lng);
+            const marker = new window.google.maps.Marker({
+              position: pickupLatLng,
+              map: gMap,
+              title: pickupInput || "Pickup Location",
+              icon: getGoogleMarkerIcon("#10b981"),
+              zIndex: 999
+            });
+            googlePickupMarkerRef.current = marker;
+            bounds.extend(pickupLatLng);
+          }
+          if (dropoffCoords) {
+            const dropoffLatLng = new window.google.maps.LatLng(dropoffCoords.lat, dropoffCoords.lng);
+            const marker = new window.google.maps.Marker({
+              position: dropoffLatLng,
+              map: gMap,
+              title: dropoffInput || "Drop-off Location",
+              icon: getGoogleMarkerIcon("#f43f5e"),
+              zIndex: 999
+            });
+            googleDropoffMarkerRef.current = marker;
+            bounds.extend(dropoffLatLng);
+          }
+          if (pickupCoords && dropoffCoords) {
+            const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson`;
+            fetch(osrmUrl).then((res) => res.json()).then((data) => {
+              if (data.routes && data.routes[0]) {
+                const route = data.routes[0];
+                const coordinates = route.geometry.coordinates;
+                const path = coordinates.map((c) => ({
+                  lat: c[1],
+                  lng: c[0]
+                }));
+                const distanceMiles = route.distance / 1609.34;
+                const timeMinutes = route.duration / 60;
+                const outline = new window.google.maps.Polyline({
+                  path,
+                  geodesic: true,
+                  strokeColor: "#064e3b",
+                  strokeOpacity: 0.35,
+                  strokeWeight: 7,
+                  map: gMap
+                });
+                googlePolylineOutlineRef.current = outline;
+                const polyline = new window.google.maps.Polyline({
+                  path,
+                  geodesic: true,
+                  strokeColor: "#059669",
+                  strokeOpacity: 0.95,
+                  strokeWeight: 4.5,
+                  map: gMap
+                });
+                googlePolylineRef.current = polyline;
+                path.forEach((pt) => bounds.extend(pt));
+                gMap.fitBounds(bounds, { top: 45, right: 45, bottom: 45, left: 45 });
+                onRouteCalculated({
+                  distanceMiles,
+                  timeMinutes,
+                  routePoints: path,
+                  instructions: [
+                    `Route via Roads (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
+                  ]
+                });
+              }
+            }).catch(() => {
+              const directPath = [
+                { lat: pickupCoords.lat, lng: pickupCoords.lng },
+                { lat: dropoffCoords.lat, lng: dropoffCoords.lng }
+              ];
+              const polyline = new window.google.maps.Polyline({
+                path: directPath,
+                strokeColor: "#059669",
+                strokeOpacity: 0.9,
+                strokeWeight: 4.5,
+                map: gMap
+              });
+              googlePolylineRef.current = polyline;
+              gMap.fitBounds(bounds, 50);
+            });
+          } else if (pickupCoords || dropoffCoords) {
+            const single = pickupCoords || dropoffCoords;
+            gMap.setCenter({ lat: single.lat, lng: single.lng });
+            gMap.setZoom(13);
+          }
+        } else if (leafletMapRef.current) {
+          const lMap = leafletMapRef.current;
+          if (leafletPickupMarkerRef.current) leafletPickupMarkerRef.current.remove();
+          if (leafletDropoffMarkerRef.current) leafletDropoffMarkerRef.current.remove();
+          if (leafletPolylineRef.current) leafletPolylineRef.current.remove();
+          const bounds = L$1.latLngBounds([]);
+          if (pickupCoords) {
+            const marker = L$1.circleMarker([pickupCoords.lat, pickupCoords.lng], {
+              radius: 8,
+              fillColor: "#10b981",
+              color: "#ffffff",
+              weight: 2,
+              fillOpacity: 1
+            }).addTo(lMap);
+            leafletPickupMarkerRef.current = marker;
+            bounds.extend([pickupCoords.lat, pickupCoords.lng]);
+          }
+          if (dropoffCoords) {
+            const marker = L$1.circleMarker([dropoffCoords.lat, dropoffCoords.lng], {
+              radius: 8,
+              fillColor: "#f43f5e",
+              color: "#ffffff",
+              weight: 2,
+              fillOpacity: 1
+            }).addTo(lMap);
+            leafletDropoffMarkerRef.current = marker;
+            bounds.extend([dropoffCoords.lat, dropoffCoords.lng]);
+          }
+          if (pickupCoords && dropoffCoords) {
+            const polyline = L$1.polyline(
+              [[pickupCoords.lat, pickupCoords.lng], [dropoffCoords.lat, dropoffCoords.lng]],
+              { color: "#059669", weight: 4.5 }
+            ).addTo(lMap);
+            leafletPolylineRef.current = polyline;
+            lMap.fitBounds(bounds, { padding: [40, 40] });
+          }
         }
-      }, [pickupCoords, dropoffCoords]);
+      }, [pickupCoords, dropoffCoords, useGoogleMap]);
       const handleZoomIn = () => {
-        if (mapRef.current) mapRef.current.zoomIn();
+        if (googleMapRef.current) {
+          googleMapRef.current.setZoom((googleMapRef.current.getZoom() || 11) + 1);
+        } else if (leafletMapRef.current) {
+          leafletMapRef.current.zoomIn();
+        }
       };
       const handleZoomOut = () => {
-        if (mapRef.current) mapRef.current.zoomOut();
+        if (googleMapRef.current) {
+          googleMapRef.current.setZoom((googleMapRef.current.getZoom() || 11) - 1);
+        } else if (leafletMapRef.current) {
+          leafletMapRef.current.zoomOut();
+        }
       };
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-full min-h-[350px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-inner", children: [
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative w-full h-full min-h-[350px] bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 shadow-inner", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "div",
           {
-            ref: mapContainerRef,
+            ref: containerRef,
             className: "w-full h-full min-h-[350px] z-0",
             style: { minHeight: "350px", width: "100%", height: "100%" }
           }
