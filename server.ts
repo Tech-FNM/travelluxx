@@ -94,6 +94,7 @@ const ServiceSchema = new mongoose.Schema({
   metaTitle: String,
   metaDescription: String,
   noIndexNoFollow: { type: Boolean, default: false },
+  faqs: { type: Array, default: [] },
   createdAt: { type: String, default: () => new Date().toISOString() },
   updatedAt: { type: String, default: () => new Date().toISOString() }
 }, { strict: false });
@@ -1441,6 +1442,7 @@ app.post("/api/admin/services", async (req, res) => {
       metaTitle: req.body.metaTitle || req.body.title,
       metaDescription: req.body.metaDescription || req.body.excerpt,
       noIndexNoFollow: !!req.body.noIndexNoFollow,
+      faqs: Array.isArray(req.body.faqs) ? req.body.faqs : [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };

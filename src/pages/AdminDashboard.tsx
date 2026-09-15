@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles, HelpCircle } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { getServiceIcon } from "../utils/serviceIcons";
@@ -469,7 +469,8 @@ export default function AdminDashboard() {
     order: 0,
     metaTitle: "",
     metaDescription: "",
-    noIndexNoFollow: false
+    noIndexNoFollow: false,
+    faqs: [] as any[]
   });
   const [servicesPageSettings, setServicesPageSettings] = useState<any>({
     hero_tag: "OUR SERVICES",
@@ -489,7 +490,11 @@ export default function AdminDashboard() {
     how_it_works_tag: "HOW IT WORKS",
     how_it_works_title: "Simple Steps to Your Destination",
     how_it_works_description: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
-    how_it_works_steps: []
+    how_it_works_steps: [],
+    faq_tag: "FREQUENTLY ASKED QUESTIONS",
+    faq_title: "Got Questions? We Have Answers",
+    faq_description: "Everything you need to know about our luxury chauffeur services, airport transfers, vehicle fleet, and booking policies.",
+    faqs: [] as any[]
   });
   const [yoastServiceTab, setYoastServiceTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [focusKeyphraseService, setFocusKeyphraseService] = useState("");
@@ -753,7 +758,8 @@ export default function AdminDashboard() {
             order: found.order !== undefined ? found.order : 0,
             metaTitle: found.metaTitle || "",
             metaDescription: found.metaDescription || "",
-            noIndexNoFollow: !!found.noIndexNoFollow
+            noIndexNoFollow: !!found.noIndexNoFollow,
+            faqs: found.faqs || []
           });
         }
       } else if (routeSubtab === "new") {
@@ -778,7 +784,8 @@ export default function AdminDashboard() {
           order: services.length + 1,
           metaTitle: "",
           metaDescription: "",
-          noIndexNoFollow: false
+          noIndexNoFollow: false,
+          faqs: []
         });
       } else if (routeSubtab === "page-settings") {
         setEditingService("page-settings");
@@ -3609,6 +3616,180 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
+                  {/* 4. Frequently Asked Questions (FAQ) Section */}
+                  <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <HelpCircle className="w-4 h-4 text-[#d4a359]" />
+                        4. Frequently Asked Questions (FAQ) Section
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentFaqs = Array.isArray(servicesPageSettings.faqs) ? [...servicesPageSettings.faqs] : [];
+                          currentFaqs.push({ question: "", answer: "" });
+                          setServicesPageSettings({ ...servicesPageSettings, faqs: currentFaqs });
+                        }}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        Add FAQ Item
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">FAQ Badge Tag</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.faq_tag || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, faq_tag: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="FREQUENTLY ASKED QUESTIONS"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">FAQ Section Title</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.faq_title || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, faq_title: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="Got Questions? We Have Answers"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">FAQ Section Description</label>
+                      <textarea
+                        rows={2}
+                        value={servicesPageSettings.faq_description || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, faq_description: e.target.value })}
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        placeholder="Everything you need to know about our chauffeur services, booking process, flight monitoring, and luxury vehicles."
+                      />
+                    </div>
+
+                    {/* FAQ Items List */}
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-bold text-[#1d2327] uppercase tracking-wide">
+                          FAQ Items ({Array.isArray(servicesPageSettings.faqs) ? servicesPageSettings.faqs.length : 0})
+                        </label>
+                      </div>
+
+                      {(!servicesPageSettings.faqs || servicesPageSettings.faqs.length === 0) ? (
+                        <div className="border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50">
+                          <p className="text-xs text-slate-500 mb-2">No custom FAQs added to the services page yet.</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setServicesPageSettings({
+                                ...servicesPageSettings,
+                                faqs: [
+                                  { question: "How far in advance should I book my chauffeur service?", answer: "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule." },
+                                  { question: "What happens if my flight is delayed?", answer: "We actively track all flights in real-time and provide complimentary 60 minutes waiting time from touchdown." },
+                                  { question: "Are your prices fixed and all-inclusive?", answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees." }
+                                ]
+                              });
+                            }}
+                            className="text-xs text-[#2271b1] font-semibold hover:underline"
+                          >
+                            + Load Recommended Default FAQs
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {servicesPageSettings.faqs.map((faq: any, idx: number) => (
+                            <div key={idx} className="border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm">
+                              <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                                <span className="font-bold text-xs text-slate-700 uppercase tracking-wider">
+                                  FAQ #{idx + 1}
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  {idx > 0 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const newFaqs = [...servicesPageSettings.faqs];
+                                        const temp = newFaqs[idx - 1];
+                                        newFaqs[idx - 1] = newFaqs[idx];
+                                        newFaqs[idx] = temp;
+                                        setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                                      }}
+                                      className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                      title="Move Up"
+                                    >
+                                      ↑
+                                    </button>
+                                  )}
+                                  {idx < servicesPageSettings.faqs.length - 1 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const newFaqs = [...servicesPageSettings.faqs];
+                                        const temp = newFaqs[idx + 1];
+                                        newFaqs[idx + 1] = newFaqs[idx];
+                                        newFaqs[idx] = temp;
+                                        setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                                      }}
+                                      className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                      title="Move Down"
+                                    >
+                                      ↓
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newFaqs = servicesPageSettings.faqs.filter((_: any, i: number) => i !== idx);
+                                      setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                                    }}
+                                    className="text-red-500 hover:text-red-700 p-1 transition ml-1"
+                                    title="Delete FAQ"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Question</label>
+                                <input
+                                  type="text"
+                                  value={faq.question || ""}
+                                  onChange={e => {
+                                    const newFaqs = [...servicesPageSettings.faqs];
+                                    newFaqs[idx].question = e.target.value;
+                                    setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                                  }}
+                                  placeholder="e.g. What happens if my flight arrives early or late?"
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Answer</label>
+                                <textarea
+                                  rows={2}
+                                  value={faq.answer || ""}
+                                  onChange={e => {
+                                    const newFaqs = [...servicesPageSettings.faqs];
+                                    newFaqs[idx].answer = e.target.value;
+                                    setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                                  }}
+                                  placeholder="Enter the detailed answer for your clients..."
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Save Button */}
                   <div className="pt-4 flex justify-end">
                     <button
@@ -3774,6 +3955,78 @@ export default function AdminDashboard() {
                           modules={quillModules}
                           className="h-64 mb-12"
                         />
+                      </div>
+                    </div>
+
+                    {/* Service Specific FAQs Editor Block */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm">
+                      <div className="border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7] flex justify-between items-center">
+                        <h3 className="font-semibold text-xs text-[#2c3338] flex items-center gap-1.5">
+                          <HelpCircle className="w-3.5 h-3.5 text-[#d4a359]" />
+                          Service FAQs (Frequently Asked Questions)
+                        </h3>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedFaqs = [...(serviceForm.faqs || []), { question: "", answer: "" }];
+                            setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                          }}
+                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded-sm text-[10px] font-semibold transition flex items-center gap-1"
+                        >
+                          <Plus className="w-3 h-3" />
+                          Add Service FAQ
+                        </button>
+                      </div>
+                      <div className="p-4 space-y-4">
+                        {(!serviceForm.faqs || serviceForm.faqs.length === 0) ? (
+                          <p className="text-xs text-slate-400">
+                            No service-specific FAQs added yet. If left empty, the general services FAQs will be displayed on this service detail page. Click "+ Add Service FAQ" to create custom FAQs for this service.
+                          </p>
+                        ) : (
+                          (serviceForm.faqs || []).map((faq: any, idx: number) => (
+                            <div key={idx} className="border border-slate-200 p-3 rounded bg-slate-50 relative space-y-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updatedFaqs = (serviceForm.faqs || []).filter((_: any, i: number) => i !== idx);
+                                  setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                                }}
+                                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                title="Remove FAQ"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                              <div>
+                                <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Question #{idx + 1}</label>
+                                <input
+                                  type="text"
+                                  value={faq.question}
+                                  onChange={e => {
+                                    const updatedFaqs = [...(serviceForm.faqs || [])];
+                                    updatedFaqs[idx].question = e.target.value;
+                                    setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                                  }}
+                                  placeholder="Enter Question..."
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Answer</label>
+                                <textarea
+                                  rows={2}
+                                  value={faq.answer}
+                                  onChange={e => {
+                                    const updatedFaqs = [...(serviceForm.faqs || [])];
+                                    updatedFaqs[idx].answer = e.target.value;
+                                    setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                                  }}
+                                  placeholder="Enter Answer..."
+                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                                />
+                              </div>
+                            </div>
+                          ))
+                        )}
                       </div>
                     </div>
 

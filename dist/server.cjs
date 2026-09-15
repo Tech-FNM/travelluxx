@@ -114,6 +114,7 @@ var ServiceSchema = new import_mongoose.default.Schema({
   metaTitle: String,
   metaDescription: String,
   noIndexNoFollow: { type: Boolean, default: false },
+  faqs: { type: Array, default: [] },
   createdAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() },
   updatedAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
 }, { strict: false });
@@ -1303,6 +1304,7 @@ app.post("/api/admin/services", async (req, res) => {
       metaTitle: req.body.metaTitle || req.body.title,
       metaDescription: req.body.metaDescription || req.body.excerpt,
       noIndexNoFollow: !!req.body.noIndexNoFollow,
+      faqs: Array.isArray(req.body.faqs) ? req.body.faqs : [],
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };

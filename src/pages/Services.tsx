@@ -19,6 +19,8 @@ import {
   CheckCircle2,
   ChevronRight,
   ArrowRight,
+  ChevronDown,
+  HelpCircle,
 } from "lucide-react";
 
 // Default fallback services if API not yet populated
@@ -145,10 +147,44 @@ const DEFAULT_STEPS = [
   },
 ];
 
+const DEFAULT_FAQS = [
+  {
+    question: "How far in advance should I book my chauffeur service?",
+    answer:
+      "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule. However, we also accommodate last-minute bookings subject to vehicle availability.",
+  },
+  {
+    question: "What happens if my flight is delayed?",
+    answer:
+      "We actively track all flights in real-time. Your chauffeur will automatically adjust your pickup time according to your actual flight arrival, and our airport service includes complimentary 60 minutes waiting time from touchdown.",
+  },
+  {
+    question: "Are your prices fixed and all-inclusive?",
+    answer:
+      "Yes. All our rates are 100% fixed and transparent with zero hidden fees. Fuel, taxes, standard wait time, and flight tracking are all included in your quote.",
+  },
+  {
+    question: "What is your cancellation and amendment policy?",
+    answer:
+      "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time. Cancellations made within 12 hours may be subject to a cancellation fee.",
+  },
+  {
+    question: "Can I request child seats or additional luggage capacity?",
+    answer:
+      "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge. For larger parties with excess luggage, our Mercedes V-Class luxury MPVs comfortably accommodate up to 7-8 passengers and 8 large suitcases.",
+  },
+  {
+    question: "What vehicles are in the TravelLuxx fleet?",
+    answer:
+      "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports.",
+  },
+];
+
 export default function Services() {
   const [settings, setSettings] = useState<any>(null);
   const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
   const [pageSettings, setPageSettings] = useState<any>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   useEffect(() => {
     // Global website settings
@@ -270,6 +306,40 @@ export default function Services() {
     pageSettings.how_it_works_steps.length > 0
       ? pageSettings.how_it_works_steps
       : DEFAULT_STEPS;
+
+  const faqTag = pageSettings?.faq_tag || "FREQUENTLY ASKED QUESTIONS";
+  const faqTitle = pageSettings?.faq_title || "Got Questions? We Have Answers";
+  const faqDescription =
+    pageSettings?.faq_description ||
+    "Everything you need to know about our luxury chauffeur services, airport transfers, vehicle fleet, and booking policies.";
+  const faqs =
+    Array.isArray(pageSettings?.faqs) && pageSettings.faqs.length > 0
+      ? pageSettings.faqs
+      : DEFAULT_FAQS;
+
+  // Add FAQ JSON-LD schema for rich SEO results
+  useEffect(() => {
+    if (!faqs || faqs.length === 0) return;
+    let script = document.getElementById("services-faq-schema") as HTMLScriptElement;
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "services-faq-schema";
+      script.type = "application/ld+json";
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f: any) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: f.answer,
+        },
+      })),
+    });
+  }, [faqs]);
 
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-[#d4a359] selection:text-slate-950">
@@ -514,6 +584,96 @@ export default function Services() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================= */}
+        {/* 5. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION)            */}
+        {/* ========================================================= */}
+        <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <div className="text-center space-y-3 mb-14">
+              <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+                {faqTag}
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                {faqTitle}
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                {faqDescription}
+              </p>
+            </div>
+
+            {/* Accordion Cards */}
+            <div className="space-y-3.5">
+              {faqs.map((faq: any, idx: number) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    className={`rounded-xl border transition-all duration-200 overflow-hidden ${
+                      isOpen
+                        ? "border-[#d4a359]/70 bg-[#faf8f5] shadow-sm ring-1 ring-[#d4a359]/20"
+                        : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                      className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                      aria-expanded={isOpen}
+                    >
+                      <span
+                        className={`text-sm sm:text-base font-bold transition-colors ${
+                          isOpen ? "text-slate-950" : "text-slate-800"
+                        }`}
+                      >
+                        {faq.question}
+                      </span>
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                          isOpen
+                            ? "bg-[#d4a359] text-slate-950 rotate-180 shadow-sm"
+                            : "bg-slate-100 text-slate-500"
+                        }`}
+                      >
+                        <ChevronDown className="w-4 h-4" />
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-[#d4a359]/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Concierge Callout Box */}
+            <div className="mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10 relative overflow-hidden">
+              <div className="space-y-1.5 text-center sm:text-left relative z-10">
+                <span className="text-[#d4a359] text-[11px] font-extrabold uppercase tracking-widest block">
+                  STILL HAVE QUESTIONS?
+                </span>
+                <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                  Our 24/7 concierge team is ready to assist you
+                </h4>
+                <p className="text-slate-400 text-xs sm:text-sm max-w-lg">
+                  Whether you need custom journey planning, corporate multi-car transfers, or special requests, we're here around the clock.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0 relative z-10">
+                <a
+                  href="/#calculator"
+                  className="inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c29143] text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
+                >
+                  <span>Get Instant Quote</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           </div>
         </section>

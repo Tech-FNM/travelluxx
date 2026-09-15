@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CuZtMkmv.js"(exports, module) {
+  "assets/index-C9-ottfC.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -39758,7 +39758,8 @@ ${escapeText(this.code(index, length))}
         order: 0,
         metaTitle: "",
         metaDescription: "",
-        noIndexNoFollow: false
+        noIndexNoFollow: false,
+        faqs: []
       });
       const [servicesPageSettings, setServicesPageSettings] = reactExports.useState({
         hero_tag: "OUR SERVICES",
@@ -39778,7 +39779,11 @@ ${escapeText(this.code(index, length))}
         how_it_works_tag: "HOW IT WORKS",
         how_it_works_title: "Simple Steps to Your Destination",
         how_it_works_description: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
-        how_it_works_steps: []
+        how_it_works_steps: [],
+        faq_tag: "FREQUENTLY ASKED QUESTIONS",
+        faq_title: "Got Questions? We Have Answers",
+        faq_description: "Everything you need to know about our luxury chauffeur services, airport transfers, vehicle fleet, and booking policies.",
+        faqs: []
       });
       const [yoastServiceTab, setYoastServiceTab] = reactExports.useState("seo");
       const [focusKeyphraseService, setFocusKeyphraseService] = reactExports.useState("");
@@ -40013,7 +40018,8 @@ ${escapeText(this.code(index, length))}
                 order: found.order !== void 0 ? found.order : 0,
                 metaTitle: found.metaTitle || "",
                 metaDescription: found.metaDescription || "",
-                noIndexNoFollow: !!found.noIndexNoFollow
+                noIndexNoFollow: !!found.noIndexNoFollow,
+                faqs: found.faqs || []
               });
             }
           } else if (routeSubtab === "new") {
@@ -40038,7 +40044,8 @@ ${escapeText(this.code(index, length))}
               order: services.length + 1,
               metaTitle: "",
               metaDescription: "",
-              noIndexNoFollow: false
+              noIndexNoFollow: false,
+              faqs: []
             });
           } else if (routeSubtab === "page-settings") {
             setEditingService("page-settings");
@@ -42936,6 +42943,187 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-4 h-4 text-[#d4a359]" }),
+                      "4. Frequently Asked Questions (FAQ) Section"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => {
+                          const currentFaqs = Array.isArray(servicesPageSettings.faqs) ? [...servicesPageSettings.faqs] : [];
+                          currentFaqs.push({ question: "", answer: "" });
+                          setServicesPageSettings({ ...servicesPageSettings, faqs: currentFaqs });
+                        },
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                          "Add FAQ Item"
+                        ]
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "FAQ Badge Tag" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "text",
+                          value: servicesPageSettings.faq_tag || "",
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, faq_tag: e.target.value }),
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "FREQUENTLY ASKED QUESTIONS"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "FAQ Section Title" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "text",
+                          value: servicesPageSettings.faq_title || "",
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, faq_title: e.target.value }),
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "Got Questions? We Have Answers"
+                        }
+                      )
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "FAQ Section Description" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "textarea",
+                      {
+                        rows: 2,
+                        value: servicesPageSettings.faq_description || "",
+                        onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, faq_description: e.target.value }),
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                        placeholder: "Everything you need to know about our chauffeur services, booking process, flight monitoring, and luxury vehicles."
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 pt-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-bold text-[#1d2327] uppercase tracking-wide", children: [
+                      "FAQ Items (",
+                      Array.isArray(servicesPageSettings.faqs) ? servicesPageSettings.faqs.length : 0,
+                      ")"
+                    ] }) }),
+                    !servicesPageSettings.faqs || servicesPageSettings.faqs.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mb-2", children: "No custom FAQs added to the services page yet." }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            setServicesPageSettings({
+                              ...servicesPageSettings,
+                              faqs: [
+                                { question: "How far in advance should I book my chauffeur service?", answer: "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule." },
+                                { question: "What happens if my flight is delayed?", answer: "We actively track all flights in real-time and provide complimentary 60 minutes waiting time from touchdown." },
+                                { question: "Are your prices fixed and all-inclusive?", answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees." }
+                              ]
+                            });
+                          },
+                          className: "text-xs text-[#2271b1] font-semibold hover:underline",
+                          children: "+ Load Recommended Default FAQs"
+                        }
+                      )
+                    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: servicesPageSettings.faqs.map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-xs text-slate-700 uppercase tracking-wider", children: [
+                          "FAQ #",
+                          idx + 1
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+                          idx > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const newFaqs = [...servicesPageSettings.faqs];
+                                const temp = newFaqs[idx - 1];
+                                newFaqs[idx - 1] = newFaqs[idx];
+                                newFaqs[idx] = temp;
+                                setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                              },
+                              className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                              title: "Move Up",
+                              children: "↑"
+                            }
+                          ),
+                          idx < servicesPageSettings.faqs.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const newFaqs = [...servicesPageSettings.faqs];
+                                const temp = newFaqs[idx + 1];
+                                newFaqs[idx + 1] = newFaqs[idx];
+                                newFaqs[idx] = temp;
+                                setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                              },
+                              className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                              title: "Move Down",
+                              children: "↓"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const newFaqs = servicesPageSettings.faqs.filter((_, i) => i !== idx);
+                                setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                              },
+                              className: "text-red-500 hover:text-red-700 p-1 transition ml-1",
+                              title: "Delete FAQ",
+                              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-4 h-4" })
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Question" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "input",
+                          {
+                            type: "text",
+                            value: faq.question || "",
+                            onChange: (e) => {
+                              const newFaqs = [...servicesPageSettings.faqs];
+                              newFaqs[idx].question = e.target.value;
+                              setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                            },
+                            placeholder: "e.g. What happens if my flight arrives early or late?",
+                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          }
+                        )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Answer" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "textarea",
+                          {
+                            rows: 2,
+                            value: faq.answer || "",
+                            onChange: (e) => {
+                              const newFaqs = [...servicesPageSettings.faqs];
+                              newFaqs[idx].answer = e.target.value;
+                              setServicesPageSettings({ ...servicesPageSettings, faqs: newFaqs });
+                            },
+                            placeholder: "Enter the detailed answer for your clients...",
+                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          }
+                        )
+                      ] })
+                    ] }, idx)) })
+                  ] })
+                ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-4 flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "button",
                   {
@@ -43096,6 +43284,81 @@ ${escapeText(this.code(index, length))}
                           className: "h-64 mb-12"
                         }
                       ) })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7] flex justify-between items-center", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "font-semibold text-xs text-[#2c3338] flex items-center gap-1.5", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-3.5 h-3.5 text-[#d4a359]" }),
+                          "Service FAQs (Frequently Asked Questions)"
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => {
+                              const updatedFaqs = [...serviceForm.faqs || [], { question: "", answer: "" }];
+                              setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                            },
+                            className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded-sm text-[10px] font-semibold transition flex items-center gap-1",
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3 h-3" }),
+                              "Add Service FAQ"
+                            ]
+                          }
+                        )
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4 space-y-4", children: !serviceForm.faqs || serviceForm.faqs.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400", children: 'No service-specific FAQs added yet. If left empty, the general services FAQs will be displayed on this service detail page. Click "+ Add Service FAQ" to create custom FAQs for this service.' }) : (serviceForm.faqs || []).map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-slate-200 p-3 rounded bg-slate-50 relative space-y-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => {
+                              const updatedFaqs = (serviceForm.faqs || []).filter((_, i) => i !== idx);
+                              setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                            },
+                            className: "absolute top-2 right-2 text-red-500 hover:text-red-700",
+                            title: "Remove FAQ",
+                            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: [
+                            "Question #",
+                            idx + 1
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: faq.question,
+                              onChange: (e) => {
+                                const updatedFaqs = [...serviceForm.faqs || []];
+                                updatedFaqs[idx].question = e.target.value;
+                                setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                              },
+                              placeholder: "Enter Question...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Answer" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: faq.answer,
+                              onChange: (e) => {
+                                const updatedFaqs = [...serviceForm.faqs || []];
+                                updatedFaqs[idx].answer = e.target.value;
+                                setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                              },
+                              placeholder: "Enter Answer...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                            }
+                          )
+                        ] })
+                      ] }, idx)) })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx(
                       YoastSeoBox,
@@ -45201,10 +45464,37 @@ ${escapeText(this.code(index, length))}
         description: "Sit back, relax and travel comfortably to your destination."
       }
     ];
+    const DEFAULT_FAQS = [
+      {
+        question: "How far in advance should I book my chauffeur service?",
+        answer: "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule. However, we also accommodate last-minute bookings subject to vehicle availability."
+      },
+      {
+        question: "What happens if my flight is delayed?",
+        answer: "We actively track all flights in real-time. Your chauffeur will automatically adjust your pickup time according to your actual flight arrival, and our airport service includes complimentary 60 minutes waiting time from touchdown."
+      },
+      {
+        question: "Are your prices fixed and all-inclusive?",
+        answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees. Fuel, taxes, standard wait time, and flight tracking are all included in your quote."
+      },
+      {
+        question: "What is your cancellation and amendment policy?",
+        answer: "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time. Cancellations made within 12 hours may be subject to a cancellation fee."
+      },
+      {
+        question: "Can I request child seats or additional luggage capacity?",
+        answer: "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge. For larger parties with excess luggage, our Mercedes V-Class luxury MPVs comfortably accommodate up to 7-8 passengers and 8 large suitcases."
+      },
+      {
+        question: "What vehicles are in the TravelLuxx fleet?",
+        answer: "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports."
+      }
+    ];
     function Services() {
       const [settings, setSettings] = reactExports.useState(null);
       const [services, setServices] = reactExports.useState(DEFAULT_SERVICES);
       const [pageSettings, setPageSettings] = reactExports.useState(null);
+      const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
       reactExports.useEffect(() => {
         fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error("Failed to load settings:", err));
         fetch("/api/services").then((res) => res.json()).then((data) => {
@@ -45270,6 +45560,32 @@ ${escapeText(this.code(index, length))}
       const howItWorksTitle = (pageSettings == null ? void 0 : pageSettings.how_it_works_title) || "Simple Steps to Your Destination";
       const howItWorksDescription = (pageSettings == null ? void 0 : pageSettings.how_it_works_description) || "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.";
       const howItWorksSteps = Array.isArray(pageSettings == null ? void 0 : pageSettings.how_it_works_steps) && pageSettings.how_it_works_steps.length > 0 ? pageSettings.how_it_works_steps : DEFAULT_STEPS;
+      const faqTag = (pageSettings == null ? void 0 : pageSettings.faq_tag) || "FREQUENTLY ASKED QUESTIONS";
+      const faqTitle = (pageSettings == null ? void 0 : pageSettings.faq_title) || "Got Questions? We Have Answers";
+      const faqDescription = (pageSettings == null ? void 0 : pageSettings.faq_description) || "Everything you need to know about our luxury chauffeur services, airport transfers, vehicle fleet, and booking policies.";
+      const faqs = Array.isArray(pageSettings == null ? void 0 : pageSettings.faqs) && pageSettings.faqs.length > 0 ? pageSettings.faqs : DEFAULT_FAQS;
+      reactExports.useEffect(() => {
+        if (!faqs || faqs.length === 0) return;
+        let script = document.getElementById("services-faq-schema");
+        if (!script) {
+          script = document.createElement("script");
+          script.id = "services-faq-schema";
+          script.type = "application/ld+json";
+          document.head.appendChild(script);
+        }
+        script.text = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: f.answer
+            }
+          }))
+        });
+      }, [faqs]);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-[#d4a359] selection:text-slate-950", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
         }, settings }),
@@ -45416,6 +45732,69 @@ ${escapeText(this.code(index, length))}
                 step.number || idx
               );
             }) })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-white border-t border-slate-200/70", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-3 mb-14", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block", children: faqTag }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: faqTitle }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto", children: faqDescription })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3.5", children: faqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-[#d4a359]/70 bg-[#faf8f5] shadow-sm ring-1 ring-[#d4a359]/20" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setOpenFaqIndex(isOpen ? null : idx),
+                        className: "w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none",
+                        "aria-expanded": isOpen,
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "span",
+                            {
+                              className: `text-sm sm:text-base font-bold transition-colors ${isOpen ? "text-slate-950" : "text-slate-800"}`,
+                              children: faq.question
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "div",
+                            {
+                              className: `w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${isOpen ? "bg-[#d4a359] text-slate-950 rotate-180 shadow-sm" : "bg-slate-100 text-slate-500"}`,
+                              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "w-4 h-4" })
+                            }
+                          )
+                        ]
+                      }
+                    ),
+                    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-5 sm:px-6 pb-5 pt-1 border-t border-[#d4a359]/15 text-slate-600 text-xs sm:text-sm leading-relaxed", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: faq.answer }) })
+                  ]
+                },
+                idx
+              );
+            }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10 relative overflow-hidden", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5 text-center sm:text-left relative z-10", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#d4a359] text-[11px] font-extrabold uppercase tracking-widest block", children: "STILL HAVE QUESTIONS?" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-base sm:text-lg font-bold text-white tracking-tight", children: "Our 24/7 concierge team is ready to assist you" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-xs sm:text-sm max-w-lg", children: "Whether you need custom journey planning, corporate multi-car transfers, or special requests, we're here around the clock." })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3 shrink-0 relative z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "a",
+                {
+                  href: "/#calculator",
+                  className: "inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c29143] text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Get Instant Quote" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-3.5 h-3.5" })
+                  ]
+                }
+              ) })
+            ] })
           ] }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
@@ -45431,6 +45810,7 @@ ${escapeText(this.code(index, length))}
       const [websiteSettings, setWebsiteSettings] = reactExports.useState(null);
       const [loading, setLoading] = reactExports.useState(true);
       const [notFound, setNotFound] = reactExports.useState(false);
+      const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
       reactExports.useEffect(() => {
         window.scrollTo(0, 0);
         setLoading(true);
@@ -45834,6 +46214,76 @@ ${escapeText(this.code(index, length))}
                 step.num
               );
             }) })
+          ] }) }),
+          ((service == null ? void 0 : service.faqs) && service.faqs.length > 0 || (pageSettings == null ? void 0 : pageSettings.faqs) && pageSettings.faqs.length > 0) && /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-white border-t border-slate-200/70", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-3 mb-14", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block", children: "FREQUENTLY ASKED QUESTIONS" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: [
+                "Questions About Our ",
+                (service == null ? void 0 : service.title) || "Chauffeur Service"
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto", children: "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet." })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3.5", children: ((service == null ? void 0 : service.faqs) && service.faqs.length > 0 ? service.faqs : pageSettings.faqs).map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-[#d4a359]/70 bg-[#faf8f5] shadow-sm ring-1 ring-[#d4a359]/20" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setOpenFaqIndex(isOpen ? null : idx),
+                        className: "w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none",
+                        "aria-expanded": isOpen,
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "span",
+                            {
+                              className: `text-sm sm:text-base font-bold transition-colors ${isOpen ? "text-slate-950" : "text-slate-800"}`,
+                              children: faq.question
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "div",
+                            {
+                              className: `w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${isOpen ? "bg-[#d4a359] text-slate-950 rotate-180 shadow-sm" : "bg-slate-100 text-slate-500"}`,
+                              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "w-4 h-4" })
+                            }
+                          )
+                        ]
+                      }
+                    ),
+                    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-5 sm:px-6 pb-5 pt-1 border-t border-[#d4a359]/15 text-slate-600 text-xs sm:text-sm leading-relaxed", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: faq.answer }) })
+                  ]
+                },
+                idx
+              );
+            }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5 text-center sm:text-left", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#d4a359] text-[11px] font-extrabold uppercase tracking-widest block", children: "NEED ASSISTANCE?" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { className: "text-base sm:text-lg font-bold text-white tracking-tight", children: [
+                  "Have additional questions about ",
+                  (service == null ? void 0 : service.title) || "this service",
+                  "?"
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-xs sm:text-sm", children: "Speak directly with our concierge team or request an instant bespoke quotation." })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "a",
+                {
+                  href: "/#calculator",
+                  className: "inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c29143] text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Book Now" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-3.5 h-3.5" })
+                  ]
+                }
+              ) })
+            ] })
           ] }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {

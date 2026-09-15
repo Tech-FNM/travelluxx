@@ -16,7 +16,8 @@ import {
   Star,
   MapPin,
   CalendarDays,
-  Tag
+  Tag,
+  ChevronDown
 } from "lucide-react";
 
 export default function ServiceDetail() {
@@ -29,6 +30,7 @@ export default function ServiceDetail() {
   const [websiteSettings, setWebsiteSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   useEffect(() => {
     // Scroll to top on slug change
@@ -590,6 +592,96 @@ export default function ServiceDetail() {
             </div>
           </div>
         </section>
+
+        {/* ========================================================= */}
+        {/* 5. SERVICE FAQs ACCORDION                                 */}
+        {/* ========================================================= */}
+        {((service?.faqs && service.faqs.length > 0) || (pageSettings?.faqs && pageSettings.faqs.length > 0)) && (
+          <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center space-y-3 mb-14">
+                <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  FREQUENTLY ASKED QUESTIONS
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                  Questions About Our {service?.title || "Chauffeur Service"}
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                  Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet.
+                </p>
+              </div>
+
+              <div className="space-y-3.5">
+                {((service?.faqs && service.faqs.length > 0) ? service.faqs : pageSettings.faqs).map((faq: any, idx: number) => {
+                  const isOpen = openFaqIndex === idx;
+                  return (
+                    <div
+                      key={idx}
+                      className={`rounded-xl border transition-all duration-200 overflow-hidden ${
+                        isOpen
+                          ? "border-[#d4a359]/70 bg-[#faf8f5] shadow-sm ring-1 ring-[#d4a359]/20"
+                          : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                        className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                        aria-expanded={isOpen}
+                      >
+                        <span
+                          className={`text-sm sm:text-base font-bold transition-colors ${
+                            isOpen ? "text-slate-950" : "text-slate-800"
+                          }`}
+                        >
+                          {faq.question}
+                        </span>
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                            isOpen
+                              ? "bg-[#d4a359] text-slate-950 rotate-180 shadow-sm"
+                              : "bg-slate-100 text-slate-500"
+                          }`}
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
+                      </button>
+                      {isOpen && (
+                        <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-[#d4a359]/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                          <p>{faq.answer}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Concierge Box */}
+              <div className="mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10">
+                <div className="space-y-1.5 text-center sm:text-left">
+                  <span className="text-[#d4a359] text-[11px] font-extrabold uppercase tracking-widest block">
+                    NEED ASSISTANCE?
+                  </span>
+                  <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                    Have additional questions about {service?.title || "this service"}?
+                  </h4>
+                  <p className="text-slate-400 text-xs sm:text-sm">
+                    Speak directly with our concierge team or request an instant bespoke quotation.
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <a
+                    href="/#calculator"
+                    className="inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c29143] text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
+                  >
+                    <span>Book Now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer onScrollTo={() => {}} settings={websiteSettings} />

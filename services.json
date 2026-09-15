@@ -130,5 +130,41 @@
     "order": 6,
     "metaTitle": "VIP Luxury Chauffeur Service UK | TravelLuxx",
     "metaDescription": "Unrivalled luxury chauffeur services in the UK. Flagship executive fleet for weddings, VIP events, and special occasions."
+  },
+  {
+    "id": "service-hourly-as-directed",
+    "title": "Hourly & As-Directed Chauffeur",
+    "slug": "hourly-as-directed-chauffeur",
+    "excerpt": "Flexible hourly luxury chauffeur service for business meetings, shopping sprees, city tours, and multi-stop journeys.",
+    "content": "<h2>Flexible Hourly & As-Directed Chauffeur Hire</h2><p>Need a dedicated luxury car and chauffeur on standby for a few hours or the entire day? TravelLuxx's as-directed service gives you complete freedom to travel on your own schedule with zero time pressure.</p><h3>Total Flexibility & Unlimited Stops</h3><p>Whether you are attending back-to-back corporate appointments across London, embarking on a designer shopping spree, or touring historical UK landmarks, your chauffeur remains at your beck and call throughout your booking.</p><h3>Executive Comfort on Standby</h3><p>Work seamlessly on the road with complimentary Wi-Fi and power outlets, or simply relax knowing your driver is waiting outside whenever you are ready to proceed to your next destination.</p>",
+    "image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80",
+    "heroImage": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    "icon": "Clock",
+    "features": [
+      "Flexible booking from 3 hours to full-day hire",
+      "Chauffeur & luxury car on dedicated standby",
+      "Unlimited stops within your booked timeframe",
+      "Complimentary chilled mineral water & Wi-Fi",
+      "Transparent fixed hourly pricing without surge"
+    ],
+    "priceText": "From £55/hr",
+    "published": true,
+    "order": 7,
+    "metaTitle": "Hourly Chauffeur Service UK | TravelLuxx As-Directed Hire",
+    "metaDescription": "Book an executive chauffeur by the hour with TravelLuxx. Dedicated luxury as-directed vehicle and chauffeur hire across London and the UK.",
+    "faqs": [
+      {
+        "question": "What is the minimum hire period for hourly service?",
+        "answer": "Our hourly as-directed chauffeur hire requires a minimum booking of 3 hours."
+      },
+      {
+        "question": "Can I extend my hours during the journey?",
+        "answer": "Yes, you can easily extend your hire duration on the day by notifying your chauffeur or calling our 24/7 team."
+      },
+      {
+        "question": "Are fuel and parking fees included?",
+        "answer": "Fuel is included within agreed mileage allowances. Congestion charges and parking fees are billed transparently at actual cost."
+      }
+    ]
   }
 ]

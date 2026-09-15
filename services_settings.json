@@ -72,5 +72,34 @@
       "title": "Enjoy Your Journey",
       "description": "Sit back, relax and travel comfortably to your destination."
     }
+  ],
+  "faq_tag": "FREQUENTLY ASKED QUESTIONS",
+  "faq_title": "Got Questions? We Have Answers",
+  "faq_description": "Everything you need to know about our chauffeur services, booking process, flight monitoring, and luxury vehicles.",
+  "faqs": [
+    {
+      "question": "How far in advance should I book my chauffeur service?",
+      "answer": "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule. However, we also accommodate last-minute bookings subject to vehicle availability."
+    },
+    {
+      "question": "What happens if my flight is delayed?",
+      "answer": "We actively track all flights in real-time. Your chauffeur will automatically adjust your pickup time according to your actual flight arrival, and our airport service includes complimentary 60 minutes waiting time from touchdown."
+    },
+    {
+      "question": "Are your prices fixed and all-inclusive?",
+      "answer": "Yes. All our rates are 100% fixed and transparent with zero hidden fees. Fuel, taxes, standard wait time, and flight tracking are all included in your quote."
+    },
+    {
+      "question": "What is your cancellation and amendment policy?",
+      "answer": "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time. Cancellations made within 12 hours may be subject to a cancellation fee."
+    },
+    {
+      "question": "Can I request child seats or additional luggage capacity?",
+      "answer": "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge. For larger parties with excess luggage, our Mercedes V-Class luxury MPVs comfortably accommodate up to 7-8 passengers and 8 large suitcases."
+    },
+    {
+      "question": "What vehicles are in the TravelLuxx fleet?",
+      "answer": "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports."
+    }
   ]
 }
