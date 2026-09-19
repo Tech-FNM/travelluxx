@@ -192,6 +192,88 @@ export default function ServiceDetail() {
     ? `+${websiteSettings.whatsapp_number}`
     : "+44 121 714 0876";
 
+  const defaultPerks = [
+    "24/7 Availability & Instant Confirmation",
+    "Fixed Price Guarantee — No Hidden Fees",
+    "Licensed, DBS-Checked Executive Chauffeurs",
+    "Immaculate Mercedes Fleet with Free Wi-Fi"
+  ];
+  const sidebarPerks = Array.isArray(service.sidebarPerks) && service.sidebarPerks.length > 0
+    ? service.sidebarPerks
+    : defaultPerks;
+
+  const defaultWhyChoose = [
+    {
+      icon: "UserCheck",
+      title: "Professional & Experienced Drivers",
+      desc: "Skilled, courteous and fully licensed.",
+    },
+    {
+      icon: "Car",
+      title: "Comfortable Vehicles",
+      desc: "Modern, clean and well-maintained fleet.",
+    },
+    {
+      icon: "Tag",
+      title: "Fixed & Transparent Pricing",
+      desc: "No hidden charges, no surprises.",
+    },
+    {
+      icon: "Clock",
+      title: "24/7 Booking Support",
+      desc: "We're always here to help you.",
+    },
+    {
+      icon: "MapPin",
+      title: "Airport & Nationwide Coverage",
+      desc: "All major airports and locations across the UK.",
+    },
+    {
+      icon: "ShieldCheck",
+      title: "Punctual & Reliable Service",
+      desc: "On time, every time.",
+    },
+  ];
+
+  const whyChooseList = Array.isArray(service.whyChooseItems) && service.whyChooseItems.length > 0
+    ? service.whyChooseItems
+    : defaultWhyChoose;
+
+  const defaultSteps = [
+    {
+      num: "01",
+      icon: "CalendarDays",
+      title: "Book Your Journey",
+      desc: "Enter your pickup, destination and journey details.",
+    },
+    {
+      num: "02",
+      icon: "CheckCircle2",
+      title: "Get Your Confirmation",
+      desc: "Receive your booking confirmation with all journey details.",
+    },
+    {
+      num: "03",
+      icon: "UserCheck",
+      title: "Meet Your Driver",
+      desc: "Your professional driver arrives at the agreed pickup location.",
+    },
+    {
+      num: "04",
+      icon: "Car",
+      title: "Enjoy Your Journey",
+      desc: "Sit back, relax and travel comfortably to your destination.",
+    },
+  ];
+
+  const stepsList = Array.isArray(service.howItWorksSteps) && service.howItWorksSteps.length > 0
+    ? service.howItWorksSteps
+    : defaultSteps;
+
+  const faqsList = (Array.isArray(service.faqs) && service.faqs.length > 0)
+    ? service.faqs
+    : (pageSettings?.faqs || []);
+
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
       <Navbar onScrollTo={() => {}} settings={websiteSettings} />
@@ -229,7 +311,7 @@ export default function ServiceDetail() {
             <div className="max-w-3xl space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.18em]">
                 <IconComponent className="w-3.5 h-3.5 text-emerald-400" />
-                <span>EXECUTIVE CHAUFFEUR SERVICE</span>
+                <span>{service.heroBadge || "EXECUTIVE CHAUFFEUR SERVICE"}</span>
               </div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
@@ -244,23 +326,26 @@ export default function ServiceDetail() {
 
               <div className="pt-4 flex flex-wrap items-center gap-3">
                 <a
-                  href="/#calculator"
+                  href={service.heroBtn1Url || "/#calculator"}
                   className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
                 >
-                  <span>Book This Service</span>
+                  <span>{service.heroBtn1Text || "Book This Service"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
 
                 <a
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                    `Hello TravelLuxx, I would like to inquire about your ${service.title} service.`
-                  )}`}
+                  href={
+                    service.heroBtn2Url ||
+                    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                      `Hello TravelLuxx, I would like to inquire about your ${service.title} service.`
+                    )}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3.5 rounded-full text-sm backdrop-blur-sm transition duration-300"
                 >
                   <MessageSquare className="w-4 h-4 text-emerald-400" />
-                  <span>WhatsApp Inquiry</span>
+                  <span>{service.heroBtn2Text || "WhatsApp Inquiry"}</span>
                 </a>
               </div>
             </div>
@@ -287,13 +372,13 @@ export default function ServiceDetail() {
                 )}
 
                 {/* Key Highlights / Features Box */}
-                {features.length > 0 && (
+                {service.highlightsEnabled !== false && features.length > 0 && (
                   <div className="bg-[#f8fafc] border border-slate-200/80 rounded-2xl p-6 sm:p-8">
                     <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-emerald-600 mb-2">
-                      KEY HIGHLIGHTS
+                      {service.highlightsBadge || "KEY HIGHLIGHTS"}
                     </h3>
                     <h4 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6">
-                      What Sets This Service Apart
+                      {service.highlightsTitle || "What Sets This Service Apart"}
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {features.map((feat: string, idx: number) => (
@@ -310,8 +395,8 @@ export default function ServiceDetail() {
                   </div>
                 )}
 
-                {/* Rich Text Body Content */}
-                <div className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600">
+                {/* Rich Text Body Content with Enhanced Hierarchy */}
+                <div className="service-rich-content">
                   {service.content ? (
                     <div dangerouslySetInnerHTML={{ __html: service.content }} />
                   ) : (
@@ -322,26 +407,28 @@ export default function ServiceDetail() {
                 </div>
 
                 {/* Trust & Guarantee Banner */}
-                <div className="bg-gradient-to-br from-[#0c101d] to-[#161d31] rounded-2xl p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-                  <div className="space-y-2 text-center sm:text-left">
-                    <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.15em]">
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                      <span>THE TRAVELLUXX STANDARD</span>
+                {service.guaranteeEnabled !== false && (
+                  <div className="bg-gradient-to-br from-[#0c101d] to-[#161d31] rounded-2xl p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+                    <div className="space-y-2 text-center sm:text-left">
+                      <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.15em]">
+                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                        <span>{service.guaranteeBadge || "THE TRAVELLUXX STANDARD"}</span>
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-bold">
+                        {service.guaranteeTitle || `Ready to Book Your ${service.title}?`}
+                      </h3>
+                      <p className="text-slate-400 text-xs sm:text-sm max-w-md">
+                        {service.guaranteeSubtitle || "Get an instant fixed fare in seconds with our online journey calculator."}
+                      </p>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-bold">
-                      Ready to Book Your {service.title}?
-                    </h3>
-                    <p className="text-slate-400 text-xs sm:text-sm max-w-md">
-                      Get an instant fixed fare in seconds with our online journey calculator.
-                    </p>
+                    <a
+                      href={service.guaranteeBtnUrl || "/#calculator"}
+                      className="shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm transition shadow-lg hover:scale-105 active:scale-95"
+                    >
+                      {service.guaranteeBtnText || "Instant Quote"}
+                    </a>
                   </div>
-                  <a
-                    href="/#calculator"
-                    className="shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm transition shadow-lg hover:scale-105 active:scale-95"
-                  >
-                    Instant Quote
-                  </a>
-                </div>
+                )}
               </div>
 
               {/* Right Sidebar */}
@@ -350,9 +437,11 @@ export default function ServiceDetail() {
                 <div className="bg-[#0c101d] text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-white/10 sticky top-24 space-y-6">
                   <div className="border-b border-white/10 pb-6">
                     <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-[0.2em] block mb-1">
-                      RESERVE YOUR RIDE
+                      {service.sidebarBadge || "RESERVE YOUR RIDE"}
                     </span>
-                    <h3 className="text-xl font-bold text-white">Book Online Instantly</h3>
+                    <h3 className="text-xl font-bold text-white">
+                      {service.sidebarTitle || "Book Online Instantly"}
+                    </h3>
                     {service.priceText && (
                       <div className="mt-3 flex items-baseline gap-2">
                         <span className="text-xs text-slate-400">Rates:</span>
@@ -363,45 +452,36 @@ export default function ServiceDetail() {
                     )}
                   </div>
 
+                  {/* Sidebar Perks */}
                   <div className="space-y-3 text-xs text-slate-300">
-                    <div className="flex items-center gap-2.5">
-                      <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>24/7 Availability &amp; Instant Confirmation</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <Tag className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Fixed Price Guarantee — No Hidden Fees</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <UserCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Licensed, DBS-Checked Executive Chauffeurs</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <Car className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Immaculate Mercedes Fleet with Free Wi-Fi</span>
-                    </div>
+                    {sidebarPerks.map((perk: string, pIdx: number) => (
+                      <div key={pIdx} className="flex items-center gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>{perk}</span>
+                      </div>
+                    ))}
                   </div>
 
                   <div className="space-y-2.5 pt-2">
                     <a
-                      href="/#calculator"
+                      href={service.sidebarBtn1Url || "/#calculator"}
                       className="w-full inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-6 rounded-xl text-sm transition shadow-lg shadow-emerald-500/20"
                     >
-                      <span>Calculate Fare &amp; Book</span>
+                      <span>{service.sidebarBtn1Text || "Calculate Fare & Book"}</span>
                       <ArrowRight className="w-4 h-4" />
                     </a>
 
                     <a
-                      href={`tel:${formattedPhone}`}
+                      href={service.sidebarBtn2Url || `tel:${formattedPhone}`}
                       className="w-full inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl text-xs border border-white/10 transition"
                     >
                       <Phone className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Call {formattedPhone}</span>
+                      <span>{service.sidebarBtn2Text || `Call ${formattedPhone}`}</span>
                     </a>
                   </div>
 
                   {/* Other Services Navigation List */}
-                  {allServices.length > 0 && (
+                  {service.showSidebarServices !== false && allServices.length > 0 && (
                     <div className="border-t border-white/10 pt-6 mt-6">
                       <h4 className="text-xs font-extrabold uppercase tracking-[0.18em] text-emerald-400 mb-4">
                         ALL OUR SERVICES
@@ -438,181 +518,129 @@ export default function ServiceDetail() {
         </section>
 
         {/* ========================================================= */}
-        {/* 3. WHY CHOOSE TRAVELLUXX (SHARED LUXURY SECTION)          */}
+        {/* 3. WHY CHOOSE SECTION                                     */}
         {/* ========================================================= */}
-        <section className="relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden">
-          <div
-            className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 bg-cover bg-right bg-no-repeat opacity-20 lg:opacity-40 pointer-events-none z-0"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80')",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0c101d] via-[#0c101d]/60 to-transparent"></div>
-          </div>
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl space-y-3 mb-16">
-              <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                WHY CHOOSE TRAVELLUXX
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Your Trusted Travel Partner
-              </h2>
-              <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-                We go the extra mile to ensure every journey is comfortable, safe and hassle-free.
-              </p>
+        {service.whyChooseEnabled !== false && (
+          <section className="relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden">
+            <div
+              className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 bg-cover bg-right bg-no-repeat opacity-20 lg:opacity-40 pointer-events-none z-0"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80')",
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c101d] via-[#0c101d]/60 to-transparent"></div>
             </div>
 
-            {/* 6 Features in 3x2 Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-              {[
-                {
-                  icon: UserCheck,
-                  title: "Professional & Experienced Drivers",
-                  desc: "Skilled, courteous and fully licensed.",
-                },
-                {
-                  icon: Car,
-                  title: "Comfortable Vehicles",
-                  desc: "Modern, clean and well-maintained fleet.",
-                },
-                {
-                  icon: Tag,
-                  title: "Fixed & Transparent Pricing",
-                  desc: "No hidden charges, no surprises.",
-                },
-                {
-                  icon: Clock,
-                  title: "24/7 Booking Support",
-                  desc: "We're always here to help you.",
-                },
-                {
-                  icon: MapPin,
-                  title: "Airport & Nationwide Coverage",
-                  desc: "All major airports and locations across the UK.",
-                },
-                {
-                  icon: ShieldCheck,
-                  title: "Punctual & Reliable Service",
-                  desc: "On time, every time.",
-                },
-              ].map((item, idx) => {
-                const ItemIcon = item.icon;
-                return (
-                  <div key={idx} className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
-                      <ItemIcon className="w-5 h-5 text-emerald-400" />
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-2xl space-y-3 mb-16">
+                <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  {service.whyChooseBadge || "WHY CHOOSE TRAVELLUXX"}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                  {service.whyChooseTitle || "Your Trusted Travel Partner"}
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                  {service.whyChooseSubtitle || "We go the extra mile to ensure every journey is comfortable, safe and hassle-free."}
+                </p>
+              </div>
+
+              {/* Grid of features */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+                {whyChooseList.map((item: any, idx: number) => {
+                  const ItemIcon = getServiceIcon(item.icon);
+                  return (
+                    <div key={idx} className="flex items-start space-x-4">
+                      <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
+                        <ItemIcon className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                          {item.title}
+                        </h4>
+                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                          {item.desc || item.description}
+                        </p>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
-                        {item.title}
-                      </h4>
-                      <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ========================================================= */}
         {/* 4. HOW IT WORKS                                           */}
         {/* ========================================================= */}
-        <section className="py-20 lg:py-24 bg-[#fafbfc]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                HOW IT WORKS
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                Simple Steps to Your Destination
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.
-              </p>
-            </div>
+        {service.howItWorksEnabled !== false && (
+          <section className="py-20 lg:py-24 bg-[#fafbfc]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  {service.howItWorksBadge || "HOW IT WORKS"}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                  {service.howItWorksTitle || "Simple Steps to Your Destination"}
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  {service.howItWorksSubtitle || "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time."}
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-              {[
-                {
-                  num: "01",
-                  icon: CalendarDays,
-                  title: "Book Your Journey",
-                  desc: "Enter your pickup, destination and journey details.",
-                },
-                {
-                  num: "02",
-                  icon: CheckCircle2,
-                  title: "Get Your Confirmation",
-                  desc: "Receive your booking confirmation with all journey details.",
-                },
-                {
-                  num: "03",
-                  icon: UserCheck,
-                  title: "Meet Your Driver",
-                  desc: "Your professional driver arrives at the agreed pickup location.",
-                },
-                {
-                  num: "04",
-                  icon: Car,
-                  title: "Enjoy Your Journey",
-                  desc: "Sit back, relax and travel comfortably to your destination.",
-                },
-              ].map((step, idx) => {
-                const StepIcon = step.icon;
-                return (
-                  <div
-                    key={step.num}
-                    className="relative flex flex-col items-center text-center space-y-3 group"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
-                      {step.num}
-                    </div>
-                    <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-800 transition-transform group-hover:scale-105">
-                      <StepIcon className="w-6 h-6 text-slate-800" />
-                    </div>
-                    <h4 className="text-sm font-bold text-slate-900 pt-1">
-                      {step.title}
-                    </h4>
-                    <p className="text-slate-500 text-xs leading-relaxed max-w-xs">
-                      {step.desc}
-                    </p>
-                    {idx < 3 && (
-                      <div className="hidden lg:flex absolute top-10 -right-4 transform -translate-y-1/2 text-slate-300">
-                        <ChevronRight className="w-5 h-5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                {stepsList.map((step: any, idx: number) => {
+                  const StepIcon = getServiceIcon(step.icon);
+                  return (
+                    <div
+                      key={step.num || step.number || idx}
+                      className="relative flex flex-col items-center text-center space-y-3 group"
+                    >
+                      <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
+                        {step.num || step.number || `0${idx + 1}`}
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+                      <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-800 transition-transform group-hover:scale-105">
+                        <StepIcon className="w-6 h-6 text-slate-800" />
+                      </div>
+                      <h4 className="text-sm font-bold text-slate-900 pt-1">
+                        {step.title}
+                      </h4>
+                      <p className="text-slate-500 text-xs leading-relaxed max-w-xs">
+                        {step.desc || step.description}
+                      </p>
+                      {idx < stepsList.length - 1 && (
+                        <div className="hidden lg:flex absolute top-10 -right-4 transform -translate-y-1/2 text-slate-300">
+                          <ChevronRight className="w-5 h-5" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ========================================================= */}
         {/* 5. SERVICE FAQs ACCORDION                                 */}
         {/* ========================================================= */}
-        {((service?.faqs && service.faqs.length > 0) || (pageSettings?.faqs && pageSettings.faqs.length > 0)) && (
+        {service.faqsEnabled !== false && faqsList.length > 0 && (
           <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center space-y-3 mb-14">
                 <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                  FREQUENTLY ASKED QUESTIONS
+                  {service.faqBadge || "FREQUENTLY ASKED QUESTIONS"}
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                  Questions About Our {service?.title || "Chauffeur Service"}
+                  {service.faqTitle || `Questions About Our ${service?.title || "Chauffeur Service"}`}
                 </h2>
                 <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                  Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet.
+                  {service.faqSubtitle || "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."}
                 </p>
               </div>
 
               <div className="space-y-3.5">
-                {((service?.faqs && service.faqs.length > 0) ? service.faqs : pageSettings.faqs).map((faq: any, idx: number) => {
+                {faqsList.map((faq: any, idx: number) => {
                   const isOpen = openFaqIndex === idx;
                   return (
                     <div
@@ -664,3 +692,4 @@ export default function ServiceDetail() {
     </div>
   );
 }
+

@@ -470,7 +470,56 @@ export default function AdminDashboard() {
     metaTitle: "",
     metaDescription: "",
     noIndexNoFollow: false,
-    faqs: [] as any[]
+    faqs: [] as any[],
+    // Dynamic Hero Banner Fields
+    heroBadge: "EXECUTIVE CHAUFFEUR SERVICE",
+    heroBtn1Text: "Book This Service",
+    heroBtn1Url: "/#calculator",
+    heroBtn2Text: "WhatsApp Inquiry",
+    heroBtn2Url: "",
+    // Dynamic Highlights Box Fields
+    highlightsEnabled: true,
+    highlightsBadge: "KEY HIGHLIGHTS",
+    highlightsTitle: "What Sets This Service Apart",
+    // Dynamic Guarantee Banner Fields
+    guaranteeEnabled: true,
+    guaranteeBadge: "THE TRAVELLUXX STANDARD",
+    guaranteeTitle: "",
+    guaranteeSubtitle: "Get an instant fixed fare in seconds with our online journey calculator.",
+    guaranteeBtnText: "Instant Quote",
+    guaranteeBtnUrl: "/#calculator",
+    // Dynamic Sidebar Card Fields
+    sidebarBadge: "RESERVE YOUR RIDE",
+    sidebarTitle: "Book Online Instantly",
+    sidebarBtn1Text: "Calculate Fare & Book",
+    sidebarBtn1Url: "/#calculator",
+    sidebarBtn2Text: "",
+    sidebarBtn2Url: "",
+    sidebarPerks: [
+      "24/7 Availability & Instant Confirmation",
+      "Fixed Price Guarantee — No Hidden Fees",
+      "Licensed, DBS-Checked Executive Chauffeurs",
+      "Immaculate Mercedes Fleet with Free Wi-Fi"
+    ] as string[],
+    newSidebarPerk: "",
+    showSidebarServices: true,
+    // Dynamic Why Choose Section Fields
+    whyChooseEnabled: true,
+    whyChooseBadge: "WHY CHOOSE TRAVELLUXX",
+    whyChooseTitle: "Your Trusted Travel Partner",
+    whyChooseSubtitle: "We go the extra mile to ensure every journey is comfortable, safe and hassle-free.",
+    whyChooseItems: [] as any[],
+    // Dynamic How It Works Section Fields
+    howItWorksEnabled: true,
+    howItWorksBadge: "HOW IT WORKS",
+    howItWorksTitle: "Simple Steps to Your Destination",
+    howItWorksSubtitle: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+    howItWorksSteps: [] as any[],
+    // Dynamic FAQ Section Fields
+    faqsEnabled: true,
+    faqBadge: "FREQUENTLY ASKED QUESTIONS",
+    faqTitle: "",
+    faqSubtitle: "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
   });
   const [servicesPageSettings, setServicesPageSettings] = useState<any>({
     hero_enabled: true,
@@ -545,6 +594,7 @@ export default function AdminDashboard() {
   const [focusKeyphrasePost, setFocusKeyphrasePost] = useState("");
   const [focusKeyphrasePage, setFocusKeyphrasePage] = useState("");
   const [editingHomepage, setEditingHomepage] = useState(false);
+  const [editingServicesPage, setEditingServicesPage] = useState(false);
   const [showMollieKey, setShowMollieKey] = useState(false);
   const [testEmailLoading, setTestEmailLoading] = useState(false);
   const [testEmailResult, setTestEmailResult] = useState<{success: boolean; message: string} | null>(null);
@@ -609,6 +659,7 @@ export default function AdminDashboard() {
 
   // Menu editor
   const [newMenuItem, setNewMenuItem] = useState({ label: "", href: "", target: "_self" });
+  const [newSubMenuItems, setNewSubMenuItems] = useState<{ [parentId: string]: { label: string; href: string; target: string } }>({});
 
   useEffect(() => {
     if (token) {
@@ -697,6 +748,8 @@ export default function AdminDashboard() {
         const found = pages.find(p => p.id === routeId);
         if (found) {
           setEditingPage(found);
+          setEditingHomepage(false);
+          setEditingServicesPage(false);
           setPageForm({
             title: found.title,
             slug: found.slug,
@@ -716,6 +769,8 @@ export default function AdminDashboard() {
         }
       } else if (routeSubtab === "new") {
         setEditingPage(null);
+        setEditingHomepage(false);
+        setEditingServicesPage(false);
         setPageForm({
           title: "",
           slug: "",
@@ -734,10 +789,16 @@ export default function AdminDashboard() {
         });
       } else if (routeSubtab === "homepage") {
         setEditingHomepage(true);
+        setEditingServicesPage(false);
+        setEditingPage(undefined);
+      } else if (routeSubtab === "services-page") {
+        setEditingServicesPage(true);
+        setEditingHomepage(false);
         setEditingPage(undefined);
       } else {
         setEditingPage(undefined);
         setEditingHomepage(false);
+        setEditingServicesPage(false);
       }
     }
   }, [routeTab, routeSubtab, routeId, pages, token]);
@@ -766,7 +827,51 @@ export default function AdminDashboard() {
             metaTitle: found.metaTitle || "",
             metaDescription: found.metaDescription || "",
             noIndexNoFollow: !!found.noIndexNoFollow,
-            faqs: found.faqs || []
+            faqs: found.faqs || [],
+            heroBadge: found.heroBadge || "EXECUTIVE CHAUFFEUR SERVICE",
+            heroBtn1Text: found.heroBtn1Text || "Book This Service",
+            heroBtn1Url: found.heroBtn1Url || "/#calculator",
+            heroBtn2Text: found.heroBtn2Text || "WhatsApp Inquiry",
+            heroBtn2Url: found.heroBtn2Url || "",
+            highlightsEnabled: found.highlightsEnabled !== false,
+            highlightsBadge: found.highlightsBadge || "KEY HIGHLIGHTS",
+            highlightsTitle: found.highlightsTitle || "What Sets This Service Apart",
+            guaranteeEnabled: found.guaranteeEnabled !== false,
+            guaranteeBadge: found.guaranteeBadge || "THE TRAVELLUXX STANDARD",
+            guaranteeTitle: found.guaranteeTitle || "",
+            guaranteeSubtitle: found.guaranteeSubtitle || "Get an instant fixed fare in seconds with our online journey calculator.",
+            guaranteeBtnText: found.guaranteeBtnText || "Instant Quote",
+            guaranteeBtnUrl: found.guaranteeBtnUrl || "/#calculator",
+            sidebarBadge: found.sidebarBadge || "RESERVE YOUR RIDE",
+            sidebarTitle: found.sidebarTitle || "Book Online Instantly",
+            sidebarBtn1Text: found.sidebarBtn1Text || "Calculate Fare & Book",
+            sidebarBtn1Url: found.sidebarBtn1Url || "/#calculator",
+            sidebarBtn2Text: found.sidebarBtn2Text || "",
+            sidebarBtn2Url: found.sidebarBtn2Url || "",
+            sidebarPerks: Array.isArray(found.sidebarPerks) && found.sidebarPerks.length > 0
+              ? found.sidebarPerks
+              : [
+                  "24/7 Availability & Instant Confirmation",
+                  "Fixed Price Guarantee — No Hidden Fees",
+                  "Licensed, DBS-Checked Executive Chauffeurs",
+                  "Immaculate Mercedes Fleet with Free Wi-Fi"
+                ],
+            newSidebarPerk: "",
+            showSidebarServices: found.showSidebarServices !== false,
+            whyChooseEnabled: found.whyChooseEnabled !== false,
+            whyChooseBadge: found.whyChooseBadge || "WHY CHOOSE TRAVELLUXX",
+            whyChooseTitle: found.whyChooseTitle || "Your Trusted Travel Partner",
+            whyChooseSubtitle: found.whyChooseSubtitle || "We go the extra mile to ensure every journey is comfortable, safe and hassle-free.",
+            whyChooseItems: Array.isArray(found.whyChooseItems) ? found.whyChooseItems : [],
+            howItWorksEnabled: found.howItWorksEnabled !== false,
+            howItWorksBadge: found.howItWorksBadge || "HOW IT WORKS",
+            howItWorksTitle: found.howItWorksTitle || "Simple Steps to Your Destination",
+            howItWorksSubtitle: found.howItWorksSubtitle || "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+            howItWorksSteps: Array.isArray(found.howItWorksSteps) ? found.howItWorksSteps : [],
+            faqsEnabled: found.faqsEnabled !== false,
+            faqBadge: found.faqBadge || "FREQUENTLY ASKED QUESTIONS",
+            faqTitle: found.faqTitle || "",
+            faqSubtitle: found.faqSubtitle || "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
           });
         }
       } else if (routeSubtab === "new") {
@@ -792,7 +897,49 @@ export default function AdminDashboard() {
           metaTitle: "",
           metaDescription: "",
           noIndexNoFollow: false,
-          faqs: []
+          faqs: [],
+          heroBadge: "EXECUTIVE CHAUFFEUR SERVICE",
+          heroBtn1Text: "Book This Service",
+          heroBtn1Url: "/#calculator",
+          heroBtn2Text: "WhatsApp Inquiry",
+          heroBtn2Url: "",
+          highlightsEnabled: true,
+          highlightsBadge: "KEY HIGHLIGHTS",
+          highlightsTitle: "What Sets This Service Apart",
+          guaranteeEnabled: true,
+          guaranteeBadge: "THE TRAVELLUXX STANDARD",
+          guaranteeTitle: "",
+          guaranteeSubtitle: "Get an instant fixed fare in seconds with our online journey calculator.",
+          guaranteeBtnText: "Instant Quote",
+          guaranteeBtnUrl: "/#calculator",
+          sidebarBadge: "RESERVE YOUR RIDE",
+          sidebarTitle: "Book Online Instantly",
+          sidebarBtn1Text: "Calculate Fare & Book",
+          sidebarBtn1Url: "/#calculator",
+          sidebarBtn2Text: "",
+          sidebarBtn2Url: "",
+          sidebarPerks: [
+            "24/7 Availability & Instant Confirmation",
+            "Fixed Price Guarantee — No Hidden Fees",
+            "Licensed, DBS-Checked Executive Chauffeurs",
+            "Immaculate Mercedes Fleet with Free Wi-Fi"
+          ],
+          newSidebarPerk: "",
+          showSidebarServices: true,
+          whyChooseEnabled: true,
+          whyChooseBadge: "WHY CHOOSE TRAVELLUXX",
+          whyChooseTitle: "Your Trusted Travel Partner",
+          whyChooseSubtitle: "We go the extra mile to ensure every journey is comfortable, safe and hassle-free.",
+          whyChooseItems: [],
+          howItWorksEnabled: true,
+          howItWorksBadge: "HOW IT WORKS",
+          howItWorksTitle: "Simple Steps to Your Destination",
+          howItWorksSubtitle: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+          howItWorksSteps: [],
+          faqsEnabled: true,
+          faqBadge: "FREQUENTLY ASKED QUESTIONS",
+          faqTitle: "",
+          faqSubtitle: "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
         });
       } else if (routeSubtab === "page-settings") {
         setEditingService("page-settings");
@@ -1321,6 +1468,49 @@ export default function AdminDashboard() {
     setMenuItems(items);
   };
   const removeMenuItem = (id: string) => setMenuItems(menuItems.filter(m => m.id !== id));
+
+  const addSubMenuItem = (parentId: string, parentIdx: number) => {
+    const sub = newSubMenuItems[parentId];
+    if (!sub || !sub.label?.trim() || !sub.href?.trim()) {
+      showToast("Sub-menu label and link are required!", "error");
+      return;
+    }
+    const updated = [...menuItems];
+    if (!Array.isArray(updated[parentIdx].children)) {
+      updated[parentIdx].children = [];
+    }
+    updated[parentIdx].children.push({
+      id: `sub-${Date.now()}`,
+      label: sub.label.trim(),
+      href: sub.href.trim(),
+      target: sub.target || "_self"
+    });
+    setMenuItems(updated);
+    setNewSubMenuItems(prev => ({
+      ...prev,
+      [parentId]: { label: "", href: "", target: "_self" }
+    }));
+    showToast("Sub-menu item added!");
+  };
+
+  const removeSubMenuItem = (parentIdx: number, subId: string) => {
+    const updated = [...menuItems];
+    if (Array.isArray(updated[parentIdx].children)) {
+      updated[parentIdx].children = updated[parentIdx].children.filter((c: any) => c.id !== subId);
+      setMenuItems(updated);
+      showToast("Sub-menu item removed.");
+    }
+  };
+
+  const moveSubMenuItem = (parentIdx: number, subIdx: number, dir: -1 | 1) => {
+    const updated = [...menuItems];
+    const children = [...(updated[parentIdx].children || [])];
+    const swap = subIdx + dir;
+    if (swap < 0 || swap >= children.length) return;
+    [children[subIdx], children[swap]] = [children[swap], children[subIdx]];
+    updated[parentIdx].children = children;
+    setMenuItems(updated);
+  };
 
   // ─── Settings ─────────────────────────────────────────────────────────────────
   const saveSettings = async (e: React.FormEvent) => {
@@ -2873,6 +3063,272 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
+              ) : editingServicesPage ? (
+                <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
+                  {/* WordPress Style Editor Top Bar */}
+                  <div className="bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none">
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold text-slate-800 text-[13px]">Services Main Page Layout (/services)</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <a
+                        href="/services"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2271b1] px-3 py-1.5 rounded-sm font-semibold transition flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        View Live
+                      </a>
+                      <button
+                        type="button"
+                        onClick={saveServicesPageSettings}
+                        disabled={isSaving}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        {isSaving && (
+                          <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                        )}
+                        Save Services Page Settings
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/admin/pages")}
+                        className="border border-[#c3c4c7] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition"
+                      >
+                        Back to Pages
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-[#f0f0f1]">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                      <div className="lg:col-span-3 space-y-6">
+                        {/* 1. Hero Section */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                              <Sparkles className="w-4 h-4 text-emerald-600" />
+                              1. Hero Section Content
+                            </h3>
+                            <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={servicesPageSettings.hero_enabled !== false}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_enabled: e.target.checked })}
+                                className="rounded text-emerald-600 focus:ring-emerald-500"
+                              />
+                              <span className={servicesPageSettings.hero_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                                {servicesPageSettings.hero_enabled !== false ? "Section Visible" : "Section Hidden"}
+                              </span>
+                            </label>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Badge Tag</label>
+                              <input
+                                type="text"
+                                value={servicesPageSettings.hero_tag || ""}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_tag: e.target.value })}
+                                className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="OUR SERVICES"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Headline</label>
+                              <input
+                                type="text"
+                                value={servicesPageSettings.hero_title || ""}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_title: e.target.value })}
+                                className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="Premium, Reliable & Comfortable Travel Services"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Subtitle / Description</label>
+                            <textarea
+                              rows={2}
+                              value={servicesPageSettings.hero_description || ""}
+                              onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_description: e.target.value })}
+                              className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              placeholder="From airport transfers to long-distance journeys..."
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Button Text</label>
+                              <input
+                                type="text"
+                                value={servicesPageSettings.hero_button_text || ""}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_button_text: e.target.value })}
+                                className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="Book Your Journey"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Button Target URL</label>
+                              <input
+                                type="text"
+                                value={servicesPageSettings.hero_button_url || ""}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_button_url: e.target.value })}
+                                className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="/#calculator"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <span className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Hero Background Image</span>
+                            {servicesPageSettings.hero_image ? (
+                              <div className="relative group aspect-[3/1] max-w-lg rounded border border-[#c3c4c7] overflow-hidden bg-slate-900 flex items-center justify-center">
+                                <img src={servicesPageSettings.hero_image} alt="Hero preview" className="w-full h-full object-cover" />
+                                <button
+                                  type="button"
+                                  onClick={() => setServicesPageSettings({ ...servicesPageSettings, hero_image: "" })}
+                                  className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow"
+                                  title="Remove image"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditorTarget("services-page-hero");
+                                  setEditorMediaModalOpen(true);
+                                }}
+                                className="border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] px-4 py-3 rounded text-xs font-semibold transition"
+                              >
+                                + Select Hero Background Image from Media
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 2. Catalog Section */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                              <Car className="w-4 h-4 text-emerald-600" />
+                              2. Our Services Catalog Grid
+                            </h3>
+                            <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={servicesPageSettings.catalog_enabled !== false}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_enabled: e.target.checked })}
+                                className="rounded text-emerald-600 focus:ring-emerald-500"
+                              />
+                              <span className={servicesPageSettings.catalog_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                                {servicesPageSettings.catalog_enabled !== false ? "Section Visible" : "Section Hidden"}
+                              </span>
+                            </label>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Tag</label>
+                              <input
+                                type="text"
+                                value={servicesPageSettings.catalog_tag || ""}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_tag: e.target.value })}
+                                className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="OUR SERVICES"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Title</label>
+                              <input
+                                type="text"
+                                value={servicesPageSettings.catalog_title || ""}
+                                onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_title: e.target.value })}
+                                className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="Travel Solutions for Every Journey"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Description</label>
+                            <textarea
+                              rows={2}
+                              value={servicesPageSettings.catalog_description || ""}
+                              onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_description: e.target.value })}
+                              className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              placeholder="Whether it's a quick airport transfer or a long-distance trip..."
+                            />
+                          </div>
+                        </div>
+
+                        {/* 3. SEO Meta Tags */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
+                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-[#f0f0f1] pb-2">
+                            <Globe className="w-4 h-4 text-emerald-600" />
+                            3. Services Page SEO &amp; Meta Tags
+                          </h3>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">SEO Meta Title</label>
+                            <input
+                              type="text"
+                              value={servicesPageSettings.meta_title || ""}
+                              onChange={e => setServicesPageSettings({ ...servicesPageSettings, meta_title: e.target.value })}
+                              className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              placeholder="Premium Chauffeur & Airport Travel Services | TravelLuxx UK"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">SEO Meta Description</label>
+                            <textarea
+                              rows={2}
+                              value={servicesPageSettings.meta_description || ""}
+                              onChange={e => setServicesPageSettings({ ...servicesPageSettings, meta_description: e.target.value })}
+                              className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              placeholder="Explore TravelLuxx's premier private travel solutions across the UK..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Sidebar */}
+                      <div className="lg:col-span-1 bg-white border border-[#c3c4c7] rounded-sm shadow-sm flex flex-col justify-between overflow-hidden">
+                        <div className="p-4 space-y-3">
+                          <h4 className="font-semibold text-xs text-[#1d2327] border-b border-[#f0f0f1] pb-2">Page Overview</h4>
+                          <div className="text-xs space-y-1.5 text-slate-600">
+                            <div><strong>Page:</strong> /services</div>
+                            <div><strong>Type:</strong> Catalog Landing</div>
+                            <div><strong>Status:</strong> Published</div>
+                          </div>
+                        </div>
+                        <div className="p-4 border-t border-[#f0f0f1] bg-[#f6f7f7] space-y-2">
+                          <button
+                            type="button"
+                            onClick={saveServicesPageSettings}
+                            disabled={isSaving}
+                            className="w-full text-center bg-[#2271b1] hover:bg-[#135e96] text-white py-2 rounded font-semibold transition flex items-center justify-center gap-1.5"
+                          >
+                            <Save className="w-3.5 h-3.5" />
+                            {isSaving ? "Saving..." : "Save Settings"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => navigate("/admin/pages")}
+                            className="w-full text-center border border-[#c3c4c7] hover:bg-white bg-transparent text-[#50575e] py-2 rounded font-semibold transition"
+                          >
+                            Back to Pages
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ) : editingPage !== undefined ? (
                 <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
                   {/* WordPress Style Editor Top Bar */}
@@ -3209,6 +3665,25 @@ export default function AdminDashboard() {
                             <td className="py-3 px-3 font-mono text-[#2271b1]">/ (Root)</td>
                             <td className="py-3 px-3 text-[#50575e]">System</td>
                             <td className="py-3 px-3 text-[#50575e] font-semibold text-emerald-700">Active Theme: {settings.active_theme || "default"}</td>
+                          </tr>
+                        )}
+                        {/* Special Row: Services Main Page Management */}
+                        {(!searchQuery || "services".includes(searchQuery.toLowerCase()) || "our services".includes(searchQuery.toLowerCase())) && (
+                          <tr className="hover:bg-[#f6f7f7] transition group bg-emerald-50/20">
+                            <td className="py-3 px-3 text-center text-emerald-600 font-bold">★</td>
+                            <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
+                              <span onClick={() => navigate("/admin/pages/services-page")} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800">
+                                Services Main Page (/services)
+                              </span>
+                              <div className="hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none">
+                                <button onClick={() => navigate("/admin/pages/services-page")} className="text-[#2271b1] hover:text-[#00a0d2]">Edit Content</button>
+                                <span className="text-[#ddd]">|</span>
+                                <a href="/services" target="_blank" rel="noreferrer" className="text-[#2271b1] hover:text-[#00a0d2]">View Live</a>
+                              </div>
+                            </td>
+                            <td className="py-3 px-3 font-mono text-[#2271b1]">/services</td>
+                            <td className="py-3 px-3 text-[#50575e]">System</td>
+                            <td className="py-3 px-3 text-[#50575e] font-semibold text-emerald-700">Services Catalog &amp; Hero</td>
                           </tr>
                         )}
                         {pages.length === 0 ? (
@@ -4487,89 +4962,199 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
+                    {/* Detail Page Hero Banner & CTA Controls */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
+                      <div className="border-b border-[#f0f0f1] pb-2">
+                        <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider flex items-center gap-1.5">
+                          <Crown className="w-4 h-4 text-emerald-600" />
+                          Detail Page Hero Banner &amp; CTAs
+                        </h3>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          Configure the header badge and call-to-action buttons on this service's detail page (/services/:slug).
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Hero Badge / Pill Tag</label>
+                          <input
+                            type="text"
+                            value={serviceForm.heroBadge || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, heroBadge: e.target.value })}
+                            placeholder="e.g. EXECUTIVE CHAUFFEUR SERVICE"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Primary Button (CTA 1) Text</label>
+                          <input
+                            type="text"
+                            value={serviceForm.heroBtn1Text || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, heroBtn1Text: e.target.value })}
+                            placeholder="Book This Service"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Primary Button (CTA 1) URL</label>
+                          <input
+                            type="text"
+                            value={serviceForm.heroBtn1Url || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, heroBtn1Url: e.target.value })}
+                            placeholder="/#calculator"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Secondary Button (CTA 2) Text</label>
+                          <input
+                            type="text"
+                            value={serviceForm.heroBtn2Text || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, heroBtn2Text: e.target.value })}
+                            placeholder="WhatsApp Inquiry"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Secondary Button (CTA 2) URL</label>
+                          <input
+                            type="text"
+                            value={serviceForm.heroBtn2Url || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, heroBtn2Url: e.target.value })}
+                            placeholder="Leave empty for direct WhatsApp chat link"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Key Highlights / Features List */}
                     <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
                       <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
-                        <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider flex items-center gap-1.5">
+                        <div className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                          Key Highlights &amp; Inclusions (Bullet Points)
-                        </h3>
-                        <span className="text-[11px] text-slate-500">
-                          {serviceForm.features.length} highlights added
-                        </span>
+                          <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider">
+                            Key Highlights Box (Section Below Image)
+                          </h3>
+                        </div>
+                        <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={serviceForm.highlightsEnabled !== false}
+                            onChange={e => setServiceForm({ ...serviceForm, highlightsEnabled: e.target.checked })}
+                            className="rounded-sm border-[#8c8f94]"
+                          />
+                          <span>Show Box</span>
+                        </label>
                       </div>
 
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={serviceForm.newFeatureText}
-                          onChange={e => setServiceForm({ ...serviceForm, newFeatureText: e.target.value })}
-                          onKeyDown={e => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              if (serviceForm.newFeatureText.trim()) {
-                                setServiceForm({
-                                  ...serviceForm,
-                                  features: [...serviceForm.features, serviceForm.newFeatureText.trim()],
-                                  newFeatureText: ""
-                                });
-                              }
-                            }
-                          }}
-                          placeholder="e.g. Complimentary 60 mins wait time, Flight monitoring in real time..."
-                          className="flex-1 border border-[#8c8f94] rounded-sm px-3 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (serviceForm.newFeatureText.trim()) {
-                              setServiceForm({
-                                ...serviceForm,
-                                features: [...serviceForm.features, serviceForm.newFeatureText.trim()],
-                                newFeatureText: ""
-                              });
-                            }
-                          }}
-                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 py-1.5 rounded-sm text-xs font-semibold transition"
-                        >
-                          + Add Highlight
-                        </button>
-                      </div>
-
-                      {/* Highlights Badges */}
-                      <div className="space-y-2 pt-1">
-                        {serviceForm.features.map((feat, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center justify-between bg-slate-50 border border-slate-200 px-3 py-1.5 rounded text-xs text-slate-800"
-                          >
-                            <div className="flex items-center gap-2">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                              <span>{feat}</span>
+                      {serviceForm.highlightsEnabled !== false && (
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Highlights Badge / Tag</label>
+                              <input
+                                type="text"
+                                value={serviceForm.highlightsBadge || ""}
+                                onChange={e => setServiceForm({ ...serviceForm, highlightsBadge: e.target.value })}
+                                placeholder="KEY HIGHLIGHTS"
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              />
                             </div>
+                            <div>
+                              <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Highlights Title</label>
+                              <input
+                                type="text"
+                                value={serviceForm.highlightsTitle || ""}
+                                onChange={e => setServiceForm({ ...serviceForm, highlightsTitle: e.target.value })}
+                                placeholder="What Sets This Service Apart"
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2 pt-1">
+                            <input
+                              type="text"
+                              value={serviceForm.newFeatureText}
+                              onChange={e => setServiceForm({ ...serviceForm, newFeatureText: e.target.value })}
+                              onKeyDown={e => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  if (serviceForm.newFeatureText.trim()) {
+                                    setServiceForm({
+                                      ...serviceForm,
+                                      features: [...serviceForm.features, serviceForm.newFeatureText.trim()],
+                                      newFeatureText: ""
+                                    });
+                                  }
+                                }
+                              }}
+                              placeholder="e.g. Complimentary 60 mins wait time, Flight monitoring in real time..."
+                              className="flex-1 border border-[#8c8f94] rounded-sm px-3 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            />
                             <button
                               type="button"
                               onClick={() => {
-                                setServiceForm({
-                                  ...serviceForm,
-                                  features: serviceForm.features.filter((_, i) => i !== idx)
-                                });
+                                if (serviceForm.newFeatureText.trim()) {
+                                  setServiceForm({
+                                    ...serviceForm,
+                                    features: [...serviceForm.features, serviceForm.newFeatureText.trim()],
+                                    newFeatureText: ""
+                                  });
+                                }
                               }}
-                              className="text-slate-400 hover:text-red-600 transition"
+                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 py-1.5 rounded-sm text-xs font-semibold transition"
                             >
-                              <X className="w-3.5 h-3.5" />
+                              + Add Highlight
                             </button>
                           </div>
-                        ))}
-                      </div>
+
+                          {/* Highlights Badges */}
+                          <div className="space-y-2 pt-1">
+                            {serviceForm.features.map((feat: string, idx: number) => (
+                              <div
+                                key={idx}
+                                className="flex items-center justify-between bg-slate-50 border border-slate-200 px-3 py-1.5 rounded text-xs text-slate-800"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                  <span>{feat}</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setServiceForm({
+                                      ...serviceForm,
+                                      features: serviceForm.features.filter((_: any, i: number) => i !== idx)
+                                    });
+                                  }}
+                                  className="text-slate-400 hover:text-red-600 transition"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Rich Text Editor for Detailed Page Content */}
                     <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-3">
                       <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
-                        <label className="block text-xs font-semibold text-[#1d2327] uppercase tracking-wide">
-                          Full Page Content &amp; Details (/services/:slug)
-                        </label>
+                        <div>
+                          <label className="block text-xs font-semibold text-[#1d2327] uppercase tracking-wide">
+                            Full Page Content &amp; Details (/services/:slug)
+                          </label>
+                          <p className="text-[11px] text-slate-500 mt-0.5">
+                            Use Headings (H2, H3), Paragraphs, and Bullet points. Headings will display prominently on the live site.
+                          </p>
+                        </div>
                       </div>
                       <div className="min-h-[300px]">
                         <ReactQuill
@@ -4582,76 +5167,312 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
+                    {/* Trust & Guarantee Banner / Bottom CTA Box */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
+                      <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                          <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider">
+                            Guarantee &amp; Instant Quote Banner (Under Content)
+                          </h3>
+                        </div>
+                        <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={serviceForm.guaranteeEnabled !== false}
+                            onChange={e => setServiceForm({ ...serviceForm, guaranteeEnabled: e.target.checked })}
+                            className="rounded-sm border-[#8c8f94]"
+                          />
+                          <span>Show Banner</span>
+                        </label>
+                      </div>
+
+                      {serviceForm.guaranteeEnabled !== false && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Banner Badge</label>
+                            <input
+                              type="text"
+                              value={serviceForm.guaranteeBadge || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, guaranteeBadge: e.target.value })}
+                              placeholder="THE TRAVELLUXX STANDARD"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Banner Title</label>
+                            <input
+                              type="text"
+                              value={serviceForm.guaranteeTitle || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, guaranteeTitle: e.target.value })}
+                              placeholder="Ready to Book Your Service?"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Banner Subtitle / Description</label>
+                            <input
+                              type="text"
+                              value={serviceForm.guaranteeSubtitle || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, guaranteeSubtitle: e.target.value })}
+                              placeholder="Get an instant fixed fare in seconds with our online journey calculator."
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Button Text</label>
+                            <input
+                              type="text"
+                              value={serviceForm.guaranteeBtnText || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, guaranteeBtnText: e.target.value })}
+                              placeholder="Instant Quote"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Button URL</label>
+                            <input
+                              type="text"
+                              value={serviceForm.guaranteeBtnUrl || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, guaranteeBtnUrl: e.target.value })}
+                              placeholder="/#calculator"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Why Choose Us Section Settings */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
+                      <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider">
+                            Why Choose Us Section (Dark Section)
+                          </h3>
+                        </div>
+                        <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={serviceForm.whyChooseEnabled !== false}
+                            onChange={e => setServiceForm({ ...serviceForm, whyChooseEnabled: e.target.checked })}
+                            className="rounded-sm border-[#8c8f94]"
+                          />
+                          <span>Show Section</span>
+                        </label>
+                      </div>
+
+                      {serviceForm.whyChooseEnabled !== false && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Badge / Tag</label>
+                            <input
+                              type="text"
+                              value={serviceForm.whyChooseBadge || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, whyChooseBadge: e.target.value })}
+                              placeholder="WHY CHOOSE TRAVELLUXX"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Heading Title</label>
+                            <input
+                              type="text"
+                              value={serviceForm.whyChooseTitle || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, whyChooseTitle: e.target.value })}
+                              placeholder="Your Trusted Travel Partner"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Subtitle / Description</label>
+                            <input
+                              type="text"
+                              value={serviceForm.whyChooseSubtitle || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, whyChooseSubtitle: e.target.value })}
+                              placeholder="We go the extra mile to ensure every journey is comfortable, safe and hassle-free."
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* How It Works Section Settings */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
+                      <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                        <div className="flex items-center gap-2">
+                          <Compass className="w-4 h-4 text-emerald-600" />
+                          <h3 className="text-xs font-bold text-[#1d2327] uppercase tracking-wider">
+                            How It Works Section (4-Step Process)
+                          </h3>
+                        </div>
+                        <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={serviceForm.howItWorksEnabled !== false}
+                            onChange={e => setServiceForm({ ...serviceForm, howItWorksEnabled: e.target.checked })}
+                            className="rounded-sm border-[#8c8f94]"
+                          />
+                          <span>Show Section</span>
+                        </label>
+                      </div>
+
+                      {serviceForm.howItWorksEnabled !== false && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Badge / Tag</label>
+                            <input
+                              type="text"
+                              value={serviceForm.howItWorksBadge || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, howItWorksBadge: e.target.value })}
+                              placeholder="HOW IT WORKS"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Heading Title</label>
+                            <input
+                              type="text"
+                              value={serviceForm.howItWorksTitle || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, howItWorksTitle: e.target.value })}
+                              placeholder="Simple Steps to Your Destination"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase">Subtitle / Description</label>
+                            <input
+                              type="text"
+                              value={serviceForm.howItWorksSubtitle || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, howItWorksSubtitle: e.target.value })}
+                              placeholder="Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time."
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
                     {/* Service Specific FAQs Editor Block */}
                     <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm">
                       <div className="border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7] flex justify-between items-center">
-                        <h3 className="font-semibold text-xs text-[#2c3338] flex items-center gap-1.5">
+                        <div className="flex items-center gap-2">
                           <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-                          Service FAQs (Frequently Asked Questions)
-                        </h3>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updatedFaqs = [...(serviceForm.faqs || []), { question: "", answer: "" }];
-                            setServiceForm({ ...serviceForm, faqs: updatedFaqs });
-                          }}
-                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded-sm text-[10px] font-semibold transition flex items-center gap-1"
-                        >
-                          <Plus className="w-3 h-3" />
-                          Add Service FAQ
-                        </button>
+                          <h3 className="font-semibold text-xs text-[#2c3338]">
+                            Service Detail FAQs (Frequently Asked Questions)
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={serviceForm.faqsEnabled !== false}
+                              onChange={e => setServiceForm({ ...serviceForm, faqsEnabled: e.target.checked })}
+                              className="rounded-sm border-[#8c8f94]"
+                            />
+                            <span>Show FAQs</span>
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updatedFaqs = [...(serviceForm.faqs || []), { question: "", answer: "" }];
+                              setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                            }}
+                            className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded-sm text-[10px] font-semibold transition flex items-center gap-1"
+                          >
+                            <Plus className="w-3 h-3" />
+                            Add Service FAQ
+                          </button>
+                        </div>
                       </div>
-                      <div className="p-4 space-y-4">
-                        {(!serviceForm.faqs || serviceForm.faqs.length === 0) ? (
-                          <p className="text-xs text-slate-400">
-                            No service-specific FAQs added yet. If left empty, the general services FAQs will be displayed on this service detail page. Click "+ Add Service FAQ" to create custom FAQs for this service.
-                          </p>
-                        ) : (
-                          (serviceForm.faqs || []).map((faq: any, idx: number) => (
-                            <div key={idx} className="border border-slate-200 p-3 rounded bg-slate-50 relative space-y-2">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const updatedFaqs = (serviceForm.faqs || []).filter((_: any, i: number) => i !== idx);
-                                  setServiceForm({ ...serviceForm, faqs: updatedFaqs });
-                                }}
-                                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                                title="Remove FAQ"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                              <div>
-                                <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Question #{idx + 1}</label>
-                                <input
-                                  type="text"
-                                  value={faq.question}
-                                  onChange={e => {
-                                    const updatedFaqs = [...(serviceForm.faqs || [])];
-                                    updatedFaqs[idx].question = e.target.value;
-                                    setServiceForm({ ...serviceForm, faqs: updatedFaqs });
-                                  }}
-                                  placeholder="Enter Question..."
-                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
-                                />
-                              </div>
-                              <div>
-                                <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Answer</label>
-                                <textarea
-                                  rows={2}
-                                  value={faq.answer}
-                                  onChange={e => {
-                                    const updatedFaqs = [...(serviceForm.faqs || [])];
-                                    updatedFaqs[idx].answer = e.target.value;
-                                    setServiceForm({ ...serviceForm, faqs: updatedFaqs });
-                                  }}
-                                  placeholder="Enter Answer..."
-                                  className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
-                                />
-                              </div>
+                      {serviceForm.faqsEnabled !== false && (
+                        <div className="p-4 space-y-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-3 border-b border-slate-200">
+                            <div>
+                              <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">FAQ Section Badge</label>
+                              <input
+                                type="text"
+                                value={serviceForm.faqBadge || ""}
+                                onChange={e => setServiceForm({ ...serviceForm, faqBadge: e.target.value })}
+                                placeholder="FREQUENTLY ASKED QUESTIONS"
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              />
                             </div>
-                          ))
-                        )}
-                      </div>
+                            <div>
+                              <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">FAQ Section Title</label>
+                              <input
+                                type="text"
+                                value={serviceForm.faqTitle || ""}
+                                onChange={e => setServiceForm({ ...serviceForm, faqTitle: e.target.value })}
+                                placeholder={`Questions About Our ${serviceForm.title || "Service"}`}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                            <div className="sm:col-span-2">
+                              <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">FAQ Section Subtitle</label>
+                              <input
+                                type="text"
+                                value={serviceForm.faqSubtitle || ""}
+                                onChange={e => setServiceForm({ ...serviceForm, faqSubtitle: e.target.value })}
+                                placeholder="Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                          </div>
+
+                          {(!serviceForm.faqs || serviceForm.faqs.length === 0) ? (
+                            <p className="text-xs text-slate-400">
+                              No service-specific FAQs added yet. If left empty, the general services FAQs will be displayed on this service detail page. Click "+ Add Service FAQ" to create custom FAQs for this service.
+                            </p>
+                          ) : (
+                            (serviceForm.faqs || []).map((faq: any, idx: number) => (
+                              <div key={idx} className="border border-slate-200 p-3 rounded bg-slate-50 relative space-y-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updatedFaqs = (serviceForm.faqs || []).filter((_: any, i: number) => i !== idx);
+                                    setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                                  }}
+                                  className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                  title="Remove FAQ"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                                <div>
+                                  <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Question #{idx + 1}</label>
+                                  <input
+                                    type="text"
+                                    value={faq.question}
+                                    onChange={e => {
+                                      const updatedFaqs = [...(serviceForm.faqs || [])];
+                                      updatedFaqs[idx].question = e.target.value;
+                                      setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                                    }}
+                                    placeholder="Enter Question..."
+                                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Answer</label>
+                                  <textarea
+                                    rows={2}
+                                    value={faq.answer}
+                                    onChange={e => {
+                                      const updatedFaqs = [...(serviceForm.faqs || [])];
+                                      updatedFaqs[idx].answer = e.target.value;
+                                      setServiceForm({ ...serviceForm, faqs: updatedFaqs });
+                                    }}
+                                    placeholder="Enter Answer..."
+                                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                                  />
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {/* Yoast SEO Box */}
@@ -4735,6 +5556,155 @@ export default function AdminDashboard() {
                           >
                             {isSaving ? "Saving..." : (editingService?.id ? "Update Service" : "Publish Service")}
                           </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Detail Page Sticky Sidebar Booking Card Controls */}
+                    <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
+                      <div className="bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338] flex items-center justify-between">
+                        <span>Sticky Sidebar Booking Card</span>
+                      </div>
+                      <div className="p-4 space-y-3.5 text-xs">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Sidebar Badge</label>
+                          <input
+                            type="text"
+                            value={serviceForm.sidebarBadge || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, sidebarBadge: e.target.value })}
+                            placeholder="RESERVE YOUR RIDE"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Sidebar Title</label>
+                          <input
+                            type="text"
+                            value={serviceForm.sidebarTitle || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, sidebarTitle: e.target.value })}
+                            placeholder="Book Online Instantly"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Primary Button (CTA 1) Text</label>
+                          <input
+                            type="text"
+                            value={serviceForm.sidebarBtn1Text || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, sidebarBtn1Text: e.target.value })}
+                            placeholder="Calculate Fare & Book"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Primary Button (CTA 1) URL</label>
+                          <input
+                            type="text"
+                            value={serviceForm.sidebarBtn1Url || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, sidebarBtn1Url: e.target.value })}
+                            placeholder="/#calculator"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Call Button (CTA 2) Text</label>
+                          <input
+                            type="text"
+                            value={serviceForm.sidebarBtn2Text || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, sidebarBtn2Text: e.target.value })}
+                            placeholder="Call +441217140876 (leave empty for default)"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Call Button (CTA 2) URL / Tel</label>
+                          <input
+                            type="text"
+                            value={serviceForm.sidebarBtn2Url || ""}
+                            onChange={e => setServiceForm({ ...serviceForm, sidebarBtn2Url: e.target.value })}
+                            placeholder="tel:+441217140876"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div className="pt-2 border-t border-[#f0f0f1]">
+                          <label className="flex items-center gap-1.5 cursor-pointer text-xs text-black">
+                            <input
+                              type="checkbox"
+                              checked={serviceForm.showSidebarServices !== false}
+                              onChange={e => setServiceForm({ ...serviceForm, showSidebarServices: e.target.checked })}
+                              className="rounded-sm border-[#8c8f94]"
+                            />
+                            <span>Show "All Our Services" in Sidebar</span>
+                          </label>
+                        </div>
+
+                        {/* Sidebar Perks Manager */}
+                        <div className="pt-3 border-t border-[#f0f0f1] space-y-2">
+                          <label className="block text-[10px] font-semibold text-[#646970] uppercase">
+                            Sidebar Perks / Checkmarks
+                          </label>
+                          <div className="flex gap-1.5">
+                            <input
+                              type="text"
+                              value={serviceForm.newSidebarPerk || ""}
+                              onChange={e => setServiceForm({ ...serviceForm, newSidebarPerk: e.target.value })}
+                              onKeyDown={e => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  if ((serviceForm.newSidebarPerk || "").trim()) {
+                                    setServiceForm({
+                                      ...serviceForm,
+                                      sidebarPerks: [...(serviceForm.sidebarPerks || []), serviceForm.newSidebarPerk.trim()],
+                                      newSidebarPerk: ""
+                                    });
+                                  }
+                                }
+                              }}
+                              placeholder="e.g. Free Wi-Fi on board..."
+                              className="flex-1 border border-[#8c8f94] rounded-sm px-2 py-1 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if ((serviceForm.newSidebarPerk || "").trim()) {
+                                  setServiceForm({
+                                    ...serviceForm,
+                                    sidebarPerks: [...(serviceForm.sidebarPerks || []), serviceForm.newSidebarPerk.trim()],
+                                    newSidebarPerk: ""
+                                  });
+                                }
+                              }}
+                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded text-xs font-semibold"
+                            >
+                              Add
+                            </button>
+                          </div>
+
+                          <div className="space-y-1.5 pt-1 max-h-48 overflow-y-auto">
+                            {(serviceForm.sidebarPerks || []).map((perk: string, pIdx: number) => (
+                              <div key={pIdx} className="flex items-center justify-between bg-slate-50 border border-slate-200 px-2.5 py-1 rounded text-[11px] text-slate-800">
+                                <span className="truncate pr-2">{perk}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setServiceForm({
+                                      ...serviceForm,
+                                      sidebarPerks: (serviceForm.sidebarPerks || []).filter((_: any, i: number) => i !== pIdx)
+                                    });
+                                  }}
+                                  className="text-slate-400 hover:text-red-600 transition shrink-0"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -5291,38 +6261,207 @@ export default function AdminDashboard() {
                   <h3 className="font-semibold text-[#1d2327] text-sm">Header Navigation Items</h3>
                 </div>
                 <div className="divide-y divide-[#f0f0f1]">
-                  {menuItems.map((item, idx) => (
-                    <div key={item.id} className="flex items-center gap-3 px-5 py-3">
-                      <div className="flex flex-col gap-0.5">
-                        <button onClick={() => moveMenuItem(idx, -1)} disabled={idx === 0}
-                          className="p-0.5 hover:bg-[#f0f0f1] rounded disabled:opacity-30 disabled:cursor-not-allowed">
-                          <ChevronUp className="w-3.5 h-3.5 text-[#646970]" />
-                        </button>
-                        <button onClick={() => moveMenuItem(idx, 1)} disabled={idx === menuItems.length - 1}
-                          className="p-0.5 hover:bg-[#f0f0f1] rounded disabled:opacity-30 disabled:cursor-not-allowed">
-                          <ChevronDown className="w-3.5 h-3.5 text-[#646970]" />
-                        </button>
+                  {menuItems.map((item, idx) => {
+                    const children = Array.isArray(item.children) ? item.children : [];
+                    const subState = newSubMenuItems[item.id] || { label: "", href: "", target: "_self" };
+
+                    return (
+                      <div key={item.id} className="p-4 space-y-3 bg-white hover:bg-slate-50/50 transition">
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col gap-0.5">
+                            <button
+                              type="button"
+                              onClick={() => moveMenuItem(idx, -1)}
+                              disabled={idx === 0}
+                              className="p-0.5 hover:bg-[#f0f0f1] rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <ChevronUp className="w-3.5 h-3.5 text-[#646970]" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveMenuItem(idx, 1)}
+                              disabled={idx === menuItems.length - 1}
+                              className="p-0.5 hover:bg-[#f0f0f1] rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <ChevronDown className="w-3.5 h-3.5 text-[#646970]" />
+                            </button>
+                          </div>
+
+                          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input
+                              type="text"
+                              value={item.label}
+                              onChange={e => {
+                                const updated = [...menuItems];
+                                updated[idx] = { ...updated[idx], label: e.target.value };
+                                setMenuItems(updated);
+                              }}
+                              placeholder="Menu Label (e.g. Services)"
+                              className="border border-[#8c8f94] rounded px-2.5 py-1.5 text-sm font-semibold text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <input
+                              type="text"
+                              value={item.href}
+                              onChange={e => {
+                                const updated = [...menuItems];
+                                updated[idx] = { ...updated[idx], href: e.target.value };
+                                setMenuItems(updated);
+                              }}
+                              placeholder="Link (e.g. /services or /#calculator)"
+                              className="border border-[#8c8f94] rounded px-2.5 py-1.5 text-sm text-black focus:outline-none focus:border-[#2271b1]"
+                            />
+                          </div>
+
+                          <select
+                            value={item.target || "_self"}
+                            onChange={e => {
+                              const updated = [...menuItems];
+                              updated[idx] = { ...updated[idx], target: e.target.value };
+                              setMenuItems(updated);
+                            }}
+                            className="border border-[#8c8f94] rounded px-2 py-1.5 text-xs focus:outline-none bg-white text-black"
+                          >
+                            <option value="_self">Same tab</option>
+                            <option value="_blank">New tab</option>
+                          </select>
+
+                          <button
+                            type="button"
+                            onClick={() => removeMenuItem(item.id)}
+                            className="text-[#d63638] hover:text-[#b32d2e] p-1.5 transition"
+                            title="Delete Menu Item"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Sub-menu (Dropdown Items) Section */}
+                        <div className="ml-7 pl-3 border-l-2 border-emerald-500/40 space-y-2 pt-1">
+                          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600">
+                            <span className="flex items-center gap-1 text-emerald-800 font-bold">
+                              <span>↳</span> Dropdown Sub-menu Items ({children.length})
+                            </span>
+                            <span className="text-slate-400 font-normal">
+                              Appears as a dropdown when hovering or clicking "{item.label || "Item"}"
+                            </span>
+                          </div>
+
+                          {/* Existing Sub-items */}
+                          {children.length > 0 && (
+                            <div className="space-y-1.5">
+                              {children.map((child: any, cIdx: number) => (
+                                <div key={child.id || cIdx} className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1.5 rounded">
+                                  <div className="flex flex-col gap-0.5">
+                                    <button
+                                      type="button"
+                                      onClick={() => moveSubMenuItem(idx, cIdx, -1)}
+                                      disabled={cIdx === 0}
+                                      className="p-0.5 hover:bg-slate-200 rounded disabled:opacity-20 text-slate-500"
+                                      title="Move Up"
+                                    >
+                                      <ChevronUp className="w-3 h-3" />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => moveSubMenuItem(idx, cIdx, 1)}
+                                      disabled={cIdx === children.length - 1}
+                                      className="p-0.5 hover:bg-slate-200 rounded disabled:opacity-20 text-slate-500"
+                                      title="Move Down"
+                                    >
+                                      <ChevronDown className="w-3 h-3" />
+                                    </button>
+                                  </div>
+
+                                  <input
+                                    type="text"
+                                    value={child.label || ""}
+                                    onChange={e => {
+                                      const updated = [...menuItems];
+                                      updated[idx].children[cIdx].label = e.target.value;
+                                      setMenuItems(updated);
+                                    }}
+                                    placeholder="Sub-item Label"
+                                    className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs text-black bg-white focus:outline-none focus:border-emerald-600"
+                                  />
+
+                                  <input
+                                    type="text"
+                                    value={child.href || ""}
+                                    onChange={e => {
+                                      const updated = [...menuItems];
+                                      updated[idx].children[cIdx].href = e.target.value;
+                                      setMenuItems(updated);
+                                    }}
+                                    placeholder="/services/airport-transfers"
+                                    className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs text-black bg-white focus:outline-none focus:border-emerald-600"
+                                  />
+
+                                  <select
+                                    value={child.target || "_self"}
+                                    onChange={e => {
+                                      const updated = [...menuItems];
+                                      updated[idx].children[cIdx].target = e.target.value;
+                                      setMenuItems(updated);
+                                    }}
+                                    className="border border-slate-300 rounded px-1.5 py-1 text-[11px] bg-white text-black focus:outline-none"
+                                  >
+                                    <option value="_self">Same tab</option>
+                                    <option value="_blank">New tab</option>
+                                  </select>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => removeSubMenuItem(idx, child.id)}
+                                    className="text-red-500 hover:text-red-700 p-1"
+                                    title="Remove Sub-item"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Add Sub-item inline form */}
+                          <div className="flex items-center gap-2 pt-1">
+                            <input
+                              type="text"
+                              value={subState.label}
+                              onChange={e => setNewSubMenuItems(prev => ({
+                                ...prev,
+                                [item.id]: { ...subState, label: e.target.value }
+                              }))}
+                              placeholder="Submenu link label (e.g. Airport Transfers)"
+                              className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs bg-white text-black focus:outline-none focus:border-emerald-600"
+                            />
+                            <input
+                              type="text"
+                              value={subState.href}
+                              onChange={e => setNewSubMenuItems(prev => ({
+                                ...prev,
+                                [item.id]: { ...subState, href: e.target.value }
+                              }))}
+                              onKeyDown={e => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  addSubMenuItem(item.id, idx);
+                                }
+                              }}
+                              placeholder="URL (e.g. /services/airport-transfers)"
+                              className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs bg-white text-black focus:outline-none focus:border-emerald-600"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => addSubMenuItem(item.id, idx)}
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-xs font-semibold flex items-center gap-1 transition shrink-0"
+                            >
+                              <Plus className="w-3 h-3" /> Add Dropdown Item
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-1 grid grid-cols-2 gap-3">
-                        <input type="text" value={item.label} onChange={e => {
-                          const updated = [...menuItems]; updated[idx] = { ...updated[idx], label: e.target.value }; setMenuItems(updated);
-                        }} placeholder="Label" className="border border-[#8c8f94] rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-[#2271b1]" />
-                        <input type="text" value={item.href} onChange={e => {
-                          const updated = [...menuItems]; updated[idx] = { ...updated[idx], href: e.target.value }; setMenuItems(updated);
-                        }} placeholder="Link e.g. /blog or /#calculator" className="border border-[#8c8f94] rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-[#2271b1]" />
-                      </div>
-                      <select value={item.target} onChange={e => {
-                        const updated = [...menuItems]; updated[idx] = { ...updated[idx], target: e.target.value }; setMenuItems(updated);
-                      }} className="border border-[#8c8f94] rounded px-2 py-1.5 text-xs focus:outline-none">
-                        <option value="_self">Same tab</option>
-                        <option value="_blank">New tab</option>
-                      </select>
-                      <button onClick={() => removeMenuItem(item.id)}
-                        className="text-[#d63638] hover:text-[#b32d2e] p-1">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* Add new item */}
