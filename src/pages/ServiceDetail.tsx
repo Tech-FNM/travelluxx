@@ -655,30 +655,6 @@ export default function ServiceDetail() {
                   );
                 })}
               </div>
-
-              {/* Concierge Box */}
-              <div className="mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10">
-                <div className="space-y-1.5 text-center sm:text-left">
-                  <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-widest block">
-                    NEED ASSISTANCE?
-                  </span>
-                  <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
-                    Have additional questions about {service?.title || "this service"}?
-                  </h4>
-                  <p className="text-slate-400 text-xs sm:text-sm">
-                    Speak directly with our concierge team or request an instant bespoke quotation.
-                  </p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <a
-                    href="/#calculator"
-                    className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
-                  >
-                    <span>Book Now</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
             </div>
           </section>
         )}

@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CBN428OE.js"(exports, module) {
+  "assets/index-D_3WDiPO.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -46261,29 +46261,7 @@ ${escapeText(this.code(index, length))}
                 },
                 idx
               );
-            }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5 text-center sm:text-left", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 text-[11px] font-extrabold uppercase tracking-widest block", children: "NEED ASSISTANCE?" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { className: "text-base sm:text-lg font-bold text-white tracking-tight", children: [
-                  "Have additional questions about ",
-                  (service == null ? void 0 : service.title) || "this service",
-                  "?"
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-xs sm:text-sm", children: "Speak directly with our concierge team or request an instant bespoke quotation." })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "a",
-                {
-                  href: "/#calculator",
-                  className: "inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform",
-                  children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Book Now" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-3.5 h-3.5" })
-                  ]
-                }
-              ) })
-            ] })
+            }) })
           ] }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {

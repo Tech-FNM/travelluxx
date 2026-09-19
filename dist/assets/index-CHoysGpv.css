@@ -2303,18 +2303,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-color: #c3c4c7;
   }
 
-  .border-\[\#d4a359\] {
-    border-color: #d4a359;
-  }
-
-  .border-\[\#d4a359\]\/15 {
-    border-color: oklab(74.602% .0261479 .105411 / .15);
-  }
-
-  .border-\[\#d4a359\]\/70 {
-    border-color: oklab(74.602% .0261479 .105411 / .7);
-  }
-
   .border-\[\#d63638\] {
     border-color: #d63638;
   }
@@ -2639,18 +2627,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     background-color: #12141c;
   }
 
-  .bg-\[\#cda66e\] {
-    background-color: #cda66e;
-  }
-
-  .bg-\[\#cda66e\]\/15 {
-    background-color: oklab(74.7852% .0211343 .0836759 / .15);
-  }
-
-  .bg-\[\#d4a359\] {
-    background-color: #d4a359;
-  }
-
   .bg-\[\#d63638\] {
     background-color: #d63638;
   }
@@ -2701,10 +2677,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .bg-\[\#f9f9f9\] {
     background-color: #f9f9f9;
-  }
-
-  .bg-\[\#faf8f5\] {
-    background-color: #faf8f5;
   }
 
   .bg-\[\#faf9f6\] {
@@ -3848,14 +3820,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     color: #c3c4c7;
   }
 
-  .text-\[\#cda66e\] {
-    color: #cda66e;
-  }
-
-  .text-\[\#d4a359\] {
-    color: #d4a359;
-  }
-
   .text-\[\#d63638\] {
     color: #d63638;
   }
@@ -4096,16 +4060,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .shadow-\[\#d4a359\]\/20 {
-    --tw-shadow-color: #d4a35933;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .shadow-\[\#d4a359\]\/20 {
-      --tw-shadow-color: color-mix(in oklab, oklab(74.602% .0261479 .105411 / .2) var(--tw-shadow-alpha), transparent);
-    }
-  }
-
   .shadow-emerald-500\/20 {
     --tw-shadow-color: #00bb7f33;
   }
@@ -4144,10 +4098,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .shadow-emerald-700\/10 {
       --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-emerald-700) 10%, transparent) var(--tw-shadow-alpha), transparent);
     }
-  }
-
-  .ring-\[\#d4a359\]\/20 {
-    --tw-ring-color: oklab(74.602% .0261479 .105411 / .2);
   }
 
   .ring-emerald-500\/20 {
@@ -4354,14 +4304,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     }
   }
 
-  .selection\:bg-\[\#d4a359\] ::selection {
-    background-color: #d4a359;
-  }
-
-  .selection\:bg-\[\#d4a359\]::selection {
-    background-color: #d4a359;
-  }
-
   .selection\:bg-emerald-500 ::selection {
     background-color: var(--color-emerald-500);
   }
@@ -4462,14 +4404,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:bg-\[\#b32d2e\]:hover {
       background-color: #b32d2e;
-    }
-
-    .hover\:bg-\[\#c29143\]:hover {
-      background-color: #c29143;
-    }
-
-    .hover\:bg-\[\#c39248\]:hover {
-      background-color: #c39248;
     }
 
     .hover\:bg-\[\#dcdcde\]:hover {
@@ -4638,10 +4572,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:text-\[\#b32d2e\]:hover {
       color: #b32d2e;
-    }
-
-    .hover\:text-\[\#b38a50\]:hover {
-      color: #b38a50;
     }
 
     .hover\:text-\[\#d63638\]:hover {
