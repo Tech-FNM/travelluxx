@@ -651,30 +651,6 @@ export default function Services() {
                 );
               })}
             </div>
-
-            {/* Concierge Callout Box */}
-            <div className="mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10 relative overflow-hidden">
-              <div className="space-y-1.5 text-center sm:text-left relative z-10">
-                <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-widest block">
-                  STILL HAVE QUESTIONS?
-                </span>
-                <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
-                  Our 24/7 concierge team is ready to assist you
-                </h4>
-                <p className="text-slate-400 text-xs sm:text-sm max-w-lg">
-                  Whether you need custom journey planning, corporate multi-car transfers, or special requests, we're here around the clock.
-                </p>
-              </div>
-              <div className="flex items-center gap-3 shrink-0 relative z-10">
-                <a
-                  href="/#calculator"
-                  className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
-                >
-                  <span>Get Instant Quote</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
           </div>
         </section>
       </main>
