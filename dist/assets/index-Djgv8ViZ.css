@@ -2363,6 +2363,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-color: var(--color-emerald-200);
   }
 
+  .border-emerald-500 {
+    border-color: var(--color-emerald-500);
+  }
+
   .border-emerald-500\/10 {
     border-color: #00bb7f1a;
   }
@@ -2370,6 +2374,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @supports (color: color-mix(in lab, red, red)) {
     .border-emerald-500\/10 {
       border-color: color-mix(in oklab, var(--color-emerald-500) 10%, transparent);
+    }
+  }
+
+  .border-emerald-500\/15 {
+    border-color: #00bb7f26;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-emerald-500\/15 {
+      border-color: color-mix(in oklab, var(--color-emerald-500) 15%, transparent);
     }
   }
 
@@ -2390,6 +2404,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @supports (color: color-mix(in lab, red, red)) {
     .border-emerald-500\/30 {
       border-color: color-mix(in oklab, var(--color-emerald-500) 30%, transparent);
+    }
+  }
+
+  .border-emerald-500\/60 {
+    border-color: #00bb7f99;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-emerald-500\/60 {
+      border-color: color-mix(in oklab, var(--color-emerald-500) 60%, transparent);
     }
   }
 
@@ -2762,6 +2786,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @supports (color: color-mix(in lab, red, red)) {
     .bg-emerald-50\/20 {
       background-color: color-mix(in oklab, var(--color-emerald-50) 20%, transparent);
+    }
+  }
+
+  .bg-emerald-50\/40 {
+    background-color: #ecfdf566;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-emerald-50\/40 {
+      background-color: color-mix(in oklab, var(--color-emerald-50) 40%, transparent);
     }
   }
 
@@ -4116,6 +4150,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --tw-ring-color: oklab(74.602% .0261479 .105411 / .2);
   }
 
+  .ring-emerald-500\/20 {
+    --tw-ring-color: #00bb7f33;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .ring-emerald-500\/20 {
+      --tw-ring-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent);
+    }
+  }
+
   .ring-emerald-600\/30 {
     --tw-ring-color: #0097674d;
   }
@@ -4460,6 +4504,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:bg-emerald-200:hover {
       background-color: var(--color-emerald-200);
+    }
+
+    .hover\:bg-emerald-400:hover {
+      background-color: var(--color-emerald-400);
     }
 
     .hover\:bg-emerald-500:hover {

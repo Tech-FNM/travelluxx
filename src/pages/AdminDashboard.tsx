@@ -3455,7 +3455,7 @@ export default function AdminDashboard() {
                   {/* Hero Settings */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
                     <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#d4a359]" />
+                      <Sparkles className="w-4 h-4 text-emerald-600" />
                       1. Main Services Page Hero Section
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3545,7 +3545,7 @@ export default function AdminDashboard() {
                   {/* Catalog Header Settings */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
                     <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                      <Car className="w-4 h-4 text-[#d4a359]" />
+                      <Car className="w-4 h-4 text-emerald-600" />
                       2. Catalog Section Header
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3582,7 +3582,7 @@ export default function AdminDashboard() {
                   {/* Why Choose Section */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
                     <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-[#d4a359]" />
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       3. Why Choose TravelLuxx Section
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3620,7 +3620,7 @@ export default function AdminDashboard() {
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                        <HelpCircle className="w-4 h-4 text-[#d4a359]" />
+                        <HelpCircle className="w-4 h-4 text-emerald-600" />
                         4. Frequently Asked Questions (FAQ) Section
                       </h3>
                       <button
@@ -3920,7 +3920,7 @@ export default function AdminDashboard() {
                             className="flex items-center justify-between bg-slate-50 border border-slate-200 px-3 py-1.5 rounded text-xs text-slate-800"
                           >
                             <div className="flex items-center gap-2">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-[#d4a359]" />
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                               <span>{feat}</span>
                             </div>
                             <button
@@ -3962,7 +3962,7 @@ export default function AdminDashboard() {
                     <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm">
                       <div className="border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7] flex justify-between items-center">
                         <h3 className="font-semibold text-xs text-[#2c3338] flex items-center gap-1.5">
-                          <HelpCircle className="w-3.5 h-3.5 text-[#d4a359]" />
+                          <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
                           Service FAQs (Frequently Asked Questions)
                         </h3>
                         <button
@@ -4140,7 +4140,7 @@ export default function AdminDashboard() {
                                 onClick={() => setServiceForm({ ...serviceForm, icon: iconName })}
                                 className={`p-2.5 rounded flex flex-col items-center justify-center gap-1 border transition ${
                                   isSelected
-                                    ? "bg-[#0c1322] text-[#d4a359] border-[#d4a359] shadow-sm"
+                                    ? "bg-[#0c1322] text-emerald-400 border-emerald-500 shadow-sm"
                                     : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                                 }`}
                                 title={iconName}
@@ -4355,7 +4355,7 @@ export default function AdminDashboard() {
 
                                   {/* Icon */}
                                   <td className="py-2 px-3 text-center">
-                                    <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0c1322] text-[#d4a359]">
+                                    <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0c1322] text-emerald-400">
                                       <SvcIcon className="w-3.5 h-3.5" />
                                     </div>
                                   </td>

@@ -342,7 +342,7 @@ export default function Services() {
   }, [faqs]);
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-[#d4a359] selection:text-slate-950">
+    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
       {/* Global Navbar */}
       <Navbar onScrollTo={() => {}} settings={settings} />
 
@@ -365,7 +365,7 @@ export default function Services() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
             <div className="max-w-2xl space-y-5">
-              <span className="inline-block text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.2em]">
+              <span className="inline-block text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em]">
                 {heroTag}
               </span>
 
@@ -380,7 +380,7 @@ export default function Services() {
               <div className="pt-3">
                 <a
                   href={heroButtonUrl}
-                  className="inline-flex items-center gap-2.5 bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-[#d4a359]/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <span>{heroButtonText}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -397,7 +397,7 @@ export default function Services() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-              <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
                 {catalogTag}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -456,7 +456,7 @@ export default function Services() {
                       <div className="pt-2 flex items-center justify-between border-t border-slate-100 mt-2">
                         <Link
                           to={detailUrl}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cda66e] hover:text-[#b38a50] transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
                         >
                           <span>Learn More</span>
                           <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
@@ -493,7 +493,7 @@ export default function Services() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl space-y-3 mb-16">
-              <span className="text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.2em] block">
+              <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
                 {whyChooseTag}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -511,7 +511,7 @@ export default function Services() {
                 return (
                   <div key={idx} className="flex items-start space-x-4">
                     <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
-                      <IconComponent className="w-5 h-5 text-[#d4a359]" />
+                      <IconComponent className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div className="space-y-1">
                       <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
@@ -535,7 +535,7 @@ export default function Services() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
             <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-              <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
                 {howItWorksTag}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -558,7 +558,7 @@ export default function Services() {
                     className="relative flex flex-col items-center text-center space-y-3 group"
                   >
                     {/* Number Badge */}
-                    <div className="w-7 h-7 rounded-full bg-[#cda66e] text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
+                    <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
                       {step.number || `0${idx + 1}`}
                     </div>
 
@@ -595,7 +595,7 @@ export default function Services() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
             <div className="text-center space-y-3 mb-14">
-              <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
                 {faqTag}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -615,7 +615,7 @@ export default function Services() {
                     key={idx}
                     className={`rounded-xl border transition-all duration-200 overflow-hidden ${
                       isOpen
-                        ? "border-[#d4a359]/70 bg-[#faf8f5] shadow-sm ring-1 ring-[#d4a359]/20"
+                        ? "border-emerald-500/60 bg-emerald-50/40 shadow-sm ring-1 ring-emerald-500/20"
                         : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
                     }`}
                   >
@@ -635,7 +635,7 @@ export default function Services() {
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
                           isOpen
-                            ? "bg-[#d4a359] text-slate-950 rotate-180 shadow-sm"
+                            ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
                             : "bg-slate-100 text-slate-500"
                         }`}
                       >
@@ -643,7 +643,7 @@ export default function Services() {
                       </div>
                     </button>
                     {isOpen && (
-                      <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-[#d4a359]/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                      <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
                         <p>{faq.answer}</p>
                       </div>
                     )}
@@ -655,7 +655,7 @@ export default function Services() {
             {/* Concierge Callout Box */}
             <div className="mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10 relative overflow-hidden">
               <div className="space-y-1.5 text-center sm:text-left relative z-10">
-                <span className="text-[#d4a359] text-[11px] font-extrabold uppercase tracking-widest block">
+                <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-widest block">
                   STILL HAVE QUESTIONS?
                 </span>
                 <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
@@ -668,7 +668,7 @@ export default function Services() {
               <div className="flex items-center gap-3 shrink-0 relative z-10">
                 <a
                   href="/#calculator"
-                  className="inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c29143] text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
+                  className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
                 >
                   <span>Get Instant Quote</span>
                   <ArrowRight className="w-3.5 h-3.5" />

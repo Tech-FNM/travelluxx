@@ -140,7 +140,7 @@ export default function ServiceDetail() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white">
-        <div className="w-12 h-12 border-4 border-[#d4a359] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
         <p className="text-slate-400 text-sm tracking-wide">Loading service details...</p>
       </div>
     );
@@ -151,7 +151,7 @@ export default function ServiceDetail() {
       <div className="min-h-screen bg-[#070b14] text-white flex flex-col">
         <Navbar onScrollTo={() => {}} settings={websiteSettings} />
         <main className="flex-grow flex flex-col items-center justify-center px-4 py-24 text-center">
-          <span className="text-[#d4a359] text-xs font-bold uppercase tracking-[0.2em] mb-3 block">
+          <span className="text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] mb-3 block">
             404 NOT FOUND
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-4">Service Not Found</h1>
@@ -160,7 +160,7 @@ export default function ServiceDetail() {
           </p>
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold px-7 py-3 rounded-full text-sm transition"
+            className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3 rounded-full text-sm transition"
           >
             <span>Browse All Services</span>
             <ArrowRight className="w-4 h-4" />
@@ -193,7 +193,7 @@ export default function ServiceDetail() {
     : "+44 121 714 0876";
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-[#d4a359] selection:text-slate-950">
+    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
       <Navbar onScrollTo={() => {}} settings={websiteSettings} />
 
       <main className="flex-grow">
@@ -221,13 +221,13 @@ export default function ServiceDetail() {
                 Services
               </Link>
               <ChevronRight className="w-3 h-3 text-slate-600" />
-              <span className="text-[#d4a359] font-semibold truncate max-w-[200px] sm:max-w-none">
+              <span className="text-emerald-400 font-semibold truncate max-w-[200px] sm:max-w-none">
                 {service.title}
               </span>
             </nav>
 
             <div className="max-w-3xl space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.18em]">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.18em]">
                 <IconComponent className="w-3.5 h-3.5 text-emerald-400" />
                 <span>EXECUTIVE CHAUFFEUR SERVICE</span>
               </div>
@@ -245,7 +245,7 @@ export default function ServiceDetail() {
               <div className="pt-4 flex flex-wrap items-center gap-3">
                 <a
                   href="/#calculator"
-                  className="inline-flex items-center gap-2.5 bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-[#d4a359]/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <span>Book This Service</span>
                   <ArrowRight className="w-4 h-4" />
@@ -289,7 +289,7 @@ export default function ServiceDetail() {
                 {/* Key Highlights / Features Box */}
                 {features.length > 0 && (
                   <div className="bg-[#f8fafc] border border-slate-200/80 rounded-2xl p-6 sm:p-8">
-                    <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#cda66e] mb-2">
+                    <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-emerald-600 mb-2">
                       KEY HIGHLIGHTS
                     </h3>
                     <h4 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6">
@@ -298,8 +298,8 @@ export default function ServiceDetail() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {features.map((feat: string, idx: number) => (
                         <div key={idx} className="flex items-start gap-3">
-                          <div className="w-6 h-6 rounded-full bg-[#cda66e]/15 text-[#cda66e] flex items-center justify-center shrink-0 mt-0.5">
-                            <CheckCircle2 className="w-4 h-4 text-[#cda66e]" />
+                          <div className="w-6 h-6 rounded-full bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                           </div>
                           <span className="text-slate-700 text-sm font-medium leading-snug">
                             {feat}
@@ -324,7 +324,7 @@ export default function ServiceDetail() {
                 {/* Trust & Guarantee Banner */}
                 <div className="bg-gradient-to-br from-[#0c101d] to-[#161d31] rounded-2xl p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
                   <div className="space-y-2 text-center sm:text-left">
-                    <div className="inline-flex items-center gap-2 text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.15em]">
+                    <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.15em]">
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />
                       <span>THE TRAVELLUXX STANDARD</span>
                     </div>
@@ -337,7 +337,7 @@ export default function ServiceDetail() {
                   </div>
                   <a
                     href="/#calculator"
-                    className="shrink-0 bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm transition shadow-lg hover:scale-105 active:scale-95"
+                    className="shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm transition shadow-lg hover:scale-105 active:scale-95"
                   >
                     Instant Quote
                   </a>
@@ -349,14 +349,14 @@ export default function ServiceDetail() {
                 {/* Sticky Booking Card */}
                 <div className="bg-[#0c101d] text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-white/10 sticky top-24 space-y-6">
                   <div className="border-b border-white/10 pb-6">
-                    <span className="text-[#d4a359] text-[11px] font-extrabold uppercase tracking-[0.2em] block mb-1">
+                    <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-[0.2em] block mb-1">
                       RESERVE YOUR RIDE
                     </span>
                     <h3 className="text-xl font-bold text-white">Book Online Instantly</h3>
                     {service.priceText && (
                       <div className="mt-3 flex items-baseline gap-2">
                         <span className="text-xs text-slate-400">Rates:</span>
-                        <span className="text-2xl font-black text-[#d4a359]">
+                        <span className="text-2xl font-black text-emerald-400">
                           {service.priceText}
                         </span>
                       </div>
@@ -385,7 +385,7 @@ export default function ServiceDetail() {
                   <div className="space-y-2.5 pt-2">
                     <a
                       href="/#calculator"
-                      className="w-full inline-flex items-center justify-center gap-2 bg-[#d4a359] hover:bg-[#c39248] text-slate-950 font-bold py-3.5 px-6 rounded-xl text-sm transition shadow-lg shadow-[#d4a359]/20"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-6 rounded-xl text-sm transition shadow-lg shadow-emerald-500/20"
                     >
                       <span>Calculate Fare &amp; Book</span>
                       <ArrowRight className="w-4 h-4" />
@@ -395,7 +395,7 @@ export default function ServiceDetail() {
                       href={`tel:${formattedPhone}`}
                       className="w-full inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl text-xs border border-white/10 transition"
                     >
-                      <Phone className="w-3.5 h-3.5 text-[#d4a359]" />
+                      <Phone className="w-3.5 h-3.5 text-emerald-400" />
                       <span>Call {formattedPhone}</span>
                     </a>
                   </div>
@@ -403,7 +403,7 @@ export default function ServiceDetail() {
                   {/* Other Services Navigation List */}
                   {allServices.length > 0 && (
                     <div className="border-t border-white/10 pt-6 mt-6">
-                      <h4 className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#d4a359] mb-4">
+                      <h4 className="text-xs font-extrabold uppercase tracking-[0.18em] text-emerald-400 mb-4">
                         ALL OUR SERVICES
                       </h4>
                       <div className="space-y-2">
@@ -416,7 +416,7 @@ export default function ServiceDetail() {
                               to={`/services/${s.slug}`}
                               className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs transition ${
                                 isCurrent
-                                  ? "bg-[#d4a359] text-slate-950 font-bold"
+                                  ? "bg-emerald-500 text-slate-950 font-bold"
                                   : "text-slate-300 hover:bg-white/5 hover:text-white"
                               }`}
                             >
@@ -453,7 +453,7 @@ export default function ServiceDetail() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl space-y-3 mb-16">
-              <span className="text-[#d4a359] text-xs font-extrabold uppercase tracking-[0.2em] block">
+              <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
                 WHY CHOOSE TRAVELLUXX
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -502,7 +502,7 @@ export default function ServiceDetail() {
                 return (
                   <div key={idx} className="flex items-start space-x-4">
                     <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
-                      <ItemIcon className="w-5 h-5 text-[#d4a359]" />
+                      <ItemIcon className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div className="space-y-1">
                       <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
@@ -525,7 +525,7 @@ export default function ServiceDetail() {
         <section className="py-20 lg:py-24 bg-[#fafbfc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-              <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
                 HOW IT WORKS
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -569,7 +569,7 @@ export default function ServiceDetail() {
                     key={step.num}
                     className="relative flex flex-col items-center text-center space-y-3 group"
                   >
-                    <div className="w-7 h-7 rounded-full bg-[#cda66e] text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
+                    <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
                       {step.num}
                     </div>
                     <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-800 transition-transform group-hover:scale-105">
@@ -600,7 +600,7 @@ export default function ServiceDetail() {
           <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center space-y-3 mb-14">
-                <span className="text-[#cda66e] text-xs font-extrabold uppercase tracking-[0.2em] block">
+                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
                   FREQUENTLY ASKED QUESTIONS
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -619,7 +619,7 @@ export default function ServiceDetail() {
                       key={idx}
                       className={`rounded-xl border transition-all duration-200 overflow-hidden ${
                         isOpen
-                          ? "border-[#d4a359]/70 bg-[#faf8f5] shadow-sm ring-1 ring-[#d4a359]/20"
+                          ? "border-emerald-500/60 bg-emerald-50/40 shadow-sm ring-1 ring-emerald-500/20"
                           : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
                       }`}
                     >
@@ -639,7 +639,7 @@ export default function ServiceDetail() {
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
                             isOpen
-                              ? "bg-[#d4a359] text-slate-950 rotate-180 shadow-sm"
+                              ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
                               : "bg-slate-100 text-slate-500"
                           }`}
                         >
@@ -647,7 +647,7 @@ export default function ServiceDetail() {
                         </div>
                       </button>
                       {isOpen && (
-                        <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-[#d4a359]/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
                           <p>{faq.answer}</p>
                         </div>
                       )}
@@ -659,7 +659,7 @@ export default function ServiceDetail() {
               {/* Concierge Box */}
               <div className="mt-14 rounded-2xl bg-[#0c101d] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-white/10">
                 <div className="space-y-1.5 text-center sm:text-left">
-                  <span className="text-[#d4a359] text-[11px] font-extrabold uppercase tracking-widest block">
+                  <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-widest block">
                     NEED ASSISTANCE?
                   </span>
                   <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
@@ -672,7 +672,7 @@ export default function ServiceDetail() {
                 <div className="flex items-center gap-3 shrink-0">
                   <a
                     href="/#calculator"
-                    className="inline-flex items-center gap-2 bg-[#d4a359] hover:bg-[#c29143] text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
+                    className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-lg text-xs font-bold transition shadow-md hover:scale-105 transform"
                   >
                     <span>Book Now</span>
                     <ArrowRight className="w-3.5 h-3.5" />
