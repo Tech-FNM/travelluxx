@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Bpo4HzEl.js"(exports, module) {
+  "assets/index-BunDodyt.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -15124,18 +15124,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$$ = [
+    const __iconNode$11 = [
       ["path", { d: "M5 12h14", key: "1ays0h" }],
       ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
     ];
-    const ArrowRight = createLucideIcon("arrow-right", __iconNode$$);
+    const ArrowRight = createLucideIcon("arrow-right", __iconNode$11);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$_ = [
+    const __iconNode$10 = [
       [
         "path",
         {
@@ -15145,14 +15145,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "8", r: "6", key: "1vp47v" }]
     ];
-    const Award = createLucideIcon("award", __iconNode$_);
+    const Award = createLucideIcon("award", __iconNode$10);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$Z = [
+    const __iconNode$$ = [
       ["path", { d: "M12 7v14", key: "1akyts" }],
       [
         "path",
@@ -15162,25 +15162,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const BookOpen = createLucideIcon("book-open", __iconNode$Z);
+    const BookOpen = createLucideIcon("book-open", __iconNode$$);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$Y = [
+    const __iconNode$_ = [
       ["path", { d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", key: "jecpp" }],
       ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
     ];
-    const Briefcase = createLucideIcon("briefcase", __iconNode$Y);
+    const Briefcase = createLucideIcon("briefcase", __iconNode$_);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$X = [
+    const __iconNode$Z = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -15192,27 +15192,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M12 18h.01", key: "mhygvu" }],
       ["path", { d: "M16 18h.01", key: "kzsmim" }]
     ];
-    const CalendarDays = createLucideIcon("calendar-days", __iconNode$X);
+    const CalendarDays = createLucideIcon("calendar-days", __iconNode$Z);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$W = [
+    const __iconNode$Y = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
       ["path", { d: "M3 10h18", key: "8toen8" }]
     ];
-    const Calendar = createLucideIcon("calendar", __iconNode$W);
+    const Calendar = createLucideIcon("calendar", __iconNode$Y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$V = [
+    const __iconNode$X = [
       [
         "path",
         {
@@ -15224,39 +15224,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M9 17h6", key: "r8uit2" }],
       ["circle", { cx: "17", cy: "17", r: "2", key: "axvx0g" }]
     ];
-    const Car = createLucideIcon("car", __iconNode$V);
+    const Car = createLucideIcon("car", __iconNode$X);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$U = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-    const Check = createLucideIcon("check", __iconNode$U);
+    const __iconNode$W = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+    const Check = createLucideIcon("check", __iconNode$W);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$T = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-    const ChevronDown = createLucideIcon("chevron-down", __iconNode$T);
+    const __iconNode$V = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+    const ChevronDown = createLucideIcon("chevron-down", __iconNode$V);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$S = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-    const ChevronRight = createLucideIcon("chevron-right", __iconNode$S);
+    const __iconNode$U = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+    const ChevronRight = createLucideIcon("chevron-right", __iconNode$U);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$R = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-    const ChevronUp = createLucideIcon("chevron-up", __iconNode$R);
+    const __iconNode$T = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+    const ChevronUp = createLucideIcon("chevron-up", __iconNode$T);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$S = [
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+    ];
+    const CircleAlert = createLucideIcon("circle-alert", __iconNode$S);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$R = [
+      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+    ];
+    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$R);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15265,10 +15288,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      */
     const __iconNode$Q = [
       ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const CircleAlert = createLucideIcon("circle-alert", __iconNode$Q);
+    const CircleCheck = createLucideIcon("circle-check", __iconNode$Q);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15276,10 +15298,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$P = [
-      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+      ["path", { d: "M12 17h.01", key: "p32p05" }]
     ];
-    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$P);
+    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$P);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15287,10 +15310,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$O = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
     ];
-    const CircleCheck = createLucideIcon("circle-check", __iconNode$O);
+    const Clock = createLucideIcon("clock", __iconNode$O);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15298,11 +15321,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$N = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
-      ["path", { d: "M12 17h.01", key: "p32p05" }]
+      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
+      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
+      ["path", { d: "M7 6h1v4", key: "1obek4" }],
+      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
     ];
-    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$N);
+    const Coins = createLucideIcon("coins", __iconNode$N);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15310,30 +15334,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$M = [
-      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-    ];
-    const Clock = createLucideIcon("clock", __iconNode$M);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$L = [
-      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
-      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
-      ["path", { d: "M7 6h1v4", key: "1obek4" }],
-      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
-    ];
-    const Coins = createLucideIcon("coins", __iconNode$L);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$K = [
       ["path", { d: "M10 2v2", key: "7u0qdc" }],
       ["path", { d: "M14 2v2", key: "6buw04" }],
       [
@@ -15345,7 +15345,41 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "M6 2v2", key: "colzsn" }]
     ];
-    const Coffee = createLucideIcon("coffee", __iconNode$K);
+    const Coffee = createLucideIcon("coffee", __iconNode$M);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$L = [
+      [
+        "path",
+        {
+          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+          key: "9ktpf1"
+        }
+      ],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+    ];
+    const Compass = createLucideIcon("compass", __iconNode$L);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$K = [
+      [
+        "path",
+        {
+          d: "M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z",
+          key: "1vdc57"
+        }
+      ],
+      ["path", { d: "M5 21h14", key: "11awu3" }]
+    ];
+    const Crown = createLucideIcon("crown", __iconNode$K);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15356,13 +15390,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
-          key: "9ktpf1"
+          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
+          key: "c7niix"
         }
-      ],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ]
     ];
-    const Compass = createLucideIcon("compass", __iconNode$J);
+    const Droplet = createLucideIcon("droplet", __iconNode$J);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15370,16 +15403,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$I = [
-      [
-        "path",
-        {
-          d: "M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z",
-          key: "1vdc57"
-        }
-      ],
-      ["path", { d: "M5 21h14", key: "11awu3" }]
+      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
     ];
-    const Crown = createLucideIcon("crown", __iconNode$I);
+    const ExternalLink = createLucideIcon("external-link", __iconNode$I);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15387,34 +15415,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$H = [
-      [
-        "path",
-        {
-          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
-          key: "c7niix"
-        }
-      ]
-    ];
-    const Droplet = createLucideIcon("droplet", __iconNode$H);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$G = [
-      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
-    ];
-    const ExternalLink = createLucideIcon("external-link", __iconNode$G);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$F = [
       [
         "path",
         {
@@ -15432,14 +15432,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "m2 2 20 20", key: "1ooewy" }]
     ];
-    const EyeOff = createLucideIcon("eye-off", __iconNode$F);
+    const EyeOff = createLucideIcon("eye-off", __iconNode$H);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$E = [
+    const __iconNode$G = [
       [
         "path",
         {
@@ -15449,7 +15449,33 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Eye = createLucideIcon("eye", __iconNode$E);
+    const Eye = createLucideIcon("eye", __iconNode$G);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$F = [
+      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+      ["path", { d: "M10 9H8", key: "b1mrlr" }],
+      ["path", { d: "M16 13H8", key: "t4e002" }],
+      ["path", { d: "M16 17H8", key: "z1uh3a" }]
+    ];
+    const FileText = createLucideIcon("file-text", __iconNode$F);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$E = [
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+      ["path", { d: "M2 12h20", key: "9i4pu4" }]
+    ];
+    const Globe = createLucideIcon("globe", __iconNode$E);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15457,20 +15483,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$D = [
-      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-      ["path", { d: "M10 9H8", key: "b1mrlr" }],
-      ["path", { d: "M16 13H8", key: "t4e002" }],
-      ["path", { d: "M16 17H8", key: "z1uh3a" }]
-    ];
-    const FileText = createLucideIcon("file-text", __iconNode$D);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$C = [
       ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
       [
         "path",
@@ -15480,7 +15492,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const House = createLucideIcon("house", __iconNode$C);
+    const House = createLucideIcon("house", __iconNode$D);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$C = [
+      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+    ];
+    const Image$1 = createLucideIcon("image", __iconNode$C);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15488,11 +15512,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$B = [
-      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
+      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
+      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
     ];
-    const Image$1 = createLucideIcon("image", __iconNode$B);
+    const Instagram = createLucideIcon("instagram", __iconNode$B);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15500,11 +15524,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$A = [
-      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
-      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
-      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
+      ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+      ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+      ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
     ];
-    const Instagram = createLucideIcon("instagram", __iconNode$A);
+    const Key = createLucideIcon("key", __iconNode$A);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15512,18 +15536,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$z = [
-      ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-      ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-      ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
-    ];
-    const Key = createLucideIcon("key", __iconNode$z);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$y = [
       [
         "path",
         {
@@ -15546,7 +15558,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Layers = createLucideIcon("layers", __iconNode$y);
+    const Layers = createLucideIcon("layers", __iconNode$z);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$y = [
+      ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+      ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+      ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+      ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+    ];
+    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15554,12 +15579,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$x = [
-      ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-      ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-      ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-      ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+      ["path", { d: "M11 5h10", key: "1cz7ny" }],
+      ["path", { d: "M11 12h10", key: "1438ji" }],
+      ["path", { d: "M11 19h10", key: "11t30w" }],
+      ["path", { d: "M4 4h1v5", key: "10yrso" }],
+      ["path", { d: "M4 9h2", key: "r1h2o0" }],
+      ["path", { d: "M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02", key: "xtkcd5" }]
     ];
-    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$x);
+    const ListOrdered = createLucideIcon("list-ordered", __iconNode$x);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -39390,6 +39417,7 @@ ${escapeText(this.code(index, length))}
       Coffee,
       Key
     };
+    const AVAILABLE_SERVICE_ICONS = Object.keys(SERVICE_ICONS);
     function getServiceIcon(iconName) {
       if (iconName && SERVICE_ICONS[iconName]) {
         return SERVICE_ICONS[iconName];
@@ -39762,28 +39790,35 @@ ${escapeText(this.code(index, length))}
         faqs: []
       });
       const [servicesPageSettings, setServicesPageSettings] = reactExports.useState({
+        hero_enabled: true,
         hero_tag: "OUR SERVICES",
         hero_title: "Premium, Reliable & Comfortable Travel Services",
         hero_description: "From airport transfers to long-distance journeys, TravelLuxx provides professional private transportation tailored around your needs.",
         hero_button_text: "Book Your Journey",
         hero_button_url: "/#calculator",
         hero_image: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+        catalog_enabled: true,
         catalog_tag: "OUR SERVICES",
         catalog_title: "Travel Solutions for Every Journey",
         catalog_description: "Whether it's a quick airport transfer or a long-distance trip, we offer a range of services designed to make your journey smooth, safe and stress-free.",
+        why_choose_enabled: true,
         why_choose_tag: "WHY CHOOSE TRAVELLUXX",
         why_choose_title: "Your Trusted Travel Partner",
         why_choose_description: "We go the extra mile to ensure your journey is comfortable, safe and hassle-free.",
         why_choose_bg_image: "https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80",
         why_choose_items: [],
+        how_it_works_enabled: true,
         how_it_works_tag: "HOW IT WORKS",
         how_it_works_title: "Simple Steps to Your Destination",
         how_it_works_description: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
         how_it_works_steps: [],
+        faq_enabled: true,
         faq_tag: "FREQUENTLY ASKED QUESTIONS",
         faq_title: "Got Questions? We Have Answers",
         faq_description: "Everything you need to know about our luxury chauffeur services, airport transfers, vehicle fleet, and booking policies.",
-        faqs: []
+        faqs: [],
+        meta_title: "",
+        meta_description: ""
       });
       const [yoastServiceTab, setYoastServiceTab] = reactExports.useState("seo");
       const [focusKeyphraseService, setFocusKeyphraseService] = reactExports.useState("");
@@ -40330,7 +40365,9 @@ ${escapeText(this.code(index, length))}
         try {
           const r = await fetch("/api/services-page-settings");
           const data = await r.json();
-          if (data && typeof data === "object") setServicesPageSettings(data);
+          if (data && typeof data === "object") {
+            setServicesPageSettings((prev) => ({ ...prev, ...data }));
+          }
         } catch (err) {
         }
       };
@@ -42755,10 +42792,65 @@ ${escapeText(this.code(index, length))}
                 ] }) })
               ] }),
               editingService === "page-settings" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-6 shadow-sm space-y-8", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-6 -mt-6 p-6 rounded-t-sm", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-base font-bold text-slate-900 flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-5 h-5 text-emerald-600" }),
+                      "Services Page Full Section Management"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-slate-500 mt-0.5", children: [
+                      "Manage headlines, descriptions, media, icons, and visibility for every section on the ",
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-slate-700", children: "/services" }),
+                      " page."
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2.5 shrink-0", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "a",
+                      {
+                        href: "/services",
+                        target: "_blank",
+                        rel: "noreferrer",
+                        className: "border border-[#c3c4c7] hover:bg-white bg-slate-100 text-[#2271b1] px-3.5 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3.5 h-3.5" }),
+                          "Live Preview"
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: saveServicesPageSettings,
+                        disabled: isSaving,
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-1.5 rounded text-xs font-bold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-3.5 h-3.5" }),
+                          isSaving ? "Saving Settings..." : "Save All Page Settings"
+                        ]
+                      }
+                    )
+                  ] })
+                ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-4 h-4 text-emerald-600" }),
-                    "1. Main Services Page Hero Section"
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-4 h-4 text-emerald-600" }),
+                      "1. Main Hero Section"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: servicesPageSettings.hero_enabled !== false,
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, hero_enabled: e.target.checked }),
+                          className: "rounded text-emerald-600 focus:ring-emerald-500"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: servicesPageSettings.hero_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: servicesPageSettings.hero_enabled !== false ? "Section Visible" : "Section Hidden" })
+                    ] })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -42796,7 +42888,8 @@ ${escapeText(this.code(index, length))}
                         rows: 2,
                         value: servicesPageSettings.hero_description || "",
                         onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, hero_description: e.target.value }),
-                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                        placeholder: "From airport transfers to long-distance journeys..."
                       }
                     )
                   ] }),
@@ -42837,7 +42930,8 @@ ${escapeText(this.code(index, length))}
                         {
                           type: "button",
                           onClick: () => setServicesPageSettings({ ...servicesPageSettings, hero_image: "" }),
-                          className: "absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition",
+                          className: "absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow",
+                          title: "Remove image",
                           children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3.5 h-3.5" })
                         }
                       )
@@ -42856,9 +42950,23 @@ ${escapeText(this.code(index, length))}
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(Car, { className: "w-4 h-4 text-emerald-600" }),
-                    "2. Catalog Section Header"
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Car, { className: "w-4 h-4 text-emerald-600" }),
+                      "2. Catalog Section Header & Grid"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: servicesPageSettings.catalog_enabled !== false,
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, catalog_enabled: e.target.checked }),
+                          className: "rounded text-emerald-600 focus:ring-emerald-500"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: servicesPageSettings.catalog_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: servicesPageSettings.catalog_enabled !== false ? "Section Visible" : "Section Hidden" })
+                    ] })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -42869,7 +42977,8 @@ ${escapeText(this.code(index, length))}
                           type: "text",
                           value: servicesPageSettings.catalog_tag || "",
                           onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, catalog_tag: e.target.value }),
-                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "OUR SERVICES"
                         }
                       )
                     ] }),
@@ -42881,7 +42990,8 @@ ${escapeText(this.code(index, length))}
                           type: "text",
                           value: servicesPageSettings.catalog_title || "",
                           onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, catalog_title: e.target.value }),
-                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "Travel Solutions for Every Journey"
                         }
                       )
                     ] })
@@ -42894,15 +43004,42 @@ ${escapeText(this.code(index, length))}
                         rows: 2,
                         value: servicesPageSettings.catalog_description || "",
                         onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, catalog_description: e.target.value }),
-                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                        placeholder: "Whether it's a quick airport transfer or a long-distance trip..."
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 bg-emerald-50/60 border border-emerald-200 rounded text-xs text-emerald-950 flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Service cards displayed in this grid are managed directly in your Services catalog." }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => navigate("/admin/services"),
+                        className: "bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1 rounded text-[11px] font-semibold transition",
+                        children: "Manage Service Cards"
                       }
                     )
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-4 h-4 text-emerald-600" }),
-                    "3. Why Choose TravelLuxx Section"
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-4 h-4 text-emerald-600" }),
+                      "3. Why Choose TravelLuxx Section & Feature Cards"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: servicesPageSettings.why_choose_enabled !== false,
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, why_choose_enabled: e.target.checked }),
+                          className: "rounded text-emerald-600 focus:ring-emerald-500"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: servicesPageSettings.why_choose_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: servicesPageSettings.why_choose_enabled !== false ? "Section Visible" : "Section Hidden" })
+                    ] })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -42913,7 +43050,8 @@ ${escapeText(this.code(index, length))}
                           type: "text",
                           value: servicesPageSettings.why_choose_tag || "",
                           onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, why_choose_tag: e.target.value }),
-                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "WHY CHOOSE TRAVELLUXX"
                         }
                       )
                     ] }),
@@ -42925,7 +43063,8 @@ ${escapeText(this.code(index, length))}
                           type: "text",
                           value: servicesPageSettings.why_choose_title || "",
                           onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, why_choose_title: e.target.value }),
-                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "Your Trusted Travel Partner"
                         }
                       )
                     ] })
@@ -42938,33 +43077,487 @@ ${escapeText(this.code(index, length))}
                         rows: 2,
                         value: servicesPageSettings.why_choose_description || "",
                         onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, why_choose_description: e.target.value }),
-                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                        placeholder: "We go the extra mile to ensure your journey is comfortable..."
                       }
                     )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Background Overlay Image (Right-Hand Luxury Vehicle Texture)" }),
+                    servicesPageSettings.why_choose_bg_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group aspect-[3/1] max-w-lg rounded border border-[#c3c4c7] overflow-hidden bg-slate-900 flex items-center justify-center", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: servicesPageSettings.why_choose_bg_image, alt: "Why Choose background preview", className: "w-full h-full object-cover" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => setServicesPageSettings({ ...servicesPageSettings, why_choose_bg_image: "" }),
+                          className: "absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow",
+                          title: "Remove image",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3.5 h-3.5" })
+                        }
+                      )
+                    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => {
+                          setEditorTarget("services-page-why-bg");
+                          setEditorMediaModalOpen(true);
+                        },
+                        className: "border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] px-4 py-3 rounded text-xs font-semibold transition",
+                        children: "+ Select Background Image from Media"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 pt-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-bold text-[#1d2327] uppercase tracking-wide", children: [
+                        "Feature Cards (",
+                        Array.isArray(servicesPageSettings.why_choose_items) ? servicesPageSettings.why_choose_items.length : 0,
+                        ")"
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            const current = Array.isArray(servicesPageSettings.why_choose_items) ? [...servicesPageSettings.why_choose_items] : [];
+                            current.push({
+                              icon: "ShieldCheck",
+                              title: "New Feature Title",
+                              description: "Feature description explaining the benefit to passengers."
+                            });
+                            setServicesPageSettings({ ...servicesPageSettings, why_choose_items: current });
+                          },
+                          className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                            "Add Feature Card"
+                          ]
+                        }
+                      ) })
+                    ] }),
+                    !servicesPageSettings.why_choose_items || servicesPageSettings.why_choose_items.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mb-2", children: "No feature cards added yet." }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            setServicesPageSettings({
+                              ...servicesPageSettings,
+                              why_choose_items: [
+                                { icon: "UserCheck", title: "Professional & Experienced Drivers", description: "Skilled, courteous and fully licensed." },
+                                { icon: "Car", title: "Comfortable Vehicles", description: "Modern, clean and well-maintained fleet." },
+                                { icon: "Tag", title: "Fixed & Transparent Pricing", description: "No hidden charges, no surprises." },
+                                { icon: "Clock", title: "24/7 Booking Support", description: "We're always here to help you." },
+                                { icon: "MapPin", title: "Airport & Nationwide Coverage", description: "All major airports and locations across the UK." },
+                                { icon: "ShieldCheck", title: "Punctual & Reliable Service", description: "On time, every time." }
+                              ]
+                            });
+                          },
+                          className: "text-xs text-[#2271b1] font-semibold hover:underline",
+                          children: "+ Load Default Feature Cards"
+                        }
+                      )
+                    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: servicesPageSettings.why_choose_items.map((item, idx) => {
+                      const IconComp = getServiceIcon(item.icon);
+                      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-7 h-7 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(IconComp, { className: "w-3.5 h-3.5" }) }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-xs text-slate-700 uppercase tracking-wider", children: [
+                              "Card #",
+                              idx + 1,
+                              ": ",
+                              item.title || "Untitled"
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+                            idx > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = [...servicesPageSettings.why_choose_items];
+                                  const temp = list[idx - 1];
+                                  list[idx - 1] = list[idx];
+                                  list[idx] = temp;
+                                  setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                },
+                                className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                title: "Move Up",
+                                children: "↑"
+                              }
+                            ),
+                            idx < servicesPageSettings.why_choose_items.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = [...servicesPageSettings.why_choose_items];
+                                  const temp = list[idx + 1];
+                                  list[idx + 1] = list[idx];
+                                  list[idx] = temp;
+                                  setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                },
+                                className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                title: "Move Down",
+                                children: "↓"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = servicesPageSettings.why_choose_items.filter((_, i) => i !== idx);
+                                  setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                },
+                                className: "text-red-500 hover:text-red-700 p-1 transition ml-1",
+                                title: "Delete Item",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-4 h-4" })
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Icon" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "select",
+                              {
+                                value: item.icon || "ShieldCheck",
+                                onChange: (e) => {
+                                  const list = [...servicesPageSettings.why_choose_items];
+                                  list[idx].icon = e.target.value;
+                                  setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                },
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]",
+                                children: AVAILABLE_SERVICE_ICONS.map((ic) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: ic, children: ic }, ic))
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Feature Title" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: item.title || "",
+                                onChange: (e) => {
+                                  const list = [...servicesPageSettings.why_choose_items];
+                                  list[idx].title = e.target.value;
+                                  setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                },
+                                placeholder: "e.g. Professional & Experienced Drivers",
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Feature Description" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: item.description || "",
+                              onChange: (e) => {
+                                const list = [...servicesPageSettings.why_choose_items];
+                                list[idx].description = e.target.value;
+                                setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                              },
+                              placeholder: "Brief description of this benefit...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] })
+                      ] }, idx);
+                    }) })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ListOrdered, { className: "w-4 h-4 text-emerald-600" }),
+                      "4. How It Works Section & Process Steps"
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: servicesPageSettings.how_it_works_enabled !== false,
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, how_it_works_enabled: e.target.checked }),
+                          className: "rounded text-emerald-600 focus:ring-emerald-500"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: servicesPageSettings.how_it_works_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: servicesPageSettings.how_it_works_enabled !== false ? "Section Visible" : "Section Hidden" })
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Tag" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "text",
+                          value: servicesPageSettings.how_it_works_tag || "",
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, how_it_works_tag: e.target.value }),
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "HOW IT WORKS"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Title" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "text",
+                          value: servicesPageSettings.how_it_works_title || "",
+                          onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, how_it_works_title: e.target.value }),
+                          className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          placeholder: "Simple Steps to Your Destination"
+                        }
+                      )
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Description" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "textarea",
+                      {
+                        rows: 2,
+                        value: servicesPageSettings.how_it_works_description || "",
+                        onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, how_it_works_description: e.target.value }),
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                        placeholder: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps..."
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 pt-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-bold text-[#1d2327] uppercase tracking-wide", children: [
+                        "Process Steps (",
+                        Array.isArray(servicesPageSettings.how_it_works_steps) ? servicesPageSettings.how_it_works_steps.length : 0,
+                        ")"
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            const current = Array.isArray(servicesPageSettings.how_it_works_steps) ? [...servicesPageSettings.how_it_works_steps] : [];
+                            const nextNum = (current.length + 1).toString().padStart(2, "0");
+                            current.push({
+                              number: nextNum,
+                              icon: "CheckCircle2",
+                              title: "New Step Title",
+                              description: "Describe what happens in this step."
+                            });
+                            setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: current });
+                          },
+                          className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                            "Add Step Card"
+                          ]
+                        }
+                      ) })
+                    ] }),
+                    !servicesPageSettings.how_it_works_steps || servicesPageSettings.how_it_works_steps.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mb-2", children: "No steps configured yet." }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            setServicesPageSettings({
+                              ...servicesPageSettings,
+                              how_it_works_steps: [
+                                { number: "01", icon: "CalendarDays", title: "Book Your Journey", description: "Enter your pickup, destination and journey details." },
+                                { number: "02", icon: "CheckCircle2", title: "Get Your Confirmation", description: "Receive your booking confirmation with all journey details." },
+                                { number: "03", icon: "UserCheck", title: "Meet Your Chauffeur", description: "Your professional driver arrives at the agreed pickup location." },
+                                { number: "04", icon: "Car", title: "Enjoy Your Journey", description: "Sit back, relax and travel comfortably to your destination." }
+                              ]
+                            });
+                          },
+                          className: "text-xs text-[#2271b1] font-semibold hover:underline",
+                          children: "+ Load Default 4 Steps"
+                        }
+                      )
+                    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: servicesPageSettings.how_it_works_steps.map((step, idx) => {
+                      getServiceIcon(step.icon);
+                      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-6 h-6 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center", children: step.number || `0${idx + 1}` }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-xs text-slate-700 uppercase tracking-wider", children: [
+                              "Step #",
+                              idx + 1,
+                              ": ",
+                              step.title || "Untitled"
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+                            idx > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = [...servicesPageSettings.how_it_works_steps];
+                                  const temp = list[idx - 1];
+                                  list[idx - 1] = list[idx];
+                                  list[idx] = temp;
+                                  setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                },
+                                className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                title: "Move Up",
+                                children: "↑"
+                              }
+                            ),
+                            idx < servicesPageSettings.how_it_works_steps.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = [...servicesPageSettings.how_it_works_steps];
+                                  const temp = list[idx + 1];
+                                  list[idx + 1] = list[idx];
+                                  list[idx] = temp;
+                                  setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                },
+                                className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                title: "Move Down",
+                                children: "↓"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = servicesPageSettings.how_it_works_steps.filter((_, i) => i !== idx);
+                                  setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                },
+                                className: "text-red-500 hover:text-red-700 p-1 transition ml-1",
+                                title: "Delete Step",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-4 h-4" })
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-4 gap-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Step Number" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: step.number || "",
+                                onChange: (e) => {
+                                  const list = [...servicesPageSettings.how_it_works_steps];
+                                  list[idx].number = e.target.value;
+                                  setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                },
+                                placeholder: "01",
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Icon" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "select",
+                              {
+                                value: step.icon || "CalendarDays",
+                                onChange: (e) => {
+                                  const list = [...servicesPageSettings.how_it_works_steps];
+                                  list[idx].icon = e.target.value;
+                                  setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                },
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]",
+                                children: AVAILABLE_SERVICE_ICONS.map((ic) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: ic, children: ic }, ic))
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Step Title" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "text",
+                                value: step.title || "",
+                                onChange: (e) => {
+                                  const list = [...servicesPageSettings.how_it_works_steps];
+                                  list[idx].title = e.target.value;
+                                  setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                },
+                                placeholder: "e.g. Book Your Journey",
+                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Step Description" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: step.description || "",
+                              onChange: (e) => {
+                                const list = [...servicesPageSettings.how_it_works_steps];
+                                list[idx].description = e.target.value;
+                                setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                              },
+                              placeholder: "Describe this step...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] })
+                      ] }, idx);
+                    }) })
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-4 h-4 text-emerald-600" }),
-                      "4. Frequently Asked Questions (FAQ) Section"
+                      "5. Frequently Asked Questions (FAQ) Section"
                     ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                      "button",
-                      {
-                        type: "button",
-                        onClick: () => {
-                          const currentFaqs = Array.isArray(servicesPageSettings.faqs) ? [...servicesPageSettings.faqs] : [];
-                          currentFaqs.push({ question: "", answer: "" });
-                          setServicesPageSettings({ ...servicesPageSettings, faqs: currentFaqs });
-                        },
-                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
-                        children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
-                          "Add FAQ Item"
-                        ]
-                      }
-                    )
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "input",
+                          {
+                            type: "checkbox",
+                            checked: servicesPageSettings.faq_enabled !== false,
+                            onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, faq_enabled: e.target.checked }),
+                            className: "rounded text-emerald-600 focus:ring-emerald-500"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: servicesPageSettings.faq_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: servicesPageSettings.faq_enabled !== false ? "Section Visible" : "Section Hidden" })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            const currentFaqs = Array.isArray(servicesPageSettings.faqs) ? [...servicesPageSettings.faqs] : [];
+                            currentFaqs.push({ question: "", answer: "" });
+                            setServicesPageSettings({ ...servicesPageSettings, faqs: currentFaqs });
+                          },
+                          className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                            "Add FAQ Item"
+                          ]
+                        }
+                      )
+                    ] })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -43025,7 +43618,10 @@ ${escapeText(this.code(index, length))}
                               faqs: [
                                 { question: "How far in advance should I book my chauffeur service?", answer: "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule." },
                                 { question: "What happens if my flight is delayed?", answer: "We actively track all flights in real-time and provide complimentary 60 minutes waiting time from touchdown." },
-                                { question: "Are your prices fixed and all-inclusive?", answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees." }
+                                { question: "Are your prices fixed and all-inclusive?", answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees." },
+                                { question: "What is your cancellation and amendment policy?", answer: "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time." },
+                                { question: "Can I request child seats or additional luggage capacity?", answer: "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge." },
+                                { question: "What vehicles are in the TravelLuxx fleet?", answer: "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs." }
                               ]
                             });
                           },
@@ -43124,15 +43720,88 @@ ${escapeText(this.code(index, length))}
                     ] }, idx)) })
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pt-4 flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
-                  {
-                    onClick: saveServicesPageSettings,
-                    disabled: isSaving,
-                    className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-6 py-2 rounded text-sm font-semibold shadow-sm transition disabled:opacity-50",
-                    children: isSaving ? "Saving Settings..." : "Save All Page Settings"
-                  }
-                ) })
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { className: "w-4 h-4 text-emerald-600" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider", children: "6. Services Page SEO & Meta Tags" })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-slate-500", children: [
+                    "Configure the title tag and description snippet displayed on Google and social media search results for the ",
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("code", { className: "text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-mono", children: "/services" }),
+                    " page."
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] uppercase tracking-wide", children: "SEO Meta Title" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-slate-500 font-mono", children: [
+                        (servicesPageSettings.meta_title || "").length,
+                        " / 60 chars recommended"
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        value: servicesPageSettings.meta_title || "",
+                        onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, meta_title: e.target.value }),
+                        placeholder: "Premium Chauffeur & Airport Travel Services | TravelLuxx UK",
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] uppercase tracking-wide", children: "SEO Meta Description" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-slate-500 font-mono", children: [
+                        (servicesPageSettings.meta_description || "").length,
+                        " / 160 chars recommended"
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "textarea",
+                      {
+                        rows: 2,
+                        value: servicesPageSettings.meta_description || "",
+                        onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, meta_description: e.target.value }),
+                        placeholder: "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK.",
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-slate-50 p-3.5 rounded border border-slate-200 space-y-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1", children: "Google Snippet Preview" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-[#202124] flex items-center gap-1.5 font-mono", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-emerald-800", children: "travelluxx.co.uk" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-slate-400", children: "› services" })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-base text-[#1a0dab] font-medium hover:underline cursor-pointer line-clamp-1", children: servicesPageSettings.meta_title || "Premium Chauffeur & Airport Travel Services | TravelLuxx UK" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-[#4d5156] line-clamp-2 leading-relaxed", children: servicesPageSettings.meta_description || "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK." })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-2 flex justify-end gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => navigate("/admin/services"),
+                      className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-4 py-2 rounded text-sm font-semibold transition",
+                      children: "Cancel"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: saveServicesPageSettings,
+                      disabled: isSaving,
+                      className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-6 py-2 rounded text-sm font-bold shadow-sm transition disabled:opacity-50 flex items-center gap-2",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-4 h-4" }),
+                        isSaving ? "Saving Settings..." : "Save All Page Settings"
+                      ]
+                    }
+                  )
+                ] })
               ] }) : editingService !== void 0 ? (
                 /* 2. ADD / EDIT SERVICE FORM */
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: saveService, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
@@ -45509,10 +46178,11 @@ ${escapeText(this.code(index, length))}
         }).catch((err) => console.error("Failed to load services page settings:", err));
       }, []);
       reactExports.useEffect(() => {
+        var _a, _b;
         const baseUrl = "https://travelluxx.co.uk";
         const pageUrl = `${baseUrl}/services`;
-        const metaTitle = "Premium Chauffeur & Airport Travel Services | TravelLuxx UK";
-        const metaDesc = "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK.";
+        const metaTitle = ((_a = pageSettings == null ? void 0 : pageSettings.meta_title) == null ? void 0 : _a.trim()) || "Premium Chauffeur & Airport Travel Services | TravelLuxx UK";
+        const metaDesc = ((_b = pageSettings == null ? void 0 : pageSettings.meta_description) == null ? void 0 : _b.trim()) || "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK.";
         document.title = metaTitle;
         const setMeta = (attr, attrVal, content) => {
           let el = document.querySelector(`meta[${attr}='${attrVal}']`);
@@ -45541,7 +46211,12 @@ ${escapeText(this.code(index, length))}
         setMeta("property", "twitter:url", pageUrl);
         setMeta("property", "twitter:title", metaTitle);
         setMeta("property", "twitter:description", metaDesc);
-      }, []);
+      }, [pageSettings]);
+      const heroEnabled = (pageSettings == null ? void 0 : pageSettings.hero_enabled) !== false;
+      const catalogEnabled = (pageSettings == null ? void 0 : pageSettings.catalog_enabled) !== false;
+      const whyChooseEnabled = (pageSettings == null ? void 0 : pageSettings.why_choose_enabled) !== false;
+      const howItWorksEnabled = (pageSettings == null ? void 0 : pageSettings.how_it_works_enabled) !== false;
+      const faqEnabled = (pageSettings == null ? void 0 : pageSettings.faq_enabled) !== false;
       const heroTag = (pageSettings == null ? void 0 : pageSettings.hero_tag) || "OUR SERVICES";
       const heroTitle = (pageSettings == null ? void 0 : pageSettings.hero_title) || "Premium, Reliable & Comfortable Travel Services";
       const heroDescription = (pageSettings == null ? void 0 : pageSettings.hero_description) || "From airport transfers to long-distance journeys, TravelLuxx provides professional private transportation tailored around your needs.";
@@ -45590,7 +46265,7 @@ ${escapeText(this.code(index, length))}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
         }, settings }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-[520px] lg:min-h-[580px] flex items-center bg-[#070b14] overflow-hidden", children: [
+          heroEnabled && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-[520px] lg:min-h-[580px] flex items-center bg-[#070b14] overflow-hidden", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
               "div",
               {
@@ -45621,7 +46296,7 @@ ${escapeText(this.code(index, length))}
               ) })
             ] }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-[#ffffff]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+          catalogEnabled && /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-[#ffffff]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-3xl mx-auto mb-16 space-y-3", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block", children: catalogTag }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: catalogTitle }),
@@ -45679,7 +46354,7 @@ ${escapeText(this.code(index, length))}
               );
             }) })
           ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden", children: [
+          whyChooseEnabled && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "div",
               {
@@ -45708,7 +46383,7 @@ ${escapeText(this.code(index, length))}
               }) })
             ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-[#fafbfc]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+          howItWorksEnabled && /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-[#fafbfc]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-2xl mx-auto mb-16 space-y-3", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block", children: howItWorksTag }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: howItWorksTitle }),
@@ -45733,7 +46408,7 @@ ${escapeText(this.code(index, length))}
               );
             }) })
           ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-white border-t border-slate-200/70", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+          faqEnabled && /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-20 lg:py-24 bg-white border-t border-slate-200/70", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center space-y-3 mb-14", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block", children: faqTag }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: faqTitle }),

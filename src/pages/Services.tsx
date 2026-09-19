@@ -219,8 +219,11 @@ export default function Services() {
     const baseUrl = "https://travelluxx.co.uk";
     const pageUrl = `${baseUrl}/services`;
 
-    const metaTitle = "Premium Chauffeur & Airport Travel Services | TravelLuxx UK";
+    const metaTitle =
+      pageSettings?.meta_title?.trim() ||
+      "Premium Chauffeur & Airport Travel Services | TravelLuxx UK";
     const metaDesc =
+      pageSettings?.meta_description?.trim() ||
       "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK.";
 
     document.title = metaTitle;
@@ -256,7 +259,14 @@ export default function Services() {
     setMeta("property", "twitter:url", pageUrl);
     setMeta("property", "twitter:title", metaTitle);
     setMeta("property", "twitter:description", metaDesc);
-  }, []);
+  }, [pageSettings]);
+
+  // Section visibility flags
+  const heroEnabled = pageSettings?.hero_enabled !== false;
+  const catalogEnabled = pageSettings?.catalog_enabled !== false;
+  const whyChooseEnabled = pageSettings?.why_choose_enabled !== false;
+  const howItWorksEnabled = pageSettings?.how_it_works_enabled !== false;
+  const faqEnabled = pageSettings?.faq_enabled !== false;
 
   // Section contents from pageSettings or defaults
   const heroTag = pageSettings?.hero_tag || "OUR SERVICES";
@@ -350,309 +360,319 @@ export default function Services() {
         {/* ========================================================= */}
         {/* 1. HERO SECTION                                           */}
         {/* ========================================================= */}
-        <section className="relative min-h-[520px] lg:min-h-[580px] flex items-center bg-[#070b14] overflow-hidden">
-          {/* Hero Background Image with Gradient Overlay */}
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-            style={{
-              backgroundImage: `url('${heroImage}')`,
-            }}
-          >
-            {/* Dark gradient to ensure high readability and match luxury mockup */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/80 to-transparent"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-transparent to-[#070b14]/50"></div>
-          </div>
+        {heroEnabled && (
+          <section className="relative min-h-[520px] lg:min-h-[580px] flex items-center bg-[#070b14] overflow-hidden">
+            {/* Hero Background Image with Gradient Overlay */}
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+              style={{
+                backgroundImage: `url('${heroImage}')`,
+              }}
+            >
+              {/* Dark gradient to ensure high readability and match luxury mockup */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/80 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-transparent to-[#070b14]/50"></div>
+            </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
-            <div className="max-w-2xl space-y-5">
-              <span className="inline-block text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em]">
-                {heroTag}
-              </span>
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
+              <div className="max-w-2xl space-y-5">
+                <span className="inline-block text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em]">
+                  {heroTag}
+                </span>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
-                {heroTitle}
-              </h1>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
+                  {heroTitle}
+                </h1>
 
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
-                {heroDescription}
-              </p>
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+                  {heroDescription}
+                </p>
 
-              <div className="pt-3">
-                <a
-                  href={heroButtonUrl}
-                  className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                >
-                  <span>{heroButtonText}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </a>
+                <div className="pt-3">
+                  <a
+                    href={heroButtonUrl}
+                    className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                  >
+                    <span>{heroButtonText}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ========================================================= */}
         {/* 2. TRAVEL SOLUTIONS FOR EVERY JOURNEY (DYNAMIC CARDS GRID)*/}
         {/* ========================================================= */}
-        <section className="py-20 lg:py-24 bg-[#ffffff]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Section Header */}
-            <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                {catalogTag}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                {catalogTitle}
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                {catalogDescription}
-              </p>
-            </div>
+        {catalogEnabled && (
+          <section className="py-20 lg:py-24 bg-[#ffffff]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {/* Section Header */}
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  {catalogTag}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                  {catalogTitle}
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  {catalogDescription}
+                </p>
+              </div>
 
-            {/* Dynamic Services Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((svc) => {
-                const IconComponent = getServiceIcon(svc.icon);
-                const detailUrl = `/services/${svc.slug}`;
-                const desc = svc.excerpt || svc.description || "";
+              {/* Dynamic Services Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {services.map((svc) => {
+                  const IconComponent = getServiceIcon(svc.icon);
+                  const detailUrl = `/services/${svc.slug}`;
+                  const desc = svc.excerpt || svc.description || "";
 
-                return (
-                  <div
-                    key={svc.id || svc.slug}
-                    className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1"
-                  >
-                    {/* Card Image Container */}
-                    <Link to={detailUrl} className="relative h-52 w-full overflow-hidden bg-slate-100 block">
-                      <img
-                        src={
-                          svc.image ||
-                          "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80"
-                        }
-                        alt={svc.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </Link>
+                  return (
+                    <div
+                      key={svc.id || svc.slug}
+                      className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1"
+                    >
+                      {/* Card Image Container */}
+                      <Link to={detailUrl} className="relative h-52 w-full overflow-hidden bg-slate-100 block">
+                        <img
+                          src={
+                            svc.image ||
+                            "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80"
+                          }
+                          alt={svc.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </Link>
 
-                    {/* Floating Dark Icon Badge overlapping image */}
-                    <div className="px-6 -mt-6 relative z-10">
-                      <div className="w-12 h-12 rounded-full bg-[#0c1322] border-2 border-white shadow-md flex items-center justify-center text-white">
-                        <IconComponent className="w-5 h-5 text-emerald-400" />
+                      {/* Floating Dark Icon Badge overlapping image */}
+                      <div className="px-6 -mt-6 relative z-10">
+                        <div className="w-12 h-12 rounded-full bg-[#0c1322] border-2 border-white shadow-md flex items-center justify-center text-white">
+                          <IconComponent className="w-5 h-5 text-emerald-400" />
+                        </div>
+                      </div>
+
+                      {/* Card Content */}
+                      <div className="p-6 pt-3 flex-grow flex flex-col justify-between space-y-4">
+                        <div className="space-y-2">
+                          <Link to={detailUrl} className="block">
+                            <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                              {svc.title}
+                            </h3>
+                          </Link>
+                          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
+                            {desc}
+                          </p>
+                        </div>
+
+                        <div className="pt-2 flex items-center justify-between border-t border-slate-100 mt-2">
+                          <Link
+                            to={detailUrl}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
+                          >
+                            <span>Learn More</span>
+                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+
+                          <a
+                            href="/#calculator"
+                            className="text-[11px] font-semibold text-slate-500 hover:text-slate-900 transition"
+                          >
+                            Book Now
+                          </a>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Card Content */}
-                    <div className="p-6 pt-3 flex-grow flex flex-col justify-between space-y-4">
-                      <div className="space-y-2">
-                        <Link to={detailUrl} className="block">
-                          <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                            {svc.title}
-                          </h3>
-                        </Link>
-                        <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
-                          {desc}
-                        </p>
-                      </div>
-
-                      <div className="pt-2 flex items-center justify-between border-t border-slate-100 mt-2">
-                        <Link
-                          to={detailUrl}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
-                        >
-                          <span>Learn More</span>
-                          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                        </Link>
-
-                        <a
-                          href="/#calculator"
-                          className="text-[11px] font-semibold text-slate-500 hover:text-slate-900 transition"
-                        >
-                          Book Now
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ========================================================= */}
         {/* 3. WHY CHOOSE TRAVELLUXX (DARK LUXURY SECTION)           */}
         {/* ========================================================= */}
-        <section className="relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden">
-          {/* Subtle Leather Interior Overlay on Right Side */}
-          <div
-            className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 bg-cover bg-right bg-no-repeat opacity-20 lg:opacity-40 pointer-events-none z-0"
-            style={{
-              backgroundImage: `url('${whyChooseBgImage}')`,
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0c101d] via-[#0c101d]/60 to-transparent"></div>
-          </div>
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl space-y-3 mb-16">
-              <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                {whyChooseTag}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                {whyChooseTitle}
-              </h2>
-              <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-                {whyChooseDescription}
-              </p>
+        {whyChooseEnabled && (
+          <section className="relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden">
+            {/* Subtle Leather Interior Overlay on Right Side */}
+            <div
+              className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 bg-cover bg-right bg-no-repeat opacity-20 lg:opacity-40 pointer-events-none z-0"
+              style={{
+                backgroundImage: `url('${whyChooseBgImage}')`,
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c101d] via-[#0c101d]/60 to-transparent"></div>
             </div>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-              {whyChooseItems.map((item: any, idx: number) => {
-                const IconComponent = getServiceIcon(item.icon);
-                return (
-                  <div key={idx} className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
-                      <IconComponent className="w-5 h-5 text-emerald-400" />
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-2xl space-y-3 mb-16">
+                <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  {whyChooseTag}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                  {whyChooseTitle}
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                  {whyChooseDescription}
+                </p>
+              </div>
+
+              {/* Features Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+                {whyChooseItems.map((item: any, idx: number) => {
+                  const IconComponent = getServiceIcon(item.icon);
+                  return (
+                    <div key={idx} className="flex items-start space-x-4">
+                      <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
+                        <IconComponent className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                          {item.title}
+                        </h4>
+                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
-                        {item.title}
-                      </h4>
-                      <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ========================================================= */}
         {/* 4. HOW IT WORKS (SIMPLE STEPS TO YOUR DESTINATION)       */}
         {/* ========================================================= */}
-        <section className="py-20 lg:py-24 bg-[#fafbfc]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Header */}
-            <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                {howItWorksTag}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                {howItWorksTitle}
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                {howItWorksDescription}
-              </p>
-            </div>
+        {howItWorksEnabled && (
+          <section className="py-20 lg:py-24 bg-[#fafbfc]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {/* Header */}
+              <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  {howItWorksTag}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                  {howItWorksTitle}
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  {howItWorksDescription}
+                </p>
+              </div>
 
-            {/* Steps Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-              {howItWorksSteps.map((step: any, idx: number) => {
-                const IconComp = getServiceIcon(step.icon);
-                const isLast = idx === howItWorksSteps.length - 1;
+              {/* Steps Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                {howItWorksSteps.map((step: any, idx: number) => {
+                  const IconComp = getServiceIcon(step.icon);
+                  const isLast = idx === howItWorksSteps.length - 1;
 
-                return (
-                  <div
-                    key={step.number || idx}
-                    className="relative flex flex-col items-center text-center space-y-3 group"
-                  >
-                    {/* Number Badge */}
-                    <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
-                      {step.number || `0${idx + 1}`}
-                    </div>
-
-                    {/* Circular Icon Holder */}
-                    <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-800 transition-transform group-hover:scale-105">
-                      <IconComp className="w-6 h-6 text-slate-800" />
-                    </div>
-
-                    {/* Step Title & Copy */}
-                    <h4 className="text-sm font-bold text-slate-900 pt-1">
-                      {step.title}
-                    </h4>
-                    <p className="text-slate-500 text-xs leading-relaxed max-w-xs">
-                      {step.description}
-                    </p>
-
-                    {/* Connecting Chevron Arrow for Desktop */}
-                    {!isLast && (
-                      <div className="hidden lg:flex absolute top-10 -right-4 transform -translate-y-1/2 text-slate-300">
-                        <ChevronRight className="w-5 h-5" />
+                  return (
+                    <div
+                      key={step.number || idx}
+                      className="relative flex flex-col items-center text-center space-y-3 group"
+                    >
+                      {/* Number Badge */}
+                      <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
+                        {step.number || `0${idx + 1}`}
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+
+                      {/* Circular Icon Holder */}
+                      <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-800 transition-transform group-hover:scale-105">
+                        <IconComp className="w-6 h-6 text-slate-800" />
+                      </div>
+
+                      {/* Step Title & Copy */}
+                      <h4 className="text-sm font-bold text-slate-900 pt-1">
+                        {step.title}
+                      </h4>
+                      <p className="text-slate-500 text-xs leading-relaxed max-w-xs">
+                        {step.description}
+                      </p>
+
+                      {/* Connecting Chevron Arrow for Desktop */}
+                      {!isLast && (
+                        <div className="hidden lg:flex absolute top-10 -right-4 transform -translate-y-1/2 text-slate-300">
+                          <ChevronRight className="w-5 h-5" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ========================================================= */}
         {/* 5. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION)            */}
         {/* ========================================================= */}
-        <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Header */}
-            <div className="text-center space-y-3 mb-14">
-              <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                {faqTag}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                {faqTitle}
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                {faqDescription}
-              </p>
-            </div>
+        {faqEnabled && (
+          <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              {/* Header */}
+              <div className="text-center space-y-3 mb-14">
+                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
+                  {faqTag}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                  {faqTitle}
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                  {faqDescription}
+                </p>
+              </div>
 
-            {/* Accordion Cards */}
-            <div className="space-y-3.5">
-              {faqs.map((faq: any, idx: number) => {
-                const isOpen = openFaqIndex === idx;
-                return (
-                  <div
-                    key={idx}
-                    className={`rounded-xl border transition-all duration-200 overflow-hidden ${
-                      isOpen
-                        ? "border-emerald-500/60 bg-emerald-50/40 shadow-sm ring-1 ring-emerald-500/20"
-                        : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                      className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
-                      aria-expanded={isOpen}
+              {/* Accordion Cards */}
+              <div className="space-y-3.5">
+                {faqs.map((faq: any, idx: number) => {
+                  const isOpen = openFaqIndex === idx;
+                  return (
+                    <div
+                      key={idx}
+                      className={`rounded-xl border transition-all duration-200 overflow-hidden ${
+                        isOpen
+                          ? "border-emerald-500/60 bg-emerald-50/40 shadow-sm ring-1 ring-emerald-500/20"
+                          : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
+                      }`}
                     >
-                      <span
-                        className={`text-sm sm:text-base font-bold transition-colors ${
-                          isOpen ? "text-slate-950" : "text-slate-800"
-                        }`}
+                      <button
+                        type="button"
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                        className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                        aria-expanded={isOpen}
                       >
-                        {faq.question}
-                      </span>
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                          isOpen
-                            ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                            : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </div>
-                    </button>
-                    {isOpen && (
-                      <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
-                        <p>{faq.answer}</p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                        <span
+                          className={`text-sm sm:text-base font-bold transition-colors ${
+                            isOpen ? "text-slate-950" : "text-slate-800"
+                          }`}
+                        >
+                          {faq.question}
+                        </span>
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                            isOpen
+                              ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                              : "bg-slate-100 text-slate-500"
+                          }`}
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
+                      </button>
+                      {isOpen && (
+                        <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                          <p>{faq.answer}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       {/* Global Footer */}

@@ -51,9 +51,12 @@ export const SERVICE_ICONS: Record<string, React.ComponentType<{ className?: str
   Key
 };
 
+export const AVAILABLE_SERVICE_ICONS = Object.keys(SERVICE_ICONS);
+
 export function getServiceIcon(iconName?: string): React.ComponentType<{ className?: string }> {
   if (iconName && SERVICE_ICONS[iconName]) {
     return SERVICE_ICONS[iconName];
   }
   return Car;
 }
+

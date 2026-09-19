@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles, HelpCircle } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles, HelpCircle, ListOrdered, Globe } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { getServiceIcon } from "../utils/serviceIcons";
+import { getServiceIcon, AVAILABLE_SERVICE_ICONS } from "../utils/serviceIcons";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "media" | "menus" | "settings" | "inquiries";
@@ -473,28 +473,35 @@ export default function AdminDashboard() {
     faqs: [] as any[]
   });
   const [servicesPageSettings, setServicesPageSettings] = useState<any>({
+    hero_enabled: true,
     hero_tag: "OUR SERVICES",
     hero_title: "Premium, Reliable & Comfortable Travel Services",
     hero_description: "From airport transfers to long-distance journeys, TravelLuxx provides professional private transportation tailored around your needs.",
     hero_button_text: "Book Your Journey",
     hero_button_url: "/#calculator",
     hero_image: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+    catalog_enabled: true,
     catalog_tag: "OUR SERVICES",
     catalog_title: "Travel Solutions for Every Journey",
     catalog_description: "Whether it's a quick airport transfer or a long-distance trip, we offer a range of services designed to make your journey smooth, safe and stress-free.",
+    why_choose_enabled: true,
     why_choose_tag: "WHY CHOOSE TRAVELLUXX",
     why_choose_title: "Your Trusted Travel Partner",
     why_choose_description: "We go the extra mile to ensure your journey is comfortable, safe and hassle-free.",
     why_choose_bg_image: "https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80",
     why_choose_items: [],
+    how_it_works_enabled: true,
     how_it_works_tag: "HOW IT WORKS",
     how_it_works_title: "Simple Steps to Your Destination",
     how_it_works_description: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
     how_it_works_steps: [],
+    faq_enabled: true,
     faq_tag: "FREQUENTLY ASKED QUESTIONS",
     faq_title: "Got Questions? We Have Answers",
     faq_description: "Everything you need to know about our luxury chauffeur services, airport transfers, vehicle fleet, and booking policies.",
-    faqs: [] as any[]
+    faqs: [] as any[],
+    meta_title: "",
+    meta_description: ""
   });
   const [yoastServiceTab, setYoastServiceTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [focusKeyphraseService, setFocusKeyphraseService] = useState("");
@@ -1071,7 +1078,9 @@ export default function AdminDashboard() {
     try {
       const r = await fetch("/api/services-page-settings");
       const data = await r.json();
-      if (data && typeof data === "object") setServicesPageSettings(data);
+      if (data && typeof data === "object") {
+        setServicesPageSettings((prev: any) => ({ ...prev, ...data }));
+      }
     } catch (err) {}
   };
 
@@ -3452,12 +3461,59 @@ export default function AdminDashboard() {
               {/* 1. EDITING SERVICES PAGE SETTINGS */}
               {editingService === "page-settings" ? (
                 <div className="bg-white border border-[#c3c4c7] rounded-sm p-6 shadow-sm space-y-8">
-                  {/* Hero Settings */}
+                  {/* Quick Summary & Sticky Save Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-6 -mt-6 p-6 rounded-t-sm">
+                    <div>
+                      <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <Settings className="w-5 h-5 text-emerald-600" />
+                        Services Page Full Section Management
+                      </h2>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        Manage headlines, descriptions, media, icons, and visibility for every section on the <span className="font-semibold text-slate-700">/services</span> page.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2.5 shrink-0">
+                      <a
+                        href="/services"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="border border-[#c3c4c7] hover:bg-white bg-slate-100 text-[#2271b1] px-3.5 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Live Preview
+                      </a>
+                      <button
+                        type="button"
+                        onClick={saveServicesPageSettings}
+                        disabled={isSaving}
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-1.5 rounded text-xs font-bold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        <Save className="w-3.5 h-3.5" />
+                        {isSaving ? "Saving Settings..." : "Save All Page Settings"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Section 1: Hero Section */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
-                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-emerald-600" />
-                      1. Main Services Page Hero Section
-                    </h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-emerald-600" />
+                        1. Main Hero Section
+                      </h3>
+                      <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={servicesPageSettings.hero_enabled !== false}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_enabled: e.target.checked })}
+                          className="rounded text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span className={servicesPageSettings.hero_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                          {servicesPageSettings.hero_enabled !== false ? "Section Visible" : "Section Hidden"}
+                        </span>
+                      </label>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Hero Badge Tag</label>
@@ -3488,6 +3544,7 @@ export default function AdminDashboard() {
                         value={servicesPageSettings.hero_description || ""}
                         onChange={e => setServicesPageSettings({ ...servicesPageSettings, hero_description: e.target.value })}
                         className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        placeholder="From airport transfers to long-distance journeys..."
                       />
                     </div>
 
@@ -3522,7 +3579,8 @@ export default function AdminDashboard() {
                           <button
                             type="button"
                             onClick={() => setServicesPageSettings({ ...servicesPageSettings, hero_image: "" })}
-                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow"
+                            title="Remove image"
                           >
                             <X className="w-3.5 h-3.5" />
                           </button>
@@ -3542,12 +3600,26 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  {/* Catalog Header Settings */}
+                  {/* Section 2: Catalog Header Settings */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
-                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                      <Car className="w-4 h-4 text-emerald-600" />
-                      2. Catalog Section Header
-                    </h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <Car className="w-4 h-4 text-emerald-600" />
+                        2. Catalog Section Header & Grid
+                      </h3>
+                      <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={servicesPageSettings.catalog_enabled !== false}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_enabled: e.target.checked })}
+                          className="rounded text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span className={servicesPageSettings.catalog_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                          {servicesPageSettings.catalog_enabled !== false ? "Section Visible" : "Section Hidden"}
+                        </span>
+                      </label>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Tag</label>
@@ -3556,6 +3628,7 @@ export default function AdminDashboard() {
                           value={servicesPageSettings.catalog_tag || ""}
                           onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_tag: e.target.value })}
                           className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="OUR SERVICES"
                         />
                       </div>
                       <div>
@@ -3565,9 +3638,11 @@ export default function AdminDashboard() {
                           value={servicesPageSettings.catalog_title || ""}
                           onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_title: e.target.value })}
                           className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="Travel Solutions for Every Journey"
                         />
                       </div>
                     </div>
+
                     <div>
                       <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Catalog Description</label>
                       <textarea
@@ -3575,16 +3650,42 @@ export default function AdminDashboard() {
                         value={servicesPageSettings.catalog_description || ""}
                         onChange={e => setServicesPageSettings({ ...servicesPageSettings, catalog_description: e.target.value })}
                         className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        placeholder="Whether it's a quick airport transfer or a long-distance trip..."
                       />
+                    </div>
+
+                    <div className="p-3 bg-emerald-50/60 border border-emerald-200 rounded text-xs text-emerald-950 flex items-center justify-between">
+                      <span>Service cards displayed in this grid are managed directly in your Services catalog.</span>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/admin/services")}
+                        className="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1 rounded text-[11px] font-semibold transition"
+                      >
+                        Manage Service Cards
+                      </button>
                     </div>
                   </div>
 
-                  {/* Why Choose Section */}
+                  {/* Section 3: Why Choose Section & Feature Cards */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
-                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                      3. Why Choose TravelLuxx Section
-                    </h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                        3. Why Choose TravelLuxx Section & Feature Cards
+                      </h3>
+                      <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={servicesPageSettings.why_choose_enabled !== false}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_enabled: e.target.checked })}
+                          className="rounded text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span className={servicesPageSettings.why_choose_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                          {servicesPageSettings.why_choose_enabled !== false ? "Section Visible" : "Section Hidden"}
+                        </span>
+                      </label>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Tag</label>
@@ -3593,6 +3694,7 @@ export default function AdminDashboard() {
                           value={servicesPageSettings.why_choose_tag || ""}
                           onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_tag: e.target.value })}
                           className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="WHY CHOOSE TRAVELLUXX"
                         />
                       </div>
                       <div>
@@ -3602,9 +3704,11 @@ export default function AdminDashboard() {
                           value={servicesPageSettings.why_choose_title || ""}
                           onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_title: e.target.value })}
                           className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="Your Trusted Travel Partner"
                         />
                       </div>
                     </div>
+
                     <div>
                       <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Description</label>
                       <textarea
@@ -3612,29 +3716,473 @@ export default function AdminDashboard() {
                         value={servicesPageSettings.why_choose_description || ""}
                         onChange={e => setServicesPageSettings({ ...servicesPageSettings, why_choose_description: e.target.value })}
                         className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        placeholder="We go the extra mile to ensure your journey is comfortable..."
                       />
+                    </div>
+
+                    <div>
+                      <span className="block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide">Background Overlay Image (Right-Hand Luxury Vehicle Texture)</span>
+                      {servicesPageSettings.why_choose_bg_image ? (
+                        <div className="relative group aspect-[3/1] max-w-lg rounded border border-[#c3c4c7] overflow-hidden bg-slate-900 flex items-center justify-center">
+                          <img src={servicesPageSettings.why_choose_bg_image} alt="Why Choose background preview" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setServicesPageSettings({ ...servicesPageSettings, why_choose_bg_image: "" })}
+                            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow"
+                            title="Remove image"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditorTarget("services-page-why-bg");
+                            setEditorMediaModalOpen(true);
+                          }}
+                          className="border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] px-4 py-3 rounded text-xs font-semibold transition"
+                        >
+                          + Select Background Image from Media
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Why Choose Feature Cards Manager */}
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-bold text-[#1d2327] uppercase tracking-wide">
+                          Feature Cards ({Array.isArray(servicesPageSettings.why_choose_items) ? servicesPageSettings.why_choose_items.length : 0})
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const current = Array.isArray(servicesPageSettings.why_choose_items) ? [...servicesPageSettings.why_choose_items] : [];
+                              current.push({
+                                icon: "ShieldCheck",
+                                title: "New Feature Title",
+                                description: "Feature description explaining the benefit to passengers."
+                              });
+                              setServicesPageSettings({ ...servicesPageSettings, why_choose_items: current });
+                            }}
+                            className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            Add Feature Card
+                          </button>
+                        </div>
+                      </div>
+
+                      {(!servicesPageSettings.why_choose_items || servicesPageSettings.why_choose_items.length === 0) ? (
+                        <div className="border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50">
+                          <p className="text-xs text-slate-500 mb-2">No feature cards added yet.</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setServicesPageSettings({
+                                ...servicesPageSettings,
+                                why_choose_items: [
+                                  { icon: "UserCheck", title: "Professional & Experienced Drivers", description: "Skilled, courteous and fully licensed." },
+                                  { icon: "Car", title: "Comfortable Vehicles", description: "Modern, clean and well-maintained fleet." },
+                                  { icon: "Tag", title: "Fixed & Transparent Pricing", description: "No hidden charges, no surprises." },
+                                  { icon: "Clock", title: "24/7 Booking Support", description: "We're always here to help you." },
+                                  { icon: "MapPin", title: "Airport & Nationwide Coverage", description: "All major airports and locations across the UK." },
+                                  { icon: "ShieldCheck", title: "Punctual & Reliable Service", description: "On time, every time." }
+                                ]
+                              });
+                            }}
+                            className="text-xs text-[#2271b1] font-semibold hover:underline"
+                          >
+                            + Load Default Feature Cards
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {servicesPageSettings.why_choose_items.map((item: any, idx: number) => {
+                            const IconComp = getServiceIcon(item.icon);
+                            return (
+                              <div key={idx} className="border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm">
+                                <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-7 h-7 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center">
+                                      <IconComp className="w-3.5 h-3.5" />
+                                    </div>
+                                    <span className="font-bold text-xs text-slate-700 uppercase tracking-wider">
+                                      Card #{idx + 1}: {item.title || "Untitled"}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-1.5">
+                                    {idx > 0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const list = [...servicesPageSettings.why_choose_items];
+                                          const temp = list[idx - 1];
+                                          list[idx - 1] = list[idx];
+                                          list[idx] = temp;
+                                          setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                        }}
+                                        className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                        title="Move Up"
+                                      >
+                                        ↑
+                                      </button>
+                                    )}
+                                    {idx < servicesPageSettings.why_choose_items.length - 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const list = [...servicesPageSettings.why_choose_items];
+                                          const temp = list[idx + 1];
+                                          list[idx + 1] = list[idx];
+                                          list[idx] = temp;
+                                          setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                        }}
+                                        className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                        title="Move Down"
+                                      >
+                                        ↓
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const list = servicesPageSettings.why_choose_items.filter((_: any, i: number) => i !== idx);
+                                        setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                      }}
+                                      className="text-red-500 hover:text-red-700 p-1 transition ml-1"
+                                      title="Delete Item"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                  <div>
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Icon</label>
+                                    <select
+                                      value={item.icon || "ShieldCheck"}
+                                      onChange={e => {
+                                        const list = [...servicesPageSettings.why_choose_items];
+                                        list[idx].icon = e.target.value;
+                                        setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                      }}
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                    >
+                                      {AVAILABLE_SERVICE_ICONS.map(ic => (
+                                        <option key={ic} value={ic}>{ic}</option>
+                                      ))}
+                                    </select>
+                                  </div>
+
+                                  <div className="sm:col-span-2">
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Feature Title</label>
+                                    <input
+                                      type="text"
+                                      value={item.title || ""}
+                                      onChange={e => {
+                                        const list = [...servicesPageSettings.why_choose_items];
+                                        list[idx].title = e.target.value;
+                                        setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                      }}
+                                      placeholder="e.g. Professional & Experienced Drivers"
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Feature Description</label>
+                                  <textarea
+                                    rows={2}
+                                    value={item.description || ""}
+                                    onChange={e => {
+                                      const list = [...servicesPageSettings.why_choose_items];
+                                      list[idx].description = e.target.value;
+                                      setServicesPageSettings({ ...servicesPageSettings, why_choose_items: list });
+                                    }}
+                                    placeholder="Brief description of this benefit..."
+                                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* 4. Frequently Asked Questions (FAQ) Section */}
+                  {/* Section 4: How It Works Section & Process Steps */}
+                  <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <ListOrdered className="w-4 h-4 text-emerald-600" />
+                        4. How It Works Section & Process Steps
+                      </h3>
+                      <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={servicesPageSettings.how_it_works_enabled !== false}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, how_it_works_enabled: e.target.checked })}
+                          className="rounded text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span className={servicesPageSettings.how_it_works_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                          {servicesPageSettings.how_it_works_enabled !== false ? "Section Visible" : "Section Hidden"}
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Tag</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.how_it_works_tag || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, how_it_works_tag: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="HOW IT WORKS"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Title</label>
+                        <input
+                          type="text"
+                          value={servicesPageSettings.how_it_works_title || ""}
+                          onChange={e => setServicesPageSettings({ ...servicesPageSettings, how_it_works_title: e.target.value })}
+                          className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          placeholder="Simple Steps to Your Destination"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Description</label>
+                      <textarea
+                        rows={2}
+                        value={servicesPageSettings.how_it_works_description || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, how_it_works_description: e.target.value })}
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        placeholder="Booking your journey with TravelLuxx is quick and easy. Follow these simple steps..."
+                      />
+                    </div>
+
+                    {/* Process Steps Manager */}
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-bold text-[#1d2327] uppercase tracking-wide">
+                          Process Steps ({Array.isArray(servicesPageSettings.how_it_works_steps) ? servicesPageSettings.how_it_works_steps.length : 0})
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const current = Array.isArray(servicesPageSettings.how_it_works_steps) ? [...servicesPageSettings.how_it_works_steps] : [];
+                              const nextNum = (current.length + 1).toString().padStart(2, "0");
+                              current.push({
+                                number: nextNum,
+                                icon: "CheckCircle2",
+                                title: "New Step Title",
+                                description: "Describe what happens in this step."
+                              });
+                              setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: current });
+                            }}
+                            className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            Add Step Card
+                          </button>
+                        </div>
+                      </div>
+
+                      {(!servicesPageSettings.how_it_works_steps || servicesPageSettings.how_it_works_steps.length === 0) ? (
+                        <div className="border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50">
+                          <p className="text-xs text-slate-500 mb-2">No steps configured yet.</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setServicesPageSettings({
+                                ...servicesPageSettings,
+                                how_it_works_steps: [
+                                  { number: "01", icon: "CalendarDays", title: "Book Your Journey", description: "Enter your pickup, destination and journey details." },
+                                  { number: "02", icon: "CheckCircle2", title: "Get Your Confirmation", description: "Receive your booking confirmation with all journey details." },
+                                  { number: "03", icon: "UserCheck", title: "Meet Your Chauffeur", description: "Your professional driver arrives at the agreed pickup location." },
+                                  { number: "04", icon: "Car", title: "Enjoy Your Journey", description: "Sit back, relax and travel comfortably to your destination." }
+                                ]
+                              });
+                            }}
+                            className="text-xs text-[#2271b1] font-semibold hover:underline"
+                          >
+                            + Load Default 4 Steps
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {servicesPageSettings.how_it_works_steps.map((step: any, idx: number) => {
+                            const StepIcon = getServiceIcon(step.icon);
+                            return (
+                              <div key={idx} className="border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm">
+                                <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                                  <div className="flex items-center gap-2">
+                                    <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center">
+                                      {step.number || `0${idx + 1}`}
+                                    </span>
+                                    <span className="font-bold text-xs text-slate-700 uppercase tracking-wider">
+                                      Step #{idx + 1}: {step.title || "Untitled"}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-1.5">
+                                    {idx > 0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const list = [...servicesPageSettings.how_it_works_steps];
+                                          const temp = list[idx - 1];
+                                          list[idx - 1] = list[idx];
+                                          list[idx] = temp;
+                                          setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                        }}
+                                        className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                        title="Move Up"
+                                      >
+                                        ↑
+                                      </button>
+                                    )}
+                                    {idx < servicesPageSettings.how_it_works_steps.length - 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const list = [...servicesPageSettings.how_it_works_steps];
+                                          const temp = list[idx + 1];
+                                          list[idx + 1] = list[idx];
+                                          list[idx] = temp;
+                                          setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                        }}
+                                        className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                        title="Move Down"
+                                      >
+                                        ↓
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const list = servicesPageSettings.how_it_works_steps.filter((_: any, i: number) => i !== idx);
+                                        setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                      }}
+                                      className="text-red-500 hover:text-red-700 p-1 transition ml-1"
+                                      title="Delete Step"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                  <div>
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Step Number</label>
+                                    <input
+                                      type="text"
+                                      value={step.number || ""}
+                                      onChange={e => {
+                                        const list = [...servicesPageSettings.how_it_works_steps];
+                                        list[idx].number = e.target.value;
+                                        setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                      }}
+                                      placeholder="01"
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                    />
+                                  </div>
+
+                                  <div>
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Icon</label>
+                                    <select
+                                      value={step.icon || "CalendarDays"}
+                                      onChange={e => {
+                                        const list = [...servicesPageSettings.how_it_works_steps];
+                                        list[idx].icon = e.target.value;
+                                        setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                      }}
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                    >
+                                      {AVAILABLE_SERVICE_ICONS.map(ic => (
+                                        <option key={ic} value={ic}>{ic}</option>
+                                      ))}
+                                    </select>
+                                  </div>
+
+                                  <div className="sm:col-span-2">
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Step Title</label>
+                                    <input
+                                      type="text"
+                                      value={step.title || ""}
+                                      onChange={e => {
+                                        const list = [...servicesPageSettings.how_it_works_steps];
+                                        list[idx].title = e.target.value;
+                                        setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                      }}
+                                      placeholder="e.g. Book Your Journey"
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Step Description</label>
+                                  <textarea
+                                    rows={2}
+                                    value={step.description || ""}
+                                    onChange={e => {
+                                      const list = [...servicesPageSettings.how_it_works_steps];
+                                      list[idx].description = e.target.value;
+                                      setServicesPageSettings({ ...servicesPageSettings, how_it_works_steps: list });
+                                    }}
+                                    placeholder="Describe this step..."
+                                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Section 5: Frequently Asked Questions (FAQ) Section */}
                   <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                         <HelpCircle className="w-4 h-4 text-emerald-600" />
-                        4. Frequently Asked Questions (FAQ) Section
+                        5. Frequently Asked Questions (FAQ) Section
                       </h3>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const currentFaqs = Array.isArray(servicesPageSettings.faqs) ? [...servicesPageSettings.faqs] : [];
-                          currentFaqs.push({ question: "", answer: "" });
-                          setServicesPageSettings({ ...servicesPageSettings, faqs: currentFaqs });
-                        }}
-                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        Add FAQ Item
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={servicesPageSettings.faq_enabled !== false}
+                            onChange={e => setServicesPageSettings({ ...servicesPageSettings, faq_enabled: e.target.checked })}
+                            className="rounded text-emerald-600 focus:ring-emerald-500"
+                          />
+                          <span className={servicesPageSettings.faq_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                            {servicesPageSettings.faq_enabled !== false ? "Section Visible" : "Section Hidden"}
+                          </span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentFaqs = Array.isArray(servicesPageSettings.faqs) ? [...servicesPageSettings.faqs] : [];
+                            currentFaqs.push({ question: "", answer: "" });
+                            setServicesPageSettings({ ...servicesPageSettings, faqs: currentFaqs });
+                          }}
+                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          Add FAQ Item
+                        </button>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3690,7 +4238,10 @@ export default function AdminDashboard() {
                                 faqs: [
                                   { question: "How far in advance should I book my chauffeur service?", answer: "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule." },
                                   { question: "What happens if my flight is delayed?", answer: "We actively track all flights in real-time and provide complimentary 60 minutes waiting time from touchdown." },
-                                  { question: "Are your prices fixed and all-inclusive?", answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees." }
+                                  { question: "Are your prices fixed and all-inclusive?", answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees." },
+                                  { question: "What is your cancellation and amendment policy?", answer: "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time." },
+                                  { question: "Can I request child seats or additional luggage capacity?", answer: "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge." },
+                                  { question: "What vehicles are in the TravelLuxx fleet?", answer: "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs." }
                                 ]
                               });
                             }}
@@ -3790,13 +4341,86 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
+                  {/* Section 6: SEO & Meta Tags */}
+                  <div className="space-y-4 border-b border-[#f0f0f1] pb-6">
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-emerald-600" />
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
+                        6. Services Page SEO & Meta Tags
+                      </h3>
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      Configure the title tag and description snippet displayed on Google and social media search results for the <code className="text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-mono">/services</code> page.
+                    </p>
+
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="block text-xs font-semibold text-[#1d2327] uppercase tracking-wide">
+                          SEO Meta Title
+                        </label>
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {(servicesPageSettings.meta_title || "").length} / 60 chars recommended
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={servicesPageSettings.meta_title || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, meta_title: e.target.value })}
+                        placeholder="Premium Chauffeur & Airport Travel Services | TravelLuxx UK"
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="block text-xs font-semibold text-[#1d2327] uppercase tracking-wide">
+                          SEO Meta Description
+                        </label>
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {(servicesPageSettings.meta_description || "").length} / 160 chars recommended
+                        </span>
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={servicesPageSettings.meta_description || ""}
+                        onChange={e => setServicesPageSettings({ ...servicesPageSettings, meta_description: e.target.value })}
+                        placeholder="Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK."
+                        className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      />
+                    </div>
+
+                    {/* Google Search Snippet Preview */}
+                    <div className="bg-slate-50 p-3.5 rounded border border-slate-200 space-y-1">
+                      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1">Google Snippet Preview</div>
+                      <div className="text-xs text-[#202124] flex items-center gap-1.5 font-mono">
+                        <span className="font-semibold text-emerald-800">travelluxx.co.uk</span>
+                        <span className="text-slate-400">› services</span>
+                      </div>
+                      <div className="text-base text-[#1a0dab] font-medium hover:underline cursor-pointer line-clamp-1">
+                        {servicesPageSettings.meta_title || "Premium Chauffeur & Airport Travel Services | TravelLuxx UK"}
+                      </div>
+                      <div className="text-xs text-[#4d5156] line-clamp-2 leading-relaxed">
+                        {servicesPageSettings.meta_description || "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK."}
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Save Button */}
-                  <div className="pt-4 flex justify-end">
+                  <div className="pt-2 flex justify-end gap-3">
                     <button
+                      type="button"
+                      onClick={() => navigate("/admin/services")}
+                      className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-4 py-2 rounded text-sm font-semibold transition"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
                       onClick={saveServicesPageSettings}
                       disabled={isSaving}
-                      className="bg-[#2271b1] hover:bg-[#135e96] text-white px-6 py-2 rounded text-sm font-semibold shadow-sm transition disabled:opacity-50"
+                      className="bg-[#2271b1] hover:bg-[#135e96] text-white px-6 py-2 rounded text-sm font-bold shadow-sm transition disabled:opacity-50 flex items-center gap-2"
                     >
+                      <Save className="w-4 h-4" />
                       {isSaving ? "Saving Settings..." : "Save All Page Settings"}
                     </button>
                   </div>

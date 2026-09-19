@@ -1,13 +1,16 @@
 {
+  "hero_enabled": true,
   "hero_tag": "OUR SERVICES",
   "hero_title": "Premium, Reliable & Comfortable Travel Services",
   "hero_description": "From airport transfers to long-distance journeys, TravelLuxx provides professional private transportation tailored around your needs.",
   "hero_button_text": "Book Your Journey",
   "hero_button_url": "/#calculator",
   "hero_image": "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+  "catalog_enabled": true,
   "catalog_tag": "OUR SERVICES",
   "catalog_title": "Travel Solutions for Every Journey",
   "catalog_description": "Whether it's a quick airport transfer or a long-distance trip, we offer a range of services designed to make your journey smooth, safe and stress-free.",
+  "why_choose_enabled": true,
   "why_choose_tag": "WHY CHOOSE TRAVELLUXX",
   "why_choose_title": "Your Trusted Travel Partner",
   "why_choose_description": "We go the extra mile to ensure your journey is comfortable, safe and hassle-free.",
@@ -44,6 +47,7 @@
       "description": "On time, every time."
     }
   ],
+  "how_it_works_enabled": true,
   "how_it_works_tag": "HOW IT WORKS",
   "how_it_works_title": "Simple Steps to Your Destination",
   "how_it_works_description": "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
@@ -73,6 +77,7 @@
       "description": "Sit back, relax and travel comfortably to your destination."
     }
   ],
+  "faq_enabled": true,
   "faq_tag": "FREQUENTLY ASKED QUESTIONS",
   "faq_title": "Got Questions? We Have Answers",
   "faq_description": "Everything you need to know about our chauffeur services, booking process, flight monitoring, and luxury vehicles.",
@@ -101,5 +106,8 @@
       "question": "What vehicles are in the TravelLuxx fleet?",
       "answer": "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports."
     }
-  ]
+  ],
+  "meta_title": "Premium Chauffeur & Airport Travel Services | TravelLuxx UK",
+  "meta_description": "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK."
 }
+
