@@ -499,7 +499,9 @@ function getCurrentWebsiteSettings() {
     service_desc_5: "Executive travel solutions tailored for business and professionals.",
     service_image_5: "",
     service_pickup_5: "Shirley, Solihull B90",
-    service_dropoff_5: "Birmingham Airport (BHX)"
+    service_dropoff_5: "Birmingham Airport (BHX)",
+    custom_header_code: "",
+    custom_footer_code: ""
   };
   try {
     const webSettingsPath = path.join(process.cwd(), "website_settings.json");
@@ -514,6 +516,61 @@ function getCurrentWebsiteSettings() {
     }
   } catch (err) {}
   return defaultSettings;
+}
+
+function prepareSnippet(code: string | undefined): string {
+  if (!code || typeof code !== "string") return "";
+  const trimmed = code.trim();
+  if (!trimmed) return "";
+  // Agar code me HTML tag maujood hai to direct return karo
+  if (trimmed.startsWith("<") || /<\w+/i.test(trimmed)) {
+    return trimmed;
+  }
+  // Agar CSS block lag raha hai
+  if (trimmed.includes("{") && trimmed.includes("}") && !trimmed.includes("function") && !trimmed.includes("var ") && !trimmed.includes("const ") && !trimmed.includes("let ")) {
+    return `<style>\n${trimmed}\n</style>`;
+  }
+  // Warna raw JS ko script tag me wrap karo
+  return `<script>\n${trimmed}\n</script>`;
+}
+
+function injectSnippetsIntoHtml(rawHtml: string, settings: any): string {
+  let html = rawHtml;
+  if (!settings) return html;
+
+  if (settings.favicon_url) {
+    if (html.includes('id="site-favicon"')) {
+      html = html.replace(/<link[^>]*id="site-favicon"[^>]*>/i, `<link rel="icon" type="image/x-icon" href="${settings.favicon_url}" id="site-favicon" />`);
+    } else if (html.includes('<link rel="icon"')) {
+      html = html.replace(/<link rel="icon"[^>]*>/i, `<link rel="icon" type="image/x-icon" href="${settings.favicon_url}" id="site-favicon" />`);
+    }
+  }
+
+  if (settings.custom_header_code) {
+    const headerSnippet = prepareSnippet(settings.custom_header_code);
+    if (headerSnippet) {
+      const injection = `\n<!-- [Travelluxx Custom Header Snippet] -->\n${headerSnippet}\n<!-- [/Travelluxx Custom Header Snippet] -->\n`;
+      if (html.includes("</head>")) {
+        html = html.replace("</head>", `${injection}</head>`);
+      } else {
+        html = `${injection}${html}`;
+      }
+    }
+  }
+
+  if (settings.custom_footer_code) {
+    const footerSnippet = prepareSnippet(settings.custom_footer_code);
+    if (footerSnippet) {
+      const injection = `\n<!-- [Travelluxx Custom Footer Snippet] -->\n${footerSnippet}\n<!-- [/Travelluxx Custom Footer Snippet] -->\n`;
+      if (html.includes("</body>")) {
+        html = html.replace("</body>", `${injection}</body>`);
+      } else {
+        html = `${html}${injection}`;
+      }
+    }
+  }
+
+  return html;
 }
 
 function getCurrentPricingSettings() {
@@ -1283,7 +1340,11 @@ app.post("/api/admin/settings", async (req, res) => {
     }
 
     if (!process.env.VERCEL) {
-      fs.writeFileSync(SETTINGS_PATH, JSON.stringify(otherSettings, null, 2));
+      fs.writeFileSync(SETTINGS_PATH, JSON.stringify(updated, null, 2));
+      try {
+        const webSettingsPath = path.join(process.cwd(), "website_settings.json");
+        fs.writeFileSync(webSettingsPath, JSON.stringify(updated, null, 2));
+      } catch (e) {}
 
       if (mollie_api_key !== undefined) {
         const envPath = path.join(process.cwd(), ".env");
@@ -2011,6 +2072,10 @@ app.post("/api/settings", async (req, res) => {
 
     if (!process.env.VERCEL) {
       fs.writeFileSync(SETTINGS_PATH, JSON.stringify(updated, null, 2));
+      try {
+        const webSettingsPath = path.join(process.cwd(), "website_settings.json");
+        fs.writeFileSync(webSettingsPath, JSON.stringify(updated, null, 2));
+      } catch (e) {}
     }
     res.json({ success: true, settings: updated });
   } catch (err: any) {
@@ -2288,14 +2353,39 @@ async function startServer() {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: "spa",
+      appType: "custom",
     });
     app.use(vite.middlewares);
+
+    app.use('*', async (req, res, next) => {
+      const url = req.originalUrl;
+      if (url.startsWith('/api') || path.extname(url.split('?')[0])) {
+        return next();
+      }
+      try {
+        let template = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        const settings = getCurrentWebsiteSettings();
+        const html = injectSnippetsIntoHtml(template, settings);
+        res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).end(html);
+      } catch (e: any) {
+        vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
   } else {
     console.log("[MODE] Production mode: serving static files from", distPath);
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { index: false }));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      try {
+        const rawHtml = fs.readFileSync(distIndexPath, 'utf8');
+        const settings = getCurrentWebsiteSettings();
+        const html = injectSnippetsIntoHtml(rawHtml, settings);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.send(html);
+      } catch (err) {
+        res.sendFile(distIndexPath);
+      }
     });
   }
 

@@ -254,25 +254,57 @@ function PublicLandingPage() {
   );
 }
 
+function normalizeSnippet(code: string | undefined): string {
+  if (!code || typeof code !== "string") return "";
+  const trimmed = code.trim();
+  if (!trimmed) return "";
+  if (trimmed.startsWith("<") || /<\w+/i.test(trimmed)) {
+    return trimmed;
+  }
+  if (trimmed.includes("{") && trimmed.includes("}") && !trimmed.includes("function") && !trimmed.includes("var ") && !trimmed.includes("const ") && !trimmed.includes("let ")) {
+    return `<style>\n${trimmed}\n</style>`;
+  }
+  return `<script>\n${trimmed}\n</script>`;
+}
+
 function injectCustomCode(htmlString: string | undefined, target: HTMLElement, identifierClass: string) {
+  // Remove previously client-injected elements
   const existing = target.querySelectorAll(`.${identifierClass}`);
   existing.forEach(el => el.remove());
 
-  if (!htmlString) return;
+  const normalized = normalizeSnippet(htmlString);
+  if (!normalized) return;
 
   const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = htmlString;
+  tempDiv.innerHTML = normalized;
 
   Array.from(tempDiv.childNodes).forEach(node => {
     if (node.nodeType === Node.ELEMENT_NODE) {
       const el = node as HTMLElement;
+
+      // Avoid duplicate tags if server-side HTML already rendered an identical element
+      if (el.tagName === "META") {
+        const name = el.getAttribute("name");
+        const property = el.getAttribute("property");
+        const content = el.getAttribute("content");
+        if (name && document.querySelector(`meta[name="${name}"][content="${content}"]`)) return;
+        if (property && document.querySelector(`meta[property="${property}"][content="${content}"]`)) return;
+      }
+      if (el.tagName === "SCRIPT" && el.getAttribute("src")) {
+        const src = el.getAttribute("src");
+        if (src && document.querySelector(`script[src="${src}"]`)) return;
+      }
+
       let newEl: HTMLElement;
       if (el.tagName === "SCRIPT") {
         newEl = document.createElement("script");
         Array.from(el.attributes).forEach(attr => {
           newEl.setAttribute(attr.name, attr.value);
         });
-        newEl.textContent = el.textContent;
+        const codeText = el.textContent || el.innerText || (el as any).text || "";
+        if (codeText.trim()) {
+          newEl.textContent = codeText;
+        }
       } else {
         newEl = el.cloneNode(true) as HTMLElement;
       }
@@ -285,26 +317,37 @@ function injectCustomCode(htmlString: string | undefined, target: HTMLElement, i
 // MAIN APP ROUTER ENTRY POINT
 export default function App() {
   useEffect(() => {
+    const applySettings = (data: any) => {
+      if (!data) return;
+      // Dynamic Favicon Injection
+      if (data.favicon_url) {
+        let faviconLink = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+        if (!faviconLink) {
+          faviconLink = document.createElement("link");
+          faviconLink.rel = "icon";
+          document.head.appendChild(faviconLink);
+        }
+        faviconLink.href = data.favicon_url;
+      }
+
+      injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
+      injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
+    };
+
     fetch("/api/settings")
       .then(res => res.json())
-      .then(data => {
-        if (data) {
-          // Dynamic Favicon Injection
-          if (data.favicon_url) {
-            let faviconLink = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-            if (!faviconLink) {
-              faviconLink = document.createElement("link");
-              faviconLink.rel = "icon";
-              document.head.appendChild(faviconLink);
-            }
-            faviconLink.href = data.favicon_url;
-          }
-
-          injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
-          injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
-        }
-      })
+      .then(applySettings)
       .catch(err => console.error("Failed to load settings in App:", err));
+
+    const handleSettingsUpdated = (e: any) => {
+      if (e.detail) {
+        applySettings(e.detail);
+      }
+    };
+    window.addEventListener("settingsUpdated", handleSettingsUpdated);
+    return () => {
+      window.removeEventListener("settingsUpdated", handleSettingsUpdated);
+    };
   }, []);
 
   return (

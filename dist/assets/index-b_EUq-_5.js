@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-zPLu1o0Y.js"(exports, module) {
+  "assets/index-b_EUq-_5.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -39593,7 +39593,7 @@ ${escapeText(this.code(index, length))}
       const descriptionLengthOk = finalDesc.length > 50;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm mt-6", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-xs text-[#2c3338]", children: "SEO Setting" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex border-b border-[#c3c4c7] bg-[#f6f7f7] text-xs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex border-b border-[#c3c4c7] bg-[#f6f7f7] text-xs overflow-x-auto whitespace-nowrap", children: [
           { id: "seo", label: "SEO", color: focusKeyphrase ? "bg-green-600" : "bg-red-500" },
           { id: "readability", label: "Readability", color: "bg-green-600" },
           { id: "schema", label: "Schema", color: "bg-blue-500" },
@@ -39603,7 +39603,7 @@ ${escapeText(this.code(index, length))}
           {
             type: "button",
             onClick: () => setTab(t.id),
-            className: `px-4 py-2 font-semibold transition border-r border-[#c3c4c7] flex items-center gap-1.5 ${tab === t.id ? "bg-white border-b-2 border-b-[#2271b1] text-black" : "text-[#50575e] hover:bg-slate-100"}`,
+            className: `px-4 py-2 font-semibold transition border-r border-[#c3c4c7] flex items-center gap-1.5 shrink-0 ${tab === t.id ? "bg-white border-b-2 border-b-[#2271b1] text-black" : "text-[#50575e] hover:bg-slate-100"}`,
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `w-2.5 h-2.5 rounded-full ${t.color}` }),
               t.label
@@ -39611,7 +39611,7 @@ ${escapeText(this.code(index, length))}
           },
           t.id
         )) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-5 text-xs text-[#2c3338] space-y-5", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 sm:p-5 text-xs text-[#2c3338] space-y-5", children: [
           tab === "seo" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#646970] mb-1.5 uppercase tracking-wide", children: "Focus keyphrase" }),
@@ -39888,7 +39888,7 @@ ${escapeText(this.code(index, length))}
       const [loginLoading, setLoginLoading] = reactExports.useState(false);
       const [form, setForm] = reactExports.useState({ username: "", email: "", password: "", name: "" });
       const [activeTab, setActiveTab] = reactExports.useState("dashboard");
-      const [sidebarOpen, setSidebarOpen] = reactExports.useState(true);
+      const [sidebarOpen, setSidebarOpen] = reactExports.useState(false);
       const [bookings, setBookings] = reactExports.useState([]);
       const [posts, setPosts] = reactExports.useState([]);
       const [pages, setPages] = reactExports.useState([]);
@@ -40920,6 +40920,8 @@ ${escapeText(this.code(index, length))}
           const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings) });
           if (res.ok) {
             setSaveStatus("Settings saved!");
+            window.dispatchEvent(new CustomEvent("settingsUpdated", { detail: settings }));
+            showToast("Settings and code snippets saved successfully!");
             setTimeout(() => setSaveStatus(""), 4e3);
           } else setSaveStatus("Failed to save.");
         } catch (err) {
@@ -40960,7 +40962,7 @@ ${escapeText(this.code(index, length))}
         pages: pages.length
       };
       if (!token) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-[#f0f0f1] font-sans", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white shadow-xl rounded-sm w-full max-w-sm overflow-hidden", children: [
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-[#f0f0f1] font-sans p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white shadow-xl rounded-sm w-full max-w-sm overflow-hidden", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#1d2327] p-6 text-center", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-[#2271b1] rounded-full flex items-center justify-center mx-auto mb-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-black text-lg", children: "T" }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-white font-bold text-xl tracking-wide", children: "Travelluxx Admin" }),
@@ -41031,35 +41033,70 @@ ${escapeText(this.code(index, length))}
         { id: "settings", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-4 h-4" }), label: "Settings" }
       ];
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#f0f0f1] font-sans flex flex-col text-[#1d2327] text-sm", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#1d2327] text-[#a7aaad] text-xs flex items-center justify-between px-4 py-2 sticky top-0 z-50", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#1d2327] text-[#a7aaad] text-xs flex items-center justify-between px-3 sm:px-4 py-2 sticky top-0 z-50", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 sm:gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setSidebarOpen((prev) => !prev),
+                className: "md:hidden p-1.5 -ml-1 text-[#a7aaad] hover:text-white rounded hover:bg-[#2c3338] transition focus:outline-none",
+                "aria-label": "Toggle navigation menu",
+                children: sidebarOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "w-4 h-4" })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 cursor-pointer", onClick: () => handleTabClick("dashboard"), children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-5 h-5 bg-[#2271b1] rounded-full flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-bold text-[10px]", children: "T" }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-semibold", children: "Travelluxx" })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: "/", target: "_blank", className: "flex items-center gap-1 hover:text-white transition", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: "/", target: "_blank", className: "hidden sm:flex items-center gap-1 hover:text-white transition", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3 h-3" }),
               " Visit Site"
             ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 sm:gap-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden sm:flex items-center gap-1.5", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "w-3.5 h-3.5" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Administrator" })
             ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/", target: "_blank", className: "sm:hidden flex items-center gap-1 hover:text-white transition p-1", title: "Visit Site", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3.5 h-3.5" }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: handleLogout, className: "flex items-center gap-1 hover:text-white transition", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { className: "w-3.5 h-3.5" }),
-              " Log Out"
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "Log Out" })
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "bg-[#1d2327] w-56 shrink-0 flex flex-col sticky top-9 h-[calc(100vh-36px)] overflow-y-auto z-40", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 py-2 mb-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#a7aaad] text-[10px] uppercase tracking-widest font-semibold", children: "Navigation" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 relative", children: [
+          sidebarOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity",
+              onClick: () => setSidebarOpen(false),
+              "aria-hidden": "true"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: `bg-[#1d2327] w-64 md:w-56 shrink-0 flex flex-col fixed inset-y-0 left-0 top-[33px] md:static md:top-9 md:h-[calc(100vh-36px)] h-[calc(100vh-33px)] overflow-y-auto z-50 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-2 mb-1 flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#a7aaad] text-[10px] uppercase tracking-widest font-semibold", children: "Navigation" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => setSidebarOpen(false),
+                  className: "md:hidden text-[#a7aaad] hover:text-white p-1",
+                  "aria-label": "Close navigation",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4" })
+                }
+              )
+            ] }),
             navItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
               "button",
               {
-                onClick: () => handleTabClick(item.id),
+                onClick: () => {
+                  handleTabClick(item.id);
+                  setSidebarOpen(false);
+                },
                 className: `w-full flex items-center gap-3 px-4 py-2.5 text-left transition text-[13px] font-medium ${activeTab === item.id ? "bg-[#2271b1] text-white" : "text-[#a7aaad] hover:bg-[#2c3338] hover:text-white"}`,
                 children: [
                   item.icon,
@@ -41070,7 +41107,7 @@ ${escapeText(this.code(index, length))}
               item.id
             ))
           ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 p-6 min-h-0 overflow-y-auto", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 p-3 sm:p-4 md:p-6 min-h-0 overflow-y-auto w-full max-w-full overflow-x-hidden", children: [
             toastMessage && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fixed top-14 right-6 z-[9999] px-5 py-3 rounded-lg shadow-lg text-sm font-semibold flex items-center gap-2 animate-fade-in transition-all ${toastType === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"}`, style: { animation: "fadeInSlide 0.3s ease" }, children: [
               toastType === "success" ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4" }),
               toastMessage,
@@ -41090,17 +41127,17 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Dashboard" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs mt-1", children: "Welcome back! Here's an overview of your site." })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-5 gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4", children: [
                 { label: "Total Leads", value: stats.leads, color: "#2271b1" },
                 { label: "Today's Bookings", value: stats.today, color: "#00a32a" },
                 { label: "Total Revenue", value: `£${stats.revenue.toFixed(2)}`, color: "#d63638" },
                 { label: "Contact Inquiries", value: stats.inquiries, color: "#0284c7" },
                 { label: "Blog Posts", value: stats.posts, color: "#9c27b0" }
-              ].map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm p-5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-3xl font-black", style: { color: s.color }, children: s.value }),
+              ].map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm p-4 sm:p-5", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl sm:text-3xl font-black", style: { color: s.color }, children: s.value }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[#646970] text-xs mt-1 font-medium", children: s.label })
               ] }, s.label)) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid md:grid-cols-3 gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm p-5", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-semibold text-[#1d2327] mb-3 pb-2 border-b border-[#f0f0f1]", children: "Recent Leads" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
@@ -41152,15 +41189,15 @@ ${escapeText(this.code(index, length))}
               ] })
             ] }),
             activeTab === "leads" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Leads & Bookings" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl sm:text-2xl font-bold text-[#1d2327]", children: "Leads & Bookings" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[#646970] text-xs", children: [
                   filteredBookings.length,
                   " of ",
                   bookings.length
                 ] })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-3", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "input",
                   {
@@ -41168,7 +41205,7 @@ ${escapeText(this.code(index, length))}
                     placeholder: "Search by name, ref, location...",
                     value: searchQuery,
                     onChange: (e) => setSearchQuery(e.target.value),
-                    className: "border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:border-[#2271b1]"
+                    className: "border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-full sm:w-64 focus:outline-none focus:border-[#2271b1]"
                   }
                 ),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -41176,7 +41213,7 @@ ${escapeText(this.code(index, length))}
                   {
                     value: statusFilter,
                     onChange: (e) => setStatusFilter(e.target.value),
-                    className: "border border-[#8c8f94] rounded px-3 py-1.5 text-sm focus:outline-none focus:border-[#2271b1]",
+                    className: "border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-full sm:w-auto focus:outline-none focus:border-[#2271b1]",
                     children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "All", children: "All Statuses" }),
                       ["Pending", "Confirmed", "Completed", "Cancelled"].map((s) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: s }, s))
@@ -41188,7 +41225,7 @@ ${escapeText(this.code(index, length))}
                   {
                     type: "button",
                     onClick: deleteSelectedBookings,
-                    className: "bg-[#d63638] hover:bg-[#b32d2e] text-white px-3 py-1.5 rounded text-xs font-semibold transition",
+                    className: "bg-[#d63638] hover:bg-[#b32d2e] text-white px-3 py-1.5 rounded text-xs font-semibold transition text-center",
                     children: [
                       "Delete Selected (",
                       selectedBookingIds.length,
@@ -41197,7 +41234,7 @@ ${escapeText(this.code(index, length))}
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs min-w-[750px]", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-3 px-4 text-left w-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "input",
@@ -41302,7 +41339,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }, b.id)) })
-              ] }) })
+              ] }) }) })
             ] }),
             activeTab === "posts" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-baseline gap-4 mb-2", children: [
@@ -41317,13 +41354,13 @@ ${escapeText(this.code(index, length))}
                 )
               ] }),
               editingPost !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold text-slate-800 text-[13px]", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-3 sm:px-4 py-2.5 flex flex-wrap gap-2 items-center justify-between text-xs text-[#2c3338] select-none", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 sm:gap-3", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold text-slate-800 text-[13px] truncate max-w-[150px] sm:max-w-none", children: [
                       postForm.title || "Draft",
                       " - Post"
                     ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative hidden md:block", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                       "input",
                       {
                         type: "text",
@@ -41333,16 +41370,16 @@ ${escapeText(this.code(index, length))}
                       }
                     ) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 sm:gap-3", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/blog/${postForm.slug}`, target: "_blank", rel: "noreferrer", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "View post", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-4 h-4" }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => savePost(), className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition", children: "Copy this" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => savePost(), className: "hidden sm:inline-block border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition", children: "Copy this" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs(
                       "button",
                       {
                         type: "button",
                         onClick: () => savePost(),
                         disabled: isSaving,
-                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 sm:px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
                         children: [
                           isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3.5 w-3.5 text-white", fill: "none", viewBox: "0 0 24 24", children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
@@ -41354,7 +41391,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePost, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 sm:p-4 md:p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePost, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(
                       "input",
@@ -41705,7 +41742,7 @@ ${escapeText(this.code(index, length))}
                     }
                   ) })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-[13px] border-collapse", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-[13px] border-collapse min-w-[650px]", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-white border-b border-[#c3c4c7] text-[#2c3338] font-semibold text-left", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 w-8 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3", children: "Title" }),
@@ -41864,7 +41901,7 @@ ${escapeText(this.code(index, length))}
                       p.date || "N/A"
                     ] })
                   ] }, p.id)) })
-                ] }) })
+                ] }) }) })
               ] })
             ] }),
             activeTab === "pages" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
@@ -41880,16 +41917,16 @@ ${escapeText(this.code(index, length))}
                 )
               ] }),
               editingHomepage ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-3 sm:px-4 py-2.5 flex flex-wrap gap-2 items-center justify-between text-xs text-[#2c3338] select-none", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-slate-800 text-[13px]", children: "Homepage (Front Page Layout)" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-2 sm:gap-3", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs(
                       "button",
                       {
                         type: "button",
                         onClick: () => saveHomepageSettings(),
                         disabled: isSaving,
-                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 sm:px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
                         children: [
                           isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3.5 w-3.5 text-white", fill: "none", viewBox: "0 0 24 24", children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
@@ -41910,7 +41947,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 sm:p-4 md:p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-6", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "1. Hero Section Content" }),
@@ -42832,13 +42869,13 @@ ${escapeText(this.code(index, length))}
                   ] })
                 ] }) })
               ] }) : editingPage !== void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold text-slate-800 text-[13px]", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-3 sm:px-4 py-2.5 flex flex-wrap gap-2 items-center justify-between text-xs text-[#2c3338] select-none", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 sm:gap-3", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold text-slate-800 text-[13px] truncate max-w-[150px] sm:max-w-none", children: [
                       pageForm.title || "Draft",
                       " - Page"
                     ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative hidden md:block", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                       "input",
                       {
                         type: "text",
@@ -42848,11 +42885,11 @@ ${escapeText(this.code(index, length))}
                       }
                     ) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 sm:gap-3", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "View page", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-4 h-4" }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "Desktop view", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z" }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:underline font-semibold mr-1", children: "Preview" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => savePage(), className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition", children: "Copy this" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "hidden sm:inline-flex p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "Desktop view", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z" }) }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${pageForm.slug}`, target: "_blank", rel: "noreferrer", className: "hidden sm:inline-block text-[#2271b1] hover:underline font-semibold mr-1", children: "Preview" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => savePage(), className: "hidden sm:inline-block border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition", children: "Copy this" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "p-1.5 hover:bg-slate-100 rounded text-[#2c3338]", title: "Settings sidebar toggle", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" })
@@ -42864,7 +42901,7 @@ ${escapeText(this.code(index, length))}
                         type: "button",
                         onClick: () => savePage(),
                         disabled: isSaving,
-                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 sm:px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
                         children: [
                           isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3.5 w-3.5 text-white", fill: "none", viewBox: "0 0 24 24", children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
@@ -42876,7 +42913,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePage, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 sm:p-4 md:p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePage, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(
                       "input",
@@ -43130,7 +43167,7 @@ ${escapeText(this.code(index, length))}
                     }
                   ) })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-[13px] border-collapse", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-[13px] border-collapse min-w-[650px]", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-white border-b border-[#c3c4c7] text-[#2c3338] font-semibold text-left", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 w-8 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3", children: "Title" }),
@@ -43317,16 +43354,16 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: p.published !== false ? "Published" : "Draft" })
                     ] }, p.id))
                   ] })
-                ] }) })
+                ] }) }) })
               ] })
             ] }),
             activeTab === "services" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center justify-between gap-4 mb-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: editingService === "page-settings" ? "Services Page Settings" : editingService !== void 0 ? (editingService == null ? void 0 : editingService.id) ? `Edit Service: ${serviceForm.title}` : "Add New Service" : "Services Management" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl sm:text-2xl font-bold text-[#1d2327]", children: editingService === "page-settings" ? "Services Page Settings" : editingService !== void 0 ? (editingService == null ? void 0 : editingService.id) ? `Edit Service: ${serviceForm.title}` : "Add New Service" : "Services Management" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs mt-0.5", children: editingService === "page-settings" ? "Manage the Hero, Why Choose, and How It Works sections of the public /services page." : editingService !== void 0 ? "Every new service automatically uses the luxury dark & gold template." : "Create and manage your luxury services catalog. All changes reflect instantly on the public website." })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: editingService === void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-2", children: editingService === void 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs(
                     "button",
                     {
@@ -43419,8 +43456,8 @@ ${escapeText(this.code(index, length))}
                   )
                 ] }) })
               ] }),
-              editingService === "page-settings" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-6 shadow-sm space-y-8", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-6 -mt-6 p-6 rounded-t-sm", children: [
+              editingService === "page-settings" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-4 sm:p-6 shadow-sm space-y-8", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-4 sm:-mx-6 -mt-4 sm:-mt-6 p-4 sm:p-6 rounded-t-sm", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-base font-bold text-slate-900 flex items-center gap-2", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-5 h-5 text-emerald-600" }),
@@ -43432,7 +43469,7 @@ ${escapeText(this.code(index, length))}
                       " page."
                     ] })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2.5 shrink-0", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs(
                       "a",
                       {
@@ -44461,8 +44498,8 @@ ${escapeText(this.code(index, length))}
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide", children: "Permalink (URL Slug)" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-xs text-[#50575e] bg-slate-50 border border-[#c3c4c7] px-3 py-1.5 rounded-sm", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "https://travelluxx.co.uk/services/" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-1.5 text-xs text-[#50575e] bg-slate-50 border border-[#c3c4c7] px-3 py-1.5 rounded-sm", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: "https://travelluxx.co.uk/services/" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx(
                             "input",
                             {
@@ -44470,7 +44507,7 @@ ${escapeText(this.code(index, length))}
                               value: serviceForm.slug,
                               onChange: (e) => setServiceForm({ ...serviceForm, slug: e.target.value }),
                               placeholder: "airport-transfers",
-                              className: "flex-1 bg-transparent font-mono text-[#2271b1] font-semibold outline-none"
+                              className: "flex-1 min-w-[120px] bg-transparent font-mono text-[#2271b1] font-semibold outline-none"
                             }
                           )
                         ] })
@@ -45442,7 +45479,7 @@ ${escapeText(this.code(index, length))}
                       }
                     ) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs min-w-[750px]", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-left w-14", children: "Image" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-left", children: "Service Title" }),
@@ -45526,14 +45563,14 @@ ${escapeText(this.code(index, length))}
                         ] }) })
                       ] }, svc.id);
                     }) })
-                  ] }) })
+                  ] }) }) })
                 ] })
               )
             ] }),
             activeTab === "inquiries" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Contact Inquiries" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-2 sm:gap-4", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl sm:text-2xl font-bold text-[#1d2327]", children: "Contact Inquiries" }),
                   selectedInquiryIds.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
                     "button",
                     {
@@ -45553,7 +45590,7 @@ ${escapeText(this.code(index, length))}
                   " total inquiries"
                 ] })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs min-w-[700px]", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-3 px-4 text-left w-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "input",
@@ -45623,7 +45660,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }, i.id)) })
-              ] }) })
+              ] }) }) })
             ] }),
             activeTab === "media" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-baseline gap-4 mb-2", children: [
@@ -45651,11 +45688,11 @@ ${escapeText(this.code(index, length))}
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap gap-2 items-center justify-between bg-transparent py-1 text-xs", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2 items-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-2 sm:items-center justify-between bg-transparent py-1 text-xs", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap gap-2 items-center", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setMediaViewMode("grid"), className: `p-1.5 border rounded-sm ${mediaViewMode === "grid" ? "bg-[#e0e0e0] border-[#8c8f94]" : "bg-white border-[#c3c4c7]"} hover:bg-slate-50 transition`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-3.5 h-3.5 text-[#2c3338]", fill: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z" }) }) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setMediaViewMode("list"), className: `p-1.5 border rounded-sm ${mediaViewMode === "list" ? "bg-[#e0e0e0] border-[#8c8f94]" : "bg-white border-[#c3c4c7]"} hover:bg-slate-50 transition`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-3.5 h-3.5 text-[#2c3338]", fill: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 4h16v2H4zm0 6h16v2H4zm0 6h16v2H4z" }) }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] outline-none ml-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "All media items" }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "All media items" }) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "All dates" }) })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -45665,7 +45702,7 @@ ${escapeText(this.code(index, length))}
                     placeholder: "Search media items",
                     value: searchQuery,
                     onChange: (e) => setSearchQuery(e.target.value),
-                    className: "border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs outline-none focus:border-[#2271b1]"
+                    className: "border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs outline-none focus:border-[#2271b1] w-full sm:w-auto"
                   }
                 ) })
               ] }),
@@ -45688,7 +45725,7 @@ ${escapeText(this.code(index, length))}
                   ]
                 }
               ),
-              media.length > 0 ? mediaViewMode === "grid" ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 gap-3 bg-white border border-[#c3c4c7] p-4 rounded-sm shadow-sm", children: media.filter((url) => url.toLowerCase().includes(searchQuery.toLowerCase())).map((url, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { onClick: () => {
+              media.length > 0 ? mediaViewMode === "grid" ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 bg-white border border-[#c3c4c7] p-4 rounded-sm shadow-sm", children: media.filter((url) => url.toLowerCase().includes(searchQuery.toLowerCase())).map((url, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { onClick: () => {
                 setSelectedMedia(url);
                 const fname = url.split("/").pop() || "";
                 setMediaTitleText(fname.split(".")[0] || fname);
@@ -45698,7 +45735,7 @@ ${escapeText(this.code(index, length))}
               }, className: "aspect-square bg-slate-50 border border-[#c3c4c7] hover:border-[#2271b1] cursor-pointer relative overflow-hidden group shadow-sm", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: url, alt: `media-${i}`, className: "w-full h-full object-cover" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition" })
-              ] }, i)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-left border-collapse", children: [
+              ] }, i)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-left border-collapse min-w-[500px]", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-[#f6f7f7] border-b border-[#c3c4c7] text-[#2c3338] font-semibold", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-3 w-16", children: "File" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-3", children: "Name / URL" }),
@@ -45738,7 +45775,7 @@ ${escapeText(this.code(index, length))}
                     ] })
                   ] }, i);
                 }) })
-              ] }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-10 bg-white border border-[#c3c4c7] rounded-sm text-slate-400 text-xs shadow-sm", children: "No uploaded files found. Upload some images to display them here!" })
+              ] }) }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-10 bg-white border border-[#c3c4c7] rounded-sm text-slate-400 text-xs shadow-sm", children: "No uploaded files found. Upload some images to display them here!" })
             ] }),
             activeTab === "menus" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 max-w-2xl", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Menu Manager" }),
@@ -46026,8 +46063,8 @@ ${escapeText(this.code(index, length))}
             activeTab === "settings" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Settings" }),
               saveStatus && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm font-medium", children: saveStatus }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col md:flex-row gap-6 items-start", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full md:w-48 bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden shrink-0", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col md:flex-row gap-4 sm:gap-6 items-start", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full md:w-48 bg-white border border-[#c3c4c7] rounded shadow-sm overflow-x-auto shrink-0 flex flex-row md:flex-col", children: [
                   { key: "general", label: "General" },
                   { key: "connectors", label: "Connectors" },
                   { key: "writing", label: "Writing" },
@@ -46037,12 +46074,12 @@ ${escapeText(this.code(index, length))}
                   {
                     type: "button",
                     onClick: () => setSettingsTab(tab.key),
-                    className: `w-full text-left px-4 py-2.5 text-xs font-semibold border-b border-[#f0f0f1] last:border-0 transition ${settingsTab === tab.key ? "bg-[#2271b1] text-white" : "text-[#50575e] hover:bg-[#f6f7f7] hover:text-[#2c3338]"}`,
+                    className: `px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition border-b-2 md:border-b md:last:border-0 ${settingsTab === tab.key ? "bg-[#2271b1] text-white border-[#2271b1]" : "text-[#50575e] hover:bg-[#f6f7f7] hover:text-[#2c3338] border-transparent md:border-[#f0f0f1]"}`,
                     children: tab.label
                   },
                   tab.key
                 )) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 bg-white border border-[#c3c4c7] rounded shadow-sm p-6 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: saveSettings, className: "space-y-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 bg-white border border-[#c3c4c7] rounded shadow-sm p-4 sm:p-6 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: saveSettings, className: "space-y-6", children: [
                   settingsTab === "general" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1]", children: "🏢 Business Information" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid md:grid-cols-2 gap-4", children: [
@@ -46333,7 +46370,7 @@ ${escapeText(this.code(index, length))}
                   ] }),
                   settingsTab === "writing" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1]", children: "🚖 Default Pricing Rates (£ per mile)" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4", children: [
                       { key: "economy_price", label: "Economy" },
                       { key: "luxury_price", label: "Luxury" },
                       { key: "family_price", label: "Family" }
@@ -46355,36 +46392,85 @@ ${escapeText(this.code(index, length))}
                     ] }, f.key)) })
                   ] }),
                   settingsTab === "snippets" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-2 pb-2 border-b border-[#f0f0f1]", children: "💻 Custom Code Snippets" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs leading-relaxed mb-4", children: "Inject custom script tags, meta tags, style sheets, or tracking integrations (like Google Search Console verification meta, Google Analytics tag, Facebook Pixel, etc.) into your site." }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-bold text-[#1d2327] text-sm flex items-center gap-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "💻" }),
+                        " Custom Code Snippets"
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" }),
+                        "Live Server & Client Injection"
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 bg-blue-50/80 border border-blue-200 rounded-sm text-xs text-blue-900 space-y-1", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-semibold text-blue-950 flex items-center gap-1", children: "ℹ️ Search Console, Analytics & Custom Scripts Supported" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[11px] text-blue-800 leading-relaxed", children: [
+                        "Code entered here is injected directly into both the server-rendered HTML and client browser. Supported elements include ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "<meta>" }),
+                        " tags (e.g. Google Search Console site verification), ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "<script>" }),
+                        " tags (Google Analytics GA4, GTM, Meta Pixel, live chat), and ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "<style>" }),
+                        " CSS."
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-5", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Header Custom Code (in <head>)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327]", children: "Header Custom Code (in <head>)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-[#646970] font-mono", children: "Google Site Verification / Analytics / Meta" })
+                        ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx(
                           "textarea",
                           {
                             rows: 8,
                             value: settings.custom_header_code || "",
                             onChange: (e) => setSettings({ ...settings, custom_header_code: e.target.value }),
-                            placeholder: "<!-- e.g. <meta name='google-site-verification' content='...' /> or <script async src='https://www.googletagmanager.com/gtag/js?id=...'><\/script> -->",
-                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            placeholder: `<!-- Example 1: Google Search Console Verification -->
+<meta name="google-site-verification" content="YOUR_CODE_HERE" />
+
+<!-- Example 2: Google Tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"><\/script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXX');
+<\/script>`,
+                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black leading-relaxed"
                           }
                         ),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "This code will be injected inside the header <head> element of all pages." })
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[#646970] text-[10px] mt-1 flex items-center gap-1", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚡" }),
+                          " Injected directly into the ",
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "<head>" }),
+                          " tag of every page before HTML is sent to browsers and crawlers."
+                        ] })
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Footer Custom Code (before </body>)" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327]", children: "Footer Custom Code (before </body>)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-[#646970] font-mono", children: "Live Chat Widgets / External Tracking" })
+                        ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx(
                           "textarea",
                           {
                             rows: 8,
                             value: settings.custom_footer_code || "",
                             onChange: (e) => setSettings({ ...settings, custom_footer_code: e.target.value }),
-                            placeholder: "<!-- e.g. live chat widget scripts or custom analytics script integrations -->",
-                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            placeholder: `<!-- Example: Live Chat or Customer Support Widget -->
+<script>
+  // Your custom footer javascript or chat script here
+<\/script>`,
+                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black leading-relaxed"
                           }
                         ),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "This code will be injected right before the closing </body> tag of all pages." })
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[#646970] text-[10px] mt-1 flex items-center gap-1", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚡" }),
+                          " Injected directly before the closing ",
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "</body>" }),
+                          " tag of all pages."
+                        ] })
                       ] })
                     ] })
                   ] }),
@@ -46408,7 +46494,7 @@ ${escapeText(this.code(index, length))}
             ] })
           ] })
         ] }),
-        selectedBooking && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-lg shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto", children: [
+        selectedBooking && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-lg shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-[#f0f0f1]", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[#2271b1] font-bold text-sm", children: selectedBooking.id }),
@@ -46416,7 +46502,7 @@ ${escapeText(this.code(index, length))}
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setSelectedBooking(null), className: "text-[#646970] hover:text-[#1d2327] p-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-5 h-5" }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-5 space-y-4 text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4 sm:p-5 space-y-4 text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-[10px] uppercase font-semibold block mb-1", children: "Passenger" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#1d2327] font-bold", children: selectedBooking.passengerName })
@@ -46425,11 +46511,11 @@ ${escapeText(this.code(index, length))}
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-[10px] uppercase font-semibold block mb-1", children: "Phone" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#1d2327] font-bold", children: selectedBooking.passengerPhone })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-1 sm:col-span-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-[10px] uppercase font-semibold block mb-1", children: "Email" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#1d2327]", children: selectedBooking.passengerEmail })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-1 sm:col-span-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 font-bold block", children: "Pickup: " }),
               selectedBooking.pickup,
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-500 font-bold block mt-1", children: "Dropoff: " }),
@@ -46476,13 +46562,13 @@ ${escapeText(this.code(index, length))}
             }
           ) })
         ] }) }),
-        selectedInquiry && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white shadow-xl rounded-sm w-full max-w-lg border border-[#c3c4c7]", children: [
+        selectedInquiry && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black/50 flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white shadow-xl rounded-sm w-full max-w-lg border border-[#c3c4c7] max-h-[90vh] overflow-y-auto", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#1d2327] p-4 text-white flex justify-between items-center", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-bold text-sm", children: "Contact Inquiry Details" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setSelectedInquiry(null), className: "text-[#a7aaad] hover:text-white transition", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-5 h-5" }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 space-y-4 text-xs", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 sm:p-6 space-y-4 text-xs", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-[10px] uppercase font-semibold block mb-1", children: "Sender Name" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#1d2327] font-bold", children: selectedInquiry.name })
@@ -46674,9 +46760,9 @@ ${escapeText(this.code(index, length))}
               setSelectedEditorMediaUrl(null);
             }, className: "text-[#a7aaad] hover:text-[#2c3338] transition", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-5 h-5" }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 overflow-hidden min-h-[400px]", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 p-5 overflow-y-auto bg-slate-50 border-r border-[#c3c4c7]", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4 border-b border-[#ddd] pb-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col md:flex-row flex-1 overflow-y-auto md:overflow-hidden min-h-[400px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 p-3 sm:p-5 overflow-y-auto bg-slate-50 border-b md:border-b-0 md:border-r border-[#c3c4c7]", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-[#ddd] pb-2", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-[#2c3338]", children: "Media Library" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -46736,11 +46822,11 @@ ${escapeText(this.code(index, length))}
                     placeholder: "Search media...",
                     value: searchQuery,
                     onChange: (e) => setSearchQuery(e.target.value),
-                    className: "border border-[#c3c4c7] bg-white rounded-sm px-2 py-1 outline-none text-xs focus:border-[#2271b1]"
+                    className: "border border-[#c3c4c7] bg-white rounded-sm px-2 py-1 outline-none text-xs focus:border-[#2271b1] w-full sm:w-auto"
                   }
                 )
               ] }),
-              media.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-4 sm:grid-cols-6 gap-3", children: media.filter((url) => url.toLowerCase().includes(searchQuery.toLowerCase())).map((url, i) => {
+              media.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3", children: media.filter((url) => url.toLowerCase().includes(searchQuery.toLowerCase())).map((url, i) => {
                 const isSelected = selectedEditorMediaUrl === url;
                 return /* @__PURE__ */ jsxRuntimeExports.jsxs(
                   "div",
@@ -46763,7 +46849,7 @@ ${escapeText(this.code(index, length))}
                 );
               }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: "No media assets found. Upload some in the Media tab first!" })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-80 bg-[#f6f7f7] p-5 overflow-y-auto flex flex-col justify-between border-l border-[#c3c4c7]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full md:w-80 bg-[#f6f7f7] p-4 sm:p-5 overflow-y-auto flex flex-col justify-between border-t md:border-t-0 md:border-l border-[#c3c4c7]", children: [
               selectedEditorMediaUrl ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wide text-[#646970] border-b border-[#ddd] pb-1.5", children: "Attachment Details" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-video bg-white border border-[#c3c4c7] flex items-center justify-center overflow-hidden rounded-sm mb-2 shadow-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: selectedEditorMediaUrl, alt: "", className: "max-w-full max-h-full object-contain" }) }),
@@ -48810,22 +48896,53 @@ ${escapeText(this.code(index, length))}
         )
       ] });
     }
+    function normalizeSnippet(code) {
+      if (!code || typeof code !== "string") return "";
+      const trimmed = code.trim();
+      if (!trimmed) return "";
+      if (trimmed.startsWith("<") || /<\w+/i.test(trimmed)) {
+        return trimmed;
+      }
+      if (trimmed.includes("{") && trimmed.includes("}") && !trimmed.includes("function") && !trimmed.includes("var ") && !trimmed.includes("const ") && !trimmed.includes("let ")) {
+        return `<style>
+${trimmed}
+</style>`;
+      }
+      return `<script>
+${trimmed}
+<\/script>`;
+    }
     function injectCustomCode(htmlString, target, identifierClass) {
       const existing = target.querySelectorAll(`.${identifierClass}`);
       existing.forEach((el) => el.remove());
-      if (!htmlString) return;
+      const normalized = normalizeSnippet(htmlString);
+      if (!normalized) return;
       const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = htmlString;
+      tempDiv.innerHTML = normalized;
       Array.from(tempDiv.childNodes).forEach((node) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
           const el = node;
+          if (el.tagName === "META") {
+            const name = el.getAttribute("name");
+            const property = el.getAttribute("property");
+            const content = el.getAttribute("content");
+            if (name && document.querySelector(`meta[name="${name}"][content="${content}"]`)) return;
+            if (property && document.querySelector(`meta[property="${property}"][content="${content}"]`)) return;
+          }
+          if (el.tagName === "SCRIPT" && el.getAttribute("src")) {
+            const src = el.getAttribute("src");
+            if (src && document.querySelector(`script[src="${src}"]`)) return;
+          }
           let newEl;
           if (el.tagName === "SCRIPT") {
             newEl = document.createElement("script");
             Array.from(el.attributes).forEach((attr) => {
               newEl.setAttribute(attr.name, attr.value);
             });
-            newEl.textContent = el.textContent;
+            const codeText = el.textContent || el.innerText || el.text || "";
+            if (codeText.trim()) {
+              newEl.textContent = codeText;
+            }
           } else {
             newEl = el.cloneNode(true);
           }
@@ -48836,21 +48953,30 @@ ${escapeText(this.code(index, length))}
     }
     function App() {
       reactExports.useEffect(() => {
-        fetch("/api/settings").then((res) => res.json()).then((data) => {
-          if (data) {
-            if (data.favicon_url) {
-              let faviconLink = document.querySelector("link[rel~='icon']");
-              if (!faviconLink) {
-                faviconLink = document.createElement("link");
-                faviconLink.rel = "icon";
-                document.head.appendChild(faviconLink);
-              }
-              faviconLink.href = data.favicon_url;
+        const applySettings = (data) => {
+          if (!data) return;
+          if (data.favicon_url) {
+            let faviconLink = document.querySelector("link[rel~='icon']");
+            if (!faviconLink) {
+              faviconLink = document.createElement("link");
+              faviconLink.rel = "icon";
+              document.head.appendChild(faviconLink);
             }
-            injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
-            injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
+            faviconLink.href = data.favicon_url;
           }
-        }).catch((err) => console.error("Failed to load settings in App:", err));
+          injectCustomCode(data.custom_header_code, document.head, "custom-header-snippet");
+          injectCustomCode(data.custom_footer_code, document.body, "custom-footer-snippet");
+        };
+        fetch("/api/settings").then((res) => res.json()).then(applySettings).catch((err) => console.error("Failed to load settings in App:", err));
+        const handleSettingsUpdated = (e) => {
+          if (e.detail) {
+            applySettings(e.detail);
+          }
+        };
+        window.addEventListener("settingsUpdated", handleSettingsUpdated);
+        return () => {
+          window.removeEventListener("settingsUpdated", handleSettingsUpdated);
+        };
       }, []);
       return /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/", element: /* @__PURE__ */ jsxRuntimeExports.jsx(PublicLandingPage, {}) }),

@@ -77,7 +77,7 @@ function YoastSeoBox({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#c3c4c7] bg-[#f6f7f7] text-xs">
+      <div className="flex border-b border-[#c3c4c7] bg-[#f6f7f7] text-xs overflow-x-auto whitespace-nowrap">
         {[
           { id: "seo", label: "SEO", color: focusKeyphrase ? "bg-green-600" : "bg-red-500" },
           { id: "readability", label: "Readability", color: "bg-green-600" },
@@ -88,7 +88,7 @@ function YoastSeoBox({
             key={t.id}
             type="button"
             onClick={() => setTab(t.id as any)}
-            className={`px-4 py-2 font-semibold transition border-r border-[#c3c4c7] flex items-center gap-1.5 ${tab === t.id ? "bg-white border-b-2 border-b-[#2271b1] text-black" : "text-[#50575e] hover:bg-slate-100"}`}
+            className={`px-4 py-2 font-semibold transition border-r border-[#c3c4c7] flex items-center gap-1.5 shrink-0 ${tab === t.id ? "bg-white border-b-2 border-b-[#2271b1] text-black" : "text-[#50575e] hover:bg-slate-100"}`}
           >
             <span className={`w-2.5 h-2.5 rounded-full ${t.color}`} />
             {t.label}
@@ -97,7 +97,7 @@ function YoastSeoBox({
       </div>
 
       {/* Tab content */}
-      <div className="p-5 text-xs text-[#2c3338] space-y-5">
+      <div className="p-3 sm:p-5 text-xs text-[#2c3338] space-y-5">
         {tab === "seo" && (
           <div className="space-y-4">
             {/* Focus Keyphrase */}
@@ -441,7 +441,7 @@ export default function AdminDashboard() {
   const [form, setForm] = useState({ username: "", email: "", password: "", name: "" });
 
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Data
   const [bookings, setBookings] = useState<any[]>([]);
@@ -1518,7 +1518,12 @@ export default function AdminDashboard() {
     setIsSaving(true);
     try {
       const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings) });
-      if (res.ok) { setSaveStatus("Settings saved!"); setTimeout(() => setSaveStatus(""), 4000); }
+      if (res.ok) { 
+        setSaveStatus("Settings saved!"); 
+        window.dispatchEvent(new CustomEvent("settingsUpdated", { detail: settings }));
+        showToast("Settings and code snippets saved successfully!");
+        setTimeout(() => setSaveStatus(""), 4000); 
+      }
       else setSaveStatus("Failed to save.");
     } catch (err) {
       console.error(err);
@@ -1562,7 +1567,7 @@ export default function AdminDashboard() {
   // ─── LOGIN PAGE ───────────────────────────────────────────────────────────────
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f0f0f1] font-sans">
+      <div className="min-h-screen flex items-center justify-center bg-[#f0f0f1] font-sans p-4">
         <div className="bg-white shadow-xl rounded-sm w-full max-w-sm overflow-hidden">
           <div className="bg-[#1d2327] p-6 text-center">
             <div className="w-12 h-12 bg-[#2271b1] rounded-full flex items-center justify-center mx-auto mb-3">
@@ -1627,40 +1632,73 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#f0f0f1] font-sans flex flex-col text-[#1d2327] text-sm">
       {/* WP Admin Bar */}
-      <div className="bg-[#1d2327] text-[#a7aaad] text-xs flex items-center justify-between px-4 py-2 sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
+      <div className="bg-[#1d2327] text-[#a7aaad] text-xs flex items-center justify-between px-3 sm:px-4 py-2 sticky top-0 z-50">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(prev => !prev)}
+            className="md:hidden p-1.5 -ml-1 text-[#a7aaad] hover:text-white rounded hover:bg-[#2c3338] transition focus:outline-none"
+            aria-label="Toggle navigation menu"
+          >
+            {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleTabClick("dashboard")}>
             <div className="w-5 h-5 bg-[#2271b1] rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-[10px]">T</span>
             </div>
             <span className="text-white font-semibold">Travelluxx</span>
           </div>
-          <a href="/" target="_blank" className="flex items-center gap-1 hover:text-white transition">
+          <a href="/" target="_blank" className="hidden sm:flex items-center gap-1 hover:text-white transition">
             <ExternalLink className="w-3 h-3" /> Visit Site
           </a>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:flex items-center gap-1.5">
             <Users className="w-3.5 h-3.5" />
             <span>Administrator</span>
           </div>
+          <a href="/" target="_blank" className="sm:hidden flex items-center gap-1 hover:text-white transition p-1" title="Visit Site">
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
           <button onClick={handleLogout} className="flex items-center gap-1 hover:text-white transition">
-            <LogOut className="w-3.5 h-3.5" /> Log Out
+            <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Log Out</span>
           </button>
         </div>
       </div>
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative">
+        {/* Mobile Backdrop Overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
         {/* Sidebar */}
-        <aside className="bg-[#1d2327] w-56 shrink-0 flex flex-col sticky top-9 h-[calc(100vh-36px)] overflow-y-auto z-40">
+        <aside className={`bg-[#1d2327] w-64 md:w-56 shrink-0 flex flex-col fixed inset-y-0 left-0 top-[33px] md:static md:top-9 md:h-[calc(100vh-36px)] h-[calc(100vh-33px)] overflow-y-auto z-50 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}>
           <div className="py-4">
-            <div className="px-4 py-2 mb-1">
+            <div className="px-4 py-2 mb-1 flex items-center justify-between">
               <p className="text-[#a7aaad] text-[10px] uppercase tracking-widest font-semibold">Navigation</p>
+              <button
+                type="button"
+                onClick={() => setSidebarOpen(false)}
+                className="md:hidden text-[#a7aaad] hover:text-white p-1"
+                aria-label="Close navigation"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
             {navItems.map(item => (
               <button
                 key={item.id}
-                onClick={() => handleTabClick(item.id)}
+                onClick={() => {
+                  handleTabClick(item.id);
+                  setSidebarOpen(false);
+                }}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition text-[13px] font-medium ${
                   activeTab === item.id
                     ? "bg-[#2271b1] text-white"
@@ -1680,7 +1718,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 min-h-0 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-4 md:p-6 min-h-0 overflow-y-auto w-full max-w-full overflow-x-hidden">
 
           {/* Toast Notification */}
           {toastMessage && (
@@ -1712,7 +1750,7 @@ export default function AdminDashboard() {
                 <p className="text-[#646970] text-xs mt-1">Welcome back! Here's an overview of your site.</p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
                 {[
                   { label: "Total Leads", value: stats.leads, color: "#2271b1" },
                   { label: "Today's Bookings", value: stats.today, color: "#00a32a" },
@@ -1720,14 +1758,14 @@ export default function AdminDashboard() {
                   { label: "Contact Inquiries", value: stats.inquiries, color: "#0284c7" },
                   { label: "Blog Posts", value: stats.posts, color: "#9c27b0" },
                 ].map(s => (
-                  <div key={s.label} className="bg-white border border-[#c3c4c7] rounded shadow-sm p-5">
-                    <div className="text-3xl font-black" style={{ color: s.color }}>{s.value}</div>
+                  <div key={s.label} className="bg-white border border-[#c3c4c7] rounded shadow-sm p-4 sm:p-5">
+                    <div className="text-2xl sm:text-3xl font-black" style={{ color: s.color }}>{s.value}</div>
                     <div className="text-[#646970] text-xs mt-1 font-medium">{s.label}</div>
                   </div>
                 ))}
               </div>
 
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white border border-[#c3c4c7] rounded shadow-sm p-5">
                   <h3 className="font-semibold text-[#1d2327] mb-3 pb-2 border-b border-[#f0f0f1]">Recent Leads</h3>
                   <div className="space-y-2">
@@ -1785,17 +1823,17 @@ export default function AdminDashboard() {
           {/* ─── LEADS ──────────────────────────────────────────── */}
           {activeTab === "leads" && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-[#1d2327]">Leads & Bookings</h1>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h1 className="text-xl sm:text-2xl font-bold text-[#1d2327]">Leads & Bookings</h1>
                 <span className="text-[#646970] text-xs">{filteredBookings.length} of {bookings.length}</span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-3">
                 <input type="text" placeholder="Search by name, ref, location..." value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:border-[#2271b1]" />
+                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-full sm:w-64 focus:outline-none focus:border-[#2271b1]" />
                 <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-sm focus:outline-none focus:border-[#2271b1]">
+                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-full sm:w-auto focus:outline-none focus:border-[#2271b1]">
                   <option value="All">All Statuses</option>
                   {["Pending", "Confirmed", "Completed", "Cancelled"].map(s => <option key={s}>{s}</option>)}
                 </select>
@@ -1803,7 +1841,7 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     onClick={deleteSelectedBookings}
-                    className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-3 py-1.5 rounded text-xs font-semibold transition"
+                    className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-3 py-1.5 rounded text-xs font-semibold transition text-center"
                   >
                     Delete Selected ({selectedBookingIds.length})
                   </button>
@@ -1811,7 +1849,8 @@ export default function AdminDashboard() {
               </div>
 
               <div className="bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden">
-                <table className="w-full text-xs">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-xs min-w-[750px]">
                   <thead className="bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]">
                     <tr>
                       <th className="py-3 px-4 text-left w-10">
@@ -1900,6 +1939,7 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}
@@ -1920,10 +1960,10 @@ export default function AdminDashboard() {
               {editingPost !== undefined ? (
                 <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
                   {/* WordPress Style Editor Top Bar */}
-                  <div className="bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none">
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold text-slate-800 text-[13px]">{postForm.title || "Draft"} - Post</span>
-                      <div className="relative">
+                  <div className="bg-white border-b border-[#c3c4c7] px-3 sm:px-4 py-2.5 flex flex-wrap gap-2 items-center justify-between text-xs text-[#2c3338] select-none">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="font-semibold text-slate-800 text-[13px] truncate max-w-[150px] sm:max-w-none">{postForm.title || "Draft"} - Post</span>
+                      <div className="relative hidden md:block">
                         <input
                           type="text"
                           readOnly
@@ -1932,12 +1972,12 @@ export default function AdminDashboard() {
                         />
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 sm:gap-3">
                       {/* External preview icon */}
                       <a href={`/blog/${postForm.slug}`} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-slate-100 rounded text-[#2c3338]" title="View post">
                         <ExternalLink className="w-4 h-4" />
                       </a>
-                      <button type="button" onClick={() => savePost()} className="border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition">
+                      <button type="button" onClick={() => savePost()} className="hidden sm:inline-block border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition">
                         Copy this
                       </button>
 
@@ -1945,7 +1985,7 @@ export default function AdminDashboard() {
                         type="button"
                         onClick={() => savePost()}
                         disabled={isSaving}
-                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 sm:px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
                       >
                         {isSaving && (
                           <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
@@ -1958,7 +1998,7 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-[#f0f0f1]">
+                  <div className="p-3 sm:p-4 md:p-6 bg-[#f0f0f1]">
                     <form onSubmit={savePost} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-4">
@@ -2296,7 +2336,8 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
-                    <table className="w-full text-[13px] border-collapse">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-[13px] border-collapse min-w-[650px]">
                       <thead className="bg-white border-b border-[#c3c4c7] text-[#2c3338] font-semibold text-left">
                         <tr>
                           <th className="py-2.5 px-3 w-8 text-center"><input type="checkbox" className="rounded-sm border-[#8c8f94]" /></th>
@@ -2462,6 +2503,7 @@ export default function AdminDashboard() {
                         ))}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               )}
@@ -2484,16 +2526,16 @@ export default function AdminDashboard() {
               {editingHomepage ? (
                 <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
                   {/* WordPress Style Editor Top Bar */}
-                  <div className="bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none">
+                  <div className="bg-white border-b border-[#c3c4c7] px-3 sm:px-4 py-2.5 flex flex-wrap gap-2 items-center justify-between text-xs text-[#2c3338] select-none">
                     <div className="flex items-center gap-3">
                       <span className="font-semibold text-slate-800 text-[13px]">Homepage (Front Page Layout)</span>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <button
                         type="button"
                         onClick={() => saveHomepageSettings()}
                         disabled={isSaving}
-                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 sm:px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
                       >
                         {isSaving && (
                           <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
@@ -2513,7 +2555,7 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-[#f0f0f1]">
+                  <div className="p-3 sm:p-4 md:p-6 bg-[#f0f0f1]">
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-6">
@@ -3332,10 +3374,10 @@ export default function AdminDashboard() {
               ) : editingPage !== undefined ? (
                 <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
                   {/* WordPress Style Editor Top Bar */}
-                  <div className="bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none">
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold text-slate-800 text-[13px]">{pageForm.title || "Draft"} - Page</span>
-                      <div className="relative">
+                  <div className="bg-white border-b border-[#c3c4c7] px-3 sm:px-4 py-2.5 flex flex-wrap gap-2 items-center justify-between text-xs text-[#2c3338] select-none">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="font-semibold text-slate-800 text-[13px] truncate max-w-[150px] sm:max-w-none">{pageForm.title || "Draft"} - Page</span>
+                      <div className="relative hidden md:block">
                         <input
                           type="text"
                           readOnly
@@ -3344,20 +3386,20 @@ export default function AdminDashboard() {
                         />
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 sm:gap-3">
                       {/* External preview icon */}
                       <a href={`/${pageForm.slug}`} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-slate-100 rounded text-[#2c3338]" title="View page">
                         <ExternalLink className="w-4 h-4" />
                       </a>
                       
                       {/* Device preview */}
-                      <button type="button" className="p-1.5 hover:bg-slate-100 rounded text-[#2c3338]" title="Desktop view">
+                      <button type="button" className="hidden sm:inline-flex p-1.5 hover:bg-slate-100 rounded text-[#2c3338]" title="Desktop view">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"/></svg>
                       </button>
 
-                      <a href={`/${pageForm.slug}`} target="_blank" rel="noreferrer" className="text-[#2271b1] hover:underline font-semibold mr-1">Preview</a>
+                      <a href={`/${pageForm.slug}`} target="_blank" rel="noreferrer" className="hidden sm:inline-block text-[#2271b1] hover:underline font-semibold mr-1">Preview</a>
 
-                      <button type="button" onClick={() => savePage()} className="border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition">
+                      <button type="button" onClick={() => savePage()} className="hidden sm:inline-block border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-3 py-1.5 rounded-sm font-semibold transition">
                         Copy this
                       </button>
 
@@ -3373,7 +3415,7 @@ export default function AdminDashboard() {
                         type="button"
                         onClick={() => savePage()}
                         disabled={isSaving}
-                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
+                        className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 sm:px-4 py-1.5 rounded-sm font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50"
                       >
                         {isSaving && (
                           <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
@@ -3386,7 +3428,7 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-[#f0f0f1]">
+                  <div className="p-3 sm:p-4 md:p-6 bg-[#f0f0f1]">
                     <form onSubmit={savePage} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-4">
@@ -3637,7 +3679,8 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
-                    <table className="w-full text-[13px] border-collapse">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-[13px] border-collapse min-w-[650px]">
                       <thead className="bg-white border-b border-[#c3c4c7] text-[#2c3338] font-semibold text-left">
                         <tr>
                           <th className="py-2.5 px-3 w-8 text-center"><input type="checkbox" className="rounded-sm border-[#8c8f94]" /></th>
@@ -3829,6 +3872,7 @@ export default function AdminDashboard() {
                         ))}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               )}
@@ -3839,9 +3883,9 @@ export default function AdminDashboard() {
           {activeTab === "services" && (
             <div className="space-y-4">
               {/* Top Header & Breadcrumbs */}
-              <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
                 <div>
-                  <h1 className="text-2xl font-bold text-[#1d2327]">
+                  <h1 className="text-xl sm:text-2xl font-bold text-[#1d2327]">
                     {editingService === "page-settings"
                       ? "Services Page Settings"
                       : editingService !== undefined
@@ -3857,7 +3901,7 @@ export default function AdminDashboard() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {editingService === undefined ? (
                     <>
                       <button
@@ -3935,9 +3979,9 @@ export default function AdminDashboard() {
 
               {/* 1. EDITING SERVICES PAGE SETTINGS */}
               {editingService === "page-settings" ? (
-                <div className="bg-white border border-[#c3c4c7] rounded-sm p-6 shadow-sm space-y-8">
+                <div className="bg-white border border-[#c3c4c7] rounded-sm p-4 sm:p-6 shadow-sm space-y-8">
                   {/* Quick Summary & Sticky Save Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-6 -mt-6 p-6 rounded-t-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-4 sm:-mx-6 -mt-4 sm:-mt-6 p-4 sm:p-6 rounded-t-sm">
                     <div>
                       <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                         <Settings className="w-5 h-5 text-emerald-600" />
@@ -3947,7 +3991,7 @@ export default function AdminDashboard() {
                         Manage headlines, descriptions, media, icons, and visibility for every section on the <span className="font-semibold text-slate-700">/services</span> page.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2.5 shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0">
                       <a
                         href="/services"
                         target="_blank"
@@ -4935,14 +4979,14 @@ export default function AdminDashboard() {
                         <label className="block text-[11px] font-semibold text-[#646970] mb-1 uppercase tracking-wide">
                           Permalink (URL Slug)
                         </label>
-                        <div className="flex items-center gap-1.5 text-xs text-[#50575e] bg-slate-50 border border-[#c3c4c7] px-3 py-1.5 rounded-sm">
-                          <span>https://travelluxx.co.uk/services/</span>
+                        <div className="flex flex-wrap items-center gap-1.5 text-xs text-[#50575e] bg-slate-50 border border-[#c3c4c7] px-3 py-1.5 rounded-sm">
+                          <span className="truncate">https://travelluxx.co.uk/services/</span>
                           <input
                             type="text"
                             value={serviceForm.slug}
                             onChange={e => setServiceForm({ ...serviceForm, slug: e.target.value })}
                             placeholder="airport-transfers"
-                            className="flex-1 bg-transparent font-mono text-[#2271b1] font-semibold outline-none"
+                            className="flex-1 min-w-[120px] bg-transparent font-mono text-[#2271b1] font-semibold outline-none"
                           />
                         </div>
                       </div>
@@ -5875,7 +5919,8 @@ export default function AdminDashboard() {
 
                   {/* Services Table */}
                   <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden">
-                    <table className="w-full text-xs">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-xs min-w-[750px]">
                       <thead className="bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]">
                         <tr>
                           <th className="py-2.5 px-3 text-left w-14">Image</th>
@@ -6020,6 +6065,7 @@ export default function AdminDashboard() {
                         )}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               )}
@@ -6029,9 +6075,9 @@ export default function AdminDashboard() {
           {/* ─── INQUIRIES ───────────────────────────────────────── */}
           {activeTab === "inquiries" && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <h1 className="text-2xl font-bold text-[#1d2327]">Contact Inquiries</h1>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                  <h1 className="text-xl sm:text-2xl font-bold text-[#1d2327]">Contact Inquiries</h1>
                   {selectedInquiryIds.length > 0 && (
                     <button
                       type="button"
@@ -6045,7 +6091,8 @@ export default function AdminDashboard() {
                 <span className="text-[#646970] text-xs">{inquiries.length} total inquiries</span>
               </div>
               <div className="bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden">
-                <table className="w-full text-xs">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-xs min-w-[700px]">
                   <thead className="bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]">
                     <tr>
                       <th className="py-3 px-4 text-left w-10">
@@ -6119,6 +6166,7 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}
@@ -6137,8 +6185,8 @@ export default function AdminDashboard() {
               </div>
 
               {/* WordPress style filters and View Switcher */}
-              <div className="flex flex-wrap gap-2 items-center justify-between bg-transparent py-1 text-xs">
-                <div className="flex gap-2 items-center">
+              <div className="flex flex-col sm:flex-row gap-2 sm:items-center justify-between bg-transparent py-1 text-xs">
+                <div className="flex flex-wrap gap-2 items-center">
                   {/* Grid view icon */}
                   <button onClick={() => setMediaViewMode("grid")} className={`p-1.5 border rounded-sm ${mediaViewMode === "grid" ? "bg-[#e0e0e0] border-[#8c8f94]" : "bg-white border-[#c3c4c7]"} hover:bg-slate-50 transition`}>
                     <svg className="w-3.5 h-3.5 text-[#2c3338]" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/></svg>
@@ -6148,7 +6196,7 @@ export default function AdminDashboard() {
                     <svg className="w-3.5 h-3.5 text-[#2c3338]" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg>
                   </button>
 
-                  <select className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] outline-none ml-2">
+                  <select className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] outline-none">
                     <option>All media items</option>
                   </select>
                   <select className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] outline-none">
@@ -6157,7 +6205,7 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <input type="text" placeholder="Search media items" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                    className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs outline-none focus:border-[#2271b1]" />
+                    className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs outline-none focus:border-[#2271b1] w-full sm:w-auto" />
                 </div>
               </div>
 
@@ -6174,7 +6222,7 @@ export default function AdminDashboard() {
 
               {media.length > 0 ? (
                 mediaViewMode === "grid" ? (
-                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 gap-3 bg-white border border-[#c3c4c7] p-4 rounded-sm shadow-sm">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 bg-white border border-[#c3c4c7] p-4 rounded-sm shadow-sm">
                     {media.filter(url => url.toLowerCase().includes(searchQuery.toLowerCase())).map((url, i) => (
                       <div key={i} onClick={() => {
                         setSelectedMedia(url);
@@ -6191,7 +6239,8 @@ export default function AdminDashboard() {
                   </div>
                 ) : (
                   <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden text-xs">
-                    <table className="w-full text-left border-collapse">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-left border-collapse min-w-[500px]">
                       <thead className="bg-[#f6f7f7] border-b border-[#c3c4c7] text-[#2c3338] font-semibold">
                         <tr>
                           <th className="py-2 px-3 w-16">File</th>
@@ -6236,6 +6285,7 @@ export default function AdminDashboard() {
                         })}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 )
               ) : (
@@ -6503,9 +6553,9 @@ export default function AdminDashboard() {
                 <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm font-medium">{saveStatus}</div>
               )}
 
-              <div className="flex flex-col md:flex-row gap-6 items-start">
+              <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-start">
                 {/* Left Sidebar of Settings Tab */}
-                <div className="w-full md:w-48 bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden shrink-0">
+                <div className="w-full md:w-48 bg-white border border-[#c3c4c7] rounded shadow-sm overflow-x-auto shrink-0 flex flex-row md:flex-col">
                   {[
                     { key: "general", label: "General" },
                     { key: "connectors", label: "Connectors" },
@@ -6516,10 +6566,10 @@ export default function AdminDashboard() {
                       key={tab.key}
                       type="button"
                       onClick={() => setSettingsTab(tab.key as any)}
-                      className={`w-full text-left px-4 py-2.5 text-xs font-semibold border-b border-[#f0f0f1] last:border-0 transition ${
+                      className={`px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition border-b-2 md:border-b md:last:border-0 ${
                         settingsTab === tab.key
-                          ? "bg-[#2271b1] text-white"
-                          : "text-[#50575e] hover:bg-[#f6f7f7] hover:text-[#2c3338]"
+                          ? "bg-[#2271b1] text-white border-[#2271b1]"
+                          : "text-[#50575e] hover:bg-[#f6f7f7] hover:text-[#2c3338] border-transparent md:border-[#f0f0f1]"
                       }`}
                     >
                       {tab.label}
@@ -6528,7 +6578,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Right content of Settings Tab */}
-                <div className="flex-1 bg-white border border-[#c3c4c7] rounded shadow-sm p-6 w-full">
+                <div className="flex-1 bg-white border border-[#c3c4c7] rounded shadow-sm p-4 sm:p-6 w-full">
                   <form onSubmit={saveSettings} className="space-y-6">
                     {settingsTab === "general" && (
                       <div className="space-y-4">
@@ -6816,7 +6866,7 @@ export default function AdminDashboard() {
                         <h2 className="font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1]">
                           🚖 Default Pricing Rates (£ per mile)
                         </h2>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                           {[
                             { key: "economy_price", label: "Economy" },
                             { key: "luxury_price", label: "Luxury" },
@@ -6835,36 +6885,62 @@ export default function AdminDashboard() {
 
                     {settingsTab === "snippets" && (
                       <div className="space-y-4">
-                        <h2 className="font-bold text-[#1d2327] text-sm mb-2 pb-2 border-b border-[#f0f0f1]">
-                          💻 Custom Code Snippets
-                        </h2>
-                        <p className="text-[#646970] text-xs leading-relaxed mb-4">
-                          Inject custom script tags, meta tags, style sheets, or tracking integrations (like Google Search Console verification meta, Google Analytics tag, Facebook Pixel, etc.) into your site.
-                        </p>
+                        <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                          <h2 className="font-bold text-[#1d2327] text-sm flex items-center gap-2">
+                            <span>💻</span> Custom Code Snippets
+                          </h2>
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Live Server &amp; Client Injection
+                          </span>
+                        </div>
+
+                        <div className="p-3 bg-blue-50/80 border border-blue-200 rounded-sm text-xs text-blue-900 space-y-1">
+                          <p className="font-semibold text-blue-950 flex items-center gap-1">
+                            ℹ️ Search Console, Analytics &amp; Custom Scripts Supported
+                          </p>
+                          <p className="text-[11px] text-blue-800 leading-relaxed">
+                            Code entered here is injected directly into both the server-rendered HTML and client browser. Supported elements include <code>&lt;meta&gt;</code> tags (e.g. Google Search Console site verification), <code>&lt;script&gt;</code> tags (Google Analytics GA4, GTM, Meta Pixel, live chat), and <code>&lt;style&gt;</code> CSS.
+                          </p>
+                        </div>
                         
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                           <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">Header Custom Code (in &lt;head&gt;)</label>
+                            <div className="flex items-center justify-between mb-1">
+                              <label className="block text-xs font-semibold text-[#1d2327]">
+                                Header Custom Code (in &lt;head&gt;)
+                              </label>
+                              <span className="text-[10px] text-[#646970] font-mono">Google Site Verification / Analytics / Meta</span>
+                            </div>
                             <textarea
                               rows={8}
                               value={settings.custom_header_code || ""}
                               onChange={e => setSettings({ ...settings, custom_header_code: e.target.value })}
-                              placeholder="<!-- e.g. <meta name='google-site-verification' content='...' /> or <script async src='https://www.googletagmanager.com/gtag/js?id=...'></script> -->"
-                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              placeholder={`<!-- Example 1: Google Search Console Verification -->\n<meta name="google-site-verification" content="YOUR_CODE_HERE" />\n\n<!-- Example 2: Google Tag (gtag.js) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-XXXXXXX');\n</script>`}
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black leading-relaxed"
                             />
-                            <p className="text-[#646970] text-[10px] mt-1">This code will be injected inside the header &lt;head&gt; element of all pages.</p>
+                            <p className="text-[#646970] text-[10px] mt-1 flex items-center gap-1">
+                              <span>⚡</span> Injected directly into the <code>&lt;head&gt;</code> tag of every page before HTML is sent to browsers and crawlers.
+                            </p>
                           </div>
 
                           <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">Footer Custom Code (before &lt;/body&gt;)</label>
+                            <div className="flex items-center justify-between mb-1">
+                              <label className="block text-xs font-semibold text-[#1d2327]">
+                                Footer Custom Code (before &lt;/body&gt;)
+                              </label>
+                              <span className="text-[10px] text-[#646970] font-mono">Live Chat Widgets / External Tracking</span>
+                            </div>
                             <textarea
                               rows={8}
                               value={settings.custom_footer_code || ""}
                               onChange={e => setSettings({ ...settings, custom_footer_code: e.target.value })}
-                              placeholder="<!-- e.g. live chat widget scripts or custom analytics script integrations -->"
-                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              placeholder={`<!-- Example: Live Chat or Customer Support Widget -->\n<script>\n  // Your custom footer javascript or chat script here\n</script>`}
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black leading-relaxed"
                             />
-                            <p className="text-[#646970] text-[10px] mt-1">This code will be injected right before the closing &lt;/body&gt; tag of all pages.</p>
+                            <p className="text-[#646970] text-[10px] mt-1 flex items-center gap-1">
+                              <span>⚡</span> Injected directly before the closing <code>&lt;/body&gt;</code> tag of all pages.
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -6896,7 +6972,7 @@ export default function AdminDashboard() {
 
       {/* Booking Detail Modal */}
       {selectedBooking && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4">
           <div className="bg-white rounded-lg shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b border-[#f0f0f1]">
               <div>
@@ -6907,8 +6983,8 @@ export default function AdminDashboard() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-5 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="p-4 sm:p-5 space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]">
                   <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Passenger</span>
                   <span className="text-[#1d2327] font-bold">{selectedBooking.passengerName}</span>
@@ -6917,11 +6993,11 @@ export default function AdminDashboard() {
                   <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Phone</span>
                   <span className="text-[#1d2327] font-bold">{selectedBooking.passengerPhone}</span>
                 </div>
-                <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-2">
+                <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-1 sm:col-span-2">
                   <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Email</span>
                   <span className="text-[#1d2327]">{selectedBooking.passengerEmail}</span>
                 </div>
-                <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-2">
+                <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1] col-span-1 sm:col-span-2">
                   <span className="text-emerald-600 font-bold block">Pickup: </span>{selectedBooking.pickup}
                   <span className="text-red-500 font-bold block mt-1">Dropoff: </span>{selectedBooking.dropoff}
                 </div>
@@ -6954,16 +7030,16 @@ export default function AdminDashboard() {
       )}
 
       {selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-          <div className="bg-white shadow-xl rounded-sm w-full max-w-lg border border-[#c3c4c7]">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn">
+          <div className="bg-white shadow-xl rounded-sm w-full max-w-lg border border-[#c3c4c7] max-h-[90vh] overflow-y-auto">
             <div className="bg-[#1d2327] p-4 text-white flex justify-between items-center">
               <h3 className="font-bold text-sm">Contact Inquiry Details</h3>
               <button onClick={() => setSelectedInquiry(null)} className="text-[#a7aaad] hover:text-white transition">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-6 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 sm:p-6 space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]">
                   <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Sender Name</span>
                   <span className="text-[#1d2327] font-bold">{selectedInquiry.name}</span>
@@ -7147,10 +7223,10 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="flex flex-1 overflow-hidden min-h-[400px]">
+            <div className="flex flex-col md:flex-row flex-1 overflow-y-auto md:overflow-hidden min-h-[400px]">
               {/* Media selection area (left) */}
-              <div className="flex-1 p-5 overflow-y-auto bg-slate-50 border-r border-[#c3c4c7]">
-                <div className="flex items-center justify-between mb-4 border-b border-[#ddd] pb-2">
+              <div className="flex-1 p-3 sm:p-5 overflow-y-auto bg-slate-50 border-b md:border-b-0 md:border-r border-[#c3c4c7]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-[#ddd] pb-2">
                   <div className="flex items-center gap-3">
                     <span className="font-semibold text-[#2c3338]">Media Library</span>
                     <button
@@ -7196,11 +7272,11 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <input type="text" placeholder="Search media..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                    className="border border-[#c3c4c7] bg-white rounded-sm px-2 py-1 outline-none text-xs focus:border-[#2271b1]" />
+                    className="border border-[#c3c4c7] bg-white rounded-sm px-2 py-1 outline-none text-xs focus:border-[#2271b1] w-full sm:w-auto" />
                 </div>
 
                 {media.length > 0 ? (
-                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3">
                     {media.filter(url => url.toLowerCase().includes(searchQuery.toLowerCase())).map((url, i) => {
                       const isSelected = selectedEditorMediaUrl === url;
                       return (
@@ -7232,7 +7308,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Sidebar metadata & Insert Action (right) */}
-              <div className="w-80 bg-[#f6f7f7] p-5 overflow-y-auto flex flex-col justify-between border-l border-[#c3c4c7]">
+              <div className="w-full md:w-80 bg-[#f6f7f7] p-4 sm:p-5 overflow-y-auto flex flex-col justify-between border-t md:border-t-0 md:border-l border-[#c3c4c7]">
                 {selectedEditorMediaUrl ? (
                   <div className="space-y-4">
                     <h4 className="font-bold text-xs uppercase tracking-wide text-[#646970] border-b border-[#ddd] pb-1.5">Attachment Details</h4>
