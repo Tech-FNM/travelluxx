@@ -2,20 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useSettings } from "../context/SettingsContext";
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [settings, setSettings] = useState<any>(null);
-
-  useEffect(() => {
-    fetch("/api/settings")
-      .then(res => res.json())
-      .then(data => setSettings(data))
-      .catch(err => console.error(err));
-  }, []);
+  const { settings } = useSettings();
 
   useEffect(() => {
     if (!slug) return;
@@ -145,7 +139,7 @@ export default function BlogPostDetail() {
       const existingScript = document.getElementById("jsonld-post-schema");
       if (existingScript) existingScript.remove();
     };
-  }, [post, settings]);
+  }, [post]);
 
   return (
     <div className="min-h-screen bg-[#faf9f6] text-[#1a1a1a] flex flex-col font-sans antialiased">
@@ -153,7 +147,7 @@ export default function BlogPostDetail() {
         if (id === "hero" || !id) {
           window.location.href = "/";
         }
-      }} settings={settings} />
+      }} />
 
       <main className="flex-1 w-full py-8 md:py-16">
         {loading ? (
@@ -314,7 +308,7 @@ export default function BlogPostDetail() {
         }
       `}</style>
 
-      <Footer onScrollTo={() => {}} settings={settings} />
+      <Footer onScrollTo={() => {}} />
     </div>
   );
 }

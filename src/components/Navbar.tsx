@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Compass, Shield, Menu, X, ChevronDown } from "lucide-react";
 import travelluxxLogo from "../assets/images/travelluxx_logo_1786403432815.jpg";
 import { trackClick } from "../utils/analytics";
 import { getCustomImage } from "../utils/customImages";
+import { useSettings } from "../context/SettingsContext";
 
 interface NavbarProps {
   onScrollTo: (elementId: string) => void;
   onAdminClick?: () => void;
-  settings?: any;
-  onUpdateSettings?: (newSettings: any) => void;
 }
 
-export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarProps) {
+export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
+  const { settings } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [openMobileDropdowns, setOpenMobileDropdowns] = useState<{ [id: string]: boolean }>({});
 
@@ -66,10 +67,6 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
   const hasCustomLogo = (() => {
     const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
     if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
-    try {
-      const localCustom = localStorage.getItem("custom_img_logo");
-      if (localCustom && localCustom.trim() !== "") return true;
-    } catch (e) {}
     return false;
   })();
 
@@ -141,7 +138,7 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                           <span>{item.label}</span>
                           <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" />
                         </button>
-                      ) : (
+                      ) : item.href?.startsWith("http") ? (
                         <a 
                           href={item.href || "#"} 
                           target={item.target || "_self"}
@@ -152,6 +149,16 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                           <span>{item.label}</span>
                           <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" />
                         </a>
+                      ) : (
+                        <Link 
+                          to={item.href || "/"} 
+                          className={`transition cursor-pointer font-bold tracking-wide flex items-center gap-1 ${
+                            isRenax ? "text-slate-200 group-hover/dropdown:text-emerald-400" : "text-slate-700 group-hover/dropdown:text-emerald-600"
+                          }`}
+                        >
+                          <span>{item.label}</span>
+                          <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" />
+                        </Link>
                       )}
                     </div>
 
@@ -182,12 +189,27 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                               </button>
                             );
                           }
+                          if (child.href?.startsWith("http")) {
+                            return (
+                              <a
+                                key={child.id}
+                                href={child.href}
+                                target={child.target || "_self"}
+                                className={`block px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                                  isRenax
+                                    ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200"
+                                    : "hover:bg-emerald-50 hover:text-emerald-700 text-slate-700"
+                                }`}
+                              >
+                                {child.label}
+                              </a>
+                            );
+                          }
 
                           return (
-                            <a
+                            <Link
                               key={child.id}
-                              href={child.href}
-                              target={child.target || "_self"}
+                              to={child.href}
                               className={`block px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                                 isRenax
                                   ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200"
@@ -195,7 +217,7 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                               }`}
                             >
                               {child.label}
-                            </a>
+                            </Link>
                           );
                         })}
                       </div>
@@ -218,17 +240,31 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                 );
               }
 
+              if (item.href?.startsWith("http")) {
+                return (
+                  <a 
+                    key={item.id}
+                    href={item.href} 
+                    target={item.target || "_self"}
+                    className={`transition cursor-pointer font-bold tracking-wide ${
+                      isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
               return (
-                <a 
+                <Link 
                   key={item.id}
-                  href={item.href} 
-                  target={item.target || "_self"}
+                  to={item.href || "/"} 
                   className={`transition cursor-pointer font-bold tracking-wide ${
                     isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -276,7 +312,7 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                         >
                           {item.label}
                         </button>
-                      ) : (
+                      ) : item.href?.startsWith("http") ? (
                         <a
                           href={item.href || "#"}
                           target={item.target || "_self"}
@@ -287,6 +323,16 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                         >
                           {item.label}
                         </a>
+                      ) : (
+                        <Link
+                          to={item.href || "/"}
+                          onClick={() => setIsOpen(false)}
+                          className={`font-bold transition cursor-pointer text-sm ${
+                            isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
                       )}
                       <button
                         type="button"
@@ -320,19 +366,33 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                               </button>
                             );
                           }
+                          if (child.href?.startsWith("http")) {
+                            return (
+                              <a
+                                key={child.id}
+                                href={child.href}
+                                target={child.target || "_self"}
+                                onClick={() => setIsOpen(false)}
+                                className={`block py-1.5 text-xs font-semibold transition ${
+                                  isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"
+                                }`}
+                              >
+                                {child.label}
+                              </a>
+                            );
+                          }
 
                           return (
-                            <a
+                            <Link
                               key={child.id}
-                              href={child.href}
-                              target={child.target || "_self"}
+                              to={child.href}
                               onClick={() => setIsOpen(false)}
                               className={`block py-1.5 text-xs font-semibold transition ${
                                 isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"
                               }`}
                             >
                               {child.label}
-                            </a>
+                            </Link>
                           );
                         })}
                       </div>
@@ -358,18 +418,33 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
                 );
               }
 
+              if (item.href?.startsWith("http")) {
+                return (
+                  <a 
+                    key={item.id}
+                    href={item.href}
+                    target={item.target || "_self"}
+                    onClick={() => setIsOpen(false)}
+                    className={`text-left font-bold py-2 transition cursor-pointer text-sm ${
+                      isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
               return (
-                <a 
+                <Link 
                   key={item.id}
-                  href={item.href}
-                  target={item.target || "_self"}
+                  to={item.href || "/"}
                   onClick={() => setIsOpen(false)}
                   className={`text-left font-bold py-2 transition cursor-pointer text-sm ${
                     isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               );
             })}
           </div>

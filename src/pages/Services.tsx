@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getServiceIcon } from "../utils/serviceIcons";
+import { useSettings } from "../context/SettingsContext";
 import {
   Plane,
   Car,
@@ -181,18 +182,12 @@ const DEFAULT_FAQS = [
 ];
 
 export default function Services() {
-  const [settings, setSettings] = useState<any>(null);
+  const { settings } = useSettings();
   const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
   const [pageSettings, setPageSettings] = useState<any>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   useEffect(() => {
-    // Global website settings
-    fetch("/api/settings")
-      .then((res) => res.json())
-      .then((data) => setSettings(data))
-      .catch((err) => console.error("Failed to load settings:", err));
-
     // Dynamic services list
     fetch("/api/services")
       .then((res) => res.json())
@@ -354,7 +349,7 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
       {/* Global Navbar */}
-      <Navbar onScrollTo={() => {}} settings={settings} />
+      <Navbar onScrollTo={(id) => { if (id === "hero" || !id) { window.location.href = "/"; } }} />
 
       <main className="flex-grow">
         {/* ========================================================= */}
@@ -493,7 +488,7 @@ export default function Services() {
       </main>
 
       {/* Global Footer */}
-      <Footer onScrollTo={() => {}} settings={settings} />
+      <Footer onScrollTo={() => {}} />
     </div>
   );
 }

@@ -18,20 +18,18 @@ import { trackVisit, trackClick } from "./utils/analytics";
 
 
 
+import { SettingsProvider, useSettings } from "./context/SettingsContext";
+
 // PUBLIC LANDING PAGE WRAPPER
 function PublicLandingPage() {
   // Shared state to allow prefilling the booking calculator
   const [calculatorPickup, setCalculatorPickup] = useState("");
   const [calculatorDropoff, setCalculatorDropoff] = useState("");
-  const [settings, setSettings] = useState<any>(null);
+  const { settings, isLoading } = useSettings();
   const [homepageContent, setHomepageContent] = useState<any>(null);
 
   useEffect(() => {
     trackVisit();
-    fetch("/api/settings")
-      .then(res => res.json())
-      .then(data => setSettings(data))
-      .catch(err => console.error("Failed to load settings:", err));
   }, []);
 
   useEffect(() => {
@@ -133,7 +131,7 @@ function PublicLandingPage() {
     setSettings(newSettings);
   };
 
-  if (!settings) {
+  if (isLoading || !settings) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center font-sans">
         <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
@@ -351,33 +349,35 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        {/* PUBLIC HOMEPAGE */}
-        <Route path="/" element={<PublicLandingPage />} />
-        
-        {/* ADMIN DASHBOARD */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/:tab" element={<AdminDashboard />} />
-        <Route path="/admin/:tab/:subtab" element={<AdminDashboard />} />
-        <Route path="/admin/:tab/:subtab/:id" element={<AdminDashboard />} />
+    <SettingsProvider>
+      <Router>
+        <Routes>
+          {/* PUBLIC HOMEPAGE */}
+          <Route path="/" element={<PublicLandingPage />} />
+          
+          {/* ADMIN DASHBOARD */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/:tab" element={<AdminDashboard />} />
+          <Route path="/admin/:tab/:subtab" element={<AdminDashboard />} />
+          <Route path="/admin/:tab/:subtab/:id" element={<AdminDashboard />} />
 
-        {/* BLOG PAGES */}
-        <Route path="/blog" element={<BlogList />} />
-        <Route path="/blog/:slug" element={<BlogPostDetail />} />
+          {/* BLOG PAGES */}
+          <Route path="/blog" element={<BlogList />} />
+          <Route path="/blog/:slug" element={<BlogPostDetail />} />
 
-        {/* SERVICES PAGES */}
-        <Route path="/services" element={<Services />} />
-        <Route path="/services/:slug" element={<ServiceDetail />} />
+          {/* SERVICES PAGES */}
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/:slug" element={<ServiceDetail />} />
 
-        {/* DYNAMIC CMS PAGES */}
-        <Route path="/:slug" element={<DynamicPage />} />
+          {/* DYNAMIC CMS PAGES */}
+          <Route path="/:slug" element={<DynamicPage />} />
 
-        {/* FALLBACK REDIRECTS TO PUBLIC WEBSITE */}
-        {/* Managed dynamically by path matching, we keep this fallback or let dynamic page handle it */}
+          {/* FALLBACK REDIRECTS TO PUBLIC WEBSITE */}
+          {/* Managed dynamically by path matching, we keep this fallback or let dynamic page handle it */}
 
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </SettingsProvider>
   );
 }
 

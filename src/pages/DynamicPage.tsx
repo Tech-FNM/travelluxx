@@ -2,20 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useSettings } from "../context/SettingsContext";
 
 export default function DynamicPage() {
   const { slug } = useParams<{ slug: string }>();
   const [page, setPage] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  const [settings, setSettings] = useState<any>(null);
-
-  useEffect(() => {
-    fetch("/api/settings")
-      .then(res => res.json())
-      .then(data => setSettings(data))
-      .catch(err => console.error(err));
-  }, []);
+  const { settings } = useSettings();
 
   useEffect(() => {
     if (!slug) return;
@@ -148,7 +142,7 @@ export default function DynamicPage() {
 
   return (
     <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>
-      <Navbar onScrollTo={() => {}} settings={settings} />
+      <Navbar onScrollTo={() => {}} />
       <main className="flex-1 max-w-4xl mx-auto px-6 py-28 w-full">
         <div>
           <h1 className={`text-4xl font-extrabold mb-8 ${isRenax ? "text-white" : "text-slate-900"}`}>{page.title}</h1>
@@ -158,7 +152,7 @@ export default function DynamicPage() {
           />
         </div>
       </main>
-      <Footer onScrollTo={() => {}} settings={settings} />
+      <Footer onScrollTo={() => {}} />
     </div>
   );
 }

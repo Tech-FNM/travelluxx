@@ -1,9 +1,10 @@
 import { Phone, Mail, MapPin, Instagram } from "lucide-react";
 
+import { useSettings } from "../context/SettingsContext";
+
 interface FooterProps {
   onScrollTo: (elementId: string) => void;
   onAdminClick?: () => void;
-  settings?: any;
 }
 
 // Custom TikTok SVG Icon
@@ -24,7 +25,8 @@ function PinterestIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-export default function Footer({ onScrollTo, onAdminClick, settings }: FooterProps) {
+export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
+  const { settings } = useSettings();
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
   const whatsappNum = settings?.whatsapp_number || "441217140876";
   const emailAddr = settings?.business_email || "info@travelluxx.co.uk";

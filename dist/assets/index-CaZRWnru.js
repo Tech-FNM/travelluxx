@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-x7GhZJsp.js"(exports, module) {
+  "assets/index-CaZRWnru.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16123,7 +16123,41 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         syncAllCustomImagesToAssets();
       }, 300);
     }
-    function Navbar({ onScrollTo, onAdminClick, settings }) {
+    const SettingsContext = reactExports.createContext(void 0);
+    function SettingsProvider({ children }) {
+      const [settings, setSettings2] = reactExports.useState(null);
+      const [isLoading, setIsLoading] = reactExports.useState(true);
+      const fetchSettings = async () => {
+        try {
+          const res = await fetch("/api/settings");
+          const data = await res.json();
+          setSettings2(data);
+        } catch (err) {
+          console.error("Failed to load settings:", err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      reactExports.useEffect(() => {
+        fetchSettings();
+      }, []);
+      const refreshSettings = async () => {
+        await fetchSettings();
+      };
+      const updateSettingsLocally = (newSettings) => {
+        setSettings2(newSettings);
+      };
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsContext.Provider, { value: { settings, isLoading, refreshSettings, updateSettingsLocally }, children });
+    }
+    function useSettings() {
+      const context = reactExports.useContext(SettingsContext);
+      if (context === void 0) {
+        throw new Error("useSettings must be used within a SettingsProvider");
+      }
+      return context;
+    }
+    function Navbar({ onScrollTo, onAdminClick }) {
+      const { settings } = useSettings();
       const [isOpen, setIsOpen] = reactExports.useState(false);
       const [openMobileDropdowns, setOpenMobileDropdowns] = reactExports.useState({});
       const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
@@ -16166,11 +16200,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const hasCustomLogo = (() => {
         const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
         if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
-        try {
-          const localCustom = localStorage.getItem("custom_img_logo");
-          if (localCustom && localCustom.trim() !== "") return true;
-        } catch (e) {
-        }
         return false;
       })();
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: `sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']" : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"}`, children: [
@@ -16199,7 +16228,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             ] })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "hidden md:flex items-center space-x-7 text-sm font-bold", children: menuItems.map((item) => {
-            var _a, _b;
+            var _a, _b, _c, _d;
             const hasChildren = Array.isArray(item.children) && item.children.length > 0;
             const isAnchor = ((_a = item.href) == null ? void 0 : _a.startsWith("/#")) || ((_b = item.href) == null ? void 0 : _b.startsWith("#"));
             const sectionId = isAnchor ? item.href.split("#")[1] : "";
@@ -16216,7 +16245,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" })
                     ]
                   }
-                ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                ) : ((_c = item.href) == null ? void 0 : _c.startsWith("http")) ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
                   "a",
                   {
                     href: item.href || "#",
@@ -16227,9 +16256,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" })
                     ]
                   }
+                ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Link$1,
+                  {
+                    to: item.href || "/",
+                    className: `transition cursor-pointer font-bold tracking-wide flex items-center gap-1 ${isRenax ? "text-slate-200 group-hover/dropdown:text-emerald-400" : "text-slate-700 group-hover/dropdown:text-emerald-600"}`,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" })
+                    ]
+                  }
                 ) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-full left-0 pt-2 z-50 min-w-[220px] opacity-0 translate-y-1 pointer-events-none group-hover/dropdown:opacity-100 group-hover/dropdown:translate-y-0 group-hover/dropdown:pointer-events-auto transition-all duration-200 ease-out", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `rounded-xl shadow-2xl border p-2 backdrop-blur-xl ${isRenax ? "bg-[#0f121d]/95 border-slate-700/70 text-white shadow-black/60" : "bg-white/95 border-slate-200/90 text-slate-800 shadow-slate-300/40"}`, children: item.children.map((child) => {
-                  var _a2, _b2;
+                  var _a2, _b2, _c2;
                   const childIsAnchor = ((_a2 = child.href) == null ? void 0 : _a2.startsWith("/#")) || ((_b2 = child.href) == null ? void 0 : _b2.startsWith("#"));
                   const childSectionId = childIsAnchor ? child.href.split("#")[1] : "";
                   if (childIsAnchor && childSectionId) {
@@ -16244,11 +16283,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       child.id
                     );
                   }
+                  if ((_c2 = child.href) == null ? void 0 : _c2.startsWith("http")) {
+                    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "a",
+                      {
+                        href: child.href,
+                        target: child.target || "_self",
+                        className: `block px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer ${isRenax ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200" : "hover:bg-emerald-50 hover:text-emerald-700 text-slate-700"}`,
+                        children: child.label
+                      },
+                      child.id
+                    );
+                  }
                   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "a",
+                    Link$1,
                     {
-                      href: child.href,
-                      target: child.target || "_self",
+                      to: child.href,
                       className: `block px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer ${isRenax ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200" : "hover:bg-emerald-50 hover:text-emerald-700 text-slate-700"}`,
                       children: child.label
                     },
@@ -16268,11 +16318,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 item.id
               );
             }
+            if ((_d = item.href) == null ? void 0 : _d.startsWith("http")) {
+              return /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "a",
+                {
+                  href: item.href,
+                  target: item.target || "_self",
+                  className: `transition cursor-pointer font-bold tracking-wide ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"}`,
+                  children: item.label
+                },
+                item.id
+              );
+            }
             return /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "a",
+              Link$1,
               {
-                href: item.href,
-                target: item.target || "_self",
+                to: item.href || "/",
                 className: `transition cursor-pointer font-bold tracking-wide ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"}`,
                 children: item.label
               },
@@ -16289,7 +16350,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ) })
         ] }) }),
         isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `md:hidden border-t py-4 px-6 shadow-lg ${isRenax ? "bg-[#12141c] border-slate-800 text-white font-['Outfit']" : "bg-white border-slate-150 text-slate-800"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col space-y-3", children: menuItems.map((item) => {
-          var _a, _b;
+          var _a, _b, _c, _d;
           const hasChildren = Array.isArray(item.children) && item.children.length > 0;
           const isAnchor = ((_a = item.href) == null ? void 0 : _a.startsWith("/#")) || ((_b = item.href) == null ? void 0 : _b.startsWith("#"));
           const sectionId = isAnchor ? item.href.split("#")[1] : "";
@@ -16308,11 +16369,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     className: `font-bold transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"}`,
                     children: item.label
                   }
-                ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                ) : ((_c = item.href) == null ? void 0 : _c.startsWith("http")) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "a",
                   {
                     href: item.href || "#",
                     target: item.target || "_self",
+                    onClick: () => setIsOpen(false),
+                    className: `font-bold transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"}`,
+                    children: item.label
+                  }
+                ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Link$1,
+                  {
+                    to: item.href || "/",
                     onClick: () => setIsOpen(false),
                     className: `font-bold transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"}`,
                     children: item.label
@@ -16329,7 +16398,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 )
               ] }),
               isSubOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pl-3 space-y-1 pt-1 border-l-2 border-emerald-500/40 ml-2", children: item.children.map((child) => {
-                var _a2, _b2;
+                var _a2, _b2, _c2;
                 const childIsAnchor = ((_a2 = child.href) == null ? void 0 : _a2.startsWith("/#")) || ((_b2 = child.href) == null ? void 0 : _b2.startsWith("#"));
                 const childSectionId = childIsAnchor ? child.href.split("#")[1] : "";
                 if (childIsAnchor && childSectionId) {
@@ -16347,11 +16416,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     child.id
                   );
                 }
+                if ((_c2 = child.href) == null ? void 0 : _c2.startsWith("http")) {
+                  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "a",
+                    {
+                      href: child.href,
+                      target: child.target || "_self",
+                      onClick: () => setIsOpen(false),
+                      className: `block py-1.5 text-xs font-semibold transition ${isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"}`,
+                      children: child.label
+                    },
+                    child.id
+                  );
+                }
                 return /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "a",
+                  Link$1,
                   {
-                    href: child.href,
-                    target: child.target || "_self",
+                    to: child.href,
                     onClick: () => setIsOpen(false),
                     className: `block py-1.5 text-xs font-semibold transition ${isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"}`,
                     children: child.label
@@ -16375,11 +16456,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               item.id
             );
           }
+          if ((_d = item.href) == null ? void 0 : _d.startsWith("http")) {
+            return /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "a",
+              {
+                href: item.href,
+                target: item.target || "_self",
+                onClick: () => setIsOpen(false),
+                className: `text-left font-bold py-2 transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"}`,
+                children: item.label
+              },
+              item.id
+            );
+          }
           return /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "a",
+            Link$1,
             {
-              href: item.href,
-              target: item.target || "_self",
+              to: item.href || "/",
               onClick: () => setIsOpen(false),
               className: `text-left font-bold py-2 transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"}`,
               children: item.label
@@ -28246,7 +28339,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     function PinterestIcon({ className = "w-4 h-4" }) {
       return /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className, viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.334 1.357-.053.225-.174.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" }) });
     }
-    function Footer({ onScrollTo, onAdminClick, settings }) {
+    function Footer({ onScrollTo, onAdminClick }) {
+      const { settings } = useSettings();
       const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
       const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
       const emailAddr = (settings == null ? void 0 : settings.business_email) || "info@travelluxx.co.uk";
@@ -40014,7 +40108,7 @@ ${escapeText(this.code(index, length))}
       const [selectedInquiryIds, setSelectedInquiryIds] = reactExports.useState([]);
       const [media, setMedia] = reactExports.useState([]);
       const [menuItems, setMenuItems] = reactExports.useState([]);
-      const [settings, setSettings] = reactExports.useState({});
+      const [settings, setSettings2] = reactExports.useState({});
       const [settingsTab, setSettingsTab] = reactExports.useState("general");
       const [searchQuery, setSearchQuery] = reactExports.useState("");
       const [statusFilter, setStatusFilter] = reactExports.useState("All");
@@ -40461,7 +40555,7 @@ ${escapeText(this.code(index, length))}
       };
       const fetchSettings = async () => {
         const r = await fetch("/api/admin/settings");
-        setSettings(await r.json());
+        setSettings2(await r.json());
       };
       const fetchMenu = async () => {
         const r = await fetch("/api/menu");
@@ -40822,11 +40916,11 @@ ${escapeText(this.code(index, length))}
         } else if (editorTarget === "yoast-page-x") {
           setPageForm((prev) => ({ ...prev, xImage: imageUrl }));
         } else if (editorTarget === "settings-logo") {
-          setSettings((prev) => ({ ...prev, logo_url: imageUrl }));
+          setSettings2((prev) => ({ ...prev, logo_url: imageUrl }));
         } else if (editorTarget === "settings-favicon") {
-          setSettings((prev) => ({ ...prev, favicon_url: imageUrl }));
+          setSettings2((prev) => ({ ...prev, favicon_url: imageUrl }));
         } else if (editorTarget === "settings-hero") {
-          setSettings((prev) => ({ ...prev, hero_image: imageUrl }));
+          setSettings2((prev) => ({ ...prev, hero_image: imageUrl }));
         } else if (editorTarget === "service-card") {
           setServiceForm((prev) => ({ ...prev, image: imageUrl }));
         } else if (editorTarget === "service-hero") {
@@ -41969,7 +42063,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_badge || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_badge: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_hero_badge: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. TRAVELLUXX PRIVATE HIRE"
                             }
@@ -41982,7 +42076,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_title || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_title: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_hero_title: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Nationwide Airport | Transfers & Private Hire"
                             }
@@ -41996,7 +42090,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 3,
                             value: settings.homepage_hero_subtitle || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_hero_subtitle: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, homepage_hero_subtitle: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. Experience premium private hire..."
                           }
@@ -42010,7 +42104,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_btn_text || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_text: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_hero_btn_text: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Calculate & Get Quote"
                             }
@@ -42023,7 +42117,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_btn_link || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_link: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_hero_btn_link: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. calculator-section"
                             }
@@ -42038,7 +42132,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_phone_text || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_text: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_hero_phone_text: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. +44 121 714 0876"
                             }
@@ -42051,7 +42145,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_phone_link || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_link: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_hero_phone_link: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. tel:441217140876"
                             }
@@ -42066,7 +42160,7 @@ ${escapeText(this.code(index, length))}
                             "button",
                             {
                               type: "button",
-                              onClick: () => setSettings({ ...settings, hero_image: "" }),
+                              onClick: () => setSettings2({ ...settings, hero_image: "" }),
                               className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700",
                               children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                             }
@@ -42095,7 +42189,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_indicator1 || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_indicator1: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_indicator1: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Licensed Professional Operators"
                             }
@@ -42108,7 +42202,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_indicator2 || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_indicator2: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_indicator2: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Guaranteed Nationwide Coverage"
                             }
@@ -42121,7 +42215,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_indicator3 || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_indicator3: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_indicator3: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Zero Surge Pricing"
                             }
@@ -42139,7 +42233,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_fleet_subtitle || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_fleet_subtitle: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_fleet_subtitle: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Our Premium Fleet"
                             }
@@ -42152,7 +42246,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_fleet_title || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_fleet_title: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, homepage_fleet_title: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Travel in Premium Comfort"
                             }
@@ -42166,7 +42260,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 3,
                             value: settings.homepage_fleet_description || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_fleet_description: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, homepage_fleet_description: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. Our curated fleet features..."
                           }
@@ -42182,7 +42276,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_economy_name || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_economy_name: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, fleet_economy_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42194,7 +42288,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_economy_tagline || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_economy_tagline: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, fleet_economy_tagline: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42207,7 +42301,7 @@ ${escapeText(this.code(index, length))}
                             {
                               rows: 2,
                               value: settings.fleet_economy_description || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_economy_description: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, fleet_economy_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -42219,7 +42313,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.fleet_economy_features || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_economy_features: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, fleet_economy_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Complimentary 4G Wi-Fi, USB Charging, etc."
                             }
@@ -42233,7 +42327,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, fleet_economy_image: "" }),
+                                onClick: () => setSettings2({ ...settings, fleet_economy_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -42262,7 +42356,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_luxury_name || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_luxury_name: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, fleet_luxury_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42274,7 +42368,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_luxury_tagline || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_luxury_tagline: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, fleet_luxury_tagline: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42287,7 +42381,7 @@ ${escapeText(this.code(index, length))}
                             {
                               rows: 2,
                               value: settings.fleet_luxury_description || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_luxury_description: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, fleet_luxury_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -42299,7 +42393,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.fleet_luxury_features || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_luxury_features: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, fleet_luxury_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Premium Leather Reclining Seats, Ambient Lighting, etc."
                             }
@@ -42313,7 +42407,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, fleet_luxury_image: "" }),
+                                onClick: () => setSettings2({ ...settings, fleet_luxury_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -42342,7 +42436,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_family_name || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_family_name: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, fleet_family_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42354,7 +42448,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_family_tagline || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_family_family: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, fleet_family_family: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42367,7 +42461,7 @@ ${escapeText(this.code(index, length))}
                             {
                               rows: 2,
                               value: settings.fleet_family_description || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_family_description: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, fleet_family_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -42379,7 +42473,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.fleet_family_features || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_family_features: e.target.value }),
+                              onChange: (e) => setSettings2({ ...settings, fleet_family_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Conference Seating, Massive Boot, etc."
                             }
@@ -42393,7 +42487,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, fleet_family_image: "" }),
+                                onClick: () => setSettings2({ ...settings, fleet_family_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -42422,7 +42516,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.homepage_airports_title || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_airports_title: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, homepage_airports_title: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. We cover all major London airports"
                           }
@@ -42442,7 +42536,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings[`airport_name_${num}`] || "",
-                                onChange: (e) => setSettings({ ...settings, [`airport_name_${num}`]: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, [`airport_name_${num}`]: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
                               }
                             )
@@ -42454,7 +42548,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings[`airport_code_${num}`] || "",
-                                onChange: (e) => setSettings({ ...settings, [`airport_code_${num}`]: e.target.value }),
+                                onChange: (e) => setSettings2({ ...settings, [`airport_code_${num}`]: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
                               }
                             )
@@ -42476,7 +42570,7 @@ ${escapeText(this.code(index, length))}
                                 {
                                   type: "text",
                                   value: settings[`service_title_${num}`] || "",
-                                  onChange: (e) => setSettings({ ...settings, [`service_title_${num}`]: e.target.value }),
+                                  onChange: (e) => setSettings2({ ...settings, [`service_title_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 }
                               )
@@ -42488,7 +42582,7 @@ ${escapeText(this.code(index, length))}
                                 {
                                   type: "text",
                                   value: settings[`service_desc_${num}`] || "",
-                                  onChange: (e) => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value }),
+                                  onChange: (e) => setSettings2({ ...settings, [`service_desc_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 }
                               )
@@ -42502,7 +42596,7 @@ ${escapeText(this.code(index, length))}
                                 "button",
                                 {
                                   type: "button",
-                                  onClick: () => setSettings({ ...settings, [`service_image_${num}`]: "" }),
+                                  onClick: () => setSettings2({ ...settings, [`service_image_${num}`]: "" }),
                                   className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                   children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                                 }
@@ -42529,7 +42623,7 @@ ${escapeText(this.code(index, length))}
                         tab: yoastHomeTab,
                         setTab: setYoastHomeTab,
                         focusKeyphrase: settings.homepage_seo_focus_keyphrase || "",
-                        setFocusKeyphrase: (v) => setSettings((prev) => ({ ...prev, homepage_seo_focus_keyphrase: v })),
+                        setFocusKeyphrase: (v) => setSettings2((prev) => ({ ...prev, homepage_seo_focus_keyphrase: v })),
                         title: settings.hero_title || "Travelluxx",
                         slug: "",
                         metaTitle: settings.homepage_seo_title || "",
@@ -42537,10 +42631,10 @@ ${escapeText(this.code(index, length))}
                         contentType: "homepage",
                         image: settings.hero_bg_image || "",
                         excerpt: "",
-                        onMetaTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_title: v })),
+                        onMetaTitleChange: (v) => setSettings2((prev) => ({ ...prev, homepage_seo_title: v })),
                         onSlugChange: () => {
                         },
-                        onMetaDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_description: v }))
+                        onMetaDescriptionChange: (v) => setSettings2((prev) => ({ ...prev, homepage_seo_description: v }))
                       }
                     )
                   ] }),
@@ -46100,7 +46194,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.business_name || "",
-                            onChange: (e) => setSettings({ ...settings, business_name: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, business_name: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46112,7 +46206,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "email",
                             value: settings.business_email || "",
-                            onChange: (e) => setSettings({ ...settings, business_email: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, business_email: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46124,7 +46218,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.whatsapp_number || "",
-                            onChange: (e) => setSettings({ ...settings, whatsapp_number: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, whatsapp_number: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46136,7 +46230,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.office_address || "",
-                            onChange: (e) => setSettings({ ...settings, office_address: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, office_address: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46148,7 +46242,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.footer_info || "",
-                            onChange: (e) => setSettings({ ...settings, footer_info: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, footer_info: e.target.value }),
                             placeholder: "© 2026 Travelluxx. All rights reserved.",
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
@@ -46177,7 +46271,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, logo_url: "" }),
+                                onClick: () => setSettings2({ ...settings, logo_url: "" }),
                                 className: "block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer",
                                 children: "Remove Logo"
                               }
@@ -46207,7 +46301,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, favicon_url: "" }),
+                                onClick: () => setSettings2({ ...settings, favicon_url: "" }),
                                 className: "block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer",
                                 children: "Remove Favicon"
                               }
@@ -46224,7 +46318,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "checkbox",
                               checked: !!settings.search_engine_visibility,
-                              onChange: (e) => setSettings({ ...settings, search_engine_visibility: e.target.checked }),
+                              onChange: (e) => setSettings2({ ...settings, search_engine_visibility: e.target.checked }),
                               className: "rounded-sm border-[#8c8f94] text-[#2271b1] mt-0.5"
                             }
                           ),
@@ -46242,7 +46336,7 @@ ${escapeText(this.code(index, length))}
                                 type: "radio",
                                 name: "homepage_displays",
                                 checked: settings.homepage_displays !== "page",
-                                onChange: () => setSettings({ ...settings, homepage_displays: "latest" }),
+                                onChange: () => setSettings2({ ...settings, homepage_displays: "latest" }),
                                 className: "text-[#2271b1] focus:ring-[#2271b1]"
                               }
                             ),
@@ -46256,7 +46350,7 @@ ${escapeText(this.code(index, length))}
                                   type: "radio",
                                   name: "homepage_displays",
                                   checked: settings.homepage_displays === "page",
-                                  onChange: () => setSettings({ ...settings, homepage_displays: "page" }),
+                                  onChange: () => setSettings2({ ...settings, homepage_displays: "page" }),
                                   className: "text-[#2271b1]"
                                 }
                               ),
@@ -46269,7 +46363,7 @@ ${escapeText(this.code(index, length))}
                                   "select",
                                   {
                                     value: settings.homepage_page_id || "",
-                                    onChange: (e) => setSettings({ ...settings, homepage_page_id: e.target.value }),
+                                    onChange: (e) => setSettings2({ ...settings, homepage_page_id: e.target.value }),
                                     className: "border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs w-48 text-black",
                                     children: [
                                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "— Select —" }),
@@ -46284,7 +46378,7 @@ ${escapeText(this.code(index, length))}
                                   "select",
                                   {
                                     value: settings.posts_page_id || "",
-                                    onChange: (e) => setSettings({ ...settings, posts_page_id: e.target.value }),
+                                    onChange: (e) => setSettings2({ ...settings, posts_page_id: e.target.value }),
                                     className: "border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs w-48 text-black",
                                     children: [
                                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "— Select —" }),
@@ -46310,7 +46404,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: showMollieKey ? "text" : "password",
                             value: settings.mollie_api_key || "",
-                            onChange: (e) => setSettings({ ...settings, mollie_api_key: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, mollie_api_key: e.target.value }),
                             placeholder: "live_... or test_...",
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
@@ -46395,7 +46489,7 @@ ${escapeText(this.code(index, length))}
                           type: "number",
                           step: "0.10",
                           value: settings[f.key] || "",
-                          onChange: (e) => setSettings({ ...settings, [f.key]: parseFloat(e.target.value) }),
+                          onChange: (e) => setSettings2({ ...settings, [f.key]: parseFloat(e.target.value) }),
                           className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                         }
                       )
@@ -46435,7 +46529,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 8,
                             value: settings.custom_header_code || "",
-                            onChange: (e) => setSettings({ ...settings, custom_header_code: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, custom_header_code: e.target.value }),
                             placeholder: `<!-- Example 1: Google Search Console Verification -->
 <meta name="google-site-verification" content="YOUR_CODE_HERE" />
 
@@ -46467,7 +46561,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 8,
                             value: settings.custom_footer_code || "",
-                            onChange: (e) => setSettings({ ...settings, custom_footer_code: e.target.value }),
+                            onChange: (e) => setSettings2({ ...settings, custom_footer_code: e.target.value }),
                             placeholder: `<!-- Example: Live Chat or Customer Support Widget -->
 <script>
   // Your custom footer javascript or chat script here
@@ -46984,10 +47078,6 @@ ${escapeText(this.code(index, length))}
     function BlogList() {
       const [posts, setPosts] = reactExports.useState([]);
       const [loading, setLoading] = reactExports.useState(true);
-      const [settings, setSettings] = reactExports.useState(null);
-      reactExports.useEffect(() => {
-        fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error("Failed to load settings:", err));
-      }, []);
       reactExports.useEffect(() => {
         fetch("/api/posts").then((res) => res.json()).then((data) => {
           setPosts(Array.isArray(data) ? data : []);
@@ -47050,7 +47140,7 @@ ${escapeText(this.code(index, length))}
       }, []);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white text-slate-800 flex flex-col font-sans", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-        }, settings }),
+        } }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 w-full", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-slate-50 border-b border-slate-200 py-14 px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 font-semibold text-xs tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-4", children: "Travelluxx Journal" }),
@@ -47093,17 +47183,14 @@ ${escapeText(this.code(index, length))}
           )) }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        }, settings })
+        } })
       ] });
     }
     function BlogPostDetail() {
       const { slug } = useParams();
       const [post, setPost] = reactExports.useState(null);
       const [loading, setLoading] = reactExports.useState(true);
-      const [settings, setSettings] = reactExports.useState(null);
-      reactExports.useEffect(() => {
-        fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error(err));
-      }, []);
+      const { settings } = useSettings();
       reactExports.useEffect(() => {
         if (!slug) return;
         fetch(`/api/posts/${slug}`).then((res) => res.json()).then((data) => {
@@ -47211,13 +47298,13 @@ ${escapeText(this.code(index, length))}
           const existingScript = document.getElementById("jsonld-post-schema");
           if (existingScript) existingScript.remove();
         };
-      }, [post, settings]);
+      }, [post]);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#faf9f6] text-[#1a1a1a] flex flex-col font-sans antialiased", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: (id) => {
           if (id === "hero" || !id) {
             window.location.href = "/";
           }
-        }, settings }),
+        } }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 w-full py-8 md:py-16", children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-32 text-slate-400 font-sans", children: "Loading article..." }) : !post ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-32 max-w-md mx-auto px-6", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-2xl font-serif text-slate-800 mb-4", children: "Article Not Found" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Link$1, { to: "/blog", className: "text-emerald-700 hover:text-emerald-800 underline font-semibold text-sm", children: "← Back to Blog" })
@@ -47341,17 +47428,14 @@ ${escapeText(this.code(index, length))}
         }
       ` }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        }, settings })
+        } })
       ] });
     }
     function DynamicPage() {
       const { slug } = useParams();
       const [page, setPage] = reactExports.useState(null);
       const [loading, setLoading] = reactExports.useState(true);
-      const [settings, setSettings] = reactExports.useState(null);
-      reactExports.useEffect(() => {
-        fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error(err));
-      }, []);
+      const { settings } = useSettings();
       reactExports.useEffect(() => {
         if (!slug) return;
         setLoading(true);
@@ -47454,7 +47538,7 @@ ${escapeText(this.code(index, length))}
       const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-        }, settings }),
+        } }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-6 py-28 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-4xl font-extrabold mb-8 ${isRenax ? "text-white" : "text-slate-900"}`, children: page.title }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47466,7 +47550,7 @@ ${escapeText(this.code(index, length))}
           )
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        }, settings })
+        } })
       ] });
     }
     const DEFAULT_SERVICES = [
@@ -47604,12 +47688,11 @@ ${escapeText(this.code(index, length))}
       }
     ];
     function Services() {
-      const [settings, setSettings] = reactExports.useState(null);
+      const { settings } = useSettings();
       const [services, setServices] = reactExports.useState(DEFAULT_SERVICES);
       const [pageSettings, setPageSettings] = reactExports.useState(null);
       const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
       reactExports.useEffect(() => {
-        fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error("Failed to load settings:", err));
         fetch("/api/services").then((res) => res.json()).then((data) => {
           if (Array.isArray(data) && data.length > 0) {
             setServices(data);
@@ -47706,8 +47789,11 @@ ${escapeText(this.code(index, length))}
         });
       }, [faqs]);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-        }, settings }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: (id) => {
+          if (id === "hero" || !id) {
+            window.location.href = "/";
+          }
+        } }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow", children: [
           heroEnabled && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-[520px] lg:min-h-[580px] flex items-center bg-[#070b14] overflow-hidden", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -47800,7 +47886,7 @@ ${escapeText(this.code(index, length))}
           ] }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        }, settings })
+        } })
       ] });
     }
     function ServiceDetail() {
@@ -47809,7 +47895,7 @@ ${escapeText(this.code(index, length))}
       const [service, setService] = reactExports.useState(null);
       const [allServices, setAllServices] = reactExports.useState([]);
       const [pageSettings, setPageSettings] = reactExports.useState(null);
-      const [websiteSettings, setWebsiteSettings] = reactExports.useState(null);
+      const { settings: websiteSettings } = useSettings();
       const [loading, setLoading] = reactExports.useState(true);
       const [notFound, setNotFound] = reactExports.useState(false);
       const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
@@ -47836,8 +47922,6 @@ ${escapeText(this.code(index, length))}
         }).catch(() => {
         });
         fetch("/api/services-page-settings").then((res) => res.json()).then((data) => setPageSettings(data)).catch(() => {
-        });
-        fetch("/api/settings").then((res) => res.json()).then((data) => setWebsiteSettings(data)).catch(() => {
         });
       }, [slug]);
       reactExports.useEffect(() => {
@@ -47894,7 +47978,7 @@ ${escapeText(this.code(index, length))}
       if (notFound || !service) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#070b14] text-white flex flex-col", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-          }, settings: websiteSettings }),
+          } }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow flex flex-col items-center justify-center px-4 py-24 text-center", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] mb-3 block", children: "404 NOT FOUND" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl sm:text-4xl font-extrabold mb-4", children: "Service Not Found" }),
@@ -47912,7 +47996,7 @@ ${escapeText(this.code(index, length))}
             )
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-          }, settings: websiteSettings })
+          } })
         ] });
       }
       const IconComponent = getServiceIcon(service.icon);
@@ -47996,7 +48080,7 @@ ${escapeText(this.code(index, length))}
       const faqsList = Array.isArray(service.faqs) && service.faqs.length > 0 ? service.faqs : (pageSettings == null ? void 0 : pageSettings.faqs) || [];
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-        }, settings: websiteSettings }),
+        } }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-[440px] lg:min-h-[500px] flex items-center bg-[#070b14] overflow-hidden", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -48255,7 +48339,7 @@ ${escapeText(this.code(index, length))}
           ] }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        }, settings: websiteSettings })
+        } })
       ] });
     }
     function RenaxLayout({
@@ -48706,11 +48790,10 @@ ${escapeText(this.code(index, length))}
     function PublicLandingPage() {
       const [calculatorPickup, setCalculatorPickup] = reactExports.useState("");
       const [calculatorDropoff, setCalculatorDropoff] = reactExports.useState("");
-      const [settings, setSettings] = reactExports.useState(null);
+      const { settings, isLoading } = useSettings();
       const [homepageContent, setHomepageContent] = reactExports.useState(null);
       reactExports.useEffect(() => {
         trackVisit();
-        fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error("Failed to load settings:", err));
       }, []);
       reactExports.useEffect(() => {
         if (settings && settings.homepage_displays === "page" && settings.homepage_page_id) {
@@ -48788,7 +48871,7 @@ ${escapeText(this.code(index, length))}
       const handleUpdateSettings = (newSettings) => {
         setSettings(newSettings);
       };
-      if (!settings) {
+      if (isLoading || !settings) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white flex flex-col items-center justify-center font-sans", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-[#047857] text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse", children: "Loading Travelluxx..." })
@@ -48992,7 +49075,7 @@ ${trimmed}
           window.removeEventListener("settingsUpdated", handleSettingsUpdated);
         };
       }, []);
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/", element: /* @__PURE__ */ jsxRuntimeExports.jsx(PublicLandingPage, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/admin", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/admin/:tab", element: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {}) }),
@@ -49003,7 +49086,7 @@ ${trimmed}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services", element: /* @__PURE__ */ jsxRuntimeExports.jsx(Services, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceDetail, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) })
-      ] }) });
+      ] }) }) });
     }
     clientExports.createRoot(document.getElementById("root")).render(
       /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) })

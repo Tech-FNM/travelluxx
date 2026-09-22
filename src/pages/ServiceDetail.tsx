@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getServiceIcon } from "../utils/serviceIcons";
+import { useSettings } from "../context/SettingsContext";
 import {
   CheckCircle2,
   ArrowRight,
@@ -27,7 +28,7 @@ export default function ServiceDetail() {
   const [service, setService] = useState<any>(null);
   const [allServices, setAllServices] = useState<any[]>([]);
   const [pageSettings, setPageSettings] = useState<any>(null);
-  const [websiteSettings, setWebsiteSettings] = useState<any>(null);
+  const { settings: websiteSettings } = useSettings();
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -70,12 +71,6 @@ export default function ServiceDetail() {
     fetch("/api/services-page-settings")
       .then((res) => res.json())
       .then((data) => setPageSettings(data))
-      .catch(() => {});
-
-    // Fetch website global settings
-    fetch("/api/settings")
-      .then((res) => res.json())
-      .then((data) => setWebsiteSettings(data))
       .catch(() => {});
   }, [slug]);
 
@@ -149,7 +144,7 @@ export default function ServiceDetail() {
   if (notFound || !service) {
     return (
       <div className="min-h-screen bg-[#070b14] text-white flex flex-col">
-        <Navbar onScrollTo={() => {}} settings={websiteSettings} />
+        <Navbar onScrollTo={() => {}} />
         <main className="flex-grow flex flex-col items-center justify-center px-4 py-24 text-center">
           <span className="text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] mb-3 block">
             404 NOT FOUND
@@ -166,7 +161,7 @@ export default function ServiceDetail() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </main>
-        <Footer onScrollTo={() => {}} settings={websiteSettings} />
+        <Footer onScrollTo={() => {}} />
       </div>
     );
   }
@@ -276,7 +271,7 @@ export default function ServiceDetail() {
 
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
-      <Navbar onScrollTo={() => {}} settings={websiteSettings} />
+      <Navbar onScrollTo={() => {}} />
 
       <main className="flex-grow">
         {/* ========================================================= */}
@@ -688,7 +683,7 @@ export default function ServiceDetail() {
         )}
       </main>
 
-      <Footer onScrollTo={() => {}} settings={websiteSettings} />
+      <Footer onScrollTo={() => {}} />
     </div>
   );
 }
