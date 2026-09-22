@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-b_EUq-_5.js"(exports, module) {
+  "assets/index-x7GhZJsp.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16163,6 +16163,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }).catch((err) => console.error("Failed to load menu:", err));
       }, []);
       const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+      const hasCustomLogo = (() => {
+        const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
+        if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
+        try {
+          const localCustom = localStorage.getItem("custom_img_logo");
+          if (localCustom && localCustom.trim() !== "") return true;
+        } catch (e) {
+        }
+        return false;
+      })();
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: `sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']" : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-20", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2 sm:space-x-2.5 group/logo relative", children: [
@@ -16183,7 +16193,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 }
               }
             ) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col justify-center select-none cursor-pointer", onClick: () => onScrollTo("hero"), children: [
+            !hasCustomLogo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col justify-center select-none cursor-pointer", onClick: () => onScrollTo("hero"), children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-extrabold text-2xl sm:text-[28px] tracking-tight block leading-tight ${isRenax ? "text-white font-bold" : "text-slate-900 font-sans"}`, children: brandName }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[11px] sm:text-[12px] tracking-[0.18em] block font-bold uppercase mt-0.5 leading-none ${isRenax ? "text-emerald-400" : "text-emerald-600 font-sans"}`, children: "- PRIVATE HIRE -" })
             ] })
@@ -46974,6 +46984,10 @@ ${escapeText(this.code(index, length))}
     function BlogList() {
       const [posts, setPosts] = reactExports.useState([]);
       const [loading, setLoading] = reactExports.useState(true);
+      const [settings, setSettings] = reactExports.useState(null);
+      reactExports.useEffect(() => {
+        fetch("/api/settings").then((res) => res.json()).then((data) => setSettings(data)).catch((err) => console.error("Failed to load settings:", err));
+      }, []);
       reactExports.useEffect(() => {
         fetch("/api/posts").then((res) => res.json()).then((data) => {
           setPosts(Array.isArray(data) ? data : []);
@@ -47036,7 +47050,7 @@ ${escapeText(this.code(index, length))}
       }, []);
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white text-slate-800 flex flex-col font-sans", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
-        } }),
+        }, settings }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 w-full", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-slate-50 border-b border-slate-200 py-14 px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-600 font-semibold text-xs tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block mb-4", children: "Travelluxx Journal" }),
@@ -47079,7 +47093,7 @@ ${escapeText(this.code(index, length))}
           )) }) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        } })
+        }, settings })
       ] });
     }
     function BlogPostDetail() {
@@ -47203,7 +47217,7 @@ ${escapeText(this.code(index, length))}
           if (id === "hero" || !id) {
             window.location.href = "/";
           }
-        } }),
+        }, settings }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 w-full py-8 md:py-16", children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-32 text-slate-400 font-sans", children: "Loading article..." }) : !post ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-32 max-w-md mx-auto px-6", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-2xl font-serif text-slate-800 mb-4", children: "Article Not Found" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Link$1, { to: "/blog", className: "text-emerald-700 hover:text-emerald-800 underline font-semibold text-sm", children: "← Back to Blog" })
@@ -47327,7 +47341,7 @@ ${escapeText(this.code(index, length))}
         }
       ` }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
-        } })
+        }, settings })
       ] });
     }
     function DynamicPage() {

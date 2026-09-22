@@ -62,6 +62,17 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
 
   const isRenax = settings?.active_theme === "renax";
 
+  // Check if a custom logo was uploaded (not the default bundled logo)
+  const hasCustomLogo = (() => {
+    const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
+    if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
+    try {
+      const localCustom = localStorage.getItem("custom_img_logo");
+      if (localCustom && localCustom.trim() !== "") return true;
+    } catch (e) {}
+    return false;
+  })();
+
   return (
     <header className={`sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${
       isRenax 
@@ -91,18 +102,21 @@ export default function Navbar({ onScrollTo, onAdminClick, settings }: NavbarPro
               />
             </div>
             
-            <div className="flex flex-col justify-center select-none cursor-pointer" onClick={() => onScrollTo("hero")}>
-              <span className={`font-extrabold text-2xl sm:text-[28px] tracking-tight block leading-tight ${
-                isRenax ? "text-white font-bold" : "text-slate-900 font-sans"
-              }`}>
-                {brandName}
-              </span>
-              <span className={`text-[11px] sm:text-[12px] tracking-[0.18em] block font-bold uppercase mt-0.5 leading-none ${
-                isRenax ? "text-emerald-400" : "text-emerald-600 font-sans"
-              }`}>
-                - PRIVATE HIRE -
-              </span>
-            </div>
+            {/* Only show brand name text if no custom logo is uploaded */}
+            {!hasCustomLogo && (
+              <div className="flex flex-col justify-center select-none cursor-pointer" onClick={() => onScrollTo("hero")}>
+                <span className={`font-extrabold text-2xl sm:text-[28px] tracking-tight block leading-tight ${
+                  isRenax ? "text-white font-bold" : "text-slate-900 font-sans"
+                }`}>
+                  {brandName}
+                </span>
+                <span className={`text-[11px] sm:text-[12px] tracking-[0.18em] block font-bold uppercase mt-0.5 leading-none ${
+                  isRenax ? "text-emerald-400" : "text-emerald-600 font-sans"
+                }`}>
+                  - PRIVATE HIRE -
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Desktop Navigation */}

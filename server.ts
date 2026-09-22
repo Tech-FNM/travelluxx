@@ -2160,7 +2160,7 @@ app.post("/api/settings/logo", async (req, res) => {
       return res.status(400).json({ error: "No logo data provided" });
     }
     const current = getCurrentWebsiteSettings();
-    const updated = { ...current, logo_image: logo, logoImage: logo };
+    const updated = { ...current, logo_image: logo, logoImage: logo, logo_url: logo };
     cachedWebsiteSettings = updated;
 
     if (mongoose.connection.readyState === 1) {

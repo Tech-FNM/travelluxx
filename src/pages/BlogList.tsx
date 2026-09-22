@@ -6,6 +6,14 @@ import Footer from "../components/Footer";
 export default function BlogList() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => setSettings(data))
+      .catch(err => console.error("Failed to load settings:", err));
+  }, []);
 
   useEffect(() => {
     fetch("/api/posts")
@@ -83,7 +91,7 @@ export default function BlogList() {
 
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans">
-      <Navbar onScrollTo={() => {}} />
+      <Navbar onScrollTo={() => {}} settings={settings} />
 
       <main className="flex-1 w-full">
         {/* Header */}
@@ -145,7 +153,7 @@ export default function BlogList() {
         </div>
       </main>
 
-      <Footer onScrollTo={() => {}} />
+      <Footer onScrollTo={() => {}} settings={settings} />
     </div>
   );
 }

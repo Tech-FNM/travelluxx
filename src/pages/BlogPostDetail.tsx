@@ -153,7 +153,7 @@ export default function BlogPostDetail() {
         if (id === "hero" || !id) {
           window.location.href = "/";
         }
-      }} />
+      }} settings={settings} />
 
       <main className="flex-1 w-full py-8 md:py-16">
         {loading ? (
@@ -314,7 +314,7 @@ export default function BlogPostDetail() {
         }
       `}</style>
 
-      <Footer onScrollTo={() => {}} />
+      <Footer onScrollTo={() => {}} settings={settings} />
     </div>
   );
 }
