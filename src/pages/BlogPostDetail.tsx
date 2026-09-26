@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -6,18 +6,9 @@ import { useSettings } from "../context/SettingsContext";
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { settings, posts, isLoading: loading } = useSettings();
 
-  const { settings } = useSettings();
-
-  useEffect(() => {
-    if (!slug) return;
-    fetch(`/api/posts/${slug}`)
-      .then((res) => res.json())
-      .then((data) => { if (!data.error) setPost(data); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, [slug]);
+  const post = posts.find((p: any) => p.slug === slug || p.id === slug);
 
   // Set SEO meta tags and Schema
   useEffect(() => {

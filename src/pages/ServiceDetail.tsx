@@ -25,53 +25,17 @@ export default function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
-  const [service, setService] = useState<any>(null);
-  const [allServices, setAllServices] = useState<any[]>([]);
-  const [pageSettings, setPageSettings] = useState<any>(null);
-  const { settings: websiteSettings } = useSettings();
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+  const { settings: websiteSettings, services, servicesPageSettings, isLoading } = useSettings();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  
+  const service = services.find((s: any) => s.slug === slug || s.id === slug);
+  const allServices = services;
+  const pageSettings = servicesPageSettings;
+  const notFound = !isLoading && !service;
 
   useEffect(() => {
     // Scroll to top on slug change
     window.scrollTo(0, 0);
-
-    // Fetch service by slug
-    setLoading(true);
-    setNotFound(false);
-
-    fetch(`/api/services/${slug}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Not found");
-        return res.json();
-      })
-      .then((data) => {
-        if (!data || data.error) {
-          setNotFound(true);
-        } else {
-          setService(data);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setNotFound(true);
-        setLoading(false);
-      });
-
-    // Fetch all services for sidebar
-    fetch("/api/services")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setAllServices(data);
-      })
-      .catch(() => {});
-
-    // Fetch page settings
-    fetch("/api/services-page-settings")
-      .then((res) => res.json())
-      .then((data) => setPageSettings(data))
-      .catch(() => {});
   }, [slug]);
 
   // Dynamic SEO Meta Tags
@@ -132,7 +96,7 @@ export default function ServiceDetail() {
     }
   }, [service]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white">
         <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>

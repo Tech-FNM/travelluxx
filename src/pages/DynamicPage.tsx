@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -6,29 +6,9 @@ import { useSettings } from "../context/SettingsContext";
 
 export default function DynamicPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [page, setPage] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { settings, pages, isLoading } = useSettings();
 
-  const { settings } = useSettings();
-
-  useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    fetch(`/api/pages/${slug}`)
-      .then(res => res.json())
-      .then(data => { 
-        if (!data.error && data.id) {
-          setPage(data);
-        } else {
-          setPage(null);
-        }
-        setLoading(false); 
-      })
-      .catch(() => {
-        setPage(null);
-        setLoading(false);
-      });
-  }, [slug]);
+  const page = pages.find((p: any) => p.slug === slug || p.id === slug);
 
   useEffect(() => {
     if (page) {
@@ -126,7 +106,7 @@ export default function DynamicPage() {
     };
   }, [page, settings]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0c0d12] flex items-center justify-center font-sans">
         <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>

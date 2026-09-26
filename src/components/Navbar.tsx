@@ -12,7 +12,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
-  const { settings } = useSettings();
+  const { settings, menuItems } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [openMobileDropdowns, setOpenMobileDropdowns] = useState<{ [id: string]: boolean }>({});
 
@@ -38,28 +38,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
     return () => window.removeEventListener("custom_images_updated", handleUpdate);
   }, [settings]);
 
-  const [menuItems, setMenuItems] = useState<any[]>(() => {
-    const cached = localStorage.getItem("travelluxx_menu");
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      } catch (e) {}
-    }
-    return [];
-  });
-
-  useEffect(() => {
-    fetch("/api/menu")
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setMenuItems(data);
-          localStorage.setItem("travelluxx_menu", JSON.stringify(data));
-        }
-      })
-      .catch(err => console.error("Failed to load menu:", err));
-  }, []);
+  // Removed local menuItems state and fetch, using context instead
 
   const isRenax = settings?.active_theme === "renax";
 

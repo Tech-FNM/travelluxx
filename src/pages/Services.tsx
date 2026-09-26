@@ -182,32 +182,10 @@ const DEFAULT_FAQS = [
 ];
 
 export default function Services() {
-  const { settings } = useSettings();
-  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
-  const [pageSettings, setPageSettings] = useState<any>(null);
+  const { settings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
+  const services = ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES;
+  const pageSettings = ctxPageSettings;
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-
-  useEffect(() => {
-    // Dynamic services list
-    fetch("/api/services")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setServices(data);
-        }
-      })
-      .catch((err) => console.error("Failed to load services:", err));
-
-    // Services page settings
-    fetch("/api/services-page-settings")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && typeof data === "object") {
-          setPageSettings(data);
-        }
-      })
-      .catch((err) => console.error("Failed to load services page settings:", err));
-  }, []);
 
   // SEO Meta Tags & Document Title
   useEffect(() => {

@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CaZRWnru.js"(exports, module) {
+  "assets/index-BtgBvfiM.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16126,14 +16126,52 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const SettingsContext = reactExports.createContext(void 0);
     function SettingsProvider({ children }) {
       const [settings, setSettings2] = reactExports.useState(null);
+      const [pages, setPages] = reactExports.useState([]);
+      const [services, setServices] = reactExports.useState([]);
+      const [posts, setPosts] = reactExports.useState([]);
+      const [servicesPageSettings, setServicesPageSettings] = reactExports.useState(null);
+      const [menuItems, setMenuItems] = reactExports.useState([]);
       const [isLoading, setIsLoading] = reactExports.useState(true);
       const fetchSettings = async () => {
         try {
-          const res = await fetch("/api/settings");
-          const data = await res.json();
-          setSettings2(data);
+          const [
+            settingsRes,
+            pagesRes,
+            servicesRes,
+            postsRes,
+            servicesPageSettingsRes,
+            menuItemsRes
+          ] = await Promise.all([
+            fetch("/api/settings"),
+            fetch("/api/pages"),
+            fetch("/api/services"),
+            fetch("/api/posts"),
+            fetch("/api/services-page-settings"),
+            fetch("/api/menu")
+          ]);
+          const [
+            settingsData,
+            pagesData,
+            servicesData,
+            postsData,
+            servicesPageSettingsData,
+            menuItemsData
+          ] = await Promise.all([
+            settingsRes.json(),
+            pagesRes.json(),
+            servicesRes.json(),
+            postsRes.json(),
+            servicesPageSettingsRes.json(),
+            menuItemsRes.json()
+          ]);
+          setSettings2(settingsData);
+          setPages(Array.isArray(pagesData) ? pagesData : []);
+          setServices(Array.isArray(servicesData) ? servicesData : []);
+          setPosts(Array.isArray(postsData) ? postsData : []);
+          setServicesPageSettings(servicesPageSettingsData);
+          setMenuItems(Array.isArray(menuItemsData) ? menuItemsData : []);
         } catch (err) {
-          console.error("Failed to load settings:", err);
+          console.error("Failed to load global data:", err);
         } finally {
           setIsLoading(false);
         }
@@ -16147,7 +16185,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const updateSettingsLocally = (newSettings) => {
         setSettings2(newSettings);
       };
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsContext.Provider, { value: { settings, isLoading, refreshSettings, updateSettingsLocally }, children });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsContext.Provider, { value: {
+        settings,
+        pages,
+        services,
+        posts,
+        servicesPageSettings,
+        menuItems,
+        isLoading,
+        refreshSettings,
+        updateSettingsLocally
+      }, children });
     }
     function useSettings() {
       const context = reactExports.useContext(SettingsContext);
@@ -16157,7 +16205,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return context;
     }
     function Navbar({ onScrollTo, onAdminClick }) {
-      const { settings } = useSettings();
+      const { settings, menuItems } = useSettings();
       const [isOpen, setIsOpen] = reactExports.useState(false);
       const [openMobileDropdowns, setOpenMobileDropdowns] = reactExports.useState({});
       const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
@@ -16177,25 +16225,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         window.addEventListener("custom_images_updated", handleUpdate);
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, [settings]);
-      const [menuItems, setMenuItems] = reactExports.useState(() => {
-        const cached = localStorage.getItem("travelluxx_menu");
-        if (cached) {
-          try {
-            const parsed = JSON.parse(cached);
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-          } catch (e) {
-          }
-        }
-        return [];
-      });
-      reactExports.useEffect(() => {
-        fetch("/api/menu").then((res) => res.json()).then((data) => {
-          if (Array.isArray(data) && data.length > 0) {
-            setMenuItems(data);
-            localStorage.setItem("travelluxx_menu", JSON.stringify(data));
-          }
-        }).catch((err) => console.error("Failed to load menu:", err));
-      }, []);
       const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
       const hasCustomLogo = (() => {
         const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
@@ -47076,14 +47105,7 @@ ${escapeText(this.code(index, length))}
       ] });
     }
     function BlogList() {
-      const [posts, setPosts] = reactExports.useState([]);
-      const [loading, setLoading] = reactExports.useState(true);
-      reactExports.useEffect(() => {
-        fetch("/api/posts").then((res) => res.json()).then((data) => {
-          setPosts(Array.isArray(data) ? data : []);
-          setLoading(false);
-        }).catch(() => setLoading(false));
-      }, []);
+      const { posts, isLoading: loading } = useSettings();
       reactExports.useEffect(() => {
         const baseUrl = "https://travelluxx.co.uk";
         const blogUrl = `${baseUrl}/blog`;
@@ -47188,16 +47210,8 @@ ${escapeText(this.code(index, length))}
     }
     function BlogPostDetail() {
       const { slug } = useParams();
-      const [post, setPost] = reactExports.useState(null);
-      const [loading, setLoading] = reactExports.useState(true);
-      const { settings } = useSettings();
-      reactExports.useEffect(() => {
-        if (!slug) return;
-        fetch(`/api/posts/${slug}`).then((res) => res.json()).then((data) => {
-          if (!data.error) setPost(data);
-          setLoading(false);
-        }).catch(() => setLoading(false));
-      }, [slug]);
+      const { settings, posts, isLoading: loading } = useSettings();
+      const post = posts.find((p) => p.slug === slug || p.id === slug);
       reactExports.useEffect(() => {
         if (post) {
           const baseUrl = "https://travelluxx.co.uk";
@@ -47433,24 +47447,8 @@ ${escapeText(this.code(index, length))}
     }
     function DynamicPage() {
       const { slug } = useParams();
-      const [page, setPage] = reactExports.useState(null);
-      const [loading, setLoading] = reactExports.useState(true);
-      const { settings } = useSettings();
-      reactExports.useEffect(() => {
-        if (!slug) return;
-        setLoading(true);
-        fetch(`/api/pages/${slug}`).then((res) => res.json()).then((data) => {
-          if (!data.error && data.id) {
-            setPage(data);
-          } else {
-            setPage(null);
-          }
-          setLoading(false);
-        }).catch(() => {
-          setPage(null);
-          setLoading(false);
-        });
-      }, [slug]);
+      const { settings, pages, isLoading } = useSettings();
+      const page = pages.find((p) => p.slug === slug || p.id === slug);
       reactExports.useEffect(() => {
         if (page) {
           const baseUrl = "https://travelluxx.co.uk";
@@ -47529,7 +47527,7 @@ ${escapeText(this.code(index, length))}
           if (existingScript) existingScript.remove();
         };
       }, [page, settings]);
-      if (loading) {
+      if (isLoading) {
         return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-[#0c0d12] flex items-center justify-center font-sans", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }) });
       }
       if (!page) {
@@ -47688,22 +47686,10 @@ ${escapeText(this.code(index, length))}
       }
     ];
     function Services() {
-      const { settings } = useSettings();
-      const [services, setServices] = reactExports.useState(DEFAULT_SERVICES);
-      const [pageSettings, setPageSettings] = reactExports.useState(null);
+      const { settings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
+      const services = ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES;
+      const pageSettings = ctxPageSettings;
       const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
-      reactExports.useEffect(() => {
-        fetch("/api/services").then((res) => res.json()).then((data) => {
-          if (Array.isArray(data) && data.length > 0) {
-            setServices(data);
-          }
-        }).catch((err) => console.error("Failed to load services:", err));
-        fetch("/api/services-page-settings").then((res) => res.json()).then((data) => {
-          if (data && typeof data === "object") {
-            setPageSettings(data);
-          }
-        }).catch((err) => console.error("Failed to load services page settings:", err));
-      }, []);
       reactExports.useEffect(() => {
         var _a, _b;
         const baseUrl = "https://travelluxx.co.uk";
@@ -47892,37 +47878,14 @@ ${escapeText(this.code(index, length))}
     function ServiceDetail() {
       const { slug } = useParams();
       useNavigate();
-      const [service, setService] = reactExports.useState(null);
-      const [allServices, setAllServices] = reactExports.useState([]);
-      const [pageSettings, setPageSettings] = reactExports.useState(null);
-      const { settings: websiteSettings } = useSettings();
-      const [loading, setLoading] = reactExports.useState(true);
-      const [notFound, setNotFound] = reactExports.useState(false);
+      const { settings: websiteSettings, services, servicesPageSettings, isLoading } = useSettings();
       const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
+      const service = services.find((s) => s.slug === slug || s.id === slug);
+      const allServices = services;
+      const pageSettings = servicesPageSettings;
+      const notFound = !isLoading && !service;
       reactExports.useEffect(() => {
         window.scrollTo(0, 0);
-        setLoading(true);
-        setNotFound(false);
-        fetch(`/api/services/${slug}`).then((res) => {
-          if (!res.ok) throw new Error("Not found");
-          return res.json();
-        }).then((data) => {
-          if (!data || data.error) {
-            setNotFound(true);
-          } else {
-            setService(data);
-          }
-          setLoading(false);
-        }).catch(() => {
-          setNotFound(true);
-          setLoading(false);
-        });
-        fetch("/api/services").then((res) => res.json()).then((data) => {
-          if (Array.isArray(data)) setAllServices(data);
-        }).catch(() => {
-        });
-        fetch("/api/services-page-settings").then((res) => res.json()).then((data) => setPageSettings(data)).catch(() => {
-        });
       }, [slug]);
       reactExports.useEffect(() => {
         if (!service) return;
@@ -47969,7 +47932,7 @@ ${escapeText(this.code(index, length))}
           setMeta("property", "twitter:image", service.image);
         }
       }, [service]);
-      if (loading) {
+      if (isLoading) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-sm tracking-wide", children: "Loading service details..." })
