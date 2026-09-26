@@ -57,7 +57,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
     }`}>
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24">
           
           {/* Logo Section */}
           <div className="flex items-center space-x-2 sm:space-x-2.5 group/logo relative">
@@ -65,10 +65,10 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
               <img
                 src={brandLogo}
                 alt={`${brandName} Logo`}
-                width={72}
-                height={72}
+                width={96}
+                height={96}
                 decoding="async"
-                className="w-16 h-16 sm:w-[72px] sm:h-[72px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
+                className="w-20 h-20 sm:w-[96px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
                 referrerPolicy="no-referrer"
                 onError={() => {
                   if (brandLogo !== travelluxxLogo) {
