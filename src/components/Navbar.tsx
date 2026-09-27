@@ -67,7 +67,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                 width={200}
                 height={96}
                 decoding="async"
-                className="w-20 h-20 sm:w-[96px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
+                className="w-20 h-20 sm:w-[170px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
                 referrerPolicy="no-referrer"
                 onError={() => {
                   if (brandLogo !== travelluxxLogo) {
