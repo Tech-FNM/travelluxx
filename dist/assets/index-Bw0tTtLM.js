@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BtgBvfiM.js"(exports, module) {
+  "assets/index-Bw0tTtLM.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16232,17 +16232,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return false;
       })();
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: `sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']" : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"}`, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-20", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-24", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2 sm:space-x-2.5 group/logo relative", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative flex items-center justify-center shrink-0 cursor-pointer", onClick: () => onScrollTo("hero"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
               "img",
               {
                 src: brandLogo,
                 alt: `${brandName} Logo`,
-                width: 72,
-                height: 72,
+                width: 200,
+                height: 96,
                 decoding: "async",
-                className: "w-16 h-16 sm:w-[72px] sm:h-[72px] object-contain transition-transform duration-300 group-hover/logo:scale-105",
+                className: "w-20 h-20 sm:w-[170px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105",
                 referrerPolicy: "no-referrer",
                 onError: () => {
                   if (brandLogo !== travelluxxLogo) {
@@ -28035,14 +28035,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         )) }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-white border border-slate-200/80 p-8 sm:p-12 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-6 relative rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] group border border-slate-200/60 shadow-sm bg-slate-100", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Object.keys(fleet).map((key) => /* @__PURE__ */ jsxRuntimeExports.jsx(
               "img",
               {
-                src: selectedClass.image,
-                alt: selectedClass.name,
-                loading: "lazy",
+                src: fleet[key].image,
+                alt: fleet[key].name,
+                loading: "eager",
                 decoding: "async",
-                className: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105",
+                className: `w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeTab === key ? "block" : "hidden"}`,
                 referrerPolicy: "no-referrer",
                 onError: (e) => {
                   const target = e.currentTarget;
@@ -28051,13 +28051,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     Luxury: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80",
                     Family: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80"
                   };
-                  const fb = fallbacks[activeTab] || fallbacks.Luxury;
+                  const fb = fallbacks[key] || fallbacks.Luxury;
                   if (target.src !== fb) {
                     target.src = fb;
                   }
                 }
-              }
-            ),
+              },
+              key
+            )),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-6 space-y-6", children: [
@@ -48567,14 +48568,16 @@ ${escapeText(this.code(index, length))}
           )) }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-[#0e1017] border border-slate-800/60 p-6 sm:p-10 rounded-[28px] shadow-lg", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-7 relative rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] group border border-slate-800/40 shadow-sm bg-slate-950", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Object.keys(fleet).map((key) => /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "img",
                 {
-                  src: selectedFleet.image,
-                  alt: selectedFleet.name,
-                  className: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                }
-              ),
+                  src: fleet[key].image,
+                  alt: fleet[key].name,
+                  loading: "eager",
+                  className: `w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeFleetTab === key ? "block" : "hidden"}`
+                },
+                key
+              )),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute top-4 left-4 bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md", children: [
                 "From ",
