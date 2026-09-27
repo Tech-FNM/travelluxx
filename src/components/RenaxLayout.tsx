@@ -365,11 +365,15 @@ export default function RenaxLayout({
           {/* Car Card Panel (Renax-inspired card with specs) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-[#0e1017] border border-slate-800/60 p-6 sm:p-10 rounded-[28px] shadow-lg">
             <div className="lg:col-span-7 relative rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] group border border-slate-800/40 shadow-sm bg-slate-950">
-              <img
-                src={selectedFleet.image}
-                alt={selectedFleet.name}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
+              {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((key) => (
+                <img
+                  key={key}
+                  src={fleet[key].image}
+                  alt={fleet[key].name}
+                  loading="eager"
+                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeFleetTab === key ? "block" : "hidden"}`}
+                />
+              ))}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
               
               <div className="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md">

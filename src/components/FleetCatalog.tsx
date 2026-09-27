@@ -139,26 +139,29 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
           
           {/* Left Block - Image */}
           <div className="lg:col-span-6 relative rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] group border border-slate-200/60 shadow-sm bg-slate-100">
-            <img
-              src={selectedClass.image}
-              alt={selectedClass.name}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              referrerPolicy="no-referrer"
-              onError={(e) => {
-                const target = e.currentTarget;
-                const fallbacks: Record<string, string> = {
-                  Economy: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80",
-                  Luxury: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80",
-                  Family: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80"
-                };
-                const fb = fallbacks[activeTab] || fallbacks.Luxury;
-                if (target.src !== fb) {
-                  target.src = fb;
-                }
-              }}
-            />
+            {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((key) => (
+              <img
+                key={key}
+                src={fleet[key].image}
+                alt={fleet[key].name}
+                loading="eager"
+                decoding="async"
+                className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeTab === key ? "block" : "hidden"}`}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  const fallbacks: Record<string, string> = {
+                    Economy: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80",
+                    Luxury: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80",
+                    Family: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80"
+                  };
+                  const fb = fallbacks[key] || fallbacks.Luxury;
+                  if (target.src !== fb) {
+                    target.src = fb;
+                  }
+                }}
+              />
+            ))}
             {/* Ambient vignette */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
           </div>
