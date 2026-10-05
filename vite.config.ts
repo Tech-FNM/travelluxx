@@ -29,8 +29,8 @@ export default defineConfig(() => {
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
       allowedHosts: ['travelluxx.co.uk', 'www.travelluxx.co.uk'],
       proxy: {
-        '/api': 'http://localhost:3001',
-        '/uploads': 'http://localhost:3001',
+        '/api': 'http://localhost:3000',
+        '/uploads': 'http://localhost:3000',
       },
     },
   };
