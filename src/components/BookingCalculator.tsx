@@ -1416,10 +1416,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-semibold">Instant Booking System</span>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
-            Calculate & Book Chauffeur
+            Calculate & Book Your Chauffeur
           </h2>
           <p className="text-slate-500 text-sm sm:text-base mt-2">
-            Get instant guaranteed prices side-by-side. Book with seamless secure checkout under 60 seconds.
+            Get instant, guaranteed prices side by side and complete a secure checkout in under 60 seconds. Whether you need private hire Birmingham for an airport run, a business meeting or a special night out, simply enter your pickup and drop-off to see your fixed fare.
           </p>
         </div>
 

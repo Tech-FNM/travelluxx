@@ -60,12 +60,12 @@ export default function ContactForm({ settings }: ContactFormProps) {
           {/* Left Block: Contact coordinates */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
-              <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block font-semibold">Get In Touch</span>
+              <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block font-semibold">Get in Touch</span>
               <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
                 Connect With Our Dispatch Office
               </h2>
               <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-                Have custom itinerary requests, multiple-day travel arrangements, or corporate accounts inquiry? Drop us a line or connect instantly on WhatsApp. Our dispatch operators are active 24/7.
+                Need a multi-day itinerary, corporate account or custom arrangement? For chauffeur hire Birmingham quotes, drop us a line or message us on WhatsApp. Our dispatch operators are active 24/7.
               </p>
             </div>
 
@@ -131,7 +131,7 @@ export default function ContactForm({ settings }: ContactFormProps) {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <h3 className="font-display font-bold text-lg text-slate-900 mb-4 flex items-center space-x-2">
                   <HelpCircle className="w-5 h-5 text-emerald-700" />
-                  <span>Submit Customized Inquiry</span>
+                  <span>Submit a Customised Inquiry</span>
                 </h3>
 
                 <div>
@@ -175,7 +175,7 @@ export default function ContactForm({ settings }: ContactFormProps) {
                   <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-2">Message Description</label>
                   <textarea
                     rows={4}
-                    placeholder="Specify dates, route points, passenger details, or custom chauffeur demands..."
+                    placeholder="Tell us your dates, route and passenger details and we will confirm your private hire Birmingham booking quickly."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 px-4 text-xs text-slate-800 transition placeholder:text-slate-400 resize-none"

@@ -1,0 +1,85 @@
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const SettingSchema = new mongoose.Schema({
+  key: { type: String, required: true, unique: true },
+  value: mongoose.Schema.Types.Mixed
+});
+const SettingModel = mongoose.model("Setting", SettingSchema);
+
+async function updateSettings() {
+  await mongoose.connect(process.env.MONGODB_URI);
+  console.log("Connected to MongoDB");
+  
+  const settingsToUpdate = {
+    homepage_hero_badge: "TravelLuxx Private Hire",
+    homepage_hero_title: "Private Hire Birmingham – Nationwide Airport Transfers",
+    homepage_hero_subtitle: "Experience premium private travel in beautifully presented Mercedes-Benz and Audi vehicles. Every journey comes with a fixed rate and absolutely no surge pricing.",
+    homepage_indicator1: "Licensed Professional Operators",
+    homepage_indicator2: "Guaranteed Nationwide Coverage",
+    homepage_hero_btn_text: "Calculate & Get Quote",
+    homepage_hero_phone_text: "+44 1217 140876",
+    
+    homepage_fleet_title: "Travel in Premium Comfort",
+    homepage_fleet_description: "Our curated Mercedes-Benz and Audi fleet is maintained to the highest safety and cosmetic standards. Choose our Executive class if you want a refined executive car Birmingham professionals can rely on for meetings and corporate travel.",
+    fleet_luxury_name: "First Class Luxury Chauffeur",
+    fleet_luxury_tagline: "The pinnacle of executive comfort and style.",
+    fleet_luxury_description: "Looking for a luxury chauffeur Birmingham customers can trust for weddings, VIP events or an ultra-comfort ride to Heathrow? Settle into reclining leather seats while your professional driver handles the rest. Prefer a timeless choice? Our Mercedes E-Class chauffeur Birmingham option combines quiet refinement with a smooth, comfortable ride.",
+    fleet_luxury_features: "Premium Reclining Leather Seats • Complimentary Bottled Water • Ambient Lighting Controls • Rear Seat Entertainment Systems • Quiet Acoustic Cabins",
+    
+    homepage_airports_title: "Airport Transfers from Birmingham and Across the UK",
+    airport_name_1: "Birmingham (BHX)",
+    airport_code_1: "BHX",
+    airport_name_2: "Heathrow",
+    airport_code_2: "LHR",
+    airport_name_3: "Gatwick",
+    airport_code_3: "LGW",
+    airport_name_4: "Luton",
+    airport_code_4: "LTN",
+    airport_name_5: "Stansted",
+    airport_code_5: "STN",
+    airport_name_6: "London City",
+    airport_code_6: "LCY",
+    // there's only 6 spaces in the default, I'll stick to 6
+    
+    service_title_1: "Airport Transfers",
+    service_desc_1: "Reliable fixed-price transfers to Birmingham, Heathrow, Gatwick and all major UK airports.",
+    service_title_2: "Port Transfers",
+    service_desc_2: "Dependable transfers to and from Southampton, Dover and other UK cruise terminals.",
+    service_title_3: "Station Transfers",
+    service_desc_3: "Seamless private hire Birmingham pickups for rail stations, including New Street, and onward journeys to London and across the UK.",
+    service_title_4: "Popular Cities",
+    service_desc_4: "Travel to Solihull, Worcester, Cheltenham, Warwick, Leamington Spa, Coventry and cities across the UK in comfort and style.",
+    service_title_5: "Business Travel",
+    service_desc_5: "Our chauffeur service Birmingham gives executives and corporate teams punctual, professional and discreet travel.",
+    
+    seo_title: "Private Hire Birmingham | Airport Transfers & Chauffeurs | TravelLuxx",
+    seo_description: "Book premium private hire Birmingham with fixed fares, no surge pricing and Mercedes-Benz and Audi vehicles. Airport, station and business transfers nationwide."
+  };
+
+  for (const [key, value] of Object.entries(settingsToUpdate)) {
+    await SettingModel.findOneAndUpdate(
+      { key },
+      { key, value },
+      { upsert: true, new: true }
+    );
+  }
+  console.log("Settings updated in DB.");
+  
+  // Also update website_settings.json locally just in case
+  const fs = require('fs');
+  const path = require('path');
+  const settingsPath = path.join(__dirname, '../website_settings.json');
+  if (fs.existsSync(settingsPath)) {
+    const localSettings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+    Object.assign(localSettings, settingsToUpdate);
+    fs.writeFileSync(settingsPath, JSON.stringify(localSettings, null, 2));
+    console.log("website_settings.json updated locally.");
+  }
+
+  process.exit(0);
+}
+
+updateSettings().catch(console.error);

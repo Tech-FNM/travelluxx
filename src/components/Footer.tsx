@@ -96,10 +96,10 @@ export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/10 transition-colors duration-500"></div>
           <div className="space-y-2 text-center md:text-left relative z-10">
             <h3 className="font-display font-bold text-lg md:text-xl text-white tracking-tight">
-              Are You a Professional Chauffeur?
+              Join TravelLuxx
             </h3>
             <p className="text-slate-400 text-xs sm:text-sm max-w-xl leading-relaxed">
-              Partner with TravelLuxx. We are continually recruiting licensed, professional chauffeurs with modern executive vehicles for nationwide transfers and high-profile clients.
+              Looking for professional driver jobs? We are recruiting premium chauffeurs in Birmingham.
             </p>
           </div>
           <a
@@ -108,7 +108,7 @@ export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
             rel="noopener noreferrer"
             className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all duration-300 shadow-lg shadow-emerald-600/10 hover:shadow-emerald-600/25 hover:-translate-y-0.5 shrink-0 text-center cursor-pointer w-full md:w-auto relative z-10"
           >
-            Apply to Join Fleet
+            Apply Now
           </a>
         </div>
 
