@@ -3896,6 +3896,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     letter-spacing: var(--tracking-widest);
   }
 
+  .break-words {
+    overflow-wrap: break-word;
+  }
+
   .break-all {
     word-break: break-all;
   }
@@ -5621,6 +5625,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 .service-rich-content {
   color: #334155;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
   font-size: .95rem;
   line-height: 1.75;
 }

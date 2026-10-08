@@ -318,7 +318,7 @@ export default function ServiceDetail() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               {/* Left Main Column */}
-              <div className="lg:col-span-8 space-y-10">
+              <div className="lg:col-span-8 space-y-10 min-w-0">
                 {/* Featured Service Image */}
                 {service.image && (
                   <div className="rounded-2xl overflow-hidden shadow-xl border border-slate-200/80 max-h-[460px] bg-slate-100">
@@ -355,11 +355,11 @@ export default function ServiceDetail() {
                 )}
 
                 {/* Rich Text Body Content with Enhanced Hierarchy */}
-                <div className="service-rich-content">
+                <div className="service-rich-content break-words overflow-hidden w-full min-w-0">
                   {service.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: service.content }} />
+                    <div dangerouslySetInnerHTML={{ __html: service.content }} className="w-full break-words" />
                   ) : (
-                    <p className="text-slate-600 leading-relaxed">
+                    <p className="text-slate-600 leading-relaxed break-words">
                       {service.excerpt}
                     </p>
                   )}

@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BrHnnQBd.js"(exports, module) {
+  "assets/index-lTRTbDvb.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -48472,7 +48472,7 @@ ${escapeText(this.code(index, length))}
             ] })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 lg:py-24 bg-[#ffffff]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-12", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-8 space-y-10", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-8 space-y-10 min-w-0", children: [
               service.image && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-2xl overflow-hidden shadow-xl border border-slate-200/80 max-h-[460px] bg-slate-100", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "img",
                 {
@@ -48489,7 +48489,7 @@ ${escapeText(this.code(index, length))}
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-slate-700 text-sm font-medium leading-snug", children: feat })
                 ] }, idx)) })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "service-rich-content", children: service.content ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { dangerouslySetInnerHTML: { __html: service.content } }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-600 leading-relaxed", children: service.excerpt }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "service-rich-content break-words overflow-hidden w-full min-w-0", children: service.content ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { dangerouslySetInnerHTML: { __html: service.content }, className: "w-full break-words" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-600 leading-relaxed break-words", children: service.excerpt }) }),
               service.guaranteeEnabled !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gradient-to-br from-[#0c101d] to-[#161d31] rounded-2xl p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 text-center sm:text-left", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.15em]", children: [

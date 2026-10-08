@@ -105,6 +105,9 @@
   color: #334155;
   font-size: 0.95rem;
   line-height: 1.75;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 .service-rich-content h1 {
   font-size: 2rem !important;
