@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Bw0tTtLM.js"(exports, module) {
+  "assets/index-BrHnnQBd.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -27388,8 +27388,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "calculator", className: "py-20 bg-white text-slate-800 relative", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-2xl mx-auto mb-12", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-semibold", children: "Instant Booking System" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: "Calculate & Book Chauffeur" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base mt-2", children: "Get instant guaranteed prices side-by-side. Book with seamless secure checkout under 60 seconds." })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: "Calculate & Book Your Chauffeur" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base mt-2", children: "Get instant, guaranteed prices side by side and complete a secure checkout in under 60 seconds. Whether you need private hire Birmingham for an airport run, a business meeting or a special night out, simply enter your pickup and drop-off to see your fixed fare." })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-8 bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden items-stretch", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-12 flex justify-between items-center border-b border-slate-200 pb-4 mb-2", children: [
@@ -28242,9 +28242,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-start", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-5 space-y-8", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block font-semibold", children: "Get In Touch" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block font-semibold", children: "Get in Touch" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: "Connect With Our Dispatch Office" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base leading-relaxed", children: "Have custom itinerary requests, multiple-day travel arrangements, or corporate accounts inquiry? Drop us a line or connect instantly on WhatsApp. Our dispatch operators are active 24/7." })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base leading-relaxed", children: "Need a multi-day itinerary, corporate account or custom arrangement? For chauffeur hire Birmingham quotes, drop us a line or message us on WhatsApp. Our dispatch operators are active 24/7." })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start space-x-4", children: [
@@ -28285,7 +28285,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "font-display font-bold text-lg text-slate-900 mb-4 flex items-center space-x-2", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-5 h-5 text-emerald-700" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Submit Customized Inquiry" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Submit a Customised Inquiry" })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs text-slate-500 font-sans uppercase tracking-wider mb-2", children: "Full Name" }),
@@ -28336,7 +28336,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 "textarea",
                 {
                   rows: 4,
-                  placeholder: "Specify dates, route points, passenger details, or custom chauffeur demands...",
+                  placeholder: "Tell us your dates, route and passenger details and we will confirm your private hire Birmingham booking quickly.",
                   value: message,
                   onChange: (e) => setMessage(e.target.value),
                   className: "w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 px-4 text-xs text-slate-800 transition placeholder:text-slate-400 resize-none",
@@ -28415,8 +28415,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/10 transition-colors duration-500" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 text-center md:text-left relative z-10", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-lg md:text-xl text-white tracking-tight", children: "Are You a Professional Chauffeur?" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-xs sm:text-sm max-w-xl leading-relaxed", children: "Partner with TravelLuxx. We are continually recruiting licensed, professional chauffeurs with modern executive vehicles for nationwide transfers and high-profile clients." })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-lg md:text-xl text-white tracking-tight", children: "Join TravelLuxx" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 text-xs sm:text-sm max-w-xl leading-relaxed", children: "Looking for professional driver jobs? We are recruiting premium chauffeurs in Birmingham." })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "a",
@@ -28425,7 +28425,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                       target: "_blank",
                       rel: "noopener noreferrer",
                       className: "bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm transition-all duration-300 shadow-lg shadow-emerald-600/10 hover:shadow-emerald-600/25 hover:-translate-y-0.5 shrink-0 text-center cursor-pointer w-full md:w-auto relative z-10",
-                      children: "Apply to Join Fleet"
+                      children: "Apply Now"
                     }
                   )
                 ]
@@ -45016,6 +45016,182 @@ ${escapeText(this.code(index, length))}
                             }
                           )
                         ] })
+                      ] }),
+                      serviceForm.whyChooseEnabled !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 pt-4 border-t border-[#f0f0f1] mt-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-bold text-[#1d2327] uppercase tracking-wide", children: [
+                            "Feature Cards (",
+                            Array.isArray(serviceForm.whyChooseItems) ? serviceForm.whyChooseItems.length : 0,
+                            ")"
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const current = Array.isArray(serviceForm.whyChooseItems) ? [...serviceForm.whyChooseItems] : [];
+                                current.push({
+                                  icon: "ShieldCheck",
+                                  title: "New Feature Title",
+                                  description: "Feature description explaining the benefit to passengers."
+                                });
+                                setServiceForm({ ...serviceForm, whyChooseItems: current });
+                              },
+                              className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                                "Add Feature Card"
+                              ]
+                            }
+                          )
+                        ] }),
+                        !serviceForm.whyChooseItems || serviceForm.whyChooseItems.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mb-2", children: "No feature cards added yet." }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                setServiceForm({
+                                  ...serviceForm,
+                                  whyChooseItems: [
+                                    {
+                                      icon: "UserCheck",
+                                      title: "Professional & Experienced Drivers",
+                                      description: "Skilled, courteous and fully licensed."
+                                    },
+                                    {
+                                      icon: "Car",
+                                      title: "Comfortable Vehicles",
+                                      description: "Modern, clean and well-maintained fleet."
+                                    },
+                                    {
+                                      icon: "Tag",
+                                      title: "Fixed & Transparent Pricing",
+                                      description: "No hidden charges, no surprises."
+                                    }
+                                  ]
+                                });
+                              },
+                              className: "text-xs text-[#2271b1] font-semibold hover:underline",
+                              children: "+ Load Default Feature Cards"
+                            }
+                          )
+                        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: serviceForm.whyChooseItems.map((item, idx) => {
+                          const IconComp = getServiceIcon(item.icon);
+                          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-7 h-7 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(IconComp, { className: "w-3.5 h-3.5" }) }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-xs text-slate-700 uppercase tracking-wider", children: [
+                                  "Card #",
+                                  idx + 1,
+                                  ": ",
+                                  item.title || "Untitled"
+                                ] })
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+                                idx > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    onClick: () => {
+                                      const list = [...serviceForm.whyChooseItems];
+                                      const temp = list[idx - 1];
+                                      list[idx - 1] = list[idx];
+                                      list[idx] = temp;
+                                      setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                    },
+                                    className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                    title: "Move Up",
+                                    children: "↑"
+                                  }
+                                ),
+                                idx < serviceForm.whyChooseItems.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    onClick: () => {
+                                      const list = [...serviceForm.whyChooseItems];
+                                      const temp = list[idx + 1];
+                                      list[idx + 1] = list[idx];
+                                      list[idx] = temp;
+                                      setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                    },
+                                    className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                    title: "Move Down",
+                                    children: "↓"
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    onClick: () => {
+                                      const list = serviceForm.whyChooseItems.filter((_, i) => i !== idx);
+                                      setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                    },
+                                    className: "text-red-500 hover:text-red-700 p-1 transition ml-1",
+                                    title: "Delete Item",
+                                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-4 h-4" })
+                                  }
+                                )
+                              ] })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Icon" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "select",
+                                  {
+                                    value: item.icon || "ShieldCheck",
+                                    onChange: (e) => {
+                                      const list = [...serviceForm.whyChooseItems];
+                                      list[idx].icon = e.target.value;
+                                      setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                    },
+                                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]",
+                                    children: AVAILABLE_SERVICE_ICONS.map((ic) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: ic, children: ic }, ic))
+                                  }
+                                )
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Feature Title" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "input",
+                                  {
+                                    type: "text",
+                                    value: item.title || "",
+                                    onChange: (e) => {
+                                      const list = [...serviceForm.whyChooseItems];
+                                      list[idx].title = e.target.value;
+                                      setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                    },
+                                    placeholder: "e.g. Professional & Experienced Drivers",
+                                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                  }
+                                )
+                              ] })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Feature Description" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "textarea",
+                                {
+                                  rows: 2,
+                                  value: item.description || "",
+                                  onChange: (e) => {
+                                    const list = [...serviceForm.whyChooseItems];
+                                    list[idx].description = e.target.value;
+                                    setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                  },
+                                  placeholder: "Brief description of this benefit...",
+                                  className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                }
+                              )
+                            ] })
+                          ] }, idx);
+                        }) })
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4", children: [
@@ -45077,6 +45253,197 @@ ${escapeText(this.code(index, length))}
                             }
                           )
                         ] })
+                      ] }),
+                      serviceForm.howItWorksEnabled !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3 pt-4 border-t border-[#f0f0f1] mt-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-bold text-[#1d2327] uppercase tracking-wide", children: [
+                            "Process Steps (",
+                            Array.isArray(serviceForm.howItWorksSteps) ? serviceForm.howItWorksSteps.length : 0,
+                            ")"
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const current = Array.isArray(serviceForm.howItWorksSteps) ? [...serviceForm.howItWorksSteps] : [];
+                                current.push({
+                                  number: String(current.length + 1).padStart(2, "0"),
+                                  icon: "CalendarDays",
+                                  title: "New Step",
+                                  description: "Describe what happens in this step."
+                                });
+                                setServiceForm({ ...serviceForm, howItWorksSteps: current });
+                              },
+                              className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                                "Add Step"
+                              ]
+                            }
+                          )
+                        ] }),
+                        !serviceForm.howItWorksSteps || serviceForm.howItWorksSteps.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mb-2", children: "No process steps added yet." }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                setServiceForm({
+                                  ...serviceForm,
+                                  howItWorksSteps: [
+                                    {
+                                      number: "01",
+                                      icon: "CalendarDays",
+                                      title: "Book Your Journey",
+                                      description: "Enter your pickup, destination and journey details."
+                                    },
+                                    {
+                                      number: "02",
+                                      icon: "CheckCircle2",
+                                      title: "Get Your Confirmation",
+                                      description: "Receive your booking confirmation with all journey details."
+                                    }
+                                  ]
+                                });
+                              },
+                              className: "text-xs text-[#2271b1] font-semibold hover:underline",
+                              children: "+ Load Default Steps"
+                            }
+                          )
+                        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: serviceForm.howItWorksSteps.map((step, idx) => {
+                          const IconComp = getServiceIcon(step.icon);
+                          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-7 h-7 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(IconComp, { className: "w-3.5 h-3.5" }) }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-xs text-slate-700 uppercase tracking-wider", children: [
+                                  "Step ",
+                                  step.number || String(idx + 1).padStart(2, "0"),
+                                  ": ",
+                                  step.title || "Untitled"
+                                ] })
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+                                idx > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    onClick: () => {
+                                      const list = [...serviceForm.howItWorksSteps];
+                                      const temp = list[idx - 1];
+                                      list[idx - 1] = list[idx];
+                                      list[idx] = temp;
+                                      setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                    },
+                                    className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                    title: "Move Up",
+                                    children: "↑"
+                                  }
+                                ),
+                                idx < serviceForm.howItWorksSteps.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    onClick: () => {
+                                      const list = [...serviceForm.howItWorksSteps];
+                                      const temp = list[idx + 1];
+                                      list[idx + 1] = list[idx];
+                                      list[idx] = temp;
+                                      setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                    },
+                                    className: "text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs",
+                                    title: "Move Down",
+                                    children: "↓"
+                                  }
+                                ),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "button",
+                                  {
+                                    type: "button",
+                                    onClick: () => {
+                                      const list = serviceForm.howItWorksSteps.filter((_, i) => i !== idx);
+                                      setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                    },
+                                    className: "text-red-500 hover:text-red-700 p-1 transition ml-1",
+                                    title: "Delete Step",
+                                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-4 h-4" })
+                                  }
+                                )
+                              ] })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-4 gap-3", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Step Number" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "input",
+                                  {
+                                    type: "text",
+                                    value: step.number || "",
+                                    onChange: (e) => {
+                                      const list = [...serviceForm.howItWorksSteps];
+                                      list[idx].number = e.target.value;
+                                      setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                    },
+                                    placeholder: "e.g. 01",
+                                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                  }
+                                )
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Icon" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "select",
+                                  {
+                                    value: step.icon || "CalendarDays",
+                                    onChange: (e) => {
+                                      const list = [...serviceForm.howItWorksSteps];
+                                      list[idx].icon = e.target.value;
+                                      setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                    },
+                                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]",
+                                    children: AVAILABLE_SERVICE_ICONS.map((ic) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: ic, children: ic }, ic))
+                                  }
+                                )
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Step Title" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                  "input",
+                                  {
+                                    type: "text",
+                                    value: step.title || "",
+                                    onChange: (e) => {
+                                      const list = [...serviceForm.howItWorksSteps];
+                                      list[idx].title = e.target.value;
+                                      setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                    },
+                                    placeholder: "e.g. Book Your Journey",
+                                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                  }
+                                )
+                              ] })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Step Description" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "textarea",
+                                {
+                                  rows: 2,
+                                  value: step.description || "",
+                                  onChange: (e) => {
+                                    const list = [...serviceForm.howItWorksSteps];
+                                    list[idx].description = e.target.value;
+                                    setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                  },
+                                  placeholder: "Brief description of this step...",
+                                  className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                }
+                              )
+                            ] })
+                          ] }, idx);
+                        }) })
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm", children: [
