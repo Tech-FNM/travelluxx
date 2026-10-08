@@ -5341,6 +5341,181 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       )}
+
+                      {/* Why Choose Feature Cards Manager */}
+                      {serviceForm.whyChooseEnabled !== false && (
+                        <div className="space-y-3 pt-4 border-t border-[#f0f0f1] mt-4">
+                          <div className="flex items-center justify-between">
+                            <label className="block text-xs font-bold text-[#1d2327] uppercase tracking-wide">
+                              Feature Cards ({Array.isArray(serviceForm.whyChooseItems) ? serviceForm.whyChooseItems.length : 0})
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = Array.isArray(serviceForm.whyChooseItems) ? [...serviceForm.whyChooseItems] : [];
+                                current.push({
+                                  icon: "ShieldCheck",
+                                  title: "New Feature Title",
+                                  description: "Feature description explaining the benefit to passengers."
+                                });
+                                setServiceForm({ ...serviceForm, whyChooseItems: current });
+                              }}
+                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                              Add Feature Card
+                            </button>
+                          </div>
+
+                          {(!serviceForm.whyChooseItems || serviceForm.whyChooseItems.length === 0) ? (
+                            <div className="border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50">
+                              <p className="text-xs text-slate-500 mb-2">No feature cards added yet.</p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setServiceForm({
+                                    ...serviceForm,
+                                    whyChooseItems: [
+                                      {
+                                        icon: "UserCheck",
+                                        title: "Professional & Experienced Drivers",
+                                        description: "Skilled, courteous and fully licensed."
+                                      },
+                                      {
+                                        icon: "Car",
+                                        title: "Comfortable Vehicles",
+                                        description: "Modern, clean and well-maintained fleet."
+                                      },
+                                      {
+                                        icon: "Tag",
+                                        title: "Fixed & Transparent Pricing",
+                                        description: "No hidden charges, no surprises."
+                                      }
+                                    ]
+                                  });
+                                }}
+                                className="text-xs text-[#2271b1] font-semibold hover:underline"
+                              >
+                                + Load Default Feature Cards
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="space-y-3">
+                              {serviceForm.whyChooseItems.map((item: any, idx: number) => {
+                                const IconComp = getServiceIcon(item.icon);
+                                return (
+                                  <div key={idx} className="border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm">
+                                    <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                                      <div className="flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center">
+                                          <IconComp className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="font-bold text-xs text-slate-700 uppercase tracking-wider">
+                                          Card #{idx + 1}: {item.title || "Untitled"}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-1.5">
+                                        {idx > 0 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const list = [...serviceForm.whyChooseItems];
+                                              const temp = list[idx - 1];
+                                              list[idx - 1] = list[idx];
+                                              list[idx] = temp;
+                                              setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                            }}
+                                            className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                            title="Move Up"
+                                          >
+                                            ↑
+                                          </button>
+                                        )}
+                                        {idx < serviceForm.whyChooseItems.length - 1 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const list = [...serviceForm.whyChooseItems];
+                                              const temp = list[idx + 1];
+                                              list[idx + 1] = list[idx];
+                                              list[idx] = temp;
+                                              setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                            }}
+                                            className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                            title="Move Down"
+                                          >
+                                            ↓
+                                          </button>
+                                        )}
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const list = serviceForm.whyChooseItems.filter((_: any, i: number) => i !== idx);
+                                            setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                          }}
+                                          className="text-red-500 hover:text-red-700 p-1 transition ml-1"
+                                          title="Delete Item"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                      <div>
+                                        <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Icon</label>
+                                        <select
+                                          value={item.icon || "ShieldCheck"}
+                                          onChange={e => {
+                                            const list = [...serviceForm.whyChooseItems];
+                                            list[idx].icon = e.target.value;
+                                            setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                          }}
+                                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                        >
+                                          {AVAILABLE_SERVICE_ICONS.map(ic => (
+                                            <option key={ic} value={ic}>{ic}</option>
+                                          ))}
+                                        </select>
+                                      </div>
+
+                                      <div className="sm:col-span-2">
+                                        <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Feature Title</label>
+                                        <input
+                                          type="text"
+                                          value={item.title || ""}
+                                          onChange={e => {
+                                            const list = [...serviceForm.whyChooseItems];
+                                            list[idx].title = e.target.value;
+                                            setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                          }}
+                                          placeholder="e.g. Professional & Experienced Drivers"
+                                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div>
+                                      <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Feature Description</label>
+                                      <textarea
+                                        rows={2}
+                                        value={item.description || ""}
+                                        onChange={e => {
+                                          const list = [...serviceForm.whyChooseItems];
+                                          list[idx].description = e.target.value;
+                                          setServiceForm({ ...serviceForm, whyChooseItems: list });
+                                        }}
+                                        placeholder="Brief description of this benefit..."
+                                        className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {/* How It Works Section Settings */}
@@ -5395,6 +5570,193 @@ export default function AdminDashboard() {
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
+                        </div>
+                      )}
+
+                      {/* How It Works Steps Manager */}
+                      {serviceForm.howItWorksEnabled !== false && (
+                        <div className="space-y-3 pt-4 border-t border-[#f0f0f1] mt-4">
+                          <div className="flex items-center justify-between">
+                            <label className="block text-xs font-bold text-[#1d2327] uppercase tracking-wide">
+                              Process Steps ({Array.isArray(serviceForm.howItWorksSteps) ? serviceForm.howItWorksSteps.length : 0})
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = Array.isArray(serviceForm.howItWorksSteps) ? [...serviceForm.howItWorksSteps] : [];
+                                current.push({
+                                  number: String(current.length + 1).padStart(2, "0"),
+                                  icon: "CalendarDays",
+                                  title: "New Step",
+                                  description: "Describe what happens in this step."
+                                });
+                                setServiceForm({ ...serviceForm, howItWorksSteps: current });
+                              }}
+                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                              Add Step
+                            </button>
+                          </div>
+
+                          {(!serviceForm.howItWorksSteps || serviceForm.howItWorksSteps.length === 0) ? (
+                            <div className="border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50">
+                              <p className="text-xs text-slate-500 mb-2">No process steps added yet.</p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setServiceForm({
+                                    ...serviceForm,
+                                    howItWorksSteps: [
+                                      {
+                                        number: "01",
+                                        icon: "CalendarDays",
+                                        title: "Book Your Journey",
+                                        description: "Enter your pickup, destination and journey details."
+                                      },
+                                      {
+                                        number: "02",
+                                        icon: "CheckCircle2",
+                                        title: "Get Your Confirmation",
+                                        description: "Receive your booking confirmation with all journey details."
+                                      }
+                                    ]
+                                  });
+                                }}
+                                className="text-xs text-[#2271b1] font-semibold hover:underline"
+                              >
+                                + Load Default Steps
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="space-y-3">
+                              {serviceForm.howItWorksSteps.map((step: any, idx: number) => {
+                                const IconComp = getServiceIcon(step.icon);
+                                return (
+                                  <div key={idx} className="border border-[#c3c4c7] rounded bg-[#fbfbfc] p-4 relative space-y-3 shadow-sm">
+                                    <div className="flex items-center justify-between border-b border-[#f0f0f1] pb-2">
+                                      <div className="flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-full bg-slate-900 text-emerald-400 flex items-center justify-center">
+                                          <IconComp className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="font-bold text-xs text-slate-700 uppercase tracking-wider">
+                                          Step {step.number || String(idx + 1).padStart(2, "0")}: {step.title || "Untitled"}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-1.5">
+                                        {idx > 0 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const list = [...serviceForm.howItWorksSteps];
+                                              const temp = list[idx - 1];
+                                              list[idx - 1] = list[idx];
+                                              list[idx] = temp;
+                                              setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                            }}
+                                            className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                            title="Move Up"
+                                          >
+                                            ↑
+                                          </button>
+                                        )}
+                                        {idx < serviceForm.howItWorksSteps.length - 1 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const list = [...serviceForm.howItWorksSteps];
+                                              const temp = list[idx + 1];
+                                              list[idx + 1] = list[idx];
+                                              list[idx] = temp;
+                                              setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                            }}
+                                            className="text-slate-600 hover:text-slate-900 p-1 text-[11px] font-semibold border border-slate-300 rounded px-1.5 bg-white shadow-xs"
+                                            title="Move Down"
+                                          >
+                                            ↓
+                                          </button>
+                                        )}
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const list = serviceForm.howItWorksSteps.filter((_: any, i: number) => i !== idx);
+                                            setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                          }}
+                                          className="text-red-500 hover:text-red-700 p-1 transition ml-1"
+                                          title="Delete Step"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                      <div>
+                                        <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Step Number</label>
+                                        <input
+                                          type="text"
+                                          value={step.number || ""}
+                                          onChange={e => {
+                                            const list = [...serviceForm.howItWorksSteps];
+                                            list[idx].number = e.target.value;
+                                            setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                          }}
+                                          placeholder="e.g. 01"
+                                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Icon</label>
+                                        <select
+                                          value={step.icon || "CalendarDays"}
+                                          onChange={e => {
+                                            const list = [...serviceForm.howItWorksSteps];
+                                            list[idx].icon = e.target.value;
+                                            setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                          }}
+                                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                        >
+                                          {AVAILABLE_SERVICE_ICONS.map(ic => (
+                                            <option key={ic} value={ic}>{ic}</option>
+                                          ))}
+                                        </select>
+                                      </div>
+
+                                      <div className="sm:col-span-2">
+                                        <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Step Title</label>
+                                        <input
+                                          type="text"
+                                          value={step.title || ""}
+                                          onChange={e => {
+                                            const list = [...serviceForm.howItWorksSteps];
+                                            list[idx].title = e.target.value;
+                                            setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                          }}
+                                          placeholder="e.g. Book Your Journey"
+                                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div>
+                                      <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Step Description</label>
+                                      <textarea
+                                        rows={2}
+                                        value={step.description || ""}
+                                        onChange={e => {
+                                          const list = [...serviceForm.howItWorksSteps];
+                                          list[idx].description = e.target.value;
+                                          setServiceForm({ ...serviceForm, howItWorksSteps: list });
+                                        }}
+                                        placeholder="Brief description of this step..."
+                                        className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
