@@ -4,9 +4,10 @@ import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Setting
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { getServiceIcon, AVAILABLE_SERVICE_ICONS } from "../utils/serviceIcons";
+import ServiceAreasManager from "./ServiceAreasManager";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "media" | "menus" | "settings" | "inquiries";
+type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "service-areas" | "media" | "menus" | "settings" | "inquiries";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function toBase64(file: File): Promise<string> {
@@ -632,7 +633,9 @@ export default function AdminDashboard() {
     template: "Single Posts",
     discussion: "Open",
     socialImage: "",
-    xImage: ""
+    xImage: "",
+    noIndexNoFollow: false,
+    faqs: [] as any[]
   });
 
   // Page editor
@@ -650,7 +653,8 @@ export default function AdminDashboard() {
     discussion: "Closed",
     image: "",
     socialImage: "",
-    xImage: ""
+    xImage: "",
+    noIndexNoFollow: false
   });
 
   // Media upload
@@ -671,7 +675,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!token) return;
     if (routeTab) {
-      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "services", "media", "menus", "settings", "inquiries"];
+      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "settings", "inquiries"];
       if (validTabs.includes(routeTab as Tab)) {
         setActiveTab(routeTab as Tab);
       }
@@ -1624,6 +1628,7 @@ export default function AdminDashboard() {
     { id: "posts", icon: <Newspaper className="w-4 h-4" />, label: "Posts (Blog)" },
     { id: "pages", icon: <FileText className="w-4 h-4" />, label: "Pages" },
     { id: "services", icon: <Car className="w-4 h-4" />, label: "Services" },
+    { id: "service-areas", icon: <MapPin className="w-4 h-4" />, label: "Service Areas" },
     { id: "media", icon: <Image className="w-4 h-4" />, label: "Media" },
     { id: "menus", icon: <Menu className="w-4 h-4" />, label: "Menus" },
     { id: "settings", icon: <Settings className="w-4 h-4" />, label: "Settings" },
@@ -1743,6 +1748,8 @@ export default function AdminDashboard() {
           </nav>
 
           {/* ─── DASHBOARD ──────────────────────────────────────── */}
+          {activeTab === "service-areas" && <ServiceAreasManager />}
+
           {activeTab === "dashboard" && (
             <div className="space-y-6">
               <div>

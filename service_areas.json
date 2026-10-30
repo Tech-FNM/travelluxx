@@ -1,0 +1,39 @@
+[
+  {
+    "id": "service-area-solihull",
+    "title": "Solihull",
+    "slug": "solihull",
+    "heroBadge": "SOLIHULL & THE WEST MIDLANDS",
+    "heroTitle": "Chauffeur & Airport Transfers in Solihull",
+    "heroDescription": "TravelLuxx provides private, door-to-door journeys from Solihull for airport trips, business travel and destinations across the UK. Travel comfortably, with a plan built around your schedule.",
+    "heroImage": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    "heroButtonText": "Plan your journey",
+    "heroButtonUrl": "/#calculator-section",
+    "heroSecondaryButtonText": "Call us",
+    "heroSecondaryButtonUrl": "",
+    "content": "<h2>Chauffeur and Airport Transfers in Solihull</h2><p>TravelLuxx provides pre-booked private journeys for passengers travelling from Solihull and nearby areas. Whether you need an airport pickup, transport for a business appointment or a longer journey, your trip is arranged around your route and schedule.</p><h3>Airport Transfers</h3><p>Travel between Solihull, Birmingham Airport and other UK airports in comfort. Share your flight details when booking so your pickup can be coordinated with your arrival. Meet-and-greet and complimentary waiting time are available for airport transfers.</p><h3>Business and Private Travel</h3><p>Arrange door-to-door travel for meetings, hotels, events and personal plans. If your itinerary includes a return trip, multiple stops or passengers travelling together, include those details when requesting your quote.</p><h3>Serving Solihull and Nearby Areas</h3><p>Pickups and drop-offs can be arranged in Solihull, Shirley, Olton, Knowle and Dorridge, as well as Birmingham Airport. TravelLuxx also offers journeys to destinations throughout the West Midlands and across the UK.</p>",
+    "faqTitle": "Solihull chauffeur services",
+    "faqs": [
+      {
+        "question": "Can I book an airport transfer from Solihull?",
+        "answer": "Yes. TravelLuxx provides pre-booked airport transfers from Solihull and nearby areas. Share your pickup address, airport and flight details when requesting your journey."
+      },
+      {
+        "question": "Do you monitor flights for airport pickups?",
+        "answer": "Flight monitoring is available for airport bookings. Your pickup can be coordinated around the flight's arrival, and airport transfers include complimentary waiting time after touchdown."
+      },
+      {
+        "question": "Can I book a chauffeur for a business meeting?",
+        "answer": "Yes. You can arrange a one-way or return journey to meetings, hotels, events and other business destinations. Contact us if you need a tailored itinerary or corporate travel arrangement."
+      },
+      {
+        "question": "Do you travel beyond Solihull?",
+        "answer": "Yes. Journeys can connect Solihull with destinations across Birmingham, the West Midlands and the wider UK. Enter your pickup and destination to request a quote."
+      }
+    ],
+    "published": true,
+    "metaTitle": "Solihull Chauffeur & Airport Transfers | TravelLuxx",
+    "metaDescription": "Book private chauffeur and airport transfers in Solihull with TravelLuxx. Comfortable door-to-door travel for airport, business and UK-wide journeys.",
+    "noIndexNoFollow": false
+  }
+]

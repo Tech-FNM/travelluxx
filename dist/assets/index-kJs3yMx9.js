@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-lTRTbDvb.js"(exports, module) {
+  "assets/index-kJs3yMx9.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -15124,18 +15124,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$11 = [
+    const __iconNode$12 = [
       ["path", { d: "M5 12h14", key: "1ays0h" }],
       ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
     ];
-    const ArrowRight = createLucideIcon("arrow-right", __iconNode$11);
+    const ArrowRight = createLucideIcon("arrow-right", __iconNode$12);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$10 = [
+    const __iconNode$11 = [
       [
         "path",
         {
@@ -15145,14 +15145,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "8", r: "6", key: "1vp47v" }]
     ];
-    const Award = createLucideIcon("award", __iconNode$10);
+    const Award = createLucideIcon("award", __iconNode$11);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$$ = [
+    const __iconNode$10 = [
       ["path", { d: "M12 7v14", key: "1akyts" }],
       [
         "path",
@@ -15162,7 +15162,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const BookOpen = createLucideIcon("book-open", __iconNode$$);
+    const BookOpen = createLucideIcon("book-open", __iconNode$10);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$$ = [
+      ["path", { d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", key: "jecpp" }],
+      ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
+    ];
+    const Briefcase = createLucideIcon("briefcase", __iconNode$$);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15170,17 +15181,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$_ = [
-      ["path", { d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", key: "jecpp" }],
-      ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
-    ];
-    const Briefcase = createLucideIcon("briefcase", __iconNode$_);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$Z = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -15192,7 +15192,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M12 18h.01", key: "mhygvu" }],
       ["path", { d: "M16 18h.01", key: "kzsmim" }]
     ];
-    const CalendarDays = createLucideIcon("calendar-days", __iconNode$Z);
+    const CalendarDays = createLucideIcon("calendar-days", __iconNode$_);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$Z = [
+      ["path", { d: "M8 2v4", key: "1cmpym" }],
+      ["path", { d: "M16 2v4", key: "4m81vk" }],
+      ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
+      ["path", { d: "M3 10h18", key: "8toen8" }]
+    ];
+    const Calendar = createLucideIcon("calendar", __iconNode$Z);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15200,19 +15213,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$Y = [
-      ["path", { d: "M8 2v4", key: "1cmpym" }],
-      ["path", { d: "M16 2v4", key: "4m81vk" }],
-      ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
-      ["path", { d: "M3 10h18", key: "8toen8" }]
-    ];
-    const Calendar = createLucideIcon("calendar", __iconNode$Y);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$X = [
       [
         "path",
         {
@@ -15224,39 +15224,51 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M9 17h6", key: "r8uit2" }],
       ["circle", { cx: "17", cy: "17", r: "2", key: "axvx0g" }]
     ];
-    const Car = createLucideIcon("car", __iconNode$X);
+    const Car = createLucideIcon("car", __iconNode$Y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$W = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-    const Check = createLucideIcon("check", __iconNode$W);
+    const __iconNode$X = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+    const Check = createLucideIcon("check", __iconNode$X);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$V = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-    const ChevronDown = createLucideIcon("chevron-down", __iconNode$V);
+    const __iconNode$W = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+    const ChevronDown = createLucideIcon("chevron-down", __iconNode$W);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$U = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-    const ChevronRight = createLucideIcon("chevron-right", __iconNode$U);
+    const __iconNode$V = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+    const ChevronRight = createLucideIcon("chevron-right", __iconNode$V);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$T = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-    const ChevronUp = createLucideIcon("chevron-up", __iconNode$T);
+    const __iconNode$U = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+    const ChevronUp = createLucideIcon("chevron-up", __iconNode$U);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$T = [
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+    ];
+    const CircleAlert = createLucideIcon("circle-alert", __iconNode$T);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15264,11 +15276,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$S = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
     ];
-    const CircleAlert = createLucideIcon("circle-alert", __iconNode$S);
+    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$S);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15276,10 +15287,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$R = [
-      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$R);
+    const CircleCheck = createLucideIcon("circle-check", __iconNode$R);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15288,9 +15299,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      */
     const __iconNode$Q = [
       ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+      ["path", { d: "M12 17h.01", key: "p32p05" }]
     ];
-    const CircleCheck = createLucideIcon("circle-check", __iconNode$Q);
+    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$Q);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15298,11 +15310,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$P = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
-      ["path", { d: "M12 17h.01", key: "p32p05" }]
+      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
     ];
-    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$P);
+    const Clock = createLucideIcon("clock", __iconNode$P);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15310,10 +15321,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$O = [
-      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
+      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
+      ["path", { d: "M7 6h1v4", key: "1obek4" }],
+      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
     ];
-    const Clock = createLucideIcon("clock", __iconNode$O);
+    const Coins = createLucideIcon("coins", __iconNode$O);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15321,19 +15334,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$N = [
-      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
-      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
-      ["path", { d: "M7 6h1v4", key: "1obek4" }],
-      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
-    ];
-    const Coins = createLucideIcon("coins", __iconNode$N);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$M = [
       ["path", { d: "M10 2v2", key: "7u0qdc" }],
       ["path", { d: "M14 2v2", key: "6buw04" }],
       [
@@ -15345,7 +15345,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "M6 2v2", key: "colzsn" }]
     ];
-    const Coffee = createLucideIcon("coffee", __iconNode$M);
+    const Coffee = createLucideIcon("coffee", __iconNode$N);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$M = [
+      [
+        "path",
+        {
+          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+          key: "9ktpf1"
+        }
+      ],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+    ];
+    const Compass = createLucideIcon("compass", __iconNode$M);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15356,13 +15373,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
-          key: "9ktpf1"
+          d: "M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z",
+          key: "1vdc57"
         }
       ],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ["path", { d: "M5 21h14", key: "11awu3" }]
     ];
-    const Compass = createLucideIcon("compass", __iconNode$L);
+    const Crown = createLucideIcon("crown", __iconNode$L);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15373,13 +15390,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z",
-          key: "1vdc57"
+          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
+          key: "c7niix"
         }
-      ],
-      ["path", { d: "M5 21h14", key: "11awu3" }]
+      ]
     ];
-    const Crown = createLucideIcon("crown", __iconNode$K);
+    const Droplet = createLucideIcon("droplet", __iconNode$K);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15387,15 +15403,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$J = [
-      [
-        "path",
-        {
-          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
-          key: "c7niix"
-        }
-      ]
+      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
     ];
-    const Droplet = createLucideIcon("droplet", __iconNode$J);
+    const ExternalLink = createLucideIcon("external-link", __iconNode$J);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15403,18 +15415,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$I = [
-      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
-    ];
-    const ExternalLink = createLucideIcon("external-link", __iconNode$I);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$H = [
       [
         "path",
         {
@@ -15432,14 +15432,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "m2 2 20 20", key: "1ooewy" }]
     ];
-    const EyeOff = createLucideIcon("eye-off", __iconNode$H);
+    const EyeOff = createLucideIcon("eye-off", __iconNode$I);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$G = [
+    const __iconNode$H = [
       [
         "path",
         {
@@ -15449,7 +15449,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Eye = createLucideIcon("eye", __iconNode$G);
+    const Eye = createLucideIcon("eye", __iconNode$H);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$G = [
+      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+      ["path", { d: "M10 9H8", key: "b1mrlr" }],
+      ["path", { d: "M16 13H8", key: "t4e002" }],
+      ["path", { d: "M16 17H8", key: "z1uh3a" }]
+    ];
+    const FileText = createLucideIcon("file-text", __iconNode$G);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15457,13 +15471,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$F = [
-      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-      ["path", { d: "M10 9H8", key: "b1mrlr" }],
-      ["path", { d: "M16 13H8", key: "t4e002" }],
-      ["path", { d: "M16 17H8", key: "z1uh3a" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+      ["path", { d: "M2 12h20", key: "9i4pu4" }]
     ];
-    const FileText = createLucideIcon("file-text", __iconNode$F);
+    const Globe = createLucideIcon("globe", __iconNode$F);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15471,18 +15483,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$E = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-      ["path", { d: "M2 12h20", key: "9i4pu4" }]
-    ];
-    const Globe = createLucideIcon("globe", __iconNode$E);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$D = [
       ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
       [
         "path",
@@ -15492,7 +15492,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const House = createLucideIcon("house", __iconNode$D);
+    const House = createLucideIcon("house", __iconNode$E);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$D = [
+      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+    ];
+    const Image$1 = createLucideIcon("image", __iconNode$D);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15500,11 +15512,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$C = [
-      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
+      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
+      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
     ];
-    const Image$1 = createLucideIcon("image", __iconNode$C);
+    const Instagram = createLucideIcon("instagram", __iconNode$C);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15512,11 +15524,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$B = [
-      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
-      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
-      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
+      ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+      ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+      ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
     ];
-    const Instagram = createLucideIcon("instagram", __iconNode$B);
+    const Key = createLucideIcon("key", __iconNode$B);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15524,18 +15536,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$A = [
-      ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-      ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-      ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
-    ];
-    const Key = createLucideIcon("key", __iconNode$A);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$z = [
       [
         "path",
         {
@@ -15558,7 +15558,20 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Layers = createLucideIcon("layers", __iconNode$z);
+    const Layers = createLucideIcon("layers", __iconNode$A);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$z = [
+      ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
+      ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
+      ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
+      ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
+    ];
+    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$z);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15566,19 +15579,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$y = [
-      ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
-      ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
-      ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
-      ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
-    ];
-    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$y);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$x = [
       ["path", { d: "M11 5h10", key: "1cz7ny" }],
       ["path", { d: "M11 12h10", key: "1438ji" }],
       ["path", { d: "M11 19h10", key: "11t30w" }],
@@ -15586,14 +15586,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M4 9h2", key: "r1h2o0" }],
       ["path", { d: "M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02", key: "xtkcd5" }]
     ];
-    const ListOrdered = createLucideIcon("list-ordered", __iconNode$x);
+    const ListOrdered = createLucideIcon("list-ordered", __iconNode$y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$w = [
+    const __iconNode$x = [
       [
         "path",
         { d: "M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2", key: "1m57jg" }
@@ -15603,7 +15603,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["circle", { cx: "16", cy: "20", r: "2", key: "1vifvg" }],
       ["circle", { cx: "8", cy: "20", r: "2", key: "ckkr5m" }]
     ];
-    const Luggage = createLucideIcon("luggage", __iconNode$w);
+    const Luggage = createLucideIcon("luggage", __iconNode$x);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$w = [
+      ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+      ["path", { d: "M21 12H9", key: "dn1m92" }],
+      ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+    ];
+    const LogOut = createLucideIcon("log-out", __iconNode$w);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15611,11 +15623,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$v = [
-      ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-      ["path", { d: "M21 12H9", key: "dn1m92" }],
-      ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+      ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+      ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
     ];
-    const LogOut = createLucideIcon("log-out", __iconNode$v);
+    const Mail = createLucideIcon("mail", __iconNode$v);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15623,17 +15634,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$u = [
-      ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-      ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
-    ];
-    const Mail = createLucideIcon("mail", __iconNode$u);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$t = [
       [
         "path",
         {
@@ -15643,7 +15643,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
     ];
-    const MapPin = createLucideIcon("map-pin", __iconNode$t);
+    const MapPin = createLucideIcon("map-pin", __iconNode$u);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$t = [
+      ["path", { d: "M4 5h16", key: "1tepv9" }],
+      ["path", { d: "M4 12h16", key: "1lakjw" }],
+      ["path", { d: "M4 19h16", key: "1djgab" }]
+    ];
+    const Menu = createLucideIcon("menu", __iconNode$t);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15651,18 +15663,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$s = [
-      ["path", { d: "M4 5h16", key: "1tepv9" }],
-      ["path", { d: "M4 12h16", key: "1lakjw" }],
-      ["path", { d: "M4 19h16", key: "1djgab" }]
-    ];
-    const Menu = createLucideIcon("menu", __iconNode$s);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$r = [
       [
         "path",
         {
@@ -15671,7 +15671,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const MessageSquare = createLucideIcon("message-square", __iconNode$r);
+    const MessageSquare = createLucideIcon("message-square", __iconNode$s);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$r = [
+      ["polygon", { points: "3 11 22 2 13 21 11 13 3 11", key: "1ltx0t" }]
+    ];
+    const Navigation = createLucideIcon("navigation", __iconNode$r);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15679,16 +15689,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$q = [
-      ["polygon", { points: "3 11 22 2 13 21 11 13 3 11", key: "1ltx0t" }]
-    ];
-    const Navigation = createLucideIcon("navigation", __iconNode$q);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$p = [
       ["path", { d: "M15 18h-5", key: "95g1m2" }],
       ["path", { d: "M18 14h-8", key: "sponae" }],
       [
@@ -15700,7 +15700,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["rect", { width: "8", height: "4", x: "10", y: "6", rx: "1", key: "aywv1n" }]
     ];
-    const Newspaper = createLucideIcon("newspaper", __iconNode$p);
+    const Newspaper = createLucideIcon("newspaper", __iconNode$q);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$p = [
+      [
+        "path",
+        {
+          d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
+          key: "1a8usu"
+        }
+      ]
+    ];
+    const Pen = createLucideIcon("pen", __iconNode$p);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15714,9 +15730,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
           key: "1a8usu"
         }
-      ]
+      ],
+      ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
     ];
-    const Pen = createLucideIcon("pen", __iconNode$o);
+    const Pencil = createLucideIcon("pencil", __iconNode$o);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -16125,7 +16142,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     const SettingsContext = reactExports.createContext(void 0);
     function SettingsProvider({ children }) {
-      const [settings, setSettings2] = reactExports.useState(null);
+      const [settings, setSettings] = reactExports.useState(null);
       const [pages, setPages] = reactExports.useState([]);
       const [services, setServices] = reactExports.useState([]);
       const [posts, setPosts] = reactExports.useState([]);
@@ -16164,7 +16181,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             servicesPageSettingsRes.json(),
             menuItemsRes.json()
           ]);
-          setSettings2(settingsData);
+          setSettings(settingsData);
           setPages(Array.isArray(pagesData) ? pagesData : []);
           setServices(Array.isArray(servicesData) ? servicesData : []);
           setPosts(Array.isArray(postsData) ? postsData : []);
@@ -16183,7 +16200,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         await fetchSettings();
       };
       const updateSettingsLocally = (newSettings) => {
-        setSettings2(newSettings);
+        setSettings(newSettings);
       };
       return /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsContext.Provider, { value: {
         settings,
@@ -39686,6 +39703,293 @@ ${escapeText(this.code(index, length))}
       }
       return Car;
     }
+    const emptyArea = {
+      title: "",
+      slug: "",
+      heroBadge: "",
+      heroTitle: "",
+      heroDescription: "",
+      heroImage: "",
+      heroButtonText: "Plan your journey",
+      heroButtonUrl: "/#calculator-section",
+      heroSecondaryButtonText: "Call us",
+      heroSecondaryButtonUrl: "",
+      content: "",
+      faqTitle: "",
+      faqs: [],
+      published: true,
+      metaTitle: "",
+      metaDescription: "",
+      noIndexNoFollow: false
+    };
+    const quillModules$1 = {
+      toolbar: [
+        [{ header: [2, 3, 4, false] }],
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["clean"]
+      ]
+    };
+    function ServiceAreasManager() {
+      const [areas, setAreas] = reactExports.useState([]);
+      const [loading, setLoading] = reactExports.useState(true);
+      const [editing, setEditing] = reactExports.useState(null);
+      const [form, setForm] = reactExports.useState(emptyArea);
+      const [saving, setSaving] = reactExports.useState(false);
+      const [error, setError] = reactExports.useState("");
+      const fetchAreas = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch("/api/admin/service-areas");
+          if (!response.ok) throw new Error("Could not load service areas.");
+          const data = await response.json();
+          if (!Array.isArray(data)) throw new Error("The service areas response was invalid.");
+          setAreas(data);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Could not load service areas.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      reactExports.useEffect(() => {
+        fetchAreas();
+      }, []);
+      const startNew = () => {
+        setEditing(null);
+        setForm({ ...emptyArea });
+        setError("");
+      };
+      const startEdit = (area) => {
+        setEditing(area);
+        setForm({
+          ...emptyArea,
+          ...area,
+          faqs: Array.isArray(area.faqs) ? area.faqs : [],
+          noIndexNoFollow: !!area.noIndexNoFollow
+        });
+        setError("");
+      };
+      const saveArea = async (event) => {
+        event.preventDefault();
+        if (!form.title.trim() || !form.slug.trim()) {
+          setError("Enter both a page title and URL slug.");
+          return;
+        }
+        setSaving(true);
+        setError("");
+        try {
+          const response = await fetch(
+            editing ? `/api/admin/service-areas/${editing.id}` : "/api/admin/service-areas",
+            {
+              method: editing ? "PUT" : "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ...form,
+                title: form.title.trim(),
+                slug: form.slug.trim().replace(/^\/+|\/+$/g, "").toLowerCase()
+              })
+            }
+          );
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || "Failed to save service area.");
+          const savedArea = result.serviceArea;
+          setAreas(
+            (current) => editing ? current.map((area) => area.id === savedArea.id ? savedArea : area) : [...current, savedArea].sort((a, b) => a.title.localeCompare(b.title))
+          );
+          setEditing(savedArea);
+          setForm({ ...emptyArea, ...savedArea });
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Failed to save service area.");
+        } finally {
+          setSaving(false);
+        }
+      };
+      const deleteArea = async (area) => {
+        if (!window.confirm(`Delete the ${area.title} service area page?`)) return;
+        try {
+          const response = await fetch(`/api/admin/service-areas/${area.id}`, { method: "DELETE" });
+          if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.error || "Failed to delete service area.");
+          }
+          setAreas((current) => current.filter((item) => item.id !== area.id));
+          if ((editing == null ? void 0 : editing.id) === area.id) startNew();
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Failed to delete service area.");
+        }
+      };
+      const updateFaq = (index, key, value) => {
+        setForm((current) => ({
+          ...current,
+          faqs: current.faqs.map(
+            (faq, faqIndex) => faqIndex === index ? { ...faq, [key]: value } : faq
+          )
+        }));
+      };
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "flex flex-col justify-between gap-3 sm:flex-row sm:items-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-bold text-[#1d2327] sm:text-2xl", children: "Service Areas Management" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 text-xs text-[#646970]", children: "Create and manage local area landing pages and their public content." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: startNew,
+              className: "inline-flex items-center gap-1.5 rounded bg-[#2271b1] px-3.5 py-2 text-xs font-semibold text-white hover:bg-[#135e96]",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "h-4 w-4" }),
+                " Add New Area"
+              ]
+            }
+          )
+        ] }),
+        error && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { role: "alert", className: "flex items-center justify-between border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700", children: [
+          error,
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => setError(""), "aria-label": "Dismiss error", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "overflow-hidden border border-[#c3c4c7] bg-white shadow-sm", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#c3c4c7] bg-[#f6f7f7] px-4 py-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-sm font-bold", children: "Service Areas" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-[#646970]", children: [
+                areas.length,
+                " total"
+              ] })
+            ] }),
+            loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "p-5 text-xs text-[#646970]", children: "Loading service areas…" }) : areas.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "p-5 text-xs text-[#646970]", children: "No service areas yet. Add one to get started." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "divide-y divide-[#f0f0f1]", children: areas.map((area) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-center justify-between gap-3 p-3 hover:bg-[#f6f7f7]", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", onClick: () => startEdit(area), className: "min-w-0 flex-1 text-left", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block truncate text-sm font-semibold text-[#2271b1]", children: area.title }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "block truncate text-xs text-[#646970]", children: [
+                  "/service-areas/",
+                  area.slug
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `mt-1 inline-block text-[10px] font-semibold ${area.published ? "text-emerald-700" : "text-slate-500"}`, children: area.published ? "Published" : "Draft" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex shrink-0 items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => startEdit(area), className: "p-1 text-[#2271b1]", "aria-label": `Edit ${area.title}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pencil, { className: "h-4 w-4" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/service-areas/${area.slug}`, target: "_blank", rel: "noreferrer", className: "p-1 text-[#2271b1]", "aria-label": `View ${area.title}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "h-4 w-4" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => deleteArea(area), className: "p-1 text-red-600", "aria-label": `Delete ${area.title}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "h-4 w-4" }) })
+              ] })
+            ] }, area.id)) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: saveArea, className: "space-y-5 border border-[#c3c4c7] bg-white p-4 shadow-sm sm:p-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-3 border-b border-[#f0f0f1] pb-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-base font-bold", children: editing ? `Edit: ${editing.title}` : "Add New Service Area" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 text-xs text-[#646970]", children: "Manage its URL, hero, page copy, FAQs and SEO details." })
+              ] }),
+              editing && /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: `/service-areas/${editing.slug}`, target: "_blank", rel: "noreferrer", className: "inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[#2271b1]", children: [
+                "View Live ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "h-3 w-3" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 sm:grid-cols-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "Page title",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, value: form.title, onChange: (event) => setForm({ ...form, title: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]", placeholder: "e.g. Solihull" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "URL slug",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "mt-1 flex items-center rounded-sm border border-[#8c8f94] px-2.5 text-sm font-normal text-[#646970]", children: [
+                  "/service-areas/",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, value: form.slug, onChange: (event) => setForm({ ...form, slug: event.target.value }), className: "min-w-0 flex-1 border-0 py-2 text-[#1d2327] outline-none", placeholder: "solihull" })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
+                "Hero badge",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroBadge, onChange: (event) => setForm({ ...form, heroBadge: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
+                "Hero heading",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroTitle, onChange: (event) => setForm({ ...form, heroTitle: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
+                "Hero description",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 3, value: form.heroDescription, onChange: (event) => setForm({ ...form, heroDescription: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
+                "Hero background image URL",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroImage, onChange: (event) => setForm({ ...form, heroImage: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]", placeholder: "https://…" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "Primary button text",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroButtonText, onChange: (event) => setForm({ ...form, heroButtonText: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "Primary button URL",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroButtonUrl, onChange: (event) => setForm({ ...form, heroButtonUrl: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "Secondary button text",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroSecondaryButtonText, onChange: (event) => setForm({ ...form, heroSecondaryButtonText: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "Secondary button URL ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-normal", children: "(leave blank to call business number)" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroSecondaryButtonUrl, onChange: (event) => setForm({ ...form, heroSecondaryButtonUrl: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]", placeholder: "tel:+441217140876" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "mb-1.5 block text-xs font-semibold text-[#50575e]", children: "Area page content" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(index_default, { theme: "snow", value: form.content, onChange: (content) => setForm((current) => ({ ...current, content })), modules: quillModules$1, className: "bg-white" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "space-y-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold", children: "Frequently Asked Questions" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", onClick: () => setForm((current) => ({ ...current, faqs: [...current.faqs, { question: "", answer: "" }] })), className: "inline-flex items-center gap-1 text-xs font-semibold text-[#2271b1]", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "h-3.5 w-3.5" }),
+                  " Add FAQ"
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-semibold text-[#50575e]", children: [
+                "FAQ section heading",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.faqTitle, onChange: (event) => setForm({ ...form, faqTitle: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              form.faqs.map((faq, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative grid gap-3 rounded border border-[#dcdcde] bg-[#f6f7f7] p-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => setForm((current) => ({ ...current, faqs: current.faqs.filter((_, faqIndex) => faqIndex !== index) })), "aria-label": "Remove FAQ", className: "absolute right-2 top-2 text-red-600", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "pr-6 text-xs font-semibold text-[#50575e]", children: [
+                  "Question",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: faq.question, onChange: (event) => updateFaq(index, "question", event.target.value), className: "mt-1 w-full rounded-sm border border-[#8c8f94] bg-white px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                  "Answer",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 2, value: faq.answer, onChange: (event) => updateFaq(index, "answer", event.target.value), className: "mt-1 w-full rounded-sm border border-[#8c8f94] bg-white px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+                ] })
+              ] }, index))
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "grid gap-4 border-t border-[#f0f0f1] pt-4 sm:grid-cols-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "SEO title",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.metaTitle, onChange: (event) => setForm({ ...form, metaTitle: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
+                "SEO description",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 2, value: form.metaDescription, onChange: (event) => setForm({ ...form, metaDescription: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e]", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: form.published, onChange: (event) => setForm({ ...form, published: event.target.checked }) }),
+                "Published"
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e]", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: form.noIndexNoFollow, onChange: (event) => setForm({ ...form, noIndexNoFollow: event.target.checked }) }),
+                "Hide from search engines"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap justify-end gap-2 border-t border-[#f0f0f1] pt-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: startNew, className: "rounded border border-[#c3c4c7] px-3.5 py-2 text-xs font-semibold text-[#50575e] hover:bg-slate-50", children: "Clear" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "submit", disabled: saving, className: "inline-flex items-center gap-1.5 rounded bg-[#2271b1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#135e96] disabled:opacity-60", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "h-3.5 w-3.5" }),
+                " ",
+                saving ? "Saving…" : editing ? "Update Area Page" : "Publish Area Page"
+              ] })
+            ] })
+          ] })
+        ] })
+      ] });
+    }
     function toBase64(file) {
       return new Promise((res, rej) => {
         const r = new FileReader();
@@ -40138,7 +40442,7 @@ ${escapeText(this.code(index, length))}
       const [selectedInquiryIds, setSelectedInquiryIds] = reactExports.useState([]);
       const [media, setMedia] = reactExports.useState([]);
       const [menuItems, setMenuItems] = reactExports.useState([]);
-      const [settings, setSettings2] = reactExports.useState({});
+      const [settings, setSettings] = reactExports.useState({});
       const [settingsTab, setSettingsTab] = reactExports.useState("general");
       const [searchQuery, setSearchQuery] = reactExports.useState("");
       const [statusFilter, setStatusFilter] = reactExports.useState("All");
@@ -40197,7 +40501,9 @@ ${escapeText(this.code(index, length))}
         template: "Single Posts",
         discussion: "Open",
         socialImage: "",
-        xImage: ""
+        xImage: "",
+        noIndexNoFollow: false,
+        faqs: []
       });
       const [editingPage, setEditingPage] = reactExports.useState(void 0);
       const [pageForm, setPageForm] = reactExports.useState({
@@ -40213,7 +40519,8 @@ ${escapeText(this.code(index, length))}
         discussion: "Closed",
         image: "",
         socialImage: "",
-        xImage: ""
+        xImage: "",
+        noIndexNoFollow: false
       });
       const fileInputRef = reactExports.useRef(null);
       const [uploading, setUploading] = reactExports.useState(false);
@@ -40227,7 +40534,7 @@ ${escapeText(this.code(index, length))}
       reactExports.useEffect(() => {
         if (!token) return;
         if (routeTab) {
-          const validTabs = ["dashboard", "leads", "posts", "pages", "services", "media", "menus", "settings", "inquiries"];
+          const validTabs = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "settings", "inquiries"];
           if (validTabs.includes(routeTab)) {
             setActiveTab(routeTab);
           }
@@ -40585,7 +40892,7 @@ ${escapeText(this.code(index, length))}
       };
       const fetchSettings = async () => {
         const r = await fetch("/api/admin/settings");
-        setSettings2(await r.json());
+        setSettings(await r.json());
       };
       const fetchMenu = async () => {
         const r = await fetch("/api/menu");
@@ -40946,11 +41253,11 @@ ${escapeText(this.code(index, length))}
         } else if (editorTarget === "yoast-page-x") {
           setPageForm((prev) => ({ ...prev, xImage: imageUrl }));
         } else if (editorTarget === "settings-logo") {
-          setSettings2((prev) => ({ ...prev, logo_url: imageUrl }));
+          setSettings((prev) => ({ ...prev, logo_url: imageUrl }));
         } else if (editorTarget === "settings-favicon") {
-          setSettings2((prev) => ({ ...prev, favicon_url: imageUrl }));
+          setSettings((prev) => ({ ...prev, favicon_url: imageUrl }));
         } else if (editorTarget === "settings-hero") {
-          setSettings2((prev) => ({ ...prev, hero_image: imageUrl }));
+          setSettings((prev) => ({ ...prev, hero_image: imageUrl }));
         } else if (editorTarget === "service-card") {
           setServiceForm((prev) => ({ ...prev, image: imageUrl }));
         } else if (editorTarget === "service-hero") {
@@ -41162,6 +41469,7 @@ ${escapeText(this.code(index, length))}
         { id: "posts", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Newspaper, { className: "w-4 h-4" }), label: "Posts (Blog)" },
         { id: "pages", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "w-4 h-4" }), label: "Pages" },
         { id: "services", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Car, { className: "w-4 h-4" }), label: "Services" },
+        { id: "service-areas", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-4 h-4" }), label: "Service Areas" },
         { id: "media", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Image$1, { className: "w-4 h-4" }), label: "Media" },
         { id: "menus", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "w-4 h-4" }), label: "Menus" },
         { id: "settings", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-4 h-4" }), label: "Settings" }
@@ -41256,6 +41564,7 @@ ${escapeText(this.code(index, length))}
                 activeTab === "settings" && settingsTab ? ` › ${settingsTab.charAt(0).toUpperCase() + settingsTab.slice(1)}` : ""
               ] })
             ] }),
+            activeTab === "service-areas" && /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreasManager, {}),
             activeTab === "dashboard" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Dashboard" }),
@@ -42093,7 +42402,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_badge || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_hero_badge: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_badge: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. TRAVELLUXX PRIVATE HIRE"
                             }
@@ -42106,7 +42415,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_title || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_hero_title: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_title: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Nationwide Airport | Transfers & Private Hire"
                             }
@@ -42120,7 +42429,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 3,
                             value: settings.homepage_hero_subtitle || "",
-                            onChange: (e) => setSettings2({ ...settings, homepage_hero_subtitle: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, homepage_hero_subtitle: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. Experience premium private hire..."
                           }
@@ -42134,7 +42443,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_btn_text || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_hero_btn_text: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_text: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Calculate & Get Quote"
                             }
@@ -42147,7 +42456,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_btn_link || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_hero_btn_link: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_link: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. calculator-section"
                             }
@@ -42162,7 +42471,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_phone_text || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_hero_phone_text: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_text: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. +44 121 714 0876"
                             }
@@ -42175,7 +42484,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_hero_phone_link || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_hero_phone_link: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_link: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. tel:441217140876"
                             }
@@ -42190,7 +42499,7 @@ ${escapeText(this.code(index, length))}
                             "button",
                             {
                               type: "button",
-                              onClick: () => setSettings2({ ...settings, hero_image: "" }),
+                              onClick: () => setSettings({ ...settings, hero_image: "" }),
                               className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700",
                               children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                             }
@@ -42219,7 +42528,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_indicator1 || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_indicator1: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_indicator1: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Licensed Professional Operators"
                             }
@@ -42232,7 +42541,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_indicator2 || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_indicator2: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_indicator2: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Guaranteed Nationwide Coverage"
                             }
@@ -42245,7 +42554,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_indicator3 || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_indicator3: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_indicator3: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Zero Surge Pricing"
                             }
@@ -42263,7 +42572,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_fleet_subtitle || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_fleet_subtitle: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_fleet_subtitle: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Our Premium Fleet"
                             }
@@ -42276,7 +42585,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.homepage_fleet_title || "",
-                              onChange: (e) => setSettings2({ ...settings, homepage_fleet_title: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, homepage_fleet_title: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Travel in Premium Comfort"
                             }
@@ -42290,7 +42599,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 3,
                             value: settings.homepage_fleet_description || "",
-                            onChange: (e) => setSettings2({ ...settings, homepage_fleet_description: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, homepage_fleet_description: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. Our curated fleet features..."
                           }
@@ -42306,7 +42615,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_economy_name || "",
-                                onChange: (e) => setSettings2({ ...settings, fleet_economy_name: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, fleet_economy_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42318,7 +42627,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_economy_tagline || "",
-                                onChange: (e) => setSettings2({ ...settings, fleet_economy_tagline: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, fleet_economy_tagline: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42331,7 +42640,7 @@ ${escapeText(this.code(index, length))}
                             {
                               rows: 2,
                               value: settings.fleet_economy_description || "",
-                              onChange: (e) => setSettings2({ ...settings, fleet_economy_description: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, fleet_economy_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -42343,7 +42652,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.fleet_economy_features || "",
-                              onChange: (e) => setSettings2({ ...settings, fleet_economy_features: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, fleet_economy_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Complimentary 4G Wi-Fi, USB Charging, etc."
                             }
@@ -42357,7 +42666,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings2({ ...settings, fleet_economy_image: "" }),
+                                onClick: () => setSettings({ ...settings, fleet_economy_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -42386,7 +42695,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_luxury_name || "",
-                                onChange: (e) => setSettings2({ ...settings, fleet_luxury_name: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, fleet_luxury_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42398,7 +42707,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_luxury_tagline || "",
-                                onChange: (e) => setSettings2({ ...settings, fleet_luxury_tagline: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, fleet_luxury_tagline: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42411,7 +42720,7 @@ ${escapeText(this.code(index, length))}
                             {
                               rows: 2,
                               value: settings.fleet_luxury_description || "",
-                              onChange: (e) => setSettings2({ ...settings, fleet_luxury_description: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, fleet_luxury_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -42423,7 +42732,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.fleet_luxury_features || "",
-                              onChange: (e) => setSettings2({ ...settings, fleet_luxury_features: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, fleet_luxury_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Premium Leather Reclining Seats, Ambient Lighting, etc."
                             }
@@ -42437,7 +42746,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings2({ ...settings, fleet_luxury_image: "" }),
+                                onClick: () => setSettings({ ...settings, fleet_luxury_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -42466,7 +42775,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_family_name || "",
-                                onChange: (e) => setSettings2({ ...settings, fleet_family_name: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, fleet_family_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42478,7 +42787,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings.fleet_family_tagline || "",
-                                onChange: (e) => setSettings2({ ...settings, fleet_family_family: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, fleet_family_family: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -42491,7 +42800,7 @@ ${escapeText(this.code(index, length))}
                             {
                               rows: 2,
                               value: settings.fleet_family_description || "",
-                              onChange: (e) => setSettings2({ ...settings, fleet_family_description: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, fleet_family_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -42503,7 +42812,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "text",
                               value: settings.fleet_family_features || "",
-                              onChange: (e) => setSettings2({ ...settings, fleet_family_features: e.target.value }),
+                              onChange: (e) => setSettings({ ...settings, fleet_family_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Conference Seating, Massive Boot, etc."
                             }
@@ -42517,7 +42826,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings2({ ...settings, fleet_family_image: "" }),
+                                onClick: () => setSettings({ ...settings, fleet_family_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -42546,7 +42855,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.homepage_airports_title || "",
-                            onChange: (e) => setSettings2({ ...settings, homepage_airports_title: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, homepage_airports_title: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. We cover all major London airports"
                           }
@@ -42566,7 +42875,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings[`airport_name_${num}`] || "",
-                                onChange: (e) => setSettings2({ ...settings, [`airport_name_${num}`]: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, [`airport_name_${num}`]: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
                               }
                             )
@@ -42578,7 +42887,7 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "text",
                                 value: settings[`airport_code_${num}`] || "",
-                                onChange: (e) => setSettings2({ ...settings, [`airport_code_${num}`]: e.target.value }),
+                                onChange: (e) => setSettings({ ...settings, [`airport_code_${num}`]: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
                               }
                             )
@@ -42600,7 +42909,7 @@ ${escapeText(this.code(index, length))}
                                 {
                                   type: "text",
                                   value: settings[`service_title_${num}`] || "",
-                                  onChange: (e) => setSettings2({ ...settings, [`service_title_${num}`]: e.target.value }),
+                                  onChange: (e) => setSettings({ ...settings, [`service_title_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 }
                               )
@@ -42612,7 +42921,7 @@ ${escapeText(this.code(index, length))}
                                 {
                                   type: "text",
                                   value: settings[`service_desc_${num}`] || "",
-                                  onChange: (e) => setSettings2({ ...settings, [`service_desc_${num}`]: e.target.value }),
+                                  onChange: (e) => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 }
                               )
@@ -42626,7 +42935,7 @@ ${escapeText(this.code(index, length))}
                                 "button",
                                 {
                                   type: "button",
-                                  onClick: () => setSettings2({ ...settings, [`service_image_${num}`]: "" }),
+                                  onClick: () => setSettings({ ...settings, [`service_image_${num}`]: "" }),
                                   className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                   children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                                 }
@@ -42653,7 +42962,7 @@ ${escapeText(this.code(index, length))}
                         tab: yoastHomeTab,
                         setTab: setYoastHomeTab,
                         focusKeyphrase: settings.homepage_seo_focus_keyphrase || "",
-                        setFocusKeyphrase: (v) => setSettings2((prev) => ({ ...prev, homepage_seo_focus_keyphrase: v })),
+                        setFocusKeyphrase: (v) => setSettings((prev) => ({ ...prev, homepage_seo_focus_keyphrase: v })),
                         title: settings.hero_title || "Travelluxx",
                         slug: "",
                         metaTitle: settings.homepage_seo_title || "",
@@ -42661,10 +42970,10 @@ ${escapeText(this.code(index, length))}
                         contentType: "homepage",
                         image: settings.hero_bg_image || "",
                         excerpt: "",
-                        onMetaTitleChange: (v) => setSettings2((prev) => ({ ...prev, homepage_seo_title: v })),
+                        onMetaTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_title: v })),
                         onSlugChange: () => {
                         },
-                        onMetaDescriptionChange: (v) => setSettings2((prev) => ({ ...prev, homepage_seo_description: v }))
+                        onMetaDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_description: v }))
                       }
                     )
                   ] }),
@@ -46591,7 +46900,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.business_name || "",
-                            onChange: (e) => setSettings2({ ...settings, business_name: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, business_name: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46603,7 +46912,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "email",
                             value: settings.business_email || "",
-                            onChange: (e) => setSettings2({ ...settings, business_email: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, business_email: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46615,7 +46924,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.whatsapp_number || "",
-                            onChange: (e) => setSettings2({ ...settings, whatsapp_number: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, whatsapp_number: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46627,7 +46936,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.office_address || "",
-                            onChange: (e) => setSettings2({ ...settings, office_address: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, office_address: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -46639,7 +46948,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: "text",
                             value: settings.footer_info || "",
-                            onChange: (e) => setSettings2({ ...settings, footer_info: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, footer_info: e.target.value }),
                             placeholder: "© 2026 Travelluxx. All rights reserved.",
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
@@ -46668,7 +46977,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings2({ ...settings, logo_url: "" }),
+                                onClick: () => setSettings({ ...settings, logo_url: "" }),
                                 className: "block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer",
                                 children: "Remove Logo"
                               }
@@ -46698,7 +47007,7 @@ ${escapeText(this.code(index, length))}
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings2({ ...settings, favicon_url: "" }),
+                                onClick: () => setSettings({ ...settings, favicon_url: "" }),
                                 className: "block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer",
                                 children: "Remove Favicon"
                               }
@@ -46715,7 +47024,7 @@ ${escapeText(this.code(index, length))}
                             {
                               type: "checkbox",
                               checked: !!settings.search_engine_visibility,
-                              onChange: (e) => setSettings2({ ...settings, search_engine_visibility: e.target.checked }),
+                              onChange: (e) => setSettings({ ...settings, search_engine_visibility: e.target.checked }),
                               className: "rounded-sm border-[#8c8f94] text-[#2271b1] mt-0.5"
                             }
                           ),
@@ -46733,7 +47042,7 @@ ${escapeText(this.code(index, length))}
                                 type: "radio",
                                 name: "homepage_displays",
                                 checked: settings.homepage_displays !== "page",
-                                onChange: () => setSettings2({ ...settings, homepage_displays: "latest" }),
+                                onChange: () => setSettings({ ...settings, homepage_displays: "latest" }),
                                 className: "text-[#2271b1] focus:ring-[#2271b1]"
                               }
                             ),
@@ -46747,7 +47056,7 @@ ${escapeText(this.code(index, length))}
                                   type: "radio",
                                   name: "homepage_displays",
                                   checked: settings.homepage_displays === "page",
-                                  onChange: () => setSettings2({ ...settings, homepage_displays: "page" }),
+                                  onChange: () => setSettings({ ...settings, homepage_displays: "page" }),
                                   className: "text-[#2271b1]"
                                 }
                               ),
@@ -46760,7 +47069,7 @@ ${escapeText(this.code(index, length))}
                                   "select",
                                   {
                                     value: settings.homepage_page_id || "",
-                                    onChange: (e) => setSettings2({ ...settings, homepage_page_id: e.target.value }),
+                                    onChange: (e) => setSettings({ ...settings, homepage_page_id: e.target.value }),
                                     className: "border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs w-48 text-black",
                                     children: [
                                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "— Select —" }),
@@ -46775,7 +47084,7 @@ ${escapeText(this.code(index, length))}
                                   "select",
                                   {
                                     value: settings.posts_page_id || "",
-                                    onChange: (e) => setSettings2({ ...settings, posts_page_id: e.target.value }),
+                                    onChange: (e) => setSettings({ ...settings, posts_page_id: e.target.value }),
                                     className: "border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs w-48 text-black",
                                     children: [
                                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "— Select —" }),
@@ -46801,7 +47110,7 @@ ${escapeText(this.code(index, length))}
                           {
                             type: showMollieKey ? "text" : "password",
                             value: settings.mollie_api_key || "",
-                            onChange: (e) => setSettings2({ ...settings, mollie_api_key: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, mollie_api_key: e.target.value }),
                             placeholder: "live_... or test_...",
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
@@ -46886,7 +47195,7 @@ ${escapeText(this.code(index, length))}
                           type: "number",
                           step: "0.10",
                           value: settings[f.key] || "",
-                          onChange: (e) => setSettings2({ ...settings, [f.key]: parseFloat(e.target.value) }),
+                          onChange: (e) => setSettings({ ...settings, [f.key]: parseFloat(e.target.value) }),
                           className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                         }
                       )
@@ -46926,7 +47235,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 8,
                             value: settings.custom_header_code || "",
-                            onChange: (e) => setSettings2({ ...settings, custom_header_code: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, custom_header_code: e.target.value }),
                             placeholder: `<!-- Example 1: Google Search Console Verification -->
 <meta name="google-site-verification" content="YOUR_CODE_HERE" />
 
@@ -46958,7 +47267,7 @@ ${escapeText(this.code(index, length))}
                           {
                             rows: 8,
                             value: settings.custom_footer_code || "",
-                            onChange: (e) => setSettings2({ ...settings, custom_footer_code: e.target.value }),
+                            onChange: (e) => setSettings({ ...settings, custom_footer_code: e.target.value }),
                             placeholder: `<!-- Example: Live Chat or Customer Support Widget -->
 <script>
   // Your custom footer javascript or chat script here
@@ -48673,6 +48982,171 @@ ${escapeText(this.code(index, length))}
         } })
       ] });
     }
+    function ServiceAreaPage() {
+      const { slug } = useParams();
+      const { settings, isLoading } = useSettings();
+      const [serviceArea, setServiceArea] = reactExports.useState(null);
+      const [areaLoading, setAreaLoading] = reactExports.useState(true);
+      const [areaError, setAreaError] = reactExports.useState("");
+      const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
+      reactExports.useEffect(() => {
+        window.scrollTo(0, 0);
+        let active = true;
+        setAreaLoading(true);
+        setAreaError("");
+        fetch(`/api/service-areas/${encodeURIComponent(slug || "")}`).then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Service area not found.");
+          if (active) setServiceArea(data);
+        }).catch((error) => {
+          if (active) {
+            setServiceArea(null);
+            setAreaError(error instanceof Error ? error.message : "Service area not found.");
+          }
+        }).finally(() => {
+          if (active) setAreaLoading(false);
+        });
+        return () => {
+          active = false;
+        };
+      }, [slug]);
+      reactExports.useEffect(() => {
+        if (!serviceArea) return;
+        const baseUrl = "https://travelluxx.co.uk";
+        const pageUrl = `${baseUrl}/service-areas/${serviceArea.slug}`;
+        const title = serviceArea.metaTitle || `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx`;
+        const description = serviceArea.metaDescription || serviceArea.heroDescription || "";
+        document.title = title;
+        const setMeta = (selector, attr, value) => {
+          let element = document.querySelector(selector);
+          if (!element) {
+            element = document.createElement("meta");
+            document.head.appendChild(element);
+          }
+          element.setAttribute(attr, value);
+        };
+        setMeta('meta[name="description"]', "content", description);
+        setMeta('meta[name="robots"]', "content", (settings == null ? void 0 : settings.search_engine_visibility) || serviceArea.noIndexNoFollow ? "noindex, nofollow" : "index, follow");
+        setMeta('meta[property="og:type"]', "content", "website");
+        setMeta('meta[property="og:url"]', "content", pageUrl);
+        setMeta('meta[property="og:title"]', "content", title);
+        setMeta('meta[property="og:description"]', "content", description);
+        setMeta('meta[property="og:site_name"]', "content", (settings == null ? void 0 : settings.business_name) || "TravelLuxx");
+        if (serviceArea.heroImage) setMeta('meta[property="og:image"]', "content", serviceArea.heroImage);
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+          canonical = document.createElement("link");
+          canonical.rel = "canonical";
+          document.head.appendChild(canonical);
+        }
+        canonical.href = pageUrl;
+        return () => {
+          document.title = (settings == null ? void 0 : settings.homepage_meta_title) || "TravelLuxx";
+        };
+      }, [serviceArea, settings]);
+      if (isLoading || areaLoading) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-slate-950 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) });
+      }
+      if (!serviceArea) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
+          } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "mx-auto max-w-3xl px-4 py-32 text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl font-bold text-slate-900", children: "Service area not found" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 text-slate-600", children: areaError || "This area page is not available." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
+          } })
+        ] });
+      }
+      const phone = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+      const phoneLabel = phone.startsWith("44") ? `+44 ${phone.slice(2, 6)} ${phone.slice(6)}` : phone;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white font-sans text-slate-800", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
+        } }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative isolate overflow-hidden bg-slate-950 text-white", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "absolute inset-0 -z-20 bg-cover bg-center opacity-30",
+                style: { backgroundImage: `url('${serviceArea.heroImage || "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85"}')` }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 -z-10 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-950/45" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto max-w-7xl px-4 pb-20 pt-32 sm:px-6 sm:pb-24 lg:px-8 lg:py-36", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-3xl", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "h-4 w-4" }),
+                serviceArea.heroBadge || serviceArea.title
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl", children: serviceArea.heroTitle || serviceArea.title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg", children: serviceArea.heroDescription }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-9 flex flex-col gap-3 sm:flex-row", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "a",
+                  {
+                    href: serviceArea.heroButtonUrl || "/#calculator-section",
+                    className: "inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-400",
+                    children: [
+                      serviceArea.heroButtonText || "Plan your journey",
+                      " ",
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "h-4 w-4" })
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "a",
+                  {
+                    href: serviceArea.heroSecondaryButtonUrl || `tel:${phone}`,
+                    className: "inline-flex items-center justify-center rounded-xl border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/10",
+                    children: serviceArea.heroSecondaryButtonText || `Call ${phoneLabel}`
+                  }
+                )
+              ] })
+            ] }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-slate-50 px-4 py-10 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base",
+              dangerouslySetInnerHTML: { __html: serviceArea.content || "" }
+            }
+          ) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700", children: "Frequently asked questions" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-3 text-3xl font-extrabold tracking-tight text-slate-900", children: serviceArea.faqTitle || `${serviceArea.title} chauffeur services` })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-8 divide-y divide-slate-200 border-y border-slate-200", children: (Array.isArray(serviceArea.faqs) ? serviceArea.faqs : []).filter((faq) => faq.question || faq.answer).map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-5", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    "aria-expanded": isOpen,
+                    onClick: () => setOpenFaqIndex(isOpen ? null : index),
+                    className: "flex w-full items-center justify-between gap-4 text-left font-semibold text-slate-900",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: faq.question }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        ChevronDown,
+                        {
+                          className: `h-5 w-5 shrink-0 text-emerald-700 transition-transform ${isOpen ? "rotate-180" : ""}`
+                        }
+                      )
+                    ]
+                  }
+                ),
+                isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 pr-8 text-sm leading-6 text-slate-600", children: faq.answer })
+              ] }, faq.question);
+            }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
+        } })
+      ] });
+    }
     function RenaxLayout({
       settings,
       calculatorPickup,
@@ -49123,7 +49597,7 @@ ${escapeText(this.code(index, length))}
     function PublicLandingPage() {
       const [calculatorPickup, setCalculatorPickup] = reactExports.useState("");
       const [calculatorDropoff, setCalculatorDropoff] = reactExports.useState("");
-      const { settings, isLoading } = useSettings();
+      const { settings, isLoading, updateSettingsLocally } = useSettings();
       const [homepageContent, setHomepageContent] = reactExports.useState(null);
       reactExports.useEffect(() => {
         trackVisit();
@@ -49201,9 +49675,6 @@ ${escapeText(this.code(index, length))}
         setCalculatorDropoff("London Heathrow Airport (LHR)");
         handleScrollTo("calculator-section");
       };
-      const handleUpdateSettings = (newSettings) => {
-        setSettings(newSettings);
-      };
       if (isLoading || !settings) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white flex flex-col items-center justify-center font-sans", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }),
@@ -49216,9 +49687,7 @@ ${escapeText(this.code(index, length))}
             Navbar,
             {
               onScrollTo: () => {
-              },
-              settings,
-              onUpdateSettings: handleUpdateSettings
+              }
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-grow max-w-4xl mx-auto px-6 py-28 w-full", children: !homepageContent ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: "Loading home..." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -49235,8 +49704,7 @@ ${escapeText(this.code(index, length))}
             Footer,
             {
               onScrollTo: () => {
-              },
-              settings
+              }
             }
           )
         ] });
@@ -49246,9 +49714,7 @@ ${escapeText(this.code(index, length))}
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Navbar,
             {
-              onScrollTo: handleScrollTo,
-              settings,
-              onUpdateSettings: handleUpdateSettings
+              onScrollTo: handleScrollTo
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -49267,8 +49733,7 @@ ${escapeText(this.code(index, length))}
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Footer,
             {
-              onScrollTo: handleScrollTo,
-              settings
+              onScrollTo: handleScrollTo
             }
           )
         ] });
@@ -49277,9 +49742,7 @@ ${escapeText(this.code(index, length))}
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           Navbar,
           {
-            onScrollTo: handleScrollTo,
-            settings,
-            onUpdateSettings: handleUpdateSettings
+            onScrollTo: handleScrollTo
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow", children: [
@@ -49304,8 +49767,7 @@ ${escapeText(this.code(index, length))}
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Footer,
             {
-              onScrollTo: handleScrollTo,
-              settings
+              onScrollTo: handleScrollTo
             }
           )
         ] }),
@@ -49418,6 +49880,7 @@ ${trimmed}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/blog/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogPostDetail, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services", element: /* @__PURE__ */ jsxRuntimeExports.jsx(Services, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceDetail, {}) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/service-areas/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreaPage, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) })
       ] }) }) });
     }

@@ -13,6 +13,7 @@ import BlogPostDetail from "./pages/BlogPostDetail";
 import DynamicPage from "./pages/DynamicPage";
 import Services from "./pages/Services";
 import ServiceDetail from "./pages/ServiceDetail";
+import ServiceAreaPage from "./pages/ServiceAreaPage";
 import RenaxLayout from "./components/RenaxLayout";
 import { trackVisit, trackClick } from "./utils/analytics";
 
@@ -25,7 +26,7 @@ function PublicLandingPage() {
   // Shared state to allow prefilling the booking calculator
   const [calculatorPickup, setCalculatorPickup] = useState("");
   const [calculatorDropoff, setCalculatorDropoff] = useState("");
-  const { settings, isLoading } = useSettings();
+  const { settings, isLoading, updateSettingsLocally } = useSettings();
   const [homepageContent, setHomepageContent] = useState<any>(null);
 
   useEffect(() => {
@@ -128,7 +129,7 @@ function PublicLandingPage() {
   };
 
   const handleUpdateSettings = (newSettings: any) => {
-    setSettings(newSettings);
+    updateSettingsLocally(newSettings);
   };
 
   if (isLoading || !settings) {
@@ -146,8 +147,6 @@ function PublicLandingPage() {
       <div className="min-h-screen bg-white text-slate-800 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
         <Navbar
           onScrollTo={() => {}}
-          settings={settings}
-          onUpdateSettings={handleUpdateSettings}
         />
         <main className="flex-grow max-w-4xl mx-auto px-6 py-28 w-full">
           {!homepageContent ? (
@@ -164,7 +163,6 @@ function PublicLandingPage() {
         </main>
         <Footer
           onScrollTo={() => {}}
-          settings={settings}
         />
       </div>
     );
@@ -176,8 +174,6 @@ function PublicLandingPage() {
       <div className="min-h-screen bg-[#0c0d12] text-slate-100 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
         <Navbar
           onScrollTo={handleScrollTo}
-          settings={settings}
-          onUpdateSettings={handleUpdateSettings}
         />
         <RenaxLayout
           settings={settings}
@@ -191,7 +187,6 @@ function PublicLandingPage() {
         />
         <Footer
           onScrollTo={handleScrollTo}
-          settings={settings}
         />
       </div>
     );
@@ -202,8 +197,6 @@ function PublicLandingPage() {
     <div className="min-h-screen bg-white text-slate-800 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
       <Navbar
         onScrollTo={handleScrollTo}
-        settings={settings}
-        onUpdateSettings={handleUpdateSettings}
       />
 
       <main className="flex-grow">
@@ -228,7 +221,6 @@ function PublicLandingPage() {
 
         <Footer
           onScrollTo={handleScrollTo}
-          settings={settings}
         />
       </main>
 
@@ -368,6 +360,9 @@ export default function App() {
           {/* SERVICES PAGES */}
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
+
+          {/* SERVICE AREA LANDING PAGES */}
+          <Route path="/service-areas/:slug" element={<ServiceAreaPage />} />
 
           {/* DYNAMIC CMS PAGES */}
           <Route path="/:slug" element={<DynamicPage />} />

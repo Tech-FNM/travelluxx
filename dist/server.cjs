@@ -49,6 +49,7 @@ var ADMINS_PATH = import_path.default.join(process.cwd(), "admins.json");
 var PAGES_PATH = import_path.default.join(process.cwd(), "pages.json");
 var INQUIRIES_PATH = import_path.default.join(process.cwd(), "inquiries.json");
 var SERVICES_PATH = import_path.default.join(process.cwd(), "services.json");
+var SERVICE_AREAS_PATH = import_path.default.join(process.cwd(), "service_areas.json");
 var SERVICES_SETTINGS_PATH = import_path.default.join(process.cwd(), "services_settings.json");
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://info_db_user:rexkTuz4elj0srRx@cluster0.utakxdh.mongodb.net/travelluxx?retryWrites=true&w=majority&appName=Cluster0";
 var BookingSchema = new import_mongoose.default.Schema({
@@ -119,6 +120,13 @@ var ServiceSchema = new import_mongoose.default.Schema({
   updatedAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
 }, { strict: false });
 var ServiceModel = import_mongoose.default.model("Service", ServiceSchema);
+var ServiceAreaSchema = new import_mongoose.default.Schema({
+  id: { type: String, required: true, unique: true },
+  title: String,
+  slug: { type: String, required: true, unique: true },
+  updatedAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
+}, { strict: false });
+var ServiceAreaModel = import_mongoose.default.model("ServiceArea", ServiceAreaSchema);
 var InquirySchema = new import_mongoose.default.Schema({
   id: { type: String, required: true, unique: true },
   name: String,
@@ -190,6 +198,17 @@ async function runMigrations() {
     }
   } catch (err) {
     console.error("Error migrating inquiries to MongoDB:", err.message);
+  }
+  try {
+    const count = await ServiceAreaModel.countDocuments();
+    if (count === 0 && import_fs.default.existsSync(SERVICE_AREAS_PATH)) {
+      const jsonServiceAreas = JSON.parse(import_fs.default.readFileSync(SERVICE_AREAS_PATH, "utf8"));
+      await ServiceAreaModel.insertMany(jsonServiceAreas, { ordered: false }).catch(() => {
+      });
+      console.log("\u2705 MongoDB populated with all service areas!");
+    }
+  } catch (err) {
+    console.error("Error migrating service areas to MongoDB:", err.message);
   }
   try {
     const count = await ServiceModel.countDocuments();
@@ -287,6 +306,27 @@ function writeServices(services) {
     import_fs.default.writeFileSync(SERVICES_PATH, JSON.stringify(services, null, 2));
   } catch (err) {
     console.error("Error writing services.json:", err);
+  }
+}
+function readServiceAreas() {
+  try {
+    if (import_fs.default.existsSync(SERVICE_AREAS_PATH)) {
+      return JSON.parse(import_fs.default.readFileSync(SERVICE_AREAS_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading service_areas.json:", err);
+  }
+  return [];
+}
+function writeServiceAreas(serviceAreas) {
+  if (process.env.VERCEL) {
+    console.log("\u2139\uFE0F Skipping writeServiceAreas to local file on Vercel.");
+    return;
+  }
+  try {
+    import_fs.default.writeFileSync(SERVICE_AREAS_PATH, JSON.stringify(serviceAreas, null, 2));
+  } catch (err) {
+    console.error("Error writing service_areas.json:", err);
   }
 }
 function readServicesSettings() {
@@ -1415,6 +1455,129 @@ app.delete("/api/admin/services/:id", async (req, res) => {
   }
   writeServices(readServices().filter((s) => s.id !== req.params.id));
   return res.json({ success: true });
+});
+app.get("/api/service-areas", async (req, res) => {
+  if (MONGODB_URI) {
+    try {
+      await connectToDatabase();
+      const serviceAreas = await ServiceAreaModel.find({ published: { $ne: false } }).sort({ title: 1 });
+      if (serviceAreas.length > 0) return res.json(serviceAreas);
+    } catch (err) {
+      console.error("Error loading service areas from MongoDB:", err);
+    }
+  }
+  return res.json(readServiceAreas().filter((area) => area.published !== false));
+});
+app.get("/api/service-areas/:slug", async (req, res) => {
+  if (MONGODB_URI) {
+    try {
+      await connectToDatabase();
+      const serviceArea2 = await ServiceAreaModel.findOne({ slug: req.params.slug, published: { $ne: false } });
+      if (serviceArea2) return res.json(serviceArea2);
+    } catch (err) {
+      console.error("Error loading service area from MongoDB:", err);
+    }
+  }
+  const serviceArea = readServiceAreas().find((area) => area.slug === req.params.slug && area.published !== false);
+  if (serviceArea) return res.json(serviceArea);
+  return res.status(404).json({ error: "Service area not found" });
+});
+app.get("/api/admin/service-areas", async (req, res) => {
+  if (MONGODB_URI) {
+    try {
+      await connectToDatabase();
+      const serviceAreas = await ServiceAreaModel.find().sort({ title: 1 });
+      if (serviceAreas.length > 0) return res.json(serviceAreas);
+    } catch (err) {
+      console.error("Error loading admin service areas from MongoDB:", err);
+    }
+  }
+  return res.json(readServiceAreas().sort((a, b) => a.title.localeCompare(b.title)));
+});
+app.post("/api/admin/service-areas", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const serviceAreas = readServiceAreas();
+    const title = String(req.body.title || "").trim();
+    if (!title) return res.status(400).json({ error: "Service area title is required" });
+    const slug = String(req.body.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")).trim();
+    if (!slug) return res.status(400).json({ error: "Service area URL slug is required" });
+    if (serviceAreas.some((area) => area.slug === slug)) return res.status(409).json({ error: "A service area with this slug already exists" });
+    if (MONGODB_URI && await ServiceAreaModel.exists({ slug })) {
+      return res.status(409).json({ error: "A service area with this slug already exists" });
+    }
+    const newServiceArea = {
+      ...req.body,
+      id: `service-area-${Date.now()}`,
+      title,
+      slug,
+      published: req.body.published !== false,
+      faqs: Array.isArray(req.body.faqs) ? req.body.faqs : [],
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    serviceAreas.push(newServiceArea);
+    writeServiceAreas(serviceAreas);
+    if (MONGODB_URI) {
+      await ServiceAreaModel.findOneAndUpdate({ id: newServiceArea.id }, newServiceArea, { upsert: true });
+    }
+    return res.json({ success: true, serviceArea: newServiceArea });
+  } catch (err) {
+    console.error("Error creating service area:", err);
+    return res.status(500).json({ error: err.message || "Failed to create service area" });
+  }
+});
+app.put("/api/admin/service-areas/:id", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const serviceAreas = readServiceAreas();
+    const index = serviceAreas.findIndex((area) => area.id === req.params.id);
+    const databaseArea = MONGODB_URI ? await ServiceAreaModel.findOne({ id: req.params.id }).lean() : null;
+    const existingArea = databaseArea || serviceAreas[index];
+    if (!existingArea) return res.status(404).json({ error: "Service area not found" });
+    const title = String(req.body.title || "").trim();
+    const slug = String(req.body.slug || "").trim();
+    if (!title) return res.status(400).json({ error: "Service area title is required" });
+    if (!slug) return res.status(400).json({ error: "Service area URL slug is required" });
+    if (serviceAreas.some((area, i) => i !== index && area.slug === slug) || MONGODB_URI && await ServiceAreaModel.exists({ slug, id: { $ne: req.params.id } })) {
+      return res.status(409).json({ error: "A service area with this slug already exists" });
+    }
+    const updatedServiceArea = {
+      ...existingArea,
+      ...req.body,
+      id: req.params.id,
+      title,
+      slug,
+      published: req.body.published !== false,
+      faqs: Array.isArray(req.body.faqs) ? req.body.faqs : [],
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    delete updatedServiceArea._id;
+    delete updatedServiceArea.__v;
+    if (index === -1) serviceAreas.push(updatedServiceArea);
+    else serviceAreas[index] = updatedServiceArea;
+    writeServiceAreas(serviceAreas);
+    if (MONGODB_URI) {
+      await ServiceAreaModel.findOneAndUpdate({ id: req.params.id }, updatedServiceArea, { upsert: true });
+    }
+    return res.json({ success: true, serviceArea: updatedServiceArea });
+  } catch (err) {
+    console.error("Error updating service area:", err);
+    return res.status(500).json({ error: err.message || "Failed to update service area" });
+  }
+});
+app.delete("/api/admin/service-areas/:id", async (req, res) => {
+  try {
+    if (MONGODB_URI) {
+      await connectToDatabase();
+      await ServiceAreaModel.deleteOne({ id: req.params.id });
+    }
+    writeServiceAreas(readServiceAreas().filter((area) => area.id !== req.params.id));
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting service area:", err);
+    return res.status(500).json({ error: err.message || "Failed to delete service area" });
+  }
 });
 app.get("/api/services-page-settings", async (req, res) => {
   try {
