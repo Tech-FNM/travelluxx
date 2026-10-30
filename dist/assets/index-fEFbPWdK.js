@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CPTjxZzb.js"(exports, module) {
+  "assets/index-fEFbPWdK.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -50297,7 +50297,6 @@ ${escapeText(this.code(index, length))}
         meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
         meta_description: "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer."
       });
-      const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
       reactExports.useEffect(() => {
         window.scrollTo(0, 0);
         fetch("/api/service-areas").then((res) => res.json()).then((data) => {
@@ -50335,170 +50334,59 @@ ${escapeText(this.code(index, length))}
         }
         canonical.setAttribute("href", pageUrl);
       }, [pageSettings]);
-      const phone = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
-      const phoneLabel = phone.startsWith("44") ? `+44 ${phone.slice(2, 6)} ${phone.slice(6)}` : phone;
-      const defaultFaqs = [
-        {
-          question: "Which areas do TravelLuxx chauffeur services cover?",
-          answer: "We provide executive private travel across Solihull, Birmingham, the West Midlands, Warwickshire, London, and nationwide airport transfers to all major UK terminals."
-        },
-        {
-          question: "Can I book long-distance transfers between cities and airports?",
-          answer: "Yes, our door-to-door private hire service operates 24/7 across the UK with fixed pricing and no surge fees, including Heathrow, Gatwick, Manchester, and Birmingham Airport."
-        },
-        {
-          question: "Do you monitor flights for airport pickups in these areas?",
-          answer: "Every airport booking includes live flight tracking and 60 minutes complimentary waiting time after landing."
-        }
-      ];
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white", children: [
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#070b14] text-white flex flex-col font-sans selection:bg-emerald-600 selection:text-white", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: (id) => {
           if (id === "hero" || !id) window.location.href = "/";
         } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow", children: [
-          pageSettings.hero_enabled !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-[500px] lg:min-h-[560px] flex items-center bg-[#070b14] overflow-hidden", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "div",
-              {
-                className: "absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-opacity duration-1000 opacity-35",
-                style: { backgroundImage: `url('${pageSettings.hero_image}')` }
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-r from-[#070b14] via-[#070b14]/90 to-transparent z-10" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-[#070b14] via-transparent to-transparent z-10" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-2xl", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-widest uppercase mb-6", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3.5 h-3.5" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: pageSettings.hero_tag || "SERVICE AREAS" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-5", children: pageSettings.hero_title }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl", children: pageSettings.hero_description }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-stretch sm:items-center gap-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "a",
-                  {
-                    href: pageSettings.hero_button_url || "/#calculator-section",
-                    className: "inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-3.5 rounded-xl text-sm transition duration-200 shadow-lg shadow-emerald-500/20",
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: pageSettings.hero_button_text || "Plan Your Journey" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4" })
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "a",
-                  {
-                    href: `tel:${phone}`,
-                    className: "inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold px-6 py-3.5 rounded-xl text-sm border border-white/20 transition duration-200",
-                    children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-                      "Call ",
-                      phoneLabel
-                    ] })
-                  }
-                )
-              ] })
-            ] }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-grow pt-28 sm:pt-36 pb-20", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-3xl mx-auto mb-14 sm:mb-16", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-widest uppercase mb-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3.5 h-3.5" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: pageSettings.hero_tag || "SERVICE AREAS" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight", children: pageSettings.hero_title || "Our Service Areas" }),
+            pageSettings.hero_description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto", children: pageSettings.hero_description })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 sm:py-24 bg-white border-b border-slate-200/80", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-3xl mx-auto mb-14", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-2", children: "Locations & Regions" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: "All Covered Service Areas" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 text-slate-600 text-sm sm:text-base", children: "Click on any area below to view local chauffeur transfer information, route details, and local FAQs." })
-            ] }),
-            loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center items-center py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) }) : areas.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-16 bg-slate-50 rounded-2xl border border-slate-200", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-12 h-12 text-slate-400 mx-auto mb-3" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-base font-bold text-slate-800", children: "No service areas found" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mt-1", children: "Check back soon or contact us to arrange private travel to your destination." })
-            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8", children: areas.map((area) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              Link$1,
-              {
-                to: `/service-areas/${area.slug}`,
-                className: "group flex flex-col bg-slate-50 hover:bg-white border border-slate-200 hover:border-emerald-500/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative aspect-[16/9] overflow-hidden bg-slate-950", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      "img",
-                      {
-                        src: area.heroImage || "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80",
-                        alt: area.title,
-                        className: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
-                      }
-                    ),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-3 left-4 right-4 flex items-center justify-between", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold tracking-wide uppercase", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3 h-3" }),
-                      area.heroBadge || area.title
-                    ] }) })
+          loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center items-center py-24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) }) : areas.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-20 bg-slate-900/60 rounded-2xl border border-white/10 max-w-lg mx-auto", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-12 h-12 text-slate-500 mx-auto mb-3" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-bold text-white", children: "No service areas found" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1", children: "Please check back soon or add areas from the admin dashboard." })
+          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8", children: areas.map((area) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Link$1,
+            {
+              to: `/service-areas/${area.slug}`,
+              className: "group flex flex-col bg-slate-900/80 hover:bg-slate-900 border border-white/10 hover:border-emerald-500/50 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative aspect-[16/10] overflow-hidden bg-slate-950", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "img",
+                    {
+                      src: area.heroImage || "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80",
+                      alt: area.title,
+                      className: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-3 left-4 right-4 flex items-center justify-between", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold tracking-wide uppercase", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3 h-3" }),
+                    area.heroBadge || area.title
+                  ] }) })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex-1 flex flex-col justify-between", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold text-white group-hover:text-emerald-400 transition", children: area.title }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed", children: area.heroDescription || `Private chauffeur travel and airport transfers covering all destinations in and around ${area.title}.` })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex-1 flex flex-col justify-between", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition", children: area.title }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-xs text-slate-600 line-clamp-3 leading-relaxed", children: area.heroDescription || "Private chauffeur travel and airport transfers covering all destinations in and around " + area.title + "." })
-                    ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:text-emerald-600", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "View Area Chauffeur Services" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-4 h-4 group-hover:translate-x-1 transition-transform" })
-                    ] })
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-emerald-400 group-hover:text-emerald-300", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Explore Area" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-4 h-4 group-hover:translate-x-1 transition-transform" })
                   ] })
-                ]
-              },
-              area.id
-            )) })
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 bg-slate-900 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-6 h-6" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-base text-white", children: "Licensed & Insured Chauffeurs" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1 leading-relaxed", children: "DBS-checked drivers operating premium Mercedes-Benz and Audi vehicles for maximum passenger safety." })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-6 h-6" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-base text-white", children: "Fixed Rates & No Surge" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1 leading-relaxed", children: "Pre-booked fixed fares with zero hidden surcharges or peak pricing regardless of traffic delays." })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plane, { className: "w-6 h-6" }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-base text-white", children: "Flight Tracking & Wait Time" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1 leading-relaxed", children: "Every airport journey features real-time flight monitoring and 60 minutes free waiting time." })
-              ] })
-            ] })
-          ] }) }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 sm:py-24 bg-white", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-12", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-2", children: "Questions & Answers" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl sm:text-3xl font-extrabold text-slate-900", children: "Frequently Asked Questions About Service Areas" })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "divide-y divide-slate-200 border-y border-slate-200", children: defaultFaqs.map((faq, index) => {
-              const isOpen = openFaqIndex === index;
-              return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "button",
-                  {
-                    type: "button",
-                    "aria-expanded": isOpen,
-                    onClick: () => setOpenFaqIndex(isOpen ? null : index),
-                    className: "flex w-full items-center justify-between gap-4 text-left font-semibold text-slate-900 text-sm sm:text-base",
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: faq.question }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        ChevronDown,
-                        {
-                          className: `h-5 w-5 shrink-0 text-emerald-700 transition-transform ${isOpen ? "rotate-180" : ""}`
-                        }
-                      )
-                    ]
-                  }
-                ),
-                isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 pr-8 text-xs sm:text-sm leading-relaxed text-slate-600", children: faq.answer })
-              ] }, index);
-            }) })
-          ] }) })
-        ] }),
+                ] })
+              ]
+            },
+            area.id
+          )) })
+        ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: (id) => {
           if (id === "hero" || !id) window.location.href = "/";
         } })
