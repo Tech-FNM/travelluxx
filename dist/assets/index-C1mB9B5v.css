@@ -755,7 +755,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --color-red-700: oklch(50.5% .213 27.518);
     --color-red-800: oklch(44.4% .177 26.899);
     --color-amber-50: oklch(98.7% .022 95.277);
+    --color-amber-100: oklch(96.2% .059 95.617);
     --color-amber-200: oklch(92.4% .12 95.746);
+    --color-amber-600: oklch(66.6% .179 58.318);
     --color-amber-700: oklch(55.5% .163 48.998);
     --color-amber-800: oklch(47.3% .137 46.201);
     --color-yellow-50: oklch(98.7% .026 102.212);
@@ -1243,6 +1245,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     right: calc(var(--spacing) * 3);
   }
 
+  .right-4 {
+    right: calc(var(--spacing) * 4);
+  }
+
   .right-6 {
     right: calc(var(--spacing) * 6);
   }
@@ -1259,6 +1265,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     bottom: 0;
   }
 
+  .bottom-3 {
+    bottom: calc(var(--spacing) * 3);
+  }
+
   .bottom-4 {
     bottom: calc(var(--spacing) * 4);
   }
@@ -1269,6 +1279,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .left-0 {
     left: 0;
+  }
+
+  .left-2\.5 {
+    left: calc(var(--spacing) * 2.5);
   }
 
   .left-3 {
@@ -1453,6 +1467,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     margin-bottom: calc(var(--spacing) * 4);
   }
 
+  .mb-5 {
+    margin-bottom: calc(var(--spacing) * 5);
+  }
+
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
@@ -1564,6 +1582,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .aspect-\[3\/1\] {
     aspect-ratio: 3;
+  }
+
+  .aspect-\[16\/9\] {
+    aspect-ratio: 16 / 9;
   }
 
   .aspect-\[16\/10\] {
@@ -1726,6 +1748,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     min-height: 250px;
   }
 
+  .min-h-\[280px\] {
+    min-height: 280px;
+  }
+
   .min-h-\[300px\] {
     min-height: 300px;
   }
@@ -1740,6 +1766,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .min-h-\[440px\] {
     min-height: 440px;
+  }
+
+  .min-h-\[500px\] {
+    min-height: 500px;
   }
 
   .min-h-\[520px\] {
@@ -1832,6 +1862,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .w-48 {
     width: calc(var(--spacing) * 48);
+  }
+
+  .w-52 {
+    width: calc(var(--spacing) * 52);
   }
 
   .w-64 {
@@ -2403,6 +2437,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-left-width: 2px;
   }
 
+  .border-l-4 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 4px;
+  }
+
   .border-dashed {
     --tw-border-style: dashed;
     border-style: dashed;
@@ -2888,6 +2927,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
     }
   }
 
+  .bg-amber-100 {
+    background-color: var(--color-amber-100);
+  }
+
+  .bg-amber-600 {
+    background-color: var(--color-amber-600);
+  }
+
   .bg-black {
     background-color: var(--color-black);
   }
@@ -2899,6 +2946,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @supports (color: color-mix(in lab, red, red)) {
     .bg-black\/10 {
       background-color: color-mix(in oklab, var(--color-black) 10%, transparent);
+    }
+  }
+
+  .bg-black\/40 {
+    background-color: #0006;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-black\/40 {
+      background-color: color-mix(in oklab, var(--color-black) 40%, transparent);
     }
   }
 
@@ -3039,6 +3096,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @supports (color: color-mix(in lab, red, red)) {
     .bg-emerald-500\/15 {
       background-color: color-mix(in oklab, var(--color-emerald-500) 15%, transparent);
+    }
+  }
+
+  .bg-emerald-500\/20 {
+    background-color: #00bb7f33;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-emerald-500\/20 {
+      background-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent);
     }
   }
 
@@ -3339,6 +3406,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --tw-gradient-stops: var(--tw-gradient-via-stops);
   }
 
+  .via-\[\#070b14\]\/90 {
+    --tw-gradient-via: oklab(14.9994% -.00205028 -.0207038 / .9);
+    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-via-stops);
+  }
+
   .via-\[\#08090d\]\/40 {
     --tw-gradient-via: oklab(14.0529% .000499159 -.00900212 / .4);
     --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
@@ -3362,6 +3435,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .via-emerald-300 {
     --tw-gradient-via: var(--color-emerald-300);
+    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-via-stops);
+  }
+
+  .via-slate-950\/20 {
+    --tw-gradient-via: #02061833;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .via-slate-950\/20 {
+      --tw-gradient-via: color-mix(in oklab, var(--color-slate-950) 20%, transparent);
+    }
+  }
+
+  .via-slate-950\/20 {
     --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-via-stops);
   }
@@ -3715,6 +3803,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     padding-right: calc(var(--spacing) * 2);
   }
 
+  .pr-2\.5 {
+    padding-right: calc(var(--spacing) * 2.5);
+  }
+
   .pr-4 {
     padding-right: calc(var(--spacing) * 4);
   }
@@ -3785,6 +3877,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .pl-6 {
     padding-left: calc(var(--spacing) * 6);
+  }
+
+  .pl-8 {
+    padding-left: calc(var(--spacing) * 8);
   }
 
   .pl-11 {
@@ -4560,6 +4656,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     transition-duration: .7s;
   }
 
+  .duration-1000 {
+    --tw-duration: 1s;
+    transition-duration: 1s;
+  }
+
   .ease-in-out {
     --tw-ease: var(--ease-in-out);
     transition-timing-function: var(--ease-in-out);
@@ -4762,6 +4863,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
       border-color: var(--color-emerald-400);
     }
 
+    .hover\:border-emerald-500\/50:hover {
+      border-color: #00bb7f80;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:border-emerald-500\/50:hover {
+        border-color: color-mix(in oklab, var(--color-emerald-500) 50%, transparent);
+      }
+    }
+
     .hover\:border-emerald-600:hover {
       border-color: var(--color-emerald-600);
     }
@@ -4800,6 +4911,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:bg-\[\#f9f9f9\]:hover {
       background-color: #f9f9f9;
+    }
+
+    .hover\:bg-amber-200:hover {
+      background-color: var(--color-amber-200);
     }
 
     .hover\:bg-emerald-50:hover {
@@ -5296,6 +5411,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
       padding-block: calc(var(--spacing) * 5);
     }
 
+    .sm\:py-24 {
+      padding-block: calc(var(--spacing) * 24);
+    }
+
+    .sm\:py-32 {
+      padding-block: calc(var(--spacing) * 32);
+    }
+
     .sm\:pb-24 {
       padding-bottom: calc(var(--spacing) * 24);
     }
@@ -5398,6 +5521,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
       width: calc(var(--spacing) * 56);
     }
 
+    .md\:w-72 {
+      width: calc(var(--spacing) * 72);
+    }
+
     .md\:w-80 {
       width: calc(var(--spacing) * 80);
     }
@@ -5421,6 +5548,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .md\:grid-cols-3 {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .md\:grid-cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
     .md\:grid-cols-6 {
@@ -5577,6 +5708,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .lg\:min-h-\[500px\] {
       min-height: 500px;
+    }
+
+    .lg\:min-h-\[560px\] {
+      min-height: 560px;
     }
 
     .lg\:min-h-\[580px\] {

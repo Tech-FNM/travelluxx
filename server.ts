@@ -20,6 +20,7 @@ const INQUIRIES_PATH = path.join(process.cwd(), "inquiries.json");
 const SERVICES_PATH = path.join(process.cwd(), "services.json");
 const SERVICE_AREAS_PATH = path.join(process.cwd(), "service_areas.json");
 const SERVICES_SETTINGS_PATH = path.join(process.cwd(), "services_settings.json");
+const SERVICE_AREAS_SETTINGS_PATH = path.join(process.cwd(), "service_areas_settings.json");
 
 import mongoose from "mongoose";
 
@@ -1742,6 +1743,53 @@ app.get("/api/services-page-settings", async (req, res) => {
     if (doc && doc.value) return res.json(doc.value);
   } catch (e) {}
   return res.json(readServicesSettings());
+});
+
+app.get("/api/service-areas-page-settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const doc = await SettingModel.findOne({ key: "service_areas_page_settings" });
+    if (doc && doc.value) return res.json(doc.value);
+  } catch (e) {}
+  try {
+    if (fs.existsSync(SERVICE_AREAS_SETTINGS_PATH)) {
+      return res.json(JSON.parse(fs.readFileSync(SERVICE_AREAS_SETTINGS_PATH, "utf8")));
+    }
+  } catch (e) {}
+  return res.json({
+    hero_enabled: true,
+    hero_tag: "SERVICE AREAS",
+    hero_title: "Explore TravelLuxx Service Areas Across the UK",
+    hero_description: "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location and schedule.",
+    hero_button_text: "Plan Your Journey",
+    hero_button_url: "/#calculator-section",
+    hero_image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
+    meta_description: "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer."
+  });
+});
+
+app.post("/api/admin/service-areas-page-settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    if (MONGODB_URI) {
+      await SettingModel.findOneAndUpdate(
+        { key: "service_areas_page_settings" },
+        { key: "service_areas_page_settings", value: req.body },
+        { upsert: true, new: true }
+      );
+    }
+  } catch (err: any) {
+    console.error("Error saving service areas page settings to MongoDB:", err);
+  }
+  try {
+    if (!process.env.VERCEL) {
+      fs.writeFileSync(SERVICE_AREAS_SETTINGS_PATH, JSON.stringify(req.body, null, 2));
+    }
+  } catch (err) {
+    console.error("Error writing service_areas_settings.json:", err);
+  }
+  return res.json({ success: true, settings: req.body });
 });
 
 app.post("/api/admin/services-page-settings", async (req, res) => {

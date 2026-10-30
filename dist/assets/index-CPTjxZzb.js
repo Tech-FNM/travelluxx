@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-kJs3yMx9.js"(exports, module) {
+  "assets/index-CPTjxZzb.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -15724,23 +15724,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$o = [
-      [
-        "path",
-        {
-          d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
-          key: "1a8usu"
-        }
-      ],
-      ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
-    ];
-    const Pencil = createLucideIcon("pencil", __iconNode$o);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$n = [
       ["path", { d: "M13 2a9 9 0 0 1 9 9", key: "1itnx2" }],
       ["path", { d: "M13 6a5 5 0 0 1 5 5", key: "11nki7" }],
       [
@@ -15751,7 +15734,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const PhoneCall = createLucideIcon("phone-call", __iconNode$n);
+    const PhoneCall = createLucideIcon("phone-call", __iconNode$o);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$n = [
+      [
+        "path",
+        {
+          d: "M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",
+          key: "9njp5v"
+        }
+      ]
+    ];
+    const Phone = createLucideIcon("phone", __iconNode$n);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15762,12 +15761,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",
-          key: "9njp5v"
+          d: "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z",
+          key: "1v9wt8"
         }
       ]
     ];
-    const Phone = createLucideIcon("phone", __iconNode$m);
+    const Plane = createLucideIcon("plane", __iconNode$m);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15775,15 +15774,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$l = [
-      [
-        "path",
-        {
-          d: "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z",
-          key: "1v9wt8"
-        }
-      ]
+      ["path", { d: "M5 12h14", key: "1ays0h" }],
+      ["path", { d: "M12 5v14", key: "s699le" }]
     ];
-    const Plane = createLucideIcon("plane", __iconNode$l);
+    const Plus = createLucideIcon("plus", __iconNode$l);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15791,10 +15785,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$k = [
-      ["path", { d: "M5 12h14", key: "1ays0h" }],
-      ["path", { d: "M12 5v14", key: "s699le" }]
+      ["circle", { cx: "6", cy: "19", r: "3", key: "1kj8tv" }],
+      ["path", { d: "M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15", key: "1d8sl" }],
+      ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }]
     ];
-    const Plus = createLucideIcon("plus", __iconNode$k);
+    const Route = createLucideIcon("route", __iconNode$k);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15802,18 +15797,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$j = [
-      ["circle", { cx: "6", cy: "19", r: "3", key: "1kj8tv" }],
-      ["path", { d: "M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15", key: "1d8sl" }],
-      ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }]
-    ];
-    const Route = createLucideIcon("route", __iconNode$j);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$i = [
       [
         "path",
         {
@@ -15824,7 +15807,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
       ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
     ];
-    const Save = createLucideIcon("save", __iconNode$i);
+    const Save = createLucideIcon("save", __iconNode$j);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$i = [
+      ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+      ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+    ];
+    const Search = createLucideIcon("search", __iconNode$i);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -39703,19 +39697,30 @@ ${escapeText(this.code(index, length))}
       }
       return Car;
     }
+    const defaultPageSettings = {
+      hero_enabled: true,
+      hero_tag: "SERVICE AREAS",
+      hero_title: "Explore TravelLuxx Service Areas Across the UK",
+      hero_description: "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location and schedule.",
+      hero_button_text: "Plan Your Journey",
+      hero_button_url: "/#calculator-section",
+      hero_image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+      meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
+      meta_description: "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer."
+    };
     const emptyArea = {
       title: "",
       slug: "",
-      heroBadge: "",
+      heroBadge: "CHAUFFEUR SERVICE",
       heroTitle: "",
       heroDescription: "",
-      heroImage: "",
+      heroImage: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
       heroButtonText: "Plan your journey",
       heroButtonUrl: "/#calculator-section",
       heroSecondaryButtonText: "Call us",
-      heroSecondaryButtonUrl: "",
+      heroSecondaryButtonUrl: "tel:+441217140876",
       content: "",
-      faqTitle: "",
+      faqTitle: "Frequently Asked Questions",
       faqs: [],
       published: true,
       metaTitle: "",
@@ -39725,42 +39730,88 @@ ${escapeText(this.code(index, length))}
     const quillModules$1 = {
       toolbar: [
         [{ header: [2, 3, 4, false] }],
-        ["bold", "italic", "underline"],
+        ["bold", "italic", "underline", "strike"],
         [{ list: "ordered" }, { list: "bullet" }],
-        ["link"],
+        ["link", "image"],
         ["clean"]
       ]
     };
+    function toBase64$1(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
     function ServiceAreasManager() {
       const [areas, setAreas] = reactExports.useState([]);
       const [loading, setLoading] = reactExports.useState(true);
+      const [viewMode, setViewMode] = reactExports.useState("list");
       const [editing, setEditing] = reactExports.useState(null);
       const [form, setForm] = reactExports.useState(emptyArea);
+      const [pageSettings, setPageSettings] = reactExports.useState(defaultPageSettings);
       const [saving, setSaving] = reactExports.useState(false);
       const [error, setError] = reactExports.useState("");
+      const [toastMessage, setToastMessage] = reactExports.useState("");
+      const [searchQuery, setSearchQuery] = reactExports.useState("");
+      const [statusFilter, setStatusFilter] = reactExports.useState("all");
+      const [mediaModalOpen, setMediaModalOpen] = reactExports.useState(false);
+      const [mediaTarget, setMediaTarget] = reactExports.useState("area-hero");
+      const [mediaList, setMediaList] = reactExports.useState([]);
+      const [selectedMediaUrl, setSelectedMediaUrl] = reactExports.useState(null);
+      const [uploadingMedia, setUploadingMedia] = reactExports.useState(false);
+      const showToast = (msg) => {
+        setToastMessage(msg);
+        setTimeout(() => setToastMessage(""), 3500);
+      };
       const fetchAreas = async () => {
         setLoading(true);
         try {
           const response = await fetch("/api/admin/service-areas");
           if (!response.ok) throw new Error("Could not load service areas.");
           const data = await response.json();
-          if (!Array.isArray(data)) throw new Error("The service areas response was invalid.");
-          setAreas(data);
+          if (Array.isArray(data)) setAreas(data);
         } catch (err) {
           setError(err instanceof Error ? err.message : "Could not load service areas.");
         } finally {
           setLoading(false);
         }
       };
+      const fetchPageSettings = async () => {
+        try {
+          const res = await fetch("/api/service-areas-page-settings");
+          if (res.ok) {
+            const data = await res.json();
+            setPageSettings((prev) => ({ ...prev, ...data }));
+          }
+        } catch (e) {
+          console.error("Failed to load service areas page settings", e);
+        }
+      };
+      const fetchMedia = async () => {
+        try {
+          const res = await fetch("/api/admin/media");
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data)) setMediaList(data);
+          }
+        } catch (e) {
+          console.error("Failed to fetch media", e);
+        }
+      };
       reactExports.useEffect(() => {
         fetchAreas();
+        fetchPageSettings();
+        fetchMedia();
       }, []);
-      const startNew = () => {
+      const openNewArea = () => {
         setEditing(null);
         setForm({ ...emptyArea });
         setError("");
+        setViewMode("form");
       };
-      const startEdit = (area) => {
+      const openEditArea = (area) => {
         setEditing(area);
         setForm({
           ...emptyArea,
@@ -39769,26 +39820,33 @@ ${escapeText(this.code(index, length))}
           noIndexNoFollow: !!area.noIndexNoFollow
         });
         setError("");
+        setViewMode("form");
+      };
+      const openPageSettings = () => {
+        setError("");
+        setViewMode("page-settings");
       };
       const saveArea = async (event) => {
         event.preventDefault();
         if (!form.title.trim() || !form.slug.trim()) {
-          setError("Enter both a page title and URL slug.");
+          setError("Please provide both a page title and URL slug.");
           return;
         }
         setSaving(true);
         setError("");
         try {
+          const cleanedSlug = form.slug.trim().replace(/^\/+|\/+$/g, "").toLowerCase();
+          const payload = {
+            ...form,
+            title: form.title.trim(),
+            slug: cleanedSlug
+          };
           const response = await fetch(
             editing ? `/api/admin/service-areas/${editing.id}` : "/api/admin/service-areas",
             {
               method: editing ? "PUT" : "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                ...form,
-                title: form.title.trim(),
-                slug: form.slug.trim().replace(/^\/+|\/+$/g, "").toLowerCase()
-              })
+              body: JSON.stringify(payload)
             }
           );
           const result = await response.json();
@@ -39799,14 +39857,35 @@ ${escapeText(this.code(index, length))}
           );
           setEditing(savedArea);
           setForm({ ...emptyArea, ...savedArea });
+          showToast(editing ? "Service area updated successfully!" : "New service area published!");
+          setViewMode("list");
         } catch (err) {
           setError(err instanceof Error ? err.message : "Failed to save service area.");
         } finally {
           setSaving(false);
         }
       };
+      const savePageSettings = async (e) => {
+        e == null ? void 0 : e.preventDefault();
+        setSaving(true);
+        setError("");
+        try {
+          const res = await fetch("/api/admin/service-areas-page-settings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pageSettings)
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to save page settings");
+          showToast("Service areas main page settings saved!");
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Failed to save page settings.");
+        } finally {
+          setSaving(false);
+        }
+      };
       const deleteArea = async (area) => {
-        if (!window.confirm(`Delete the ${area.title} service area page?`)) return;
+        if (!window.confirm(`Are you sure you want to delete the ${area.title} service area page?`)) return;
         try {
           const response = await fetch(`/api/admin/service-areas/${area.id}`, { method: "DELETE" });
           if (!response.ok) {
@@ -39814,9 +39893,31 @@ ${escapeText(this.code(index, length))}
             throw new Error(result.error || "Failed to delete service area.");
           }
           setAreas((current) => current.filter((item) => item.id !== area.id));
-          if ((editing == null ? void 0 : editing.id) === area.id) startNew();
+          if ((editing == null ? void 0 : editing.id) === area.id) {
+            setEditing(null);
+            setViewMode("list");
+          }
+          showToast("Service area deleted!");
         } catch (err) {
           setError(err instanceof Error ? err.message : "Failed to delete service area.");
+        }
+      };
+      const toggleAreaStatus = async (area) => {
+        const updatedStatus = !area.published;
+        try {
+          const response = await fetch(`/api/admin/service-areas/${area.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...area, published: updatedStatus })
+          });
+          if (response.ok) {
+            setAreas(
+              (current) => current.map((a) => a.id === area.id ? { ...a, published: updatedStatus } : a)
+            );
+            showToast(updatedStatus ? "Page published live!" : "Page set to draft.");
+          }
+        } catch (e) {
+          showToast("Failed to update status");
         }
       };
       const updateFaq = (index, key, value) => {
@@ -39827,167 +39928,1201 @@ ${escapeText(this.code(index, length))}
           )
         }));
       };
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "flex flex-col justify-between gap-3 sm:flex-row sm:items-center", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-xl font-bold text-[#1d2327] sm:text-2xl", children: "Service Areas Management" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 text-xs text-[#646970]", children: "Create and manage local area landing pages and their public content." })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              type: "button",
-              onClick: startNew,
-              className: "inline-flex items-center gap-1.5 rounded bg-[#2271b1] px-3.5 py-2 text-xs font-semibold text-white hover:bg-[#135e96]",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "h-4 w-4" }),
-                " Add New Area"
-              ]
+      const handleMediaUpload = async (files) => {
+        if (!files || files.length === 0) return;
+        setUploadingMedia(true);
+        for (const file of Array.from(files)) {
+          try {
+            const base64Data = await toBase64$1(file);
+            const res = await fetch("/api/admin/upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ filename: file.name, data: base64Data })
+            });
+            const json = await res.json();
+            if (json.url) {
+              setMediaList((prev) => [json.url, ...prev]);
+              setSelectedMediaUrl(json.url);
             }
-          )
+          } catch (err) {
+            console.error("Upload error", err);
+          }
+        }
+        setUploadingMedia(false);
+      };
+      const confirmMediaSelection = () => {
+        if (!selectedMediaUrl) return;
+        if (mediaTarget === "area-hero") {
+          setForm((prev) => ({ ...prev, heroImage: selectedMediaUrl }));
+        } else if (mediaTarget === "page-hero") {
+          setPageSettings((prev) => ({ ...prev, hero_image: selectedMediaUrl }));
+        }
+        setMediaModalOpen(false);
+        setSelectedMediaUrl(null);
+      };
+      const filteredAreas = areas.filter((area) => {
+        const matchesSearch = area.title.toLowerCase().includes(searchQuery.toLowerCase()) || area.slug.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus = statusFilter === "all" || statusFilter === "published" && area.published !== false || statusFilter === "draft" && area.published === false;
+        return matchesSearch && matchesStatus;
+      });
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+        toastMessage && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed bottom-6 right-6 z-50 bg-[#1d2327] text-white px-4 py-3 rounded shadow-xl flex items-center gap-2 border-l-4 border-emerald-500 animate-fadeIn text-xs", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CircleCheck, { className: "w-4 h-4 text-emerald-400" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: toastMessage })
         ] }),
-        error && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { role: "alert", className: "flex items-center justify-between border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700", children: [
-          error,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-xl sm:text-2xl font-bold text-[#1d2327] flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-6 h-6 text-[#2271b1]" }),
+              viewMode === "page-settings" ? "Service Areas Main Page Settings" : viewMode === "form" ? (editing == null ? void 0 : editing.id) ? `Edit Area: ${form.title}` : "Add New Service Area" : "Service Areas Management"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs mt-0.5", children: viewMode === "page-settings" ? "Manage the hero banner, titles, and SEO meta tags of the public /service-areas hub." : viewMode === "form" ? "Configure hero image, local chauffeur content, badges, FAQs, and SEO for this area landing page." : "Create and manage your local service area landing pages. Styled exactly like your Services Management system." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center gap-2", children: viewMode === "list" ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: openNewArea,
+                className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3.5 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                  "Add New Area"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: openPageSettings,
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2c3338] px-3.5 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-3.5 h-3.5 text-slate-600" }),
+                  "Page Settings (/service-areas)"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "a",
+              {
+                href: "/service-areas",
+                target: "_blank",
+                rel: "noreferrer",
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2271b1] px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3 h-3" }),
+                  "View Hub Live"
+                ]
+              }
+            )
+          ] }) : viewMode === "page-settings" ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: savePageSettings,
+                disabled: saving,
+                className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-3.5 h-3.5" }),
+                  saving ? "Saving..." : "Save Page Settings"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "a",
+              {
+                href: "/service-areas",
+                target: "_blank",
+                rel: "noreferrer",
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2271b1] px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3 h-3" }),
+                  "View /service-areas"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setViewMode("list"),
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-3.5 py-1.5 rounded text-xs font-semibold transition",
+                children: "Back to Areas List"
+              }
+            )
+          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: saveArea,
+                disabled: saving,
+                className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-3.5 h-3.5" }),
+                  saving ? "Saving..." : (editing == null ? void 0 : editing.id) ? "Update Area Page" : "Publish Area Page"
+                ]
+              }
+            ),
+            (editing == null ? void 0 : editing.id) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "a",
+              {
+                href: `/service-areas/${form.slug}`,
+                target: "_blank",
+                rel: "noreferrer",
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#2271b1] px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3 h-3" }),
+                  "View Live"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setViewMode("list"),
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-3.5 py-1.5 rounded text-xs font-semibold transition",
+                children: "Cancel"
+              }
+            )
+          ] }) })
+        ] }),
+        error && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { role: "alert", className: "flex items-center justify-between border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 rounded-sm", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: error }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => setError(""), "aria-label": "Dismiss error", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" }) })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "overflow-hidden border border-[#c3c4c7] bg-white shadow-sm", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#c3c4c7] bg-[#f6f7f7] px-4 py-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-sm font-bold", children: "Service Areas" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-[#646970]", children: [
-                areas.length,
-                " total"
-              ] })
-            ] }),
-            loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "p-5 text-xs text-[#646970]", children: "Loading service areas…" }) : areas.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "p-5 text-xs text-[#646970]", children: "No service areas yet. Add one to get started." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "divide-y divide-[#f0f0f1]", children: areas.map((area) => /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex items-center justify-between gap-3 p-3 hover:bg-[#f6f7f7]", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", onClick: () => startEdit(area), className: "min-w-0 flex-1 text-left", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block truncate text-sm font-semibold text-[#2271b1]", children: area.title }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "block truncate text-xs text-[#646970]", children: [
-                  "/service-areas/",
-                  area.slug
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `mt-1 inline-block text-[10px] font-semibold ${area.published ? "text-emerald-700" : "text-slate-500"}`, children: area.published ? "Published" : "Draft" })
+        viewMode === "page-settings" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-4 sm:p-6 shadow-sm space-y-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#c3c4c7] bg-slate-50 -mx-4 sm:-mx-6 -mt-4 sm:-mt-6 p-4 sm:p-6 rounded-t-sm", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-base font-bold text-slate-900 flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-5 h-5 text-emerald-600" }),
+                "Public /service-areas Hub Configuration"
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex shrink-0 items-center gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => startEdit(area), className: "p-1 text-[#2271b1]", "aria-label": `Edit ${area.title}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pencil, { className: "h-4 w-4" }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/service-areas/${area.slug}`, target: "_blank", rel: "noreferrer", className: "p-1 text-[#2271b1]", "aria-label": `View ${area.title}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "h-4 w-4" }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => deleteArea(area), className: "p-1 text-red-600", "aria-label": `Delete ${area.title}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "h-4 w-4" }) })
-              ] })
-            ] }, area.id)) })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mt-0.5", children: "Customize the hero banner image, titles, button call-to-actions, and SEO search results preview." })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "a",
+                {
+                  href: "/service-areas",
+                  target: "_blank",
+                  rel: "noreferrer",
+                  className: "border border-[#c3c4c7] hover:bg-white bg-slate-100 text-[#2271b1] px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3.5 h-3.5" }),
+                    "Live Preview"
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  type: "button",
+                  onClick: savePageSettings,
+                  disabled: saving,
+                  className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-1.5 rounded text-xs font-bold shadow-sm transition flex items-center gap-1.5 disabled:opacity-50",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-3.5 h-3.5" }),
+                    saving ? "Saving..." : "Save Hub Settings"
+                  ]
+                }
+              )
+            ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: saveArea, className: "space-y-5 border border-[#c3c4c7] bg-white p-4 shadow-sm sm:p-6", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-3 border-b border-[#f0f0f1] pb-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-base font-bold", children: editing ? `Edit: ${editing.title}` : "Add New Service Area" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-1 text-xs text-[#646970]", children: "Manage its URL, hero, page copy, FAQs and SEO details." })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-4 h-4 text-emerald-600" }),
+                "1. Hero Banner Section"
               ] }),
-              editing && /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: `/service-areas/${editing.slug}`, target: "_blank", rel: "noreferrer", className: "inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[#2271b1]", children: [
-                "View Live ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "h-3 w-3" })
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: pageSettings.hero_enabled !== false,
+                    onChange: (e) => setPageSettings({ ...pageSettings, hero_enabled: e.target.checked }),
+                    className: "rounded text-emerald-600 focus:ring-emerald-500"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: pageSettings.hero_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: pageSettings.hero_enabled !== false ? "Hero Visible" : "Hero Hidden" })
               ] })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 sm:grid-cols-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "Page title",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, value: form.title, onChange: (event) => setForm({ ...form, title: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]", placeholder: "e.g. Solihull" })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Hero Badge Tag" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: pageSettings.hero_tag || "",
+                    onChange: (e) => setPageSettings({ ...pageSettings, hero_tag: e.target.value }),
+                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                    placeholder: "SERVICE AREAS"
+                  }
+                )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "URL slug",
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "mt-1 flex items-center rounded-sm border border-[#8c8f94] px-2.5 text-sm font-normal text-[#646970]", children: [
-                  "/service-areas/",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, value: form.slug, onChange: (event) => setForm({ ...form, slug: event.target.value }), className: "min-w-0 flex-1 border-0 py-2 text-[#1d2327] outline-none", placeholder: "solihull" })
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
-                "Hero badge",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroBadge, onChange: (event) => setForm({ ...form, heroBadge: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
-                "Hero heading",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroTitle, onChange: (event) => setForm({ ...form, heroTitle: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
-                "Hero description",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 3, value: form.heroDescription, onChange: (event) => setForm({ ...form, heroDescription: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e] sm:col-span-2", children: [
-                "Hero background image URL",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroImage, onChange: (event) => setForm({ ...form, heroImage: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]", placeholder: "https://…" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "Primary button text",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroButtonText, onChange: (event) => setForm({ ...form, heroButtonText: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "Primary button URL",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroButtonUrl, onChange: (event) => setForm({ ...form, heroButtonUrl: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "Secondary button text",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroSecondaryButtonText, onChange: (event) => setForm({ ...form, heroSecondaryButtonText: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "Secondary button URL ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-normal", children: "(leave blank to call business number)" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.heroSecondaryButtonUrl, onChange: (event) => setForm({ ...form, heroSecondaryButtonUrl: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]", placeholder: "tel:+441217140876" })
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Hero Main Heading" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: pageSettings.hero_title || "",
+                    onChange: (e) => setPageSettings({ ...pageSettings, hero_title: e.target.value }),
+                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                    placeholder: "Explore TravelLuxx Service Areas Across the UK"
+                  }
+                )
               ] })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "mb-1.5 block text-xs font-semibold text-[#50575e]", children: "Area page content" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(index_default, { theme: "snow", value: form.content, onChange: (content) => setForm((current) => ({ ...current, content })), modules: quillModules$1, className: "bg-white" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Hero Subheading / Description" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "textarea",
+                {
+                  rows: 2,
+                  value: pageSettings.hero_description || "",
+                  onChange: (e) => setPageSettings({ ...pageSettings, hero_description: e.target.value }),
+                  className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                  placeholder: "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location..."
+                }
+              )
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "space-y-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold", children: "Frequently Asked Questions" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", onClick: () => setForm((current) => ({ ...current, faqs: [...current.faqs, { question: "", answer: "" }] })), className: "inline-flex items-center gap-1 text-xs font-semibold text-[#2271b1]", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "h-3.5 w-3.5" }),
-                  " Add FAQ"
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-semibold text-[#50575e]", children: [
-                "FAQ section heading",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.faqTitle, onChange: (event) => setForm({ ...form, faqTitle: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
-              ] }),
-              form.faqs.map((faq, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative grid gap-3 rounded border border-[#dcdcde] bg-[#f6f7f7] p-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => setForm((current) => ({ ...current, faqs: current.faqs.filter((_, faqIndex) => faqIndex !== index) })), "aria-label": "Remove FAQ", className: "absolute right-2 top-2 text-red-600", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "pr-6 text-xs font-semibold text-[#50575e]", children: [
-                  "Question",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: faq.question, onChange: (event) => updateFaq(index, "question", event.target.value), className: "mt-1 w-full rounded-sm border border-[#8c8f94] bg-white px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: "Hero Background Image Management" }),
+              pageSettings.hero_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 max-w-xl", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group aspect-[21/9] rounded border border-[#c3c4c7] overflow-hidden bg-slate-900 shadow-sm", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "img",
+                    {
+                      src: pageSettings.hero_image,
+                      alt: "Hero Preview",
+                      className: "w-full h-full object-cover"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => {
+                          setMediaTarget("page-hero");
+                          setMediaModalOpen(true);
+                        },
+                        className: "bg-white/90 hover:bg-white text-slate-900 px-3 py-1.5 rounded text-xs font-bold shadow",
+                        children: "Change from Media Library"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setPageSettings({ ...pageSettings, hero_image: "" }),
+                        className: "bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded text-xs font-bold shadow",
+                        children: "Remove"
+                      }
+                    )
+                  ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                  "Answer",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 2, value: faq.answer, onChange: (event) => updateFaq(index, "answer", event.target.value), className: "mt-1 w-full rounded-sm border border-[#8c8f94] bg-white px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: pageSettings.hero_image,
+                      onChange: (e) => setPageSettings({ ...pageSettings, hero_image: e.target.value }),
+                      placeholder: "Or enter direct Image URL: https://...",
+                      className: "flex-1 border border-[#8c8f94] rounded px-2.5 py-1.5 text-xs font-mono"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => {
+                        setMediaTarget("page-hero");
+                        setMediaModalOpen(true);
+                      },
+                      className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 px-3 py-1.5 rounded text-xs font-semibold shrink-0",
+                      children: "Media Library"
+                    }
+                  )
                 ] })
-              ] }, index))
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => {
+                    setMediaTarget("page-hero");
+                    setMediaModalOpen(true);
+                  },
+                  className: "w-full max-w-xl border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] py-8 rounded text-xs font-semibold transition text-center flex flex-col items-center justify-center gap-2",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { className: "w-5 h-5 text-slate-400" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "+ Select Hero Banner Image from Media Library" })
+                  ]
+                }
+              )
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "grid gap-4 border-t border-[#f0f0f1] pt-4 sm:grid-cols-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "SEO title",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { value: form.metaTitle, onChange: (event) => setForm({ ...form, metaTitle: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Hero Button Text" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: pageSettings.hero_button_text || "",
+                    onChange: (e) => setPageSettings({ ...pageSettings, hero_button_text: e.target.value }),
+                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                    placeholder: "Plan Your Journey"
+                  }
+                )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-xs font-semibold text-[#50575e]", children: [
-                "SEO description",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 2, value: form.metaDescription, onChange: (event) => setForm({ ...form, metaDescription: event.target.value }), className: "mt-1 w-full rounded-sm border border-[#8c8f94] px-2.5 py-2 text-sm font-normal text-[#1d2327]" })
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Hero Button URL" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: pageSettings.hero_button_url || "",
+                    onChange: (e) => setPageSettings({ ...pageSettings, hero_button_url: e.target.value }),
+                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                    placeholder: "/#calculator-section"
+                  }
+                )
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 border-b border-[#f0f0f1] pb-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { className: "w-4 h-4 text-emerald-600" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider", children: "2. SEO & Meta Tags for /service-areas" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "SEO Page Meta Title" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "text",
+                  value: pageSettings.meta_title || "",
+                  onChange: (e) => setPageSettings({ ...pageSettings, meta_title: e.target.value }),
+                  className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                  placeholder: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "SEO Meta Description" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "textarea",
+                {
+                  rows: 2,
+                  value: pageSettings.meta_description || "",
+                  onChange: (e) => setPageSettings({ ...pageSettings, meta_description: e.target.value }),
+                  className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                  placeholder: "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide..."
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-slate-50 p-3.5 rounded border border-slate-200 space-y-1 max-w-2xl", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1", children: "Google Search Result Preview" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-[#202124] flex items-center gap-1.5 font-mono", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-emerald-800", children: "travelluxx.co.uk" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-slate-400", children: "› service-areas" })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e]", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: form.published, onChange: (event) => setForm({ ...form, published: event.target.checked }) }),
-                "Published"
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-base text-[#1a0dab] font-medium hover:underline cursor-pointer line-clamp-1", children: pageSettings.meta_title || "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-[#4d5156] line-clamp-2 leading-relaxed", children: pageSettings.meta_description || "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide." })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-2 flex justify-end gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setViewMode("list"),
+                className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-4 py-2 rounded text-sm font-semibold transition",
+                children: "Cancel"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: savePageSettings,
+                disabled: saving,
+                className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-6 py-2 rounded text-sm font-bold shadow-sm transition disabled:opacity-50 flex items-center gap-2",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-4 h-4" }),
+                  saving ? "Saving Settings..." : "Save Hub Settings"
+                ]
+              }
+            )
+          ] })
+        ] }),
+        viewMode === "form" && /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: saveArea, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: [
+                  "Area Name / Page Title ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-500", children: "*" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    required: true,
+                    value: form.title,
+                    onChange: (e) => {
+                      const newTitle = e.target.value;
+                      setForm((prev) => ({
+                        ...prev,
+                        title: newTitle,
+                        slug: !(editing == null ? void 0 : editing.id) && (!prev.slug || prev.slug === prev.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")) ? newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : prev.slug
+                      }));
+                    },
+                    placeholder: "e.g. Solihull, Birmingham, Coventry, Stratford-upon-Avon...",
+                    className: "w-full border border-[#8c8f94] rounded-sm px-3 py-2 text-sm font-semibold text-[#1d2327] focus:outline-none focus:border-[#2271b1]"
+                  }
+                )
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e]", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: form.noIndexNoFollow, onChange: (event) => setForm({ ...form, noIndexNoFollow: event.target.checked }) }),
-                "Hide from search engines"
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5 uppercase tracking-wide", children: [
+                  "Permalink URL Slug ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-500", children: "*" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center rounded-sm border border-[#8c8f94] bg-slate-50 px-3 py-1.5 text-xs", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-slate-500 font-mono select-none", children: "/service-areas/" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      required: true,
+                      value: form.slug,
+                      onChange: (e) => setForm({ ...form, slug: e.target.value }),
+                      placeholder: "solihull",
+                      className: "flex-1 bg-transparent px-1 font-mono text-[#1d2327] outline-none font-semibold"
+                    }
+                  ),
+                  (editing == null ? void 0 : editing.id) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "a",
+                    {
+                      href: `/service-areas/${form.slug}`,
+                      target: "_blank",
+                      rel: "noreferrer",
+                      className: "ml-2 text-[#2271b1] hover:underline flex items-center gap-1 font-sans",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3 h-3" }),
+                        " View"
+                      ]
+                    }
+                  )
+                ] })
               ] })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap justify-end gap-2 border-t border-[#f0f0f1] pt-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: startNew, className: "rounded border border-[#c3c4c7] px-3.5 py-2 text-xs font-semibold text-[#50575e] hover:bg-slate-50", children: "Clear" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "submit", disabled: saving, className: "inline-flex items-center gap-1.5 rounded bg-[#2271b1] px-4 py-2 text-xs font-semibold text-white hover:bg-[#135e96] disabled:opacity-60", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "h-3.5 w-3.5" }),
-                " ",
-                saving ? "Saving…" : editing ? "Update Area Page" : "Publish Area Page"
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-b border-[#f0f0f1] pb-2 flex items-center justify-between", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-4 h-4 text-emerald-600" }),
+                  "Area Landing Hero Banner"
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-slate-400 font-mono", children: [
+                  "Displays at the top of /service-areas/",
+                  form.slug || ":slug"
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Hero Badge Tag" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.heroBadge,
+                      onChange: (e) => setForm({ ...form, heroBadge: e.target.value }),
+                      placeholder: "CHAUFFEUR SERVICE SOLIHULL",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Hero Main Heading" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.heroTitle,
+                      onChange: (e) => setForm({ ...form, heroTitle: e.target.value }),
+                      placeholder: "e.g. Executive Chauffeur & Airport Transfers in Solihull",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Hero Subtitle / Description" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "textarea",
+                  {
+                    rows: 2,
+                    value: form.heroDescription,
+                    onChange: (e) => setForm({ ...form, heroDescription: e.target.value }),
+                    placeholder: "Arrive in unmatched comfort, punctuality, and luxury with TravelLuxx...",
+                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Primary Button Text" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.heroButtonText,
+                      onChange: (e) => setForm({ ...form, heroButtonText: e.target.value }),
+                      placeholder: "Plan your journey",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Primary Button URL" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.heroButtonUrl,
+                      onChange: (e) => setForm({ ...form, heroButtonUrl: e.target.value }),
+                      placeholder: "/#calculator-section",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Secondary Call Button Text" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.heroSecondaryButtonText,
+                      onChange: (e) => setForm({ ...form, heroSecondaryButtonText: e.target.value }),
+                      placeholder: "Call us",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Secondary Call Button URL / Phone" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.heroSecondaryButtonUrl,
+                      onChange: (e) => setForm({ ...form, heroSecondaryButtonUrl: e.target.value }),
+                      placeholder: "tel:+441217140876",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "block text-xs font-semibold text-[#1d2327] uppercase tracking-wide flex items-center gap-1.5", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "w-4 h-4 text-emerald-600" }),
+                  "Area Detailed Content & Guide"
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-500 font-mono", children: "Rich Text / HTML / Headings" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-slate-500", children: [
+                "Write comprehensive details about chauffeur services, executive business travel, routes to Birmingham Airport / London Heathrow, fleet options, and local perks in ",
+                form.title || "this area",
+                "."
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-[280px]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                index_default,
+                {
+                  theme: "snow",
+                  value: form.content,
+                  onChange: (content) => setForm((prev) => ({ ...prev, content })),
+                  modules: quillModules$1,
+                  placeholder: "Introduce the area, local chauffeur solutions, corporate transport, airport pickups, and fleet perks...",
+                  className: "bg-white"
+                }
+              ) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xs font-bold uppercase tracking-wider text-slate-800", children: "Area Frequently Asked Questions (FAQ)" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-slate-500 mt-0.5", children: "Helpful local answers regarding pickups, wait times, airport flight monitoring, and pricing." })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => setForm((prev) => ({
+                      ...prev,
+                      faqs: [...prev.faqs, { question: "", answer: "" }]
+                    })),
+                    className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-sm transition flex items-center gap-1.5",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                      "Add FAQ Item"
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "FAQ Section Heading" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: form.faqTitle,
+                    onChange: (e) => setForm({ ...form, faqTitle: e.target.value }),
+                    placeholder: "Frequently Asked Questions",
+                    className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                  }
+                )
+              ] }),
+              form.faqs.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-dashed border-[#8c8f94] rounded p-6 text-center bg-slate-50", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mb-2", children: "No FAQs added for this area yet." }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => setForm((prev) => ({
+                      ...prev,
+                      faqs: [
+                        {
+                          question: `Can I book an executive airport transfer from ${form.title || "this area"}?`,
+                          answer: `Yes, TravelLuxx provides round-the-clock private airport transfers to Birmingham (BHX), London Heathrow (LHR), Gatwick, Manchester, and East Midlands.`
+                        },
+                        {
+                          question: `How far in advance should I reserve my chauffeur?`,
+                          answer: `We recommend booking at least 24 hours in advance to guarantee vehicle availability, though last-minute bookings can also be arranged via our WhatsApp hotline.`
+                        }
+                      ]
+                    })),
+                    className: "text-xs text-[#2271b1] font-semibold hover:underline",
+                    children: "+ Load Default 2 FAQs"
+                  }
+                )
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: form.faqs.map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: "border border-[#c3c4c7] rounded bg-[#fbfbfc] p-3.5 relative space-y-2 shadow-xs",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between border-b border-[#f0f0f1] pb-1.5", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-[11px] text-slate-700 uppercase tracking-wider", children: [
+                        "FAQ #",
+                        idx + 1
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => setForm((prev) => ({
+                            ...prev,
+                            faqs: prev.faqs.filter((_, i) => i !== idx)
+                          })),
+                          className: "text-red-500 hover:text-red-700 p-1 transition",
+                          title: "Delete FAQ",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Question" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "text",
+                          value: faq.question,
+                          onChange: (e) => updateFaq(idx, "question", e.target.value),
+                          placeholder: "e.g. Do you offer meet & greet services?",
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-[#646970] mb-1 uppercase", children: "Answer" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "textarea",
+                        {
+                          rows: 2,
+                          value: faq.answer,
+                          onChange: (e) => updateFaq(idx, "answer", e.target.value),
+                          placeholder: "Provide the detailed explanation...",
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                        }
+                      )
+                    ] })
+                  ]
+                },
+                idx
+              )) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 border-b border-[#f0f0f1] pb-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { className: "w-4 h-4 text-emerald-600" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xs font-bold uppercase tracking-wider text-slate-800", children: "Search Engine Optimization (SEO)" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Meta Title" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: form.metaTitle,
+                    onChange: (e) => setForm({ ...form, metaTitle: e.target.value }),
+                    placeholder: `Executive Chauffeur Service in ${form.title || "Area"} | TravelLuxx`,
+                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Meta Description" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "textarea",
+                  {
+                    rows: 2,
+                    value: form.metaDescription,
+                    onChange: (e) => setForm({ ...form, metaDescription: e.target.value }),
+                    placeholder: `Book executive private chauffeur travel and airport transfers across ${form.title || "this area"} with TravelLuxx. Fixed rates, luxury fleet.`,
+                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-6 pt-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "checkbox",
+                      checked: form.published,
+                      onChange: (e) => setForm({ ...form, published: e.target.checked }),
+                      className: "rounded text-emerald-600 focus:ring-emerald-500"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Published Live" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "checkbox",
+                      checked: form.noIndexNoFollow,
+                      onChange: (e) => setForm({ ...form, noIndexNoFollow: e.target.checked }),
+                      className: "rounded text-emerald-600 focus:ring-emerald-500"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Discourage search engines (noindex, nofollow)" })
+                ] })
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338] flex items-center justify-between", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Publish" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "span",
+                  {
+                    className: `text-[10px] font-bold px-2 py-0.5 rounded ${form.published ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`,
+                    children: form.published ? "Live" : "Draft"
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 space-y-3 text-xs", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between text-[#646970]", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Status:" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-black", children: form.published ? "Published" : "Draft" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between text-[#646970]", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Visibility:" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-black", children: form.noIndexNoFollow ? "Hidden from Google" : "Public Index" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-2 border-t border-[#f0f0f1] flex flex-col gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "button",
+                    {
+                      type: "submit",
+                      disabled: saving,
+                      className: "w-full bg-[#2271b1] hover:bg-[#135e96] text-white py-2 rounded text-xs font-bold shadow-sm transition disabled:opacity-50 flex items-center justify-center gap-1.5",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { className: "w-3.5 h-3.5" }),
+                        saving ? "Saving..." : (editing == null ? void 0 : editing.id) ? "Update Area" : "Publish Area"
+                      ]
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => setViewMode("list"),
+                      className: "w-full border border-[#c3c4c7] hover:bg-slate-50 text-[#50575e] py-1.5 rounded text-xs font-semibold transition text-center",
+                      children: "Cancel & Return"
+                    }
+                  )
+                ] })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-2.5 font-semibold text-xs text-[#2c3338] flex items-center justify-between", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Hero Banner Image" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-3.5 h-3.5 text-emerald-600" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4 space-y-3", children: form.heroImage ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative aspect-[16/9] rounded border border-[#c3c4c7] overflow-hidden bg-slate-900 shadow-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: form.heroImage, alt: "Area Hero", className: "w-full h-full object-cover" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => {
+                        setMediaTarget("area-hero");
+                        setMediaModalOpen(true);
+                      },
+                      className: "flex-1 border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 py-1.5 rounded text-xs font-semibold transition",
+                      children: "Change Image"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => setForm({ ...form, heroImage: "" }),
+                      className: "text-red-600 hover:text-red-800 text-xs px-2",
+                      children: "Remove"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "text",
+                    value: form.heroImage,
+                    onChange: (e) => setForm({ ...form, heroImage: e.target.value }),
+                    placeholder: "Or enter direct image URL",
+                    className: "w-full border border-[#8c8f94] rounded px-2 py-1 text-[11px] font-mono"
+                  }
+                )
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => {
+                    setMediaTarget("area-hero");
+                    setMediaModalOpen(true);
+                  },
+                  className: "w-full border border-dashed border-[#8c8f94] hover:bg-slate-50 text-[#2271b1] py-6 rounded text-xs font-semibold transition text-center flex flex-col items-center justify-center gap-1.5",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { className: "w-4 h-4 text-slate-400" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "+ Select Hero Banner from Media" })
+                  ]
+                }
+              ) })
+            ] })
+          ] })
+        ] }),
+        viewMode === "list" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center justify-between gap-4 text-xs", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-x-2 text-[#50575e]", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "span",
+                {
+                  onClick: () => setStatusFilter("all"),
+                  className: `cursor-pointer ${statusFilter === "all" ? "font-bold text-black" : "text-[#2271b1] hover:underline"}`,
+                  children: [
+                    "All (",
+                    areas.length,
+                    ")"
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#c3c4c7]", children: "|" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "span",
+                {
+                  onClick: () => setStatusFilter("published"),
+                  className: `cursor-pointer ${statusFilter === "published" ? "font-bold text-black" : "text-[#2271b1] hover:underline"}`,
+                  children: [
+                    "Published (",
+                    areas.filter((a) => a.published !== false).length,
+                    ")"
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#c3c4c7]", children: "|" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "span",
+                {
+                  onClick: () => setStatusFilter("draft"),
+                  className: `cursor-pointer ${statusFilter === "draft" ? "font-bold text-black" : "text-[#2271b1] hover:underline"}`,
+                  children: [
+                    "Drafts (",
+                    areas.filter((a) => a.published === false).length,
+                    ")"
+                  ]
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "text",
+                  placeholder: "Search service areas...",
+                  value: searchQuery,
+                  onChange: (e) => setSearchQuery(e.target.value),
+                  className: "border border-[#8c8f94] bg-white rounded pl-8 pr-2.5 py-1 text-xs outline-none focus:border-[#2271b1] w-52"
+                }
+              )
+            ] }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "overflow-x-auto w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-xs min-w-[750px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-left w-16", children: "Hero Image" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-left", children: "Area Page Title" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-left", children: "URL Slug" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-center", children: "Hero Badge" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-center", children: "FAQs" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-center", children: "Status" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-3 text-right", children: "Actions" })
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { className: "divide-y divide-[#f0f0f1] text-[#2c3338]", children: loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 7, className: "text-center py-10 text-slate-500 font-semibold", children: "Loading service areas..." }) }) : filteredAreas.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 7, className: "text-center py-10 text-slate-500", children: 'No service areas found. Click "Add New Area" to create one.' }) }) : filteredAreas.map((area) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-14 h-9 rounded bg-slate-900 overflow-hidden border border-slate-200", children: area.heroImage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "img",
+                {
+                  src: area.heroImage,
+                  alt: area.title,
+                  className: "w-full h-full object-cover"
+                }
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full h-full flex items-center justify-center text-slate-400", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3.5 h-3.5" }) }) }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-2 px-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-sm text-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "span",
+                  {
+                    onClick: () => openEditArea(area),
+                    className: "hover:underline cursor-pointer",
+                    children: area.title
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-[11px] text-[#555] pt-0.5", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => openEditArea(area),
+                      className: "text-[#2271b1] hover:underline",
+                      children: "Edit"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => toggleAreaStatus(area),
+                      className: "text-slate-600 hover:underline",
+                      children: area.published !== false ? "Draft" : "Publish"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => deleteArea(area),
+                      className: "text-red-600 hover:underline",
+                      children: "Delete"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "a",
+                    {
+                      href: `/service-areas/${area.slug}`,
+                      target: "_blank",
+                      rel: "noreferrer",
+                      className: "text-emerald-700 hover:underline",
+                      children: "View Live"
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-2 px-3 font-mono text-[#2271b1] text-xs", children: [
+                "/service-areas/",
+                area.slug
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-slate-100 border border-slate-200 text-slate-700 px-2 py-0.5 rounded text-[10px] font-mono", children: area.heroBadge || "CHAUFFEUR SERVICE" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-semibold", children: [
+                Array.isArray(area.faqs) ? area.faqs.length : 0,
+                " FAQs"
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "span",
+                {
+                  onClick: () => toggleAreaStatus(area),
+                  className: `cursor-pointer inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${area.published !== false ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200" : "bg-amber-100 text-amber-800 hover:bg-amber-200"}`,
+                  title: "Click to toggle status",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "span",
+                      {
+                        className: `w-1.5 h-1.5 rounded-full ${area.published !== false ? "bg-emerald-600" : "bg-amber-600"}`
+                      }
+                    ),
+                    area.published !== false ? "Published" : "Draft"
+                  ]
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-2 px-3 text-right space-x-1.5", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => openEditArea(area),
+                    className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded text-[11px] font-semibold transition",
+                    children: "Edit"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "a",
+                  {
+                    href: `/service-areas/${area.slug}`,
+                    target: "_blank",
+                    rel: "noreferrer",
+                    className: "border border-[#c3c4c7] hover:bg-white text-[#2271b1] px-2 py-1 rounded text-[11px] font-semibold transition inline-flex items-center gap-0.5",
+                    children: "View"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => deleteArea(area),
+                    className: "border border-red-300 text-red-600 hover:bg-red-50 px-2 py-1 rounded text-[11px] font-semibold transition",
+                    children: "Delete"
+                  }
+                )
+              ] })
+            ] }, area.id)) })
+          ] }) }) })
+        ] }),
+        mediaModalOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 animate-fadeIn text-xs", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white shadow-xl rounded-sm w-full max-w-4xl border border-[#c3c4c7] flex flex-col overflow-hidden max-h-[85vh]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f6f7f7] border-b border-[#c3c4c7] px-4 py-3 flex justify-between items-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "font-bold text-sm text-[#23282d] flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { className: "w-4 h-4 text-[#2271b1]" }),
+              "Select Image for",
+              " ",
+              mediaTarget === "page-hero" ? "Main /service-areas Hero Banner" : `Service Area Hero Banner`
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  setMediaModalOpen(false);
+                  setSelectedMediaUrl(null);
+                },
+                className: "text-[#a7aaad] hover:text-[#2c3338] transition",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-5 h-5" })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col md:flex-row flex-1 overflow-y-auto min-h-[400px]", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 p-4 overflow-y-auto bg-slate-50 border-r border-[#c3c4c7]", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 border-b border-[#ddd] pb-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-[#2c3338]", children: "Media Library" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 bg-white px-2.5 py-1 rounded-sm text-xs font-semibold transition shadow-sm flex items-center gap-1 cursor-pointer", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { className: "w-3.5 h-3.5" }),
+                    uploadingMedia ? "Uploading..." : "Upload New Image",
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "file",
+                        accept: "image/*",
+                        className: "hidden",
+                        onChange: (e) => handleMediaUpload(e.target.files)
+                      }
+                    )
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[#646970] text-xs", children: [
+                  mediaList.length,
+                  " total images"
+                ] })
+              ] }),
+              mediaList.length > 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3", children: mediaList.map((url, i) => {
+                const isSelected = selectedMediaUrl === url;
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    onClick: () => setSelectedMediaUrl(url),
+                    className: `aspect-video bg-white border cursor-pointer relative overflow-hidden group shadow-xs rounded-sm ${isSelected ? "border-4 border-[#2271b1]" : "border-[#c3c4c7] hover:border-[#8c8f94]"}`,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: url, alt: "", className: "w-full h-full object-cover" }),
+                      isSelected && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-1 right-1 bg-[#2271b1] text-white rounded-full p-0.5 shadow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-3.5 h-3.5" }) })
+                    ]
+                  },
+                  i
+                );
+              }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: 'No media items uploaded yet. Click "Upload New Image" above.' })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full md:w-72 bg-[#f6f7f7] p-4 flex flex-col justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wide text-[#646970] border-b border-[#ddd] pb-1.5 mb-3", children: "Selected Image" }),
+                selectedMediaUrl ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-video bg-slate-900 border border-[#c3c4c7] rounded overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "img",
+                    {
+                      src: selectedMediaUrl,
+                      alt: "Selected preview",
+                      className: "w-full h-full object-cover"
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] text-[#646970] truncate font-mono", children: selectedMediaUrl.split("/").pop() })
+                ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 py-10 text-center", children: "Click an image to preview and select it." })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#ddd] pt-4 flex justify-end gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => {
+                      setMediaModalOpen(false);
+                      setSelectedMediaUrl(null);
+                    },
+                    className: "border border-[#c3c4c7] hover:bg-slate-100 px-3 py-1.5 rounded-sm font-semibold transition bg-white text-[#50575e]",
+                    children: "Cancel"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: confirmMediaSelection,
+                    disabled: !selectedMediaUrl,
+                    className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-1.5 rounded-sm font-semibold shadow-sm transition disabled:opacity-40",
+                    children: "Use Selected Image"
+                  }
+                )
               ] })
             ] })
           ] })
-        ] })
+        ] }) })
       ] });
     }
     function toBase64(file) {
@@ -49147,6 +50282,228 @@ ${escapeText(this.code(index, length))}
         } })
       ] });
     }
+    function ServiceAreas() {
+      const { settings } = useSettings();
+      const [areas, setAreas] = reactExports.useState([]);
+      const [loading, setLoading] = reactExports.useState(true);
+      const [pageSettings, setPageSettings] = reactExports.useState({
+        hero_enabled: true,
+        hero_tag: "SERVICE AREAS",
+        hero_title: "Explore TravelLuxx Service Areas Across the UK",
+        hero_description: "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location and schedule.",
+        hero_button_text: "Plan Your Journey",
+        hero_button_url: "/#calculator-section",
+        hero_image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+        meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
+        meta_description: "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer."
+      });
+      const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
+      reactExports.useEffect(() => {
+        window.scrollTo(0, 0);
+        fetch("/api/service-areas").then((res) => res.json()).then((data) => {
+          if (Array.isArray(data)) setAreas(data);
+        }).catch((err) => console.error("Error loading service areas:", err)).finally(() => setLoading(false));
+        fetch("/api/service-areas-page-settings").then((res) => res.json()).then((data) => {
+          if (data && !data.error) setPageSettings((prev) => ({ ...prev, ...data }));
+        }).catch((err) => console.error("Error loading service areas page settings:", err));
+      }, []);
+      reactExports.useEffect(() => {
+        const baseUrl = "https://travelluxx.co.uk";
+        const pageUrl = `${baseUrl}/service-areas`;
+        const metaTitle = pageSettings.meta_title || "Service Areas | TravelLuxx UK";
+        const metaDesc = pageSettings.meta_description || pageSettings.hero_description;
+        document.title = metaTitle;
+        const setMeta = (attr, attrVal, content) => {
+          let el = document.querySelector(`meta[${attr}='${attrVal}']`);
+          if (!el) {
+            el = document.createElement("meta");
+            el.setAttribute(attr, attrVal);
+            document.head.appendChild(el);
+          }
+          el.setAttribute("content", content);
+        };
+        setMeta("name", "description", metaDesc);
+        setMeta("property", "og:title", metaTitle);
+        setMeta("property", "og:description", metaDesc);
+        setMeta("property", "og:url", pageUrl);
+        setMeta("property", "og:type", "website");
+        let canonical = document.querySelector("link[rel='canonical']");
+        if (!canonical) {
+          canonical = document.createElement("link");
+          canonical.setAttribute("rel", "canonical");
+          document.head.appendChild(canonical);
+        }
+        canonical.setAttribute("href", pageUrl);
+      }, [pageSettings]);
+      const phone = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+      const phoneLabel = phone.startsWith("44") ? `+44 ${phone.slice(2, 6)} ${phone.slice(6)}` : phone;
+      const defaultFaqs = [
+        {
+          question: "Which areas do TravelLuxx chauffeur services cover?",
+          answer: "We provide executive private travel across Solihull, Birmingham, the West Midlands, Warwickshire, London, and nationwide airport transfers to all major UK terminals."
+        },
+        {
+          question: "Can I book long-distance transfers between cities and airports?",
+          answer: "Yes, our door-to-door private hire service operates 24/7 across the UK with fixed pricing and no surge fees, including Heathrow, Gatwick, Manchester, and Birmingham Airport."
+        },
+        {
+          question: "Do you monitor flights for airport pickups in these areas?",
+          answer: "Every airport booking includes live flight tracking and 60 minutes complimentary waiting time after landing."
+        }
+      ];
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: (id) => {
+          if (id === "hero" || !id) window.location.href = "/";
+        } }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-grow", children: [
+          pageSettings.hero_enabled !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-[500px] lg:min-h-[560px] flex items-center bg-[#070b14] overflow-hidden", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-opacity duration-1000 opacity-35",
+                style: { backgroundImage: `url('${pageSettings.hero_image}')` }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-r from-[#070b14] via-[#070b14]/90 to-transparent z-10" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-[#070b14] via-transparent to-transparent z-10" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-2xl", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-widest uppercase mb-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3.5 h-3.5" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: pageSettings.hero_tag || "SERVICE AREAS" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-5", children: pageSettings.hero_title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl", children: pageSettings.hero_description }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-stretch sm:items-center gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "a",
+                  {
+                    href: pageSettings.hero_button_url || "/#calculator-section",
+                    className: "inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-3.5 rounded-xl text-sm transition duration-200 shadow-lg shadow-emerald-500/20",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: pageSettings.hero_button_text || "Plan Your Journey" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4" })
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "a",
+                  {
+                    href: `tel:${phone}`,
+                    className: "inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold px-6 py-3.5 rounded-xl text-sm border border-white/20 transition duration-200",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                      "Call ",
+                      phoneLabel
+                    ] })
+                  }
+                )
+              ] })
+            ] }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 sm:py-24 bg-white border-b border-slate-200/80", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-3xl mx-auto mb-14", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-2", children: "Locations & Regions" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight", children: "All Covered Service Areas" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 text-slate-600 text-sm sm:text-base", children: "Click on any area below to view local chauffeur transfer information, route details, and local FAQs." })
+            ] }),
+            loading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center items-center py-20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) }) : areas.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-16 bg-slate-50 rounded-2xl border border-slate-200", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-12 h-12 text-slate-400 mx-auto mb-3" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-base font-bold text-slate-800", children: "No service areas found" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-500 mt-1", children: "Check back soon or contact us to arrange private travel to your destination." })
+            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8", children: areas.map((area) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Link$1,
+              {
+                to: `/service-areas/${area.slug}`,
+                className: "group flex flex-col bg-slate-50 hover:bg-white border border-slate-200 hover:border-emerald-500/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative aspect-[16/9] overflow-hidden bg-slate-950", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "img",
+                      {
+                        src: area.heroImage || "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80",
+                        alt: area.title,
+                        className: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-3 left-4 right-4 flex items-center justify-between", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold tracking-wide uppercase", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-3 h-3" }),
+                      area.heroBadge || area.title
+                    ] }) })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 flex-1 flex flex-col justify-between", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition", children: area.title }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-xs text-slate-600 line-clamp-3 leading-relaxed", children: area.heroDescription || "Private chauffeur travel and airport transfers covering all destinations in and around " + area.title + "." })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:text-emerald-600", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "View Area Chauffeur Services" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-4 h-4 group-hover:translate-x-1 transition-transform" })
+                    ] })
+                  ] })
+                ]
+              },
+              area.id
+            )) })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 bg-slate-900 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-6 h-6" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-base text-white", children: "Licensed & Insured Chauffeurs" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1 leading-relaxed", children: "DBS-checked drivers operating premium Mercedes-Benz and Audi vehicles for maximum passenger safety." })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-6 h-6" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-base text-white", children: "Fixed Rates & No Surge" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1 leading-relaxed", children: "Pre-booked fixed fares with zero hidden surcharges or peak pricing regardless of traffic delays." })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plane, { className: "w-6 h-6" }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-base text-white", children: "Flight Tracking & Wait Time" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-slate-400 mt-1 leading-relaxed", children: "Every airport journey features real-time flight monitoring and 60 minutes free waiting time." })
+              ] })
+            ] })
+          ] }) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 sm:py-24 bg-white", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-12", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-2", children: "Questions & Answers" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl sm:text-3xl font-extrabold text-slate-900", children: "Frequently Asked Questions About Service Areas" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "divide-y divide-slate-200 border-y border-slate-200", children: defaultFaqs.map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-5", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    "aria-expanded": isOpen,
+                    onClick: () => setOpenFaqIndex(isOpen ? null : index),
+                    className: "flex w-full items-center justify-between gap-4 text-left font-semibold text-slate-900 text-sm sm:text-base",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: faq.question }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        ChevronDown,
+                        {
+                          className: `h-5 w-5 shrink-0 text-emerald-700 transition-transform ${isOpen ? "rotate-180" : ""}`
+                        }
+                      )
+                    ]
+                  }
+                ),
+                isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 pr-8 text-xs sm:text-sm leading-relaxed text-slate-600", children: faq.answer })
+              ] }, index);
+            }) })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: (id) => {
+          if (id === "hero" || !id) window.location.href = "/";
+        } })
+      ] });
+    }
     function RenaxLayout({
       settings,
       calculatorPickup,
@@ -49880,6 +51237,7 @@ ${trimmed}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/blog/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogPostDetail, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services", element: /* @__PURE__ */ jsxRuntimeExports.jsx(Services, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceDetail, {}) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/service-areas", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RenaxLayout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreas, {}) }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/service-areas/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreaPage, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) })
       ] }) }) });

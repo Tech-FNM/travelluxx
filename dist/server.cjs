@@ -51,6 +51,7 @@ var INQUIRIES_PATH = import_path.default.join(process.cwd(), "inquiries.json");
 var SERVICES_PATH = import_path.default.join(process.cwd(), "services.json");
 var SERVICE_AREAS_PATH = import_path.default.join(process.cwd(), "service_areas.json");
 var SERVICES_SETTINGS_PATH = import_path.default.join(process.cwd(), "services_settings.json");
+var SERVICE_AREAS_SETTINGS_PATH = import_path.default.join(process.cwd(), "service_areas_settings.json");
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://info_db_user:rexkTuz4elj0srRx@cluster0.utakxdh.mongodb.net/travelluxx?retryWrites=true&w=majority&appName=Cluster0";
 var BookingSchema = new import_mongoose.default.Schema({
   id: { type: String, required: true, unique: true },
@@ -1587,6 +1588,53 @@ app.get("/api/services-page-settings", async (req, res) => {
   } catch (e) {
   }
   return res.json(readServicesSettings());
+});
+app.get("/api/service-areas-page-settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const doc = await SettingModel.findOne({ key: "service_areas_page_settings" });
+    if (doc && doc.value) return res.json(doc.value);
+  } catch (e) {
+  }
+  try {
+    if (import_fs.default.existsSync(SERVICE_AREAS_SETTINGS_PATH)) {
+      return res.json(JSON.parse(import_fs.default.readFileSync(SERVICE_AREAS_SETTINGS_PATH, "utf8")));
+    }
+  } catch (e) {
+  }
+  return res.json({
+    hero_enabled: true,
+    hero_tag: "SERVICE AREAS",
+    hero_title: "Explore TravelLuxx Service Areas Across the UK",
+    hero_description: "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location and schedule.",
+    hero_button_text: "Plan Your Journey",
+    hero_button_url: "/#calculator-section",
+    hero_image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
+    meta_description: "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer."
+  });
+});
+app.post("/api/admin/service-areas-page-settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    if (MONGODB_URI) {
+      await SettingModel.findOneAndUpdate(
+        { key: "service_areas_page_settings" },
+        { key: "service_areas_page_settings", value: req.body },
+        { upsert: true, new: true }
+      );
+    }
+  } catch (err) {
+    console.error("Error saving service areas page settings to MongoDB:", err);
+  }
+  try {
+    if (!process.env.VERCEL) {
+      import_fs.default.writeFileSync(SERVICE_AREAS_SETTINGS_PATH, JSON.stringify(req.body, null, 2));
+    }
+  } catch (err) {
+    console.error("Error writing service_areas_settings.json:", err);
+  }
+  return res.json({ success: true, settings: req.body });
 });
 app.post("/api/admin/services-page-settings", async (req, res) => {
   const newSettings = req.body || {};

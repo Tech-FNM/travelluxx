@@ -14,6 +14,7 @@ import DynamicPage from "./pages/DynamicPage";
 import Services from "./pages/Services";
 import ServiceDetail from "./pages/ServiceDetail";
 import ServiceAreaPage from "./pages/ServiceAreaPage";
+import ServiceAreas from "./pages/ServiceAreas";
 import RenaxLayout from "./components/RenaxLayout";
 import { trackVisit, trackClick } from "./utils/analytics";
 
@@ -361,7 +362,8 @@ export default function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
 
-          {/* SERVICE AREA LANDING PAGES */}
+          {/* SERVICE AREAS PAGES */}
+          <Route path="/service-areas" element={<RenaxLayout><ServiceAreas /></RenaxLayout>} />
           <Route path="/service-areas/:slug" element={<ServiceAreaPage />} />
 
           {/* DYNAMIC CMS PAGES */}
