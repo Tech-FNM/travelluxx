@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DHw3ZWlo.js"(exports, module) {
+  "assets/index-BlpJ2xjI.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16136,13 +16136,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     const SettingsContext = reactExports.createContext(void 0);
     function SettingsProvider({ children }) {
-      const [settings, setSettings] = reactExports.useState(null);
+      const [settings, setSettings] = reactExports.useState(() => {
+        try {
+          const cached = localStorage.getItem("travelluxx_cached_settings");
+          return cached ? JSON.parse(cached) : null;
+        } catch (e) {
+          return null;
+        }
+      });
       const [pages, setPages] = reactExports.useState([]);
       const [services, setServices] = reactExports.useState([]);
       const [posts, setPosts] = reactExports.useState([]);
       const [servicesPageSettings, setServicesPageSettings] = reactExports.useState(null);
-      const [menuItems, setMenuItems] = reactExports.useState([]);
-      const [isLoading, setIsLoading] = reactExports.useState(true);
+      const [menuItems, setMenuItems] = reactExports.useState(() => {
+        try {
+          const cached = localStorage.getItem("travelluxx_cached_menu");
+          return cached ? JSON.parse(cached) : [];
+        } catch (e) {
+          return [];
+        }
+      });
+      const [isLoading, setIsLoading] = reactExports.useState(false);
       const fetchSettings = async () => {
         try {
           const [
@@ -16176,6 +16190,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             menuItemsRes.json()
           ]);
           setSettings(settingsData);
+          try {
+            localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
+            localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
+          } catch (e) {
+          }
           setPages(Array.isArray(pagesData) ? pagesData : []);
           setServices(Array.isArray(servicesData) ? servicesData : []);
           setPosts(Array.isArray(postsData) ? postsData : []);

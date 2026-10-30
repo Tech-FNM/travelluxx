@@ -15,13 +15,27 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<any>(() => {
+    try {
+      const cached = localStorage.getItem("travelluxx_cached_settings");
+      return cached ? JSON.parse(cached) : null;
+    } catch (e) {
+      return null;
+    }
+  });
   const [pages, setPages] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [servicesPageSettings, setServicesPageSettings] = useState<any>(null);
-  const [menuItems, setMenuItems] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [menuItems, setMenuItems] = useState<any[]>(() => {
+    try {
+      const cached = localStorage.getItem("travelluxx_cached_menu");
+      return cached ? JSON.parse(cached) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSettings = async () => {
     try {
@@ -58,6 +72,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       ]);
 
       setSettings(settingsData);
+      try {
+        localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
+        localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
+      } catch (e) {}
       setPages(Array.isArray(pagesData) ? pagesData : []);
       setServices(Array.isArray(servicesData) ? servicesData : []);
       setPosts(Array.isArray(postsData) ? postsData : []);
