@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-fEFbPWdK.js"(exports, module) {
+  "assets/index-DHw3ZWlo.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -51125,7 +51125,7 @@ ${trimmed}
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/blog/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(BlogPostDetail, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services", element: /* @__PURE__ */ jsxRuntimeExports.jsx(Services, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/services/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceDetail, {}) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/service-areas", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RenaxLayout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreas, {}) }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/service-areas", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreas, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/service-areas/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreaPage, {}) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Route$1, { path: "/:slug", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DynamicPage, {}) })
       ] }) }) });

@@ -363,7 +363,7 @@ export default function App() {
           <Route path="/services/:slug" element={<ServiceDetail />} />
 
           {/* SERVICE AREAS PAGES */}
-          <Route path="/service-areas" element={<RenaxLayout><ServiceAreas /></RenaxLayout>} />
+          <Route path="/service-areas" element={<ServiceAreas />} />
           <Route path="/service-areas/:slug" element={<ServiceAreaPage />} />
 
           {/* DYNAMIC CMS PAGES */}

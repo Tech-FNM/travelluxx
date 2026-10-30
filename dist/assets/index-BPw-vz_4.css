@@ -1467,10 +1467,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     margin-bottom: calc(var(--spacing) * 4);
   }
 
-  .mb-5 {
-    margin-bottom: calc(var(--spacing) * 5);
-  }
-
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
@@ -1766,10 +1762,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .min-h-\[440px\] {
     min-height: 440px;
-  }
-
-  .min-h-\[500px\] {
-    min-height: 500px;
   }
 
   .min-h-\[520px\] {
@@ -3412,12 +3404,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --tw-gradient-stops: var(--tw-gradient-via-stops);
   }
 
-  .via-\[\#070b14\]\/90 {
-    --tw-gradient-via: oklab(14.9994% -.00205028 -.0207038 / .9);
-    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
-    --tw-gradient-stops: var(--tw-gradient-via-stops);
-  }
-
   .via-\[\#08090d\]\/40 {
     --tw-gradient-via: oklab(14.0529% .000499159 -.00900212 / .4);
     --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
@@ -4662,11 +4648,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     transition-duration: .7s;
   }
 
-  .duration-1000 {
-    --tw-duration: 1s;
-    transition-duration: 1s;
-  }
-
   .ease-in-out {
     --tw-ease: var(--ease-in-out);
     transition-timing-function: var(--ease-in-out);
@@ -5433,14 +5414,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       padding-block: calc(var(--spacing) * 5);
     }
 
-    .sm\:py-24 {
-      padding-block: calc(var(--spacing) * 24);
-    }
-
-    .sm\:py-32 {
-      padding-block: calc(var(--spacing) * 32);
-    }
-
     .sm\:pt-36 {
       padding-top: calc(var(--spacing) * 36);
     }
@@ -5734,10 +5707,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .lg\:min-h-\[500px\] {
       min-height: 500px;
-    }
-
-    .lg\:min-h-\[560px\] {
-      min-height: 560px;
     }
 
     .lg\:min-h-\[580px\] {
