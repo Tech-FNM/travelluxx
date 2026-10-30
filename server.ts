@@ -1423,12 +1423,15 @@ app.get("/api/pages", async (req, res) => {
 });
 
 app.get("/api/pages/:slug", async (req, res) => {
+  const cleanParam = (req.params.slug || "").replace(/^\/+/, "");
   try {
     await connectToDatabase();
-    const page = await PageModel.findOne({ slug: req.params.slug });
+    const page = await PageModel.findOne({
+      $or: [{ slug: cleanParam }, { id: cleanParam }]
+    });
     if (page) return res.json(page);
   } catch (e) {}
-  const page = readPages().find(p => p.slug === req.params.slug);
+  const page = readPages().find(p => p.slug === cleanParam || p.id === cleanParam);
   if (page) return res.json(page);
   return res.status(404).json({ error: "Page not found" });
 });
@@ -1446,10 +1449,12 @@ app.post("/api/admin/pages", async (req, res) => {
   try {
     await connectToDatabase();
     const pages = readPages();
+    const cleanSlug = (req.body.slug?.trim() || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `page-${Date.now()}`).replace(/^\/+/, "");
     const newPage = {
-      id: `page-${Date.now()}`,
-      slug: req.body.slug || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `page-${Date.now()}`,
       ...req.body,
+      id: `page-${Date.now()}`,
+      title: req.body.title?.trim() || "Untitled Page",
+      slug: cleanSlug,
       updatedAt: new Date().toISOString()
     };
     pages.push(newPage);
@@ -1470,6 +1475,9 @@ app.put("/api/admin/pages/:id", async (req, res) => {
   const updateData = { ...req.body };
   delete updateData._id;
   delete updateData.__v;
+  if (updateData.slug !== undefined) {
+    updateData.slug = String(updateData.slug).trim().replace(/^\/+/, "");
+  }
   try {
     await connectToDatabase();
     await PageModel.findOneAndUpdate({ id: req.params.id }, { ...updateData, updatedAt: new Date().toISOString() });

@@ -112,10 +112,19 @@ function toBase64(file: File): Promise<string> {
   });
 }
 
-export default function ServiceAreasManager() {
+interface ServiceAreasManagerProps {
+  initialViewMode?: "list" | "form" | "page-settings";
+  onBack?: () => void;
+}
+
+export default function ServiceAreasManager({ initialViewMode = "list", onBack }: ServiceAreasManagerProps = {}) {
   const [areas, setAreas] = useState<ServiceArea[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"list" | "form" | "page-settings">("list");
+  const [viewMode, setViewMode] = useState<"list" | "form" | "page-settings">(initialViewMode);
+
+  useEffect(() => {
+    if (initialViewMode) setViewMode(initialViewMode);
+  }, [initialViewMode]);
   const [editing, setEditing] = useState<ServiceArea | null>(null);
   const [form, setForm] = useState(emptyArea);
   const [pageSettings, setPageSettings] = useState<ServiceAreasPageSettings>(defaultPageSettings);
@@ -446,10 +455,10 @@ export default function ServiceAreasManager() {
               </a>
               <button
                 type="button"
-                onClick={() => setViewMode("list")}
+                onClick={onBack ? onBack : () => setViewMode("list")}
                 className="border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-3.5 py-1.5 rounded text-xs font-semibold transition"
               >
-                Back to Areas List
+                {onBack ? "Back to Pages" : "Back to Areas List"}
               </button>
             </>
           ) : (

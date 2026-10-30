@@ -23,8 +23,22 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       return null;
     }
   });
-  const [pages, setPages] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
+  const [pages, setPages] = useState<any[]>(() => {
+    try {
+      const cached = localStorage.getItem("travelluxx_cached_pages");
+      return cached ? JSON.parse(cached) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [services, setServices] = useState<any[]>(() => {
+    try {
+      const cached = localStorage.getItem("travelluxx_cached_services");
+      return cached ? JSON.parse(cached) : [];
+    } catch (e) {
+      return [];
+    }
+  });
   const [posts, setPosts] = useState<any[]>([]);
   const [servicesPageSettings, setServicesPageSettings] = useState<any>(null);
   const [menuItems, setMenuItems] = useState<any[]>(() => {
@@ -35,9 +49,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       return [];
     }
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchSettings = async () => {
+    setIsLoading(true);
     try {
       const [
         settingsRes,
@@ -75,6 +90,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
         localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
+        localStorage.setItem("travelluxx_cached_pages", JSON.stringify(pagesData));
+        localStorage.setItem("travelluxx_cached_services", JSON.stringify(servicesData));
       } catch (e) {}
       setPages(Array.isArray(pagesData) ? pagesData : []);
       setServices(Array.isArray(servicesData) ? servicesData : []);

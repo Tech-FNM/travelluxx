@@ -1,19 +1,63 @@
-import React, { useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 
 export default function DynamicPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { settings, pages, isLoading } = useSettings();
+  const cleanSlug = slug?.replace(/^\/+|\/+$/g, "") || "";
+  const { settings, pages, isLoading: globalLoading } = useSettings();
 
-  const page = pages.find((p: any) => p.slug === slug || p.id === slug);
+  const [page, setPage] = useState<any>(() => {
+    return pages.find((p: any) => p.slug === cleanSlug || p.id === cleanSlug) || null;
+  });
+  const [fetching, setFetching] = useState(!page);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const fromContext = pages.find((p: any) => p.slug === cleanSlug || p.id === cleanSlug);
+    if (fromContext) {
+      setPage(fromContext);
+      setFetching(false);
+      setNotFound(false);
+    }
+
+    // Always fetch freshest content from the API
+    let active = true;
+    if (!fromContext) setFetching(true);
+    setNotFound(false);
+
+    fetch(`/api/pages/${encodeURIComponent(cleanSlug)}`)
+      .then(async res => {
+        if (!res.ok) throw new Error("Page not found");
+        const data = await res.json();
+        if (active) {
+          setPage(data);
+          setNotFound(false);
+        }
+      })
+      .catch(() => {
+        if (active && !fromContext) {
+          setPage(null);
+          setNotFound(true);
+        }
+      })
+      .finally(() => {
+        if (active) setFetching(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [cleanSlug, pages]);
 
   useEffect(() => {
     if (page) {
       const baseUrl = "https://travelluxx.co.uk";
-      const pageUrl = `${baseUrl}/${page.slug || slug}`;
+      const pageUrl = `${baseUrl}/${page.slug || cleanSlug}`;
 
       document.title = page.metaTitle || page.title || "Travelluxx";
       
@@ -104,21 +148,39 @@ export default function DynamicPage() {
       const existingScript = document.getElementById("jsonld-page-schema");
       if (existingScript) existingScript.remove();
     };
-  }, [page, settings]);
+  }, [page, settings, cleanSlug]);
 
-  if (isLoading) {
+  const isRenax = settings?.active_theme === "renax";
+
+  if (fetching || (globalLoading && !page)) {
     return (
-      <div className="min-h-screen bg-[#0c0d12] flex items-center justify-center font-sans">
+      <div className={`min-h-screen flex items-center justify-center font-sans ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`}>
         <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
-  if (!page) {
-    return <Navigate to="/" replace />;
+  if (notFound || !page) {
+    return (
+      <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>
+        <Navbar onScrollTo={() => {}} />
+        <main className="flex-1 flex flex-col items-center justify-center text-center px-6 py-28">
+          <h1 className="text-6xl font-black text-emerald-500 mb-4">404</h1>
+          <h2 className="text-2xl font-bold mb-2">Page Not Found</h2>
+          <p className="text-slate-400 max-w-md mb-8">
+            The page you are looking for does not exist or may have been moved.
+          </p>
+          <Link
+            to="/"
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition duration-200"
+          >
+            Back to Homepage
+          </Link>
+        </main>
+        <Footer onScrollTo={() => {}} />
+      </div>
+    );
   }
-
-  const isRenax = settings?.active_theme === "renax";
 
   return (
     <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>

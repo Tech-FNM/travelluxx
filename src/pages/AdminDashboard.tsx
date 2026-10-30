@@ -596,6 +596,7 @@ export default function AdminDashboard() {
   const [focusKeyphrasePage, setFocusKeyphrasePage] = useState("");
   const [editingHomepage, setEditingHomepage] = useState(false);
   const [editingServicesPage, setEditingServicesPage] = useState(false);
+  const [editingServiceAreasPage, setEditingServiceAreasPage] = useState(false);
   const [showMollieKey, setShowMollieKey] = useState(false);
   const [testEmailLoading, setTestEmailLoading] = useState(false);
   const [testEmailResult, setTestEmailResult] = useState<{success: boolean; message: string} | null>(null);
@@ -3112,6 +3113,10 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
+              ) : editingServiceAreasPage ? (
+                <div className="bg-transparent space-y-4">
+                  <ServiceAreasManager initialViewMode="page-settings" onBack={() => navigate("/admin/pages")} />
+                </div>
               ) : editingServicesPage ? (
                 <div className="bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm">
                   {/* WordPress Style Editor Top Bar */}
@@ -3860,7 +3865,7 @@ export default function AdminDashboard() {
                             <tr key={p.id} className="hover:bg-[#f6f7f7] transition group">
                               <td className="py-3 px-3 text-center"><input type="checkbox" className="rounded-sm border-[#8c8f94]" /></td>
                               <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
-                                <span onClick={() => openEditPage(p)} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1">{p.title}</span>
+                                <span onClick={() => openEditPage(p)} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1">{p.title || "(no title)"}</span>
                                 <div className="hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none">
                                   <button onClick={() => openEditPage(p)} className="text-[#2271b1] hover:text-[#00a0d2]">Edit</button>
                                   <span className="text-[#ddd]">|</span>
@@ -3868,10 +3873,10 @@ export default function AdminDashboard() {
                                   <span className="text-[#ddd]">|</span>
                                   <button onClick={() => deletePage(p.id)} className="text-[#b32d2e] hover:text-[#d63638]">Trash</button>
                                   <span className="text-[#ddd]">|</span>
-                                  <a href={`/${p.slug}`} target="_blank" className="text-[#2271b1] hover:text-[#00a0d2]">View</a>
+                                  <a href={`/${(p.slug || p.id || "").replace(/^\/+/, "")}`} target="_blank" rel="noreferrer" className="text-[#2271b1] hover:text-[#00a0d2]">View</a>
                                 </div>
                               </td>
-                              <td className="py-3 px-3 font-mono text-[#2271b1]">/{p.slug}</td>
+                              <td className="py-3 px-3 font-mono text-[#2271b1]">/{p.slug ? p.slug.replace(/^\/+/, "") : p.id}</td>
                               <td className="py-3 px-3 text-[#50575e]">Travelluxx Admin</td>
                               <td className="py-3 px-3 text-[#50575e]">{p.published !== false ? "Published" : "Draft"}</td>
                             </tr>
