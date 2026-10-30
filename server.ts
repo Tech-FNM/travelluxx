@@ -1478,29 +1478,57 @@ app.put("/api/admin/pages/:id", async (req, res) => {
   if (updateData.slug !== undefined) {
     updateData.slug = String(updateData.slug).trim().replace(/^\/+/, "");
   }
+  let dbPage = null;
   try {
     await connectToDatabase();
-    await PageModel.findOneAndUpdate({ id: req.params.id }, { ...updateData, updatedAt: new Date().toISOString() });
+    const filter = {
+      $or: [
+        { id: req.params.id },
+        { _id: req.params.id.match(/^[0-9a-fA-F]{24}$/) ? req.params.id : null },
+        { slug: req.params.id }
+      ].filter(Boolean)
+    };
+    dbPage = await PageModel.findOneAndUpdate(
+      filter,
+      { ...updateData, updatedAt: new Date().toISOString() },
+      { new: true }
+    );
   } catch (e) {
     console.error("Error updating MongoDB page:", e);
   }
 
   const pages = readPages();
-  const idx = pages.findIndex(p => p.id === req.params.id);
+  const idx = pages.findIndex(p => p.id === req.params.id || p._id === req.params.id || p.slug === req.params.id);
   if (idx !== -1) {
-    pages[idx] = { ...pages[idx], ...req.body, updatedAt: new Date().toISOString() };
+    pages[idx] = { ...pages[idx], ...updateData, updatedAt: new Date().toISOString() };
     writePages(pages);
     return res.json({ success: true, page: pages[idx] });
+  } else if (dbPage) {
+    // Also sync to pages.json
+    pages.push(dbPage.toObject ? dbPage.toObject() : dbPage);
+    writePages(pages);
+    return res.json({ success: true, page: dbPage });
+  } else {
+    const newEntry = { id: req.params.id, ...updateData, updatedAt: new Date().toISOString() };
+    pages.push(newEntry);
+    writePages(pages);
+    return res.json({ success: true, page: newEntry });
   }
-  return res.status(404).json({ error: "Page not found" });
 });
 
 app.delete("/api/admin/pages/:id", async (req, res) => {
   try {
     await connectToDatabase();
-    await PageModel.deleteOne({ id: req.params.id });
+    const filter = {
+      $or: [
+        { id: req.params.id },
+        { _id: req.params.id.match(/^[0-9a-fA-F]{24}$/) ? req.params.id : null },
+        { slug: req.params.id }
+      ].filter(Boolean)
+    };
+    await PageModel.deleteOne(filter);
   } catch (e) {}
-  writePages(readPages().filter(p => p.id !== req.params.id));
+  writePages(readPages().filter(p => p.id !== req.params.id && p._id !== req.params.id && p.slug !== req.params.id));
   return res.json({ success: true });
 });
 

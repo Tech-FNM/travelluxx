@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BlpJ2xjI.js"(exports, module) {
+  "assets/index-Dlpq2py1.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -13908,38 +13908,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         onError
       });
     }
-    function Navigate({
-      to,
-      replace: replace2,
-      state,
-      relative
-    }) {
-      invariant(
-        useInRouterContext(),
-        // TODO: This error is probably because they somehow have 2 versions of
-        // the router loaded. We can help them understand how to avoid that.
-        `<Navigate> may be used only in the context of a <Router> component.`
-      );
-      let { static: isStatic } = reactExports.useContext(NavigationContext);
-      warning(
-        !isStatic,
-        `<Navigate> must not be used on the initial render in a <StaticRouter>. This is a no-op, but you should modify your code so the <Navigate> is only ever rendered in response to some user interaction or state change.`
-      );
-      let { matches } = reactExports.useContext(RouteContext);
-      let { pathname: locationPathname } = useLocation();
-      let navigate = useNavigate();
-      let path = resolveTo(
-        to,
-        getResolveToMatches(matches),
-        locationPathname,
-        relative === "path"
-      );
-      let jsonPath = JSON.stringify(path);
-      reactExports.useEffect(() => {
-        navigate(JSON.parse(jsonPath), { replace: replace2, state, relative });
-      }, [navigate, jsonPath, relative, replace2, state]);
-      return null;
-    }
     function Route$1(props) {
       invariant(
         false,
@@ -16144,8 +16112,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           return null;
         }
       });
-      const [pages, setPages] = reactExports.useState([]);
-      const [services, setServices] = reactExports.useState([]);
+      const [pages, setPages] = reactExports.useState(() => {
+        try {
+          const cached = localStorage.getItem("travelluxx_cached_pages");
+          return cached ? JSON.parse(cached) : [];
+        } catch (e) {
+          return [];
+        }
+      });
+      const [services, setServices] = reactExports.useState(() => {
+        try {
+          const cached = localStorage.getItem("travelluxx_cached_services");
+          return cached ? JSON.parse(cached) : [];
+        } catch (e) {
+          return [];
+        }
+      });
       const [posts, setPosts] = reactExports.useState([]);
       const [servicesPageSettings, setServicesPageSettings] = reactExports.useState(null);
       const [menuItems, setMenuItems] = reactExports.useState(() => {
@@ -16156,8 +16138,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           return [];
         }
       });
-      const [isLoading, setIsLoading] = reactExports.useState(false);
+      const [isLoading, setIsLoading] = reactExports.useState(true);
       const fetchSettings = async () => {
+        setIsLoading(true);
         try {
           const [
             settingsRes,
@@ -16193,6 +16176,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           try {
             localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
             localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
+            localStorage.setItem("travelluxx_cached_pages", JSON.stringify(pagesData));
+            localStorage.setItem("travelluxx_cached_services", JSON.stringify(servicesData));
           } catch (e) {
           }
           setPages(Array.isArray(pagesData) ? pagesData : []);
@@ -39763,10 +39748,13 @@ ${escapeText(this.code(index, length))}
         reader.readAsDataURL(file);
       });
     }
-    function ServiceAreasManager() {
+    function ServiceAreasManager({ initialViewMode = "list", onBack } = {}) {
       const [areas, setAreas] = reactExports.useState([]);
       const [loading, setLoading] = reactExports.useState(true);
-      const [viewMode, setViewMode] = reactExports.useState("list");
+      const [viewMode, setViewMode] = reactExports.useState(initialViewMode);
+      reactExports.useEffect(() => {
+        if (initialViewMode) setViewMode(initialViewMode);
+      }, [initialViewMode]);
       const [editing, setEditing] = reactExports.useState(null);
       const [form, setForm] = reactExports.useState(emptyArea);
       const [pageSettings, setPageSettings] = reactExports.useState(defaultPageSettings);
@@ -40066,9 +40054,9 @@ ${escapeText(this.code(index, length))}
               "button",
               {
                 type: "button",
-                onClick: () => setViewMode("list"),
+                onClick: onBack ? onBack : () => setViewMode("list"),
                 className: "border border-[#c3c4c7] hover:bg-slate-50 bg-white text-[#50575e] px-3.5 py-1.5 rounded text-xs font-semibold transition",
-                children: "Back to Areas List"
+                children: onBack ? "Back to Pages" : "Back to Areas List"
               }
             )
           ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -41624,6 +41612,7 @@ ${escapeText(this.code(index, length))}
       const [focusKeyphrasePage, setFocusKeyphrasePage] = reactExports.useState("");
       const [editingHomepage, setEditingHomepage] = reactExports.useState(false);
       const [editingServicesPage, setEditingServicesPage] = reactExports.useState(false);
+      const [editingServiceAreasPage, setEditingServiceAreasPage] = reactExports.useState(false);
       const [showMollieKey, setShowMollieKey] = reactExports.useState(false);
       const [testEmailLoading, setTestEmailLoading] = reactExports.useState(false);
       const [testEmailResult, setTestEmailResult] = reactExports.useState(null);
@@ -42358,31 +42347,42 @@ ${escapeText(this.code(index, length))}
         }
       };
       const openQuickEditPage = (page) => {
-        setQuickEditingPageId(page.id);
+        const pageId2 = page.id || page._id || page.slug;
+        setQuickEditingPageId(pageId2);
         setQuickPageForm({
-          title: page.title,
-          slug: page.slug,
+          title: page.title || "",
+          slug: (page.slug || "").replace(/^\/+/, ""),
           published: page.published !== false
         });
       };
       const saveQuickPage = async (id) => {
-        const page = pages.find((p) => p.id === id);
+        var _a2, _b;
+        const page = pages.find((p) => (p.id || p._id || p.slug) === id);
         if (!page) return;
         setIsSaving(true);
         try {
-          const updatedPage = { ...page, ...quickPageForm };
-          const res = await fetch(`/api/admin/pages/${id}`, {
+          const pageId2 = page.id || page._id || page.slug || id;
+          const cleanSlug = (((_a2 = quickPageForm.slug) == null ? void 0 : _a2.trim()) || ((_b = quickPageForm.title) == null ? void 0 : _b.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")) || page.slug || pageId2).replace(/^\/+/, "");
+          const updatedPage = { ...page, ...quickPageForm, slug: cleanSlug };
+          const res = await fetch(`/api/admin/pages/${pageId2}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedPage)
           });
           if (res.ok) {
-            setPages((prev) => prev.map((p) => p.id === id ? { ...p, ...quickPageForm } : p));
+            const data = await res.json();
+            const savedPage = data.page || updatedPage;
+            setPages((prev) => prev.map((p) => (p.id || p._id || p.slug) === id ? { ...p, ...quickPageForm, slug: cleanSlug, ...savedPage } : p));
             setQuickEditingPageId(null);
-            showToast("Page updated!");
+            showToast("Page updated successfully!");
+            fetchPages();
+          } else {
+            const errData = await res.json().catch(() => ({}));
+            showToast(errData.error || "Failed to update page", "error");
           }
         } catch (err) {
           console.error(err);
+          showToast("Error updating page", "error");
         } finally {
           setIsSaving(false);
         }
@@ -43497,7 +43497,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
                       p.date || "N/A"
                     ] })
-                  ] }, p.id)) })
+                  ] }, pageId)) })
                 ] }) }) })
               ] })
             ] }),
@@ -44165,7 +44165,7 @@ ${escapeText(this.code(index, length))}
                     ] })
                   ] })
                 ] }) })
-              ] }) : editingServicesPage ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
+              ] }) : editingServiceAreasPage ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-transparent space-y-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ServiceAreasManager, { initialViewMode: "page-settings", onBack: () => navigate("/admin/pages") }) }) : editingServicesPage ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm overflow-hidden shadow-sm", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border-b border-[#c3c4c7] px-4 py-2.5 flex items-center justify-between text-xs text-[#2c3338] select-none", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold text-slate-800 text-[13px]", children: "Services Main Page Layout (/services)" }) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
@@ -44804,152 +44804,169 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "System" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e] font-semibold text-emerald-700", children: "Services Catalog & Hero" })
                     ] }),
-                    pages.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "text-center py-8 text-[#646970]", children: "No pages found." }) }) : pages.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map((p) => quickEditingPageId === p.id ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "bg-[#f5f7fa] border-y-2 border-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 text-xs text-[#2c3338]", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wider text-[#646970] border-b border-[#ddd] pb-1 mb-2", children: "Quick Edit" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Title" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "input",
-                              {
-                                type: "text",
-                                value: quickPageForm.title,
-                                onChange: (e) => setQuickPageForm({ ...quickPageForm, title: e.target.value }),
-                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
-                              }
-                            )
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Slug" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "input",
-                              {
-                                type: "text",
-                                value: quickPageForm.slug,
-                                onChange: (e) => setQuickPageForm({ ...quickPageForm, slug: e.target.value }),
-                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
-                              }
-                            )
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Date" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1 items-center", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-xs text-[#2c3338] outline-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "08-Aug" }) }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "15", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "," }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "2026", className: "w-12 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "@" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "21", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ":" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "35", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" })
-                            ] })
-                          ] })
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Parent Page" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "(no parent)" }),
-                              pages.filter((item) => item.id !== p.id).map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: item.id, children: item.title }, item.id))
-                            ] })
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Order" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "input",
-                              {
-                                type: "number",
-                                defaultValue: 0,
-                                className: "w-20 border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338]"
-                              }
-                            )
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Template" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Default Template" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Full Width Page" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Landing Page" })
-                            ] })
-                          ] })
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Status" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                              "select",
-                              {
-                                value: quickPageForm.published ? "published" : "draft",
-                                onChange: (e) => setQuickPageForm({ ...quickPageForm, published: e.target.value === "published" }),
-                                className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]",
-                                children: [
-                                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "published", children: "Published" }),
-                                  /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "draft", children: "Draft" })
-                                ]
-                              }
-                            )
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 pt-2", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", defaultChecked: true, className: "rounded-sm border-[#8c8f94]" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Allow Comments" })
-                            ] }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Make this page private" })
-                            ] })
-                          ] })
-                        ] })
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 text-xs border-t border-[#ddd] pt-3", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "button",
-                          {
-                            type: "button",
-                            onClick: () => setQuickEditingPageId(null),
-                            className: "border border-[#c3c4c7] hover:bg-slate-100 text-[#50575e] px-3 py-1.5 rounded-sm font-semibold transition bg-white",
-                            children: "Cancel"
-                          }
-                        ),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                          "button",
-                          {
-                            type: "button",
-                            onClick: () => saveQuickPage(p.id),
-                            disabled: isSaving,
-                            className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm",
-                            children: [
-                              isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3 w-3 mr-1 text-white inline-block", fill: "none", viewBox: "0 0 24 24", children: [
-                                /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
-                                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
-                              ] }),
-                              "Update"
-                            ]
-                          }
-                        )
-                      ] })
-                    ] }) }) }, p.id) : /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }) }),
+                    (!searchQuery || "service areas".includes(searchQuery.toLowerCase()) || "service area".includes(searchQuery.toLowerCase()) || "areas".includes(searchQuery.toLowerCase())) && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group bg-emerald-50/20", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center text-emerald-600 font-bold", children: "★" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-semibold text-[#2271b1] max-w-xs", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => openEditPage(p), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1", children: p.title }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => navigate("/admin/pages/service-areas-page"), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800", children: "Service Areas Main Page (/service-areas)" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => navigate("/admin/pages/service-areas-page"), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit Content" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openQuickEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Quick Edit" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(p.id), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${p.slug}`, target: "_blank", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/service-areas", target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View Live" })
                         ] })
                       ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: [
-                        "/",
-                        p.slug
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "Travelluxx Admin" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: p.published !== false ? "Published" : "Draft" })
-                    ] }, p.id))
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: "/service-areas" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "System" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e] font-semibold text-emerald-700", children: "Service Areas Directory & Hero" })
+                    ] }),
+                    pages.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "text-center py-8 text-[#646970]", children: "No pages found." }) }) : pages.filter((p) => (p.title || "").toLowerCase().includes(searchQuery.toLowerCase())).map((p) => {
+                      const pageId2 = p.id || p._id || p.slug;
+                      return quickEditingPageId === pageId2 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "bg-[#f5f7fa] border-y-2 border-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 text-xs text-[#2c3338]", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wider text-[#646970] border-b border-[#ddd] pb-1 mb-2", children: "Quick Edit" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Title" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: quickPageForm.title,
+                                  onChange: (e) => setQuickPageForm({ ...quickPageForm, title: e.target.value }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Slug" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: quickPageForm.slug,
+                                  onChange: (e) => setQuickPageForm({ ...quickPageForm, slug: e.target.value }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Date" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-1 items-center", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-xs text-[#2c3338] outline-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "08-Aug" }) }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "15", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "," }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "2026", className: "w-12 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "@" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "21", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ":" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", defaultValue: "35", className: "w-8 border border-[#8c8f94] bg-white rounded-sm px-1 py-1 text-center text-xs" })
+                              ] })
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Parent Page" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "(no parent)" }),
+                                pages.filter((item) => item.id !== p.id).map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: item.id, children: item.title }, item.id))
+                              ] })
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Order" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "number",
+                                  defaultValue: 0,
+                                  className: "w-20 border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338]"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Template" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs text-[#2c3338] outline-none", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Default Template" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Full Width Page" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { children: "Landing Page" })
+                              ] })
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#2c3338] mb-1", children: "Status" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                "select",
+                                {
+                                  value: quickPageForm.published ? "published" : "draft",
+                                  onChange: (e) => setQuickPageForm({ ...quickPageForm, published: e.target.value === "published" }),
+                                  className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-[#2c3338]",
+                                  children: [
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "published", children: "Published" }),
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "draft", children: "Draft" })
+                                  ]
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 pt-2", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", defaultChecked: true, className: "rounded-sm border-[#8c8f94]" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Allow Comments" })
+                              ] }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-1.5 font-medium text-[#2c3338]", children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }),
+                                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Make this page private" })
+                              ] })
+                            ] })
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 text-xs border-t border-[#ddd] pt-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => setQuickEditingPageId(null),
+                              className: "border border-[#c3c4c7] hover:bg-slate-100 text-[#50575e] px-3 py-1.5 rounded-sm font-semibold transition bg-white",
+                              children: "Cancel"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => saveQuickPage(pageId2),
+                              disabled: isSaving,
+                              className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm",
+                              children: [
+                                isSaving && /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3 w-3 mr-1 text-white inline-block", fill: "none", viewBox: "0 0 24 24", children: [
+                                  /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
+                                  /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
+                                ] }),
+                                "Update"
+                              ]
+                            }
+                          )
+                        ] })
+                      ] }) }) }, p.id) : /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", className: "rounded-sm border-[#8c8f94]" }) }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-semibold text-[#2271b1] max-w-xs", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: () => openEditPage(p), className: "hover:text-[#00a0d2] cursor-pointer text-sm block mb-1", children: p.title || "(no title)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Edit" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openQuickEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Quick Edit" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(pageId2), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${(p.slug || p.id || "").replace(/^\/+/, "")}`, target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 font-mono text-[#2271b1]", children: [
+                          "/",
+                          p.slug ? p.slug.replace(/^\/+/, "") : p.id
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "Travelluxx Admin" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: p.published !== false ? "Published" : "Draft" })
+                      ] }, p.id);
+                    })
                   ] })
                 ] }) }) })
               ] })
@@ -49278,12 +49295,47 @@ ${escapeText(this.code(index, length))}
     }
     function DynamicPage() {
       const { slug } = useParams();
-      const { settings, pages, isLoading } = useSettings();
-      const page = pages.find((p) => p.slug === slug || p.id === slug);
+      const cleanSlug = (slug == null ? void 0 : slug.replace(/^\/+|\/+$/g, "")) || "";
+      const { settings, pages, isLoading: globalLoading } = useSettings();
+      const [page, setPage] = reactExports.useState(() => {
+        return pages.find((p) => p.slug === cleanSlug || p.id === cleanSlug) || null;
+      });
+      const [fetching, setFetching] = reactExports.useState(!page);
+      const [notFound, setNotFound] = reactExports.useState(false);
+      reactExports.useEffect(() => {
+        window.scrollTo(0, 0);
+        const fromContext = pages.find((p) => p.slug === cleanSlug || p.id === cleanSlug);
+        if (fromContext) {
+          setPage(fromContext);
+          setFetching(false);
+          setNotFound(false);
+        }
+        let active = true;
+        if (!fromContext) setFetching(true);
+        setNotFound(false);
+        fetch(`/api/pages/${encodeURIComponent(cleanSlug)}`).then(async (res) => {
+          if (!res.ok) throw new Error("Page not found");
+          const data = await res.json();
+          if (active) {
+            setPage(data);
+            setNotFound(false);
+          }
+        }).catch(() => {
+          if (active && !fromContext) {
+            setPage(null);
+            setNotFound(true);
+          }
+        }).finally(() => {
+          if (active) setFetching(false);
+        });
+        return () => {
+          active = false;
+        };
+      }, [cleanSlug, pages]);
       reactExports.useEffect(() => {
         if (page) {
           const baseUrl = "https://travelluxx.co.uk";
-          const pageUrl = `${baseUrl}/${page.slug || slug}`;
+          const pageUrl = `${baseUrl}/${page.slug || cleanSlug}`;
           document.title = page.metaTitle || page.title || "Travelluxx";
           const setMeta = (attr, attrVal, content) => {
             let el = document.querySelector(`meta[${attr}='${attrVal}']`);
@@ -49357,23 +49409,41 @@ ${escapeText(this.code(index, length))}
           const existingScript = document.getElementById("jsonld-page-schema");
           if (existingScript) existingScript.remove();
         };
-      }, [page, settings]);
-      if (isLoading) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-[#0c0d12] flex items-center justify-center font-sans", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }) });
-      }
-      if (!page) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate, { to: "/", replace: true });
-      }
+      }, [page, settings, cleanSlug]);
       const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+      if (fetching || globalLoading && !page) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `min-h-screen flex items-center justify-center font-sans ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }) });
+      }
+      if (notFound || !page) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
+          } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 flex flex-col items-center justify-center text-center px-6 py-28", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-6xl font-black text-emerald-500 mb-4", children: "404" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold mb-2", children: "Page Not Found" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 max-w-md mb-8", children: "The page you are looking for does not exist or may have been moved." }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Link$1,
+              {
+                to: "/",
+                className: "bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition duration-200",
+                children: "Back to Homepage"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
+          } })
+        ] });
+      }
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
         } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-6 py-28 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-4xl font-extrabold mb-8 ${isRenax ? "text-white" : "text-slate-900"}`, children: page.title }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-28 w-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-3xl sm:text-4xl font-extrabold mb-8 break-words ${isRenax ? "text-white" : "text-slate-900"}`, children: page.title }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "div",
             {
-              className: `prose max-w-none text-base leading-relaxed ${isRenax ? "prose-invert text-slate-300" : "prose-slate text-slate-700"}`,
+              className: `page-rich-content prose max-w-none text-base leading-relaxed break-words overflow-x-auto ${isRenax ? "prose-invert text-slate-300" : "prose-slate text-slate-700"}`,
               dangerouslySetInnerHTML: { __html: page.content }
             }
           )

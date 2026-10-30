@@ -185,11 +185,11 @@ export default function DynamicPage() {
   return (
     <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>
       <Navbar onScrollTo={() => {}} />
-      <main className="flex-1 max-w-4xl mx-auto px-6 py-28 w-full">
-        <div>
-          <h1 className={`text-4xl font-extrabold mb-8 ${isRenax ? "text-white" : "text-slate-900"}`}>{page.title}</h1>
+      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-28 w-full overflow-hidden">
+        <div className="w-full max-w-full">
+          <h1 className={`text-3xl sm:text-4xl font-extrabold mb-8 break-words ${isRenax ? "text-white" : "text-slate-900"}`}>{page.title}</h1>
           <div
-            className={`prose max-w-none text-base leading-relaxed ${isRenax ? "prose-invert text-slate-300" : "prose-slate text-slate-700"}`}
+            className={`page-rich-content prose max-w-none text-base leading-relaxed break-words overflow-x-auto ${isRenax ? "prose-invert text-slate-300" : "prose-slate text-slate-700"}`}
             dangerouslySetInnerHTML={{ __html: page.content }}
           />
         </div>

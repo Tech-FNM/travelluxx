@@ -233,3 +233,42 @@
 
 
 
+
+/* Page Rich Content Responsive & Word Wrap */
+.page-rich-content,
+.prose {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.page-rich-content *,
+.prose * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.page-rich-content table,
+.prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+.page-rich-content table td,
+.page-rich-content table th,
+.prose table td,
+.prose table th {
+  word-break: normal;
+  overflow-wrap: normal;
+  padding: 8px 12px;
+}
+.page-rich-content pre,
+.prose pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.page-rich-content img,
+.prose img {
+  max-width: 100%;
+  height: auto;
+}

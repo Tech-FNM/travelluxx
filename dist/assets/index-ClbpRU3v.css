@@ -3931,6 +3931,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
 
+  .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
+  }
+
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -4243,6 +4248,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .text-emerald-400 {
     color: var(--color-emerald-400);
+  }
+
+  .text-emerald-500 {
+    color: var(--color-emerald-500);
   }
 
   .text-emerald-600 {
@@ -6035,6 +6044,41 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 .service-area-content ol {
   list-style: decimal;
+}
+
+.page-rich-content, .prose {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.page-rich-content *, .prose * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.page-rich-content table, .prose table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+
+.page-rich-content table td, .page-rich-content table th, .prose table td, .prose table th {
+  word-break: normal;
+  overflow-wrap: normal;
+  padding: 8px 12px;
+}
+
+.page-rich-content pre, .prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.page-rich-content img, .prose img {
+  max-width: 100%;
+  height: auto;
 }
 
 @property --tw-translate-x {

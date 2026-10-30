@@ -1363,31 +1363,41 @@ export default function AdminDashboard() {
     }
   };
   const openQuickEditPage = (page: any) => {
-    setQuickEditingPageId(page.id);
+    const pageId = page.id || page._id || page.slug;
+    setQuickEditingPageId(pageId);
     setQuickPageForm({
-      title: page.title,
-      slug: page.slug,
+      title: page.title || "",
+      slug: (page.slug || "").replace(/^\/+/, ""),
       published: page.published !== false
     });
   };
   const saveQuickPage = async (id: string) => {
-    const page = pages.find(p => p.id === id);
+    const page = pages.find(p => (p.id || p._id || p.slug) === id);
     if (!page) return;
     setIsSaving(true);
     try {
-      const updatedPage = { ...page, ...quickPageForm };
-      const res = await fetch(`/api/admin/pages/${id}`, {
+      const pageId = page.id || page._id || page.slug || id;
+      const cleanSlug = (quickPageForm.slug?.trim() || quickPageForm.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || page.slug || pageId).replace(/^\/+/, "");
+      const updatedPage = { ...page, ...quickPageForm, slug: cleanSlug };
+      const res = await fetch(`/api/admin/pages/${pageId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedPage)
       });
       if (res.ok) {
-        setPages(prev => prev.map(p => p.id === id ? { ...p, ...quickPageForm } : p));
+        const data = await res.json();
+        const savedPage = data.page || updatedPage;
+        setPages(prev => prev.map(p => (p.id || p._id || p.slug) === id ? { ...p, ...quickPageForm, slug: cleanSlug, ...savedPage } : p));
         setQuickEditingPageId(null);
-        showToast("Page updated!");
+        showToast("Page updated successfully!");
+        fetchPages();
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        showToast(errData.error || "Failed to update page", "error");
       }
     } catch (err) {
       console.error(err);
+      showToast("Error updating page", "error");
     } finally {
       setIsSaving(false);
     }
@@ -2485,7 +2495,7 @@ export default function AdminDashboard() {
                               </td>
                             </tr>
                           ) : (
-                            <tr key={p.id} className="hover:bg-[#f6f7f7] transition group">
+                            <tr key={pageId} className="hover:bg-[#f6f7f7] transition group">
                               <td className="py-3 px-3 text-center"><input type="checkbox" className="rounded-sm border-[#8c8f94]" /></td>
                               <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
                                 <span onClick={() => openEditPost(p)} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1">{p.title}</span>
@@ -3741,10 +3751,31 @@ export default function AdminDashboard() {
                             <td className="py-3 px-3 text-[#50575e] font-semibold text-emerald-700">Services Catalog &amp; Hero</td>
                           </tr>
                         )}
-                        {pages.length === 0 ? (
+                        
+                        {/* Special Row: Service Areas Main Page Management */}
+                        {(!searchQuery || "service areas".includes(searchQuery.toLowerCase()) || "service area".includes(searchQuery.toLowerCase()) || "areas".includes(searchQuery.toLowerCase())) && (
+                          <tr className="hover:bg-[#f6f7f7] transition group bg-emerald-50/20">
+                            <td className="py-3 px-3 text-center text-emerald-600 font-bold">★</td>
+                            <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
+                              <span onClick={() => navigate("/admin/pages/service-areas-page")} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1 font-bold text-emerald-800">
+                                Service Areas Main Page (/service-areas)
+                              </span>
+                              <div className="hidden group-hover:flex items-center gap-1.5 text-xs font-normal text-[#555] select-none">
+                                <button onClick={() => navigate("/admin/pages/service-areas-page")} className="text-[#2271b1] hover:text-[#00a0d2]">Edit Content</button>
+                                <span className="text-[#ddd]">|</span>
+                                <a href="/service-areas" target="_blank" rel="noreferrer" className="text-[#2271b1] hover:text-[#00a0d2]">View Live</a>
+                              </div>
+                            </td>
+                            <td className="py-3 px-3 font-mono text-[#2271b1]">/service-areas</td>
+                            <td className="py-3 px-3 text-[#50575e]">System</td>
+                            <td className="py-3 px-3 text-[#50575e] font-semibold text-emerald-700">Service Areas Directory &amp; Hero</td>
+                          </tr>
+                        )}
+{pages.length === 0 ? (
                           <tr><td colSpan={5} className="text-center py-8 text-[#646970]">No pages found.</td></tr>
-                        ) : pages.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map(p => (
-                          quickEditingPageId === p.id ? (
+                        ) : pages.filter(p => (p.title || "").toLowerCase().includes(searchQuery.toLowerCase())).map(p => {
+                          const pageId = p.id || p._id || p.slug;
+                          return quickEditingPageId === pageId ? (
                             <tr key={p.id} className="bg-[#f5f7fa] border-y-2 border-[#2271b1]">
                               <td colSpan={5} className="p-4">
                                 <div className="space-y-4 text-xs text-[#2c3338]">
@@ -3852,7 +3883,7 @@ export default function AdminDashboard() {
                                     </button>
                                   <button
                                       type="button"
-                                      onClick={() => saveQuickPage(p.id)} disabled={isSaving}
+                                      onClick={() => saveQuickPage(pageId)} disabled={isSaving}
                                       className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm"
                                     >
                                       {isSaving && <svg className="animate-spin h-3 w-3 mr-1 text-white inline-block" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>}Update
@@ -3871,7 +3902,7 @@ export default function AdminDashboard() {
                                   <span className="text-[#ddd]">|</span>
                                   <button onClick={() => openQuickEditPage(p)} className="text-[#2271b1] hover:text-[#00a0d2]">Quick Edit</button>
                                   <span className="text-[#ddd]">|</span>
-                                  <button onClick={() => deletePage(p.id)} className="text-[#b32d2e] hover:text-[#d63638]">Trash</button>
+                                  <button onClick={() => deletePage(pageId)} className="text-[#b32d2e] hover:text-[#d63638]">Trash</button>
                                   <span className="text-[#ddd]">|</span>
                                   <a href={`/${(p.slug || p.id || "").replace(/^\/+/, "")}`} target="_blank" rel="noreferrer" className="text-[#2271b1] hover:text-[#00a0d2]">View</a>
                                 </div>
@@ -3880,8 +3911,8 @@ export default function AdminDashboard() {
                               <td className="py-3 px-3 text-[#50575e]">Travelluxx Admin</td>
                               <td className="py-3 px-3 text-[#50575e]">{p.published !== false ? "Published" : "Draft"}</td>
                             </tr>
-                          )
-                        ))}
+                          );
+                        })}
                       </tbody>
                     </table>
                     </div>

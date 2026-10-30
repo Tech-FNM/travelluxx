@@ -1290,13 +1290,16 @@ app.get("/api/pages", async (req, res) => {
   return res.json(readPages());
 });
 app.get("/api/pages/:slug", async (req, res) => {
+  const cleanParam = (req.params.slug || "").replace(/^\/+/, "");
   try {
     await connectToDatabase();
-    const page2 = await PageModel.findOne({ slug: req.params.slug });
+    const page2 = await PageModel.findOne({
+      $or: [{ slug: cleanParam }, { id: cleanParam }]
+    });
     if (page2) return res.json(page2);
   } catch (e) {
   }
-  const page = readPages().find((p) => p.slug === req.params.slug);
+  const page = readPages().find((p) => p.slug === cleanParam || p.id === cleanParam);
   if (page) return res.json(page);
   return res.status(404).json({ error: "Page not found" });
 });
@@ -1313,10 +1316,12 @@ app.post("/api/admin/pages", async (req, res) => {
   try {
     await connectToDatabase();
     const pages = readPages();
+    const cleanSlug = (req.body.slug?.trim() || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `page-${Date.now()}`).replace(/^\/+/, "");
     const newPage = {
-      id: `page-${Date.now()}`,
-      slug: req.body.slug || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `page-${Date.now()}`,
       ...req.body,
+      id: `page-${Date.now()}`,
+      title: req.body.title?.trim() || "Untitled Page",
+      slug: cleanSlug,
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     pages.push(newPage);
@@ -1335,28 +1340,58 @@ app.put("/api/admin/pages/:id", async (req, res) => {
   const updateData = { ...req.body };
   delete updateData._id;
   delete updateData.__v;
+  if (updateData.slug !== void 0) {
+    updateData.slug = String(updateData.slug).trim().replace(/^\/+/, "");
+  }
+  let dbPage = null;
   try {
     await connectToDatabase();
-    await PageModel.findOneAndUpdate({ id: req.params.id }, { ...updateData, updatedAt: (/* @__PURE__ */ new Date()).toISOString() });
+    const filter = {
+      $or: [
+        { id: req.params.id },
+        { _id: req.params.id.match(/^[0-9a-fA-F]{24}$/) ? req.params.id : null },
+        { slug: req.params.id }
+      ].filter(Boolean)
+    };
+    dbPage = await PageModel.findOneAndUpdate(
+      filter,
+      { ...updateData, updatedAt: (/* @__PURE__ */ new Date()).toISOString() },
+      { new: true }
+    );
   } catch (e) {
     console.error("Error updating MongoDB page:", e);
   }
   const pages = readPages();
-  const idx = pages.findIndex((p) => p.id === req.params.id);
+  const idx = pages.findIndex((p) => p.id === req.params.id || p._id === req.params.id || p.slug === req.params.id);
   if (idx !== -1) {
-    pages[idx] = { ...pages[idx], ...req.body, updatedAt: (/* @__PURE__ */ new Date()).toISOString() };
+    pages[idx] = { ...pages[idx], ...updateData, updatedAt: (/* @__PURE__ */ new Date()).toISOString() };
     writePages(pages);
     return res.json({ success: true, page: pages[idx] });
+  } else if (dbPage) {
+    pages.push(dbPage.toObject ? dbPage.toObject() : dbPage);
+    writePages(pages);
+    return res.json({ success: true, page: dbPage });
+  } else {
+    const newEntry = { id: req.params.id, ...updateData, updatedAt: (/* @__PURE__ */ new Date()).toISOString() };
+    pages.push(newEntry);
+    writePages(pages);
+    return res.json({ success: true, page: newEntry });
   }
-  return res.status(404).json({ error: "Page not found" });
 });
 app.delete("/api/admin/pages/:id", async (req, res) => {
   try {
     await connectToDatabase();
-    await PageModel.deleteOne({ id: req.params.id });
+    const filter = {
+      $or: [
+        { id: req.params.id },
+        { _id: req.params.id.match(/^[0-9a-fA-F]{24}$/) ? req.params.id : null },
+        { slug: req.params.id }
+      ].filter(Boolean)
+    };
+    await PageModel.deleteOne(filter);
   } catch (e) {
   }
-  writePages(readPages().filter((p) => p.id !== req.params.id));
+  writePages(readPages().filter((p) => p.id !== req.params.id && p._id !== req.params.id && p.slug !== req.params.id));
   return res.json({ success: true });
 });
 app.get("/api/services", async (req, res) => {
