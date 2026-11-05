@@ -1933,65 +1933,125 @@ app.post("/api/mollie/create-payment", async (req, res) => {
     const givenName = nameParts[0] && nameParts[0].length >= 2 ? nameParts[0] : "Customer";
     const familyName = nameParts.slice(1).join(" ") || "Traveler";
     const customerEmail = (bookingData.passengerEmail || bookingData.email || booking.passengerEmail || booking.email || "bookings@travelluxx.co.uk").trim();
+    let rawPhone = (bookingData.passengerPhone || booking.passengerPhone || booking.phone || "").trim();
+    let formattedPhone = rawPhone.replace(/[^\d+]/g, "");
+    if (formattedPhone.startsWith("0")) {
+      formattedPhone = "+44" + formattedPhone.substring(1);
+    } else if (formattedPhone && !formattedPhone.startsWith("+")) {
+      formattedPhone = "+" + formattedPhone;
+    }
+    if (!formattedPhone || formattedPhone.length < 8) {
+      formattedPhone = "+442079460991";
+    }
     const pickupStr = (bookingData.pickup || booking.pickup || "").trim();
     const ukPostcodeMatch = pickupStr.match(/[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}/i);
     const postalCode = ukPostcodeMatch ? ukPostcodeMatch[0].toUpperCase() : "SW1A 1AA";
     const streetAndNumber = pickupStr.length >= 5 ? pickupStr.substring(0, 80) : "10 Downing Street";
     const city = "London";
-    const paymentPayload = {
-      amount: {
-        currency: "GBP",
-        value: amountVal
-      },
-      description: `TravelLuxx Booking Ref: ${bookingId}`,
-      redirectUrl: `${appUrl}/?bookingStatus=success&bookingId=${bookingId}`,
-      webhookUrl: `${appUrl}/api/mollie/webhook`,
-      locale: "en_GB",
-      metadata: {
-        bookingId,
-        passengerName: fullName,
-        email: customerEmail,
-        vehicle: bookingData.vehicle || booking.vehicle || "Chauffeur"
-      },
-      billingAddress: {
-        givenName,
-        familyName,
-        email: customerEmail,
-        streetAndNumber,
-        postalCode,
-        city,
-        country: "GB"
-      },
-      lines: [
-        {
-          type: "physical",
-          description: `Chauffeur Service (${bookingData.vehicle || booking.vehicle || "Executive"} Class) - Ref: ${bookingId}`,
-          quantity: 1,
-          unitPrice: {
-            currency: "GBP",
-            value: amountVal
-          },
-          totalAmount: {
-            currency: "GBP",
-            value: amountVal
-          },
-          vatRate: "0.00",
-          vatAmount: {
-            currency: "GBP",
-            value: "0.00"
-          }
-        }
-      ]
+    const customerAddress = {
+      givenName,
+      familyName,
+      email: customerEmail,
+      phone: formattedPhone,
+      streetAndNumber,
+      postalCode,
+      city,
+      country: "GB"
     };
-    const payment = await mollieClient.payments.create(paymentPayload);
-    booking.molliePaymentId = payment.id;
+    let checkoutUrl = "";
+    let mollieId = "";
+    try {
+      const order = await mollieClient.orders.create({
+        amount: {
+          currency: "GBP",
+          value: amountVal
+        },
+        orderNumber: bookingId,
+        locale: "en_GB",
+        description: `TravelLuxx Booking Ref: ${bookingId}`,
+        redirectUrl: `${appUrl}/?bookingStatus=success&bookingId=${bookingId}`,
+        webhookUrl: `${appUrl}/api/mollie/webhook`,
+        billingAddress: customerAddress,
+        shippingAddress: customerAddress,
+        metadata: {
+          bookingId,
+          passengerName: fullName,
+          email: customerEmail,
+          vehicle: bookingData.vehicle || booking.vehicle || "Chauffeur"
+        },
+        lines: [
+          {
+            type: "physical",
+            name: `Chauffeur Service (${bookingData.vehicle || booking.vehicle || "Executive"} Class) - Ref: ${bookingId}`,
+            quantity: 1,
+            unitPrice: {
+              currency: "GBP",
+              value: amountVal
+            },
+            totalAmount: {
+              currency: "GBP",
+              value: amountVal
+            },
+            vatRate: "0.00",
+            vatAmount: {
+              currency: "GBP",
+              value: "0.00"
+            }
+          }
+        ]
+      });
+      checkoutUrl = order.getCheckoutUrl() || order._links?.checkout?.href || "";
+      mollieId = order.id;
+    } catch (orderErr) {
+      console.warn("Mollie orders.create failed, falling back to payments.create:", orderErr?.message || orderErr);
+      const payment = await mollieClient.payments.create({
+        amount: {
+          currency: "GBP",
+          value: amountVal
+        },
+        description: `TravelLuxx Booking Ref: ${bookingId}`,
+        redirectUrl: `${appUrl}/?bookingStatus=success&bookingId=${bookingId}`,
+        webhookUrl: `${appUrl}/api/mollie/webhook`,
+        locale: "en_GB",
+        billingAddress: customerAddress,
+        shippingAddress: customerAddress,
+        metadata: {
+          bookingId,
+          passengerName: fullName,
+          email: customerEmail,
+          vehicle: bookingData.vehicle || booking.vehicle || "Chauffeur"
+        },
+        lines: [
+          {
+            type: "physical",
+            description: `Chauffeur Service (${bookingData.vehicle || booking.vehicle || "Executive"} Class) - Ref: ${bookingId}`,
+            quantity: 1,
+            unitPrice: {
+              currency: "GBP",
+              value: amountVal
+            },
+            totalAmount: {
+              currency: "GBP",
+              value: amountVal
+            },
+            vatRate: "0.00",
+            vatAmount: {
+              currency: "GBP",
+              value: "0.00"
+            }
+          }
+        ]
+      });
+      checkoutUrl = payment.getCheckoutUrl() || payment._links?.checkout?.href || "";
+      mollieId = payment.id;
+    }
+    booking.molliePaymentId = mollieId;
     writeBookings(bookings);
-    const checkoutUrl = payment.getCheckoutUrl();
     return res.json({
       success: true,
       checkoutUrl,
       bookingId,
-      molliePaymentId: payment.id
+      molliePaymentId: mollieId
     });
   } catch (err) {
     console.error("Mollie payment creation error:", err);
@@ -2003,22 +2063,38 @@ app.post("/api/mollie/create-payment", async (req, res) => {
 });
 app.post("/api/mollie/webhook", async (req, res) => {
   try {
-    const paymentId = req.body?.id;
-    if (!paymentId) {
-      return res.status(400).send("Missing payment id");
+    const resourceId = req.body?.id;
+    if (!resourceId) {
+      return res.status(400).send("Missing resource id");
     }
     const mollieClient = getMollieClient();
     if (!mollieClient) {
       return res.status(400).send("Mollie not configured");
     }
-    const payment = await mollieClient.payments.get(paymentId);
-    const metadata = payment.metadata;
-    const bookingId = metadata?.bookingId;
+    let status = "";
+    let bookingId = "";
+    if (resourceId.startsWith("ord_")) {
+      const order = await mollieClient.orders.get(resourceId);
+      status = order.status;
+      bookingId = order.metadata?.bookingId || order.orderNumber;
+      if (order.status === "authorized") {
+        try {
+          await mollieClient.shipments.create({ orderId: resourceId });
+          console.log(`Auto-shipped and captured Mollie order: ${resourceId}`);
+        } catch (shipErr) {
+          console.warn("Mollie shipment creation notice:", shipErr?.message || shipErr);
+        }
+      }
+    } else {
+      const payment = await mollieClient.payments.get(resourceId);
+      status = payment.status;
+      bookingId = payment.metadata?.bookingId;
+    }
     if (bookingId) {
       const bookings = readBookings();
-      const booking = bookings.find((b) => b.id === bookingId || b.molliePaymentId === paymentId);
+      const booking = bookings.find((b) => b.id === bookingId || b.molliePaymentId === resourceId);
       if (booking) {
-        if (payment.status === "paid") {
+        if (status === "paid" || status === "authorized" || status === "completed") {
           booking.paymentStatus = "Paid";
           booking.status = "Pending";
           booking.paymentMethod = "Mollie";
@@ -2031,7 +2107,7 @@ app.post("/api/mollie/webhook", async (req, res) => {
           }
           sendBookingEmails(booking).catch((err) => console.error("Mollie email error:", err));
           sendWhatsAppNotification(booking).catch((err) => console.error("Mollie WhatsApp error:", err));
-        } else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
+        } else if (status === "canceled" || status === "expired" || status === "failed") {
           booking.paymentStatus = "Failed/Canceled";
           booking.status = "Canceled";
           writeBookings(bookings);
