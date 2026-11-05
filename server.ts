@@ -2123,7 +2123,21 @@ app.post("/api/mollie/create-payment", async (req, res) => {
     const rawPrice = Number(bookingData.price || booking.price || 0);
     const amountVal = rawPrice > 0 ? rawPrice.toFixed(2) : "10.00";
 
-    const payment = await mollieClient.payments.create({
+    // Prepare Customer Name & Address for Klarna / BNPL compliance
+    const fullName = (bookingData.passengerName || booking.passengerName || booking.name || "Valued Customer").trim();
+    const nameParts = fullName.split(" ").filter(Boolean);
+    const givenName = nameParts[0] && nameParts[0].length >= 2 ? nameParts[0] : "Customer";
+    const familyName = nameParts.slice(1).join(" ") || "Traveler";
+    const customerEmail = (bookingData.passengerEmail || bookingData.email || booking.passengerEmail || booking.email || "bookings@travelluxx.co.uk").trim();
+
+    // Extract or fallback UK Postcode & Address for billingAddress
+    const pickupStr = (bookingData.pickup || booking.pickup || "").trim();
+    const ukPostcodeMatch = pickupStr.match(/[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}/i);
+    const postalCode = ukPostcodeMatch ? ukPostcodeMatch[0].toUpperCase() : "SW1A 1AA";
+    const streetAndNumber = pickupStr.length >= 5 ? pickupStr.substring(0, 80) : "10 Downing Street";
+    const city = "London";
+
+    const paymentPayload: any = {
       amount: {
         currency: "GBP",
         value: amountVal,
@@ -2131,12 +2145,45 @@ app.post("/api/mollie/create-payment", async (req, res) => {
       description: `TravelLuxx Booking Ref: ${bookingId}`,
       redirectUrl: `${appUrl}/?bookingStatus=success&bookingId=${bookingId}`,
       webhookUrl: `${appUrl}/api/mollie/webhook`,
+      locale: "en_GB",
       metadata: {
         bookingId: bookingId,
-        passengerName: booking.passengerName || booking.name || "",
-        email: booking.email || "",
+        passengerName: fullName,
+        email: customerEmail,
+        vehicle: bookingData.vehicle || booking.vehicle || "Chauffeur",
       },
-    });
+      billingAddress: {
+        givenName: givenName,
+        familyName: familyName,
+        email: customerEmail,
+        streetAndNumber: streetAndNumber,
+        postalCode: postalCode,
+        city: city,
+        country: "GB"
+      },
+      lines: [
+        {
+          type: "physical",
+          description: `Chauffeur Service (${bookingData.vehicle || booking.vehicle || "Executive"} Class) - Ref: ${bookingId}`,
+          quantity: 1,
+          unitPrice: {
+            currency: "GBP",
+            value: amountVal,
+          },
+          totalAmount: {
+            currency: "GBP",
+            value: amountVal,
+          },
+          vatRate: "0.00",
+          vatAmount: {
+            currency: "GBP",
+            value: "0.00",
+          }
+        }
+      ]
+    };
+
+    const payment = await mollieClient.payments.create(paymentPayload);
 
     booking.molliePaymentId = payment.id;
     writeBookings(bookings);
