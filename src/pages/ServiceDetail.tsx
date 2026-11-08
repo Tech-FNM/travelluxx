@@ -355,9 +355,9 @@ export default function ServiceDetail() {
                 )}
 
                 {/* Rich Text Body Content with Enhanced Hierarchy */}
-                <div className="service-rich-content break-words overflow-hidden w-full min-w-0">
+                <div className="service-rich-content page-rich-content ql-snow break-words overflow-hidden w-full min-w-0">
                   {service.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: service.content }} className="w-full break-words" />
+                    <div dangerouslySetInnerHTML={{ __html: service.content }} className="ql-editor w-full break-words !p-0" />
                   ) : (
                     <p className="text-slate-600 leading-relaxed break-words">
                       {service.excerpt}

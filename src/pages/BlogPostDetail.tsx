@@ -184,14 +184,16 @@ export default function BlogPostDetail() {
               )}
 
               {/* Rich Body Content */}
-              <div
-                className="article-body-content font-serif text-[17px] md:text-[19px] text-[#292929] leading-relaxed space-y-6"
-                style={{
-                  lineHeight: "1.8",
-                  letterSpacing: "-0.003em"
-                }}
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+              <div className="ql-snow">
+                <div
+                  className="ql-editor page-rich-content article-body-content font-serif text-[17px] md:text-[19px] text-[#292929] leading-relaxed space-y-6"
+                  style={{
+                    lineHeight: "1.8",
+                    letterSpacing: "-0.003em"
+                  }}
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </div>
 
               {/* FAQs Section */}
               {post.faqs && post.faqs.length > 0 && (

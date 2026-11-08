@@ -90,12 +90,12 @@
   animation: dash 1.5s linear infinite;
 }
 
-/* Quill Editor Custom styling */
-.ql-container {
+/* Quill Editor in Admin */
+.quill .ql-container {
   min-height: 250px;
   font-family: inherit !important;
 }
-.ql-editor {
+.quill .ql-editor {
   min-height: 250px;
   font-size: 14px;
 }
@@ -182,26 +182,347 @@
   margin: 1.25rem 0 !important;
 }
 
+/* ==========================================================================
+   Page Rich Content Typography (Matches Quill Text Editor)
+   ========================================================================== */
+
 .page-rich-content {
-  min-width: 0;
+  color: #334155;
+  font-size: 1rem;
+  line-height: 1.8;
+  word-break: break-word;
   overflow-wrap: anywhere;
+  max-width: 100%;
 }
+
+.page-rich-content.ql-editor,
+.ql-snow .page-rich-content.ql-editor,
+.ql-snow .page-rich-content {
+  min-height: unset !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  font-size: 1rem !important;
+  line-height: 1.8 !important;
+  font-family: inherit !important;
+  cursor: default !important;
+  user-select: auto !important;
+  white-space: normal !important;
+}
+.page-rich-content.ql-editor > *,
+.page-rich-content .ql-editor > * {
+  cursor: default !important;
+}
+
+/* Headings */
+.page-rich-content h1,
+.ql-snow .page-rich-content h1,
+.page-rich-content.ql-editor h1 {
+  font-size: 2.25rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-top: 2rem !important;
+  margin-bottom: 0.85rem !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.page-rich-content h2,
+.ql-snow .page-rich-content h2,
+.page-rich-content.ql-editor h2 {
+  font-size: 1.65rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-top: 1.85rem !important;
+  margin-bottom: 0.75rem !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.015em !important;
+}
+
+.page-rich-content h3,
+.ql-snow .page-rich-content h3,
+.page-rich-content.ql-editor h3 {
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.6rem !important;
+  line-height: 1.35 !important;
+}
+
+.page-rich-content h4,
+.ql-snow .page-rich-content h4,
+.page-rich-content.ql-editor h4 {
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.4 !important;
+}
+
+.page-rich-content h5,
+.ql-snow .page-rich-content h5,
+.page-rich-content.ql-editor h5 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.page-rich-content h6,
+.ql-snow .page-rich-content h6,
+.page-rich-content.ql-editor h6 {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.4rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Paragraphs & Spacing */
+.page-rich-content p,
+.ql-snow .page-rich-content p,
+.page-rich-content.ql-editor p {
+  font-size: 1rem !important;
+  color: #334155;
+  line-height: 1.8 !important;
+  margin-bottom: 1.15rem !important;
+}
+
+.page-rich-content p:empty,
+.page-rich-content p > br:only-child {
+  min-height: 1.25rem;
+  display: block;
+}
+
+/* Lists */
+.page-rich-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.75rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 1.25rem !important;
+  color: #334155;
+}
+
+.page-rich-content ul ul {
+  list-style-type: circle !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.page-rich-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.75rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 1.25rem !important;
+  color: #334155;
+}
+
+.page-rich-content ol ol {
+  list-style-type: lower-alpha !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.page-rich-content li {
+  margin-bottom: 0.45rem !important;
+  line-height: 1.65 !important;
+  display: list-item !important;
+}
+
+/* Quill-specific Bullet/Numbered List Format Support */
+.page-rich-content li[data-list=bullet] {
+  list-style-type: none !important;
+  padding-left: 1.5em !important;
+  position: relative;
+}
+
+.page-rich-content li[data-list=bullet] > .ql-ui:before {
+  content: '\2022' !important;
+  display: inline-block !important;
+  margin-left: -1.5em !important;
+  margin-right: 0.3em !important;
+  text-align: right !important;
+  width: 1.2em !important;
+  color: #059669 !important;
+  font-size: 1.25em !important;
+}
+
+.page-rich-content li[data-list=ordered] {
+  list-style-type: none !important;
+  padding-left: 1.5em !important;
+  position: relative;
+}
+
+/* Bold & Formatting */
+.page-rich-content strong,
+.page-rich-content b {
+  font-weight: 700 !important;
+  color: #0f172a;
+}
+
+.page-rich-content em,
+.page-rich-content i {
+  font-style: italic !important;
+}
+
+.page-rich-content u {
+  text-decoration: underline !important;
+}
+
+.page-rich-content s {
+  text-decoration: line-through !important;
+}
+
+/* Blockquotes */
+.page-rich-content blockquote {
+  border-left: 4px solid #10b981 !important;
+  padding: 0.85rem 1.25rem !important;
+  margin: 1.5rem 0 !important;
+  font-style: italic !important;
+  background-color: #f0fdf4 !important;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  color: #1e293b !important;
+}
+
+/* Tables */
+.page-rich-content table,
+.prose table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 1.5rem 0 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  background-color: #ffffff;
+  display: table !important;
+}
+
+.page-rich-content table th,
+.page-rich-content table td,
+.prose table th,
+.prose table td {
+  padding: 10px 14px !important;
+  border: 1px solid #cbd5e1 !important;
+  text-align: left !important;
+  word-break: normal !important;
+}
+
+.page-rich-content table th,
+.prose table th {
+  background-color: #f1f5f9 !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.page-rich-content table tr:nth-child(even) td,
+.prose table tr:nth-child(even) td {
+  background-color: #f8fafc !important;
+}
+
+/* Alignment Classes from Quill */
+.page-rich-content .ql-align-center {
+  text-align: center !important;
+}
+
+.page-rich-content .ql-align-right {
+  text-align: right !important;
+}
+
+.page-rich-content .ql-align-justify {
+  text-align: justify !important;
+}
+
+/* Size Classes from Quill */
+.page-rich-content .ql-size-small {
+  font-size: 0.8em !important;
+}
+
+.page-rich-content .ql-size-large {
+  font-size: 1.4em !important;
+  line-height: 1.35 !important;
+}
+
+.page-rich-content .ql-size-huge {
+  font-size: 2em !important;
+  line-height: 1.25 !important;
+}
+
+/* Font Classes from Quill */
+.page-rich-content .ql-font-serif {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
+}
+
+.page-rich-content .ql-font-monospace {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* Indent Classes from Quill */
+.page-rich-content .ql-indent-1 { padding-left: 2rem !important; }
+.page-rich-content .ql-indent-2 { padding-left: 4rem !important; }
+.page-rich-content .ql-indent-3 { padding-left: 6rem !important; }
+.page-rich-content .ql-indent-4 { padding-left: 8rem !important; }
+
+/* Links */
+.page-rich-content a {
+  color: #059669 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+  transition: color 0.15s ease-in-out;
+}
+
+.page-rich-content a:hover {
+  color: #047857 !important;
+}
+
+/* Images & Media */
 .page-rich-content img,
-.page-rich-content video,
+.prose img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 0.5rem !important;
+  margin: 1.5rem auto !important;
+  display: block !important;
+}
+
 .page-rich-content iframe,
+.page-rich-content video,
 .page-rich-content embed,
 .page-rich-content object {
-  max-width: 100%;
+  max-width: 100% !important;
+  border-radius: 0.5rem !important;
+  margin: 1.5rem auto !important;
 }
-.page-rich-content table {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
+
+/* Code & Pre */
+.page-rich-content pre,
+.prose pre,
+.page-rich-content .ql-syntax {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+  padding: 1rem 1.25rem !important;
+  border-radius: 0.5rem !important;
+  overflow-x: auto !important;
+  font-family: ui-monospace, SFMono-Regular, monospace !important;
+  font-size: 0.875rem !important;
+  margin: 1.25rem 0 !important;
 }
-.page-rich-content pre {
-  max-width: 100%;
-  overflow-x: auto;
+
+.page-rich-content code,
+.prose code {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  padding: 0.2rem 0.4rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875em !important;
 }
+
+/* Service Area specifics */
 .service-area-content h2 {
   margin: 0 0 0.75rem;
   color: #0f172a;
@@ -231,44 +552,107 @@
   list-style: decimal;
 }
 
+/* ==========================================================================
+   Dark Theme / Renax Overrides
+   ========================================================================== */
 
+.dark-page-content .page-rich-content,
+.dark-page-content.page-rich-content,
+.dark-page-content {
+  color: #cbd5e1 !important;
+}
 
+.dark-page-content .page-rich-content p,
+.dark-page-content p {
+  color: #cbd5e1 !important;
+}
 
-/* Page Rich Content Responsive & Word Wrap */
-.page-rich-content,
-.prose {
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  max-width: 100%;
+.dark-page-content .page-rich-content h1,
+.dark-page-content .page-rich-content h2,
+.dark-page-content .page-rich-content h3,
+.dark-page-content .page-rich-content h4,
+.dark-page-content .page-rich-content h5,
+.dark-page-content .page-rich-content h6,
+.dark-page-content .page-rich-content strong,
+.dark-page-content .page-rich-content b,
+.dark-page-content h1,
+.dark-page-content h2,
+.dark-page-content h3,
+.dark-page-content h4,
+.dark-page-content strong,
+.dark-page-content b {
+  color: #f8fafc !important;
 }
-.page-rich-content *,
-.prose * {
-  max-width: 100%;
-  box-sizing: border-box;
+
+.dark-page-content .page-rich-content ul,
+.dark-page-content .page-rich-content ol,
+.dark-page-content ul,
+.dark-page-content ol {
+  color: #cbd5e1 !important;
 }
-.page-rich-content table,
-.prose table {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  border-collapse: collapse;
+
+.dark-page-content .page-rich-content a,
+.dark-page-content a {
+  color: #34d399 !important;
 }
-.page-rich-content table td,
-.page-rich-content table th,
-.prose table td,
-.prose table th {
-  word-break: normal;
-  overflow-wrap: normal;
-  padding: 8px 12px;
+
+.dark-page-content .page-rich-content a:hover,
+.dark-page-content a:hover {
+  color: #6ee7b7 !important;
 }
-.page-rich-content pre,
-.prose pre {
-  overflow-x: auto;
-  max-width: 100%;
+
+.dark-page-content .page-rich-content blockquote,
+.dark-page-content blockquote {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-left-color: #10b981 !important;
 }
-.page-rich-content img,
-.prose img {
-  max-width: 100%;
-  height: auto;
+
+.dark-page-content .page-rich-content table,
+.dark-page-content table {
+  background-color: #0c101d !important;
+  border-color: #334155 !important;
+}
+
+.dark-page-content .page-rich-content table th,
+.dark-page-content table th {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+.dark-page-content .page-rich-content table td,
+.dark-page-content table td {
+  border-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+.dark-page-content .page-rich-content table tr:nth-child(even) td,
+.dark-page-content table tr:nth-child(even) td {
+  background-color: #111827 !important;
+}
+
+/* Neutralize pasted dark inline styles in dark mode */
+.dark-page-content [style*="color: rgb(31, 41, 55)"],
+.dark-page-content [style*="color: rgb(0, 0, 0)"],
+.dark-page-content [style*="color:#000"],
+.dark-page-content [style*="color: #000"],
+.dark-page-content [style*="color:#1"],
+.dark-page-content [style*="color: #1"],
+.dark-page-content [style*="color:#2"],
+.dark-page-content [style*="color: #2"] {
+  color: #f8fafc !important;
+}
+
+/* Neutralize pasted white background highlights in dark mode */
+.dark-page-content [style*="background-color: rgb(255, 255, 255)"],
+.dark-page-content [style*="background-color: #fff"],
+.dark-page-content [style*="background-color:#fff"],
+.dark-page-content [style*="background-color: white"] {
+  background-color: transparent !important;
+}
+
+.dark-page-content [style*="background-color: rgb(217, 226, 243)"] {
+  background-color: #1e293b !important;
+  color: #93c5fd !important;
 }

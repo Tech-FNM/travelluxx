@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Dlpq2py1.js"(exports, module) {
+  "assets/index-Byg69ReL.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -49186,17 +49186,17 @@ ${escapeText(this.code(index, length))}
           post.image && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-4xl mx-auto px-4 md:px-6 mb-10 md:mb-14", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[21/9] w-full overflow-hidden rounded shadow-sm bg-slate-100", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: post.image, alt: post.title, className: "w-full h-full object-cover" }) }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 md:px-6", children: [
             post.excerpt && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-slate-500 text-lg md:text-xl font-light italic leading-relaxed mb-8 border-l-2 border-emerald-600 pl-4", children: post.excerpt }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ql-snow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
               "div",
               {
-                className: "article-body-content font-serif text-[17px] md:text-[19px] text-[#292929] leading-relaxed space-y-6",
+                className: "ql-editor page-rich-content article-body-content font-serif text-[17px] md:text-[19px] text-[#292929] leading-relaxed space-y-6",
                 style: {
                   lineHeight: "1.8",
                   letterSpacing: "-0.003em"
                 },
                 dangerouslySetInnerHTML: { __html: post.content }
               }
-            ),
+            ) }),
             post.faqs && post.faqs.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-12 pt-8 border-t border-slate-200", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-serif text-2xl font-semibold mb-6 text-slate-900", children: "Frequently Asked Questions" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: post.faqs.map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -49438,15 +49438,15 @@ ${escapeText(this.code(index, length))}
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
         } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-28 w-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-full", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-3xl sm:text-4xl font-extrabold mb-8 break-words ${isRenax ? "text-white" : "text-slate-900"}`, children: page.title }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-28 w-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `w-full max-w-full ${isRenax ? "bg-[#131620] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl" : "bg-white sm:p-8 sm:rounded-2xl sm:border sm:border-slate-100 sm:shadow-sm"}`, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-3xl sm:text-4xl font-extrabold mb-8 pb-4 border-b break-words ${isRenax ? "text-white border-white/10" : "text-slate-900 border-slate-200"}`, children: page.title }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `ql-snow ${isRenax ? "dark-page-content" : ""}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             "div",
             {
-              className: `page-rich-content prose max-w-none text-base leading-relaxed break-words overflow-x-auto ${isRenax ? "prose-invert text-slate-300" : "prose-slate text-slate-700"}`,
+              className: `ql-editor page-rich-content text-base leading-relaxed break-words overflow-x-auto ${isRenax ? "text-slate-200" : "text-slate-700"}`,
               dangerouslySetInnerHTML: { __html: page.content }
             }
-          )
+          ) })
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
         } })
@@ -50022,7 +50022,7 @@ ${escapeText(this.code(index, length))}
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-slate-700 text-sm font-medium leading-snug", children: feat })
                 ] }, idx)) })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "service-rich-content break-words overflow-hidden w-full min-w-0", children: service.content ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { dangerouslySetInnerHTML: { __html: service.content }, className: "w-full break-words" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-600 leading-relaxed break-words", children: service.excerpt }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "service-rich-content page-rich-content ql-snow break-words overflow-hidden w-full min-w-0", children: service.content ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { dangerouslySetInnerHTML: { __html: service.content }, className: "ql-editor w-full break-words !p-0" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-600 leading-relaxed break-words", children: service.excerpt }) }),
               service.guaranteeEnabled !== false && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gradient-to-br from-[#0c101d] to-[#161d31] rounded-2xl p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 text-center sm:text-left", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.15em]", children: [
@@ -50329,13 +50329,13 @@ ${escapeText(this.code(index, length))}
               ] })
             ] }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-slate-50 px-4 py-10 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-slate-50 px-4 py-10 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ql-snow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             "div",
             {
-              className: "service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base",
+              className: "ql-editor page-rich-content service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base !p-0",
               dangerouslySetInnerHTML: { __html: serviceArea.content || "" }
             }
-          ) }) }),
+          ) }) }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700", children: "Frequently asked questions" }),
@@ -51024,15 +51024,15 @@ ${escapeText(this.code(index, length))}
               }
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-grow max-w-4xl mx-auto px-6 py-28 w-full", children: !homepageContent ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: "Loading home..." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-extrabold text-slate-900 mb-8", children: homepageContent.title }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
+          /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-grow max-w-4xl mx-auto px-6 py-28 w-full", children: !homepageContent ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center py-20 text-slate-400", children: "Loading home..." }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white sm:p-8 sm:rounded-2xl sm:border sm:border-slate-100 sm:shadow-sm", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b border-slate-200", children: homepageContent.title }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ql-snow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
               "div",
               {
-                className: "prose prose-slate max-w-none text-slate-700 text-base leading-relaxed",
+                className: "ql-editor page-rich-content text-slate-700 text-base leading-relaxed",
                 dangerouslySetInnerHTML: { __html: homepageContent.content }
               }
-            )
+            ) })
           ] }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Footer,

@@ -148,10 +148,12 @@ export default function ServiceAreaPage() {
 
         <section className="bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10">
-            <div
-              className="service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base"
-              dangerouslySetInnerHTML={{ __html: serviceArea.content || "" }}
-            />
+            <div className="ql-snow">
+              <div
+                className="ql-editor page-rich-content service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base !p-0"
+                dangerouslySetInnerHTML={{ __html: serviceArea.content || "" }}
+              />
+            </div>
           </div>
         </section>
 

@@ -153,12 +153,14 @@ function PublicLandingPage() {
           {!homepageContent ? (
             <div className="text-center py-20 text-slate-400">Loading home...</div>
           ) : (
-            <div>
-              <h1 className="text-4xl font-extrabold text-slate-900 mb-8">{homepageContent.title}</h1>
-              <div
-                className="prose prose-slate max-w-none text-slate-700 text-base leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: homepageContent.content }}
-              />
+            <div className="bg-white sm:p-8 sm:rounded-2xl sm:border sm:border-slate-100 sm:shadow-sm">
+              <h1 className="text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b border-slate-200">{homepageContent.title}</h1>
+              <div className="ql-snow">
+                <div
+                  className="ql-editor page-rich-content text-slate-700 text-base leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: homepageContent.content }}
+                />
+              </div>
             </div>
           )}
         </main>
