@@ -185,12 +185,12 @@ export default function DynamicPage() {
   return (
     <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>
       <Navbar onScrollTo={() => {}} />
-      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-28 w-full overflow-hidden">
-        <div className={`w-full max-w-full ${isRenax ? "bg-[#131620] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl" : "bg-white sm:p-8 sm:rounded-2xl sm:border sm:border-slate-100 sm:shadow-sm"}`}>
-          <h1 className={`text-3xl sm:text-4xl font-extrabold mb-8 pb-4 border-b break-words ${isRenax ? "text-white border-white/10" : "text-slate-900 border-slate-200"}`}>{page.title}</h1>
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
+        <div className="w-full">
+          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 pb-4 border-b break-words ${isRenax ? "text-white border-white/10" : "text-slate-900 border-slate-200"}`}>{page.title}</h1>
           <div className={`ql-snow ${isRenax ? "dark-page-content" : ""}`}>
             <div
-              className={`ql-editor page-rich-content text-base leading-relaxed break-words overflow-x-auto ${isRenax ? "text-slate-200" : "text-slate-700"}`}
+              className={`ql-editor page-rich-content ${isRenax ? "text-slate-200" : "text-slate-800"}`}
               dangerouslySetInnerHTML={{ __html: page.content }}
             />
           </div>

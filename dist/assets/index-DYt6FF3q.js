@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Byg69ReL.js"(exports, module) {
+  "assets/index-DYt6FF3q.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -42672,7 +42672,7 @@ ${escapeText(this.code(index, length))}
               "aria-hidden": "true"
             }
           ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: `bg-[#1d2327] w-64 md:w-56 shrink-0 flex flex-col fixed inset-y-0 left-0 top-[33px] md:static md:top-9 md:h-[calc(100vh-36px)] h-[calc(100vh-33px)] overflow-y-auto z-50 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: `bg-[#1d2327] w-56 md:w-50 shrink-0 flex flex-col fixed inset-y-0 left-0 top-[33px] md:static md:top-9 md:h-[calc(100vh-36px)] h-[calc(100vh-33px)] overflow-y-auto z-50 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-2 mb-1 flex items-center justify-between", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#a7aaad] text-[10px] uppercase tracking-widest font-semibold", children: "Navigation" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -42703,7 +42703,7 @@ ${escapeText(this.code(index, length))}
               item.id
             ))
           ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 p-3 sm:p-4 md:p-6 min-h-0 overflow-y-auto w-full max-w-full overflow-x-hidden", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 p-2 sm:p-3 md:p-4 min-h-0 overflow-y-auto w-full max-w-full overflow-x-hidden", children: [
             toastMessage && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `fixed top-14 right-6 z-[9999] px-5 py-3 rounded-lg shadow-lg text-sm font-semibold flex items-center gap-2 animate-fade-in transition-all ${toastType === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"}`, style: { animation: "fadeInSlide 0.3s ease" }, children: [
               toastType === "success" ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4" }),
               toastMessage,
@@ -42988,7 +42988,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 sm:p-4 md:p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePost, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 sm:p-3 md:p-4 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePost, className: "grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(
                       "input",
@@ -43544,7 +43544,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 sm:p-4 md:p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 sm:p-3 md:p-4 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-6", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 border-b border-[#f0f0f1] pb-2 uppercase tracking-wider", children: "1. Hero Section Content" }),
@@ -44510,7 +44510,7 @@ ${escapeText(this.code(index, length))}
                     )
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 sm:p-4 md:p-6 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePage, className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-2 sm:p-3 md:p-4 bg-[#f0f0f1]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: savePage, className: "grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-3 space-y-4", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(
                       "input",
@@ -49438,12 +49438,12 @@ ${escapeText(this.code(index, length))}
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
         } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-28 w-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `w-full max-w-full ${isRenax ? "bg-[#131620] border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl" : "bg-white sm:p-8 sm:rounded-2xl sm:border sm:border-slate-100 sm:shadow-sm"}`, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-3xl sm:text-4xl font-extrabold mb-8 pb-4 border-b break-words ${isRenax ? "text-white border-white/10" : "text-slate-900 border-slate-200"}`, children: page.title }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: `text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 pb-4 border-b break-words ${isRenax ? "text-white border-white/10" : "text-slate-900 border-slate-200"}`, children: page.title }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `ql-snow ${isRenax ? "dark-page-content" : ""}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             "div",
             {
-              className: `ql-editor page-rich-content text-base leading-relaxed break-words overflow-x-auto ${isRenax ? "text-slate-200" : "text-slate-700"}`,
+              className: `ql-editor page-rich-content ${isRenax ? "text-slate-200" : "text-slate-800"}`,
               dangerouslySetInnerHTML: { __html: page.content }
             }
           ) })

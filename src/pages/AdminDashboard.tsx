@@ -1693,7 +1693,7 @@ export default function AdminDashboard() {
         )}
 
         {/* Sidebar */}
-        <aside className={`bg-[#1d2327] w-64 md:w-56 shrink-0 flex flex-col fixed inset-y-0 left-0 top-[33px] md:static md:top-9 md:h-[calc(100vh-36px)] h-[calc(100vh-33px)] overflow-y-auto z-50 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none ${
+        <aside className={`bg-[#1d2327] w-56 md:w-50 shrink-0 flex flex-col fixed inset-y-0 left-0 top-[33px] md:static md:top-9 md:h-[calc(100vh-36px)] h-[calc(100vh-33px)] overflow-y-auto z-50 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}>
           <div className="py-4">
@@ -1734,7 +1734,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-3 sm:p-4 md:p-6 min-h-0 overflow-y-auto w-full max-w-full overflow-x-hidden">
+        <main className="flex-1 p-2 sm:p-3 md:p-4 min-h-0 overflow-y-auto w-full max-w-full overflow-x-hidden">
 
           {/* Toast Notification */}
           {toastMessage && (
@@ -2016,8 +2016,8 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="p-3 sm:p-4 md:p-6 bg-[#f0f0f1]">
-                    <form onSubmit={savePost} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  <div className="p-2 sm:p-3 md:p-4 bg-[#f0f0f1]">
+                    <form onSubmit={savePost} className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-4">
                         <input
@@ -2573,8 +2573,8 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="p-3 sm:p-4 md:p-6 bg-[#f0f0f1]">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  <div className="p-2 sm:p-3 md:p-4 bg-[#f0f0f1]">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-6">
                         {/* Section 1: Hero Section */}
@@ -3450,8 +3450,8 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="p-3 sm:p-4 md:p-6 bg-[#f0f0f1]">
-                    <form onSubmit={savePage} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  <div className="p-2 sm:p-3 md:p-4 bg-[#f0f0f1]">
+                    <form onSubmit={savePage} className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-4">
                         <input
