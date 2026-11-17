@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CnF-eFqS.js"(exports, module) {
+  "assets/index-BowJ23Pc.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -39969,6 +39969,8 @@ ${escapeText(this.code(index, length))}
       const [mediaList, setMediaList] = reactExports.useState([]);
       const [selectedMediaUrl, setSelectedMediaUrl] = reactExports.useState(null);
       const [uploadingMedia, setUploadingMedia] = reactExports.useState(false);
+      const [yoastAreaTab, setYoastAreaTab] = reactExports.useState("seo");
+      const [focusKeyphraseArea, setFocusKeyphraseArea] = reactExports.useState("");
       const showToast = (msg) => {
         setToastMessage(msg);
         setTimeout(() => setToastMessage(""), 3500);
@@ -40885,142 +40887,57 @@ ${escapeText(this.code(index, length))}
                 idx
               )) })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 border-b border-[#f0f0f1] pb-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { className: "w-4 h-4 text-emerald-600" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xs font-bold uppercase tracking-wider text-slate-800", children: "Search Engine Optimization (SEO)" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Meta Title" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              YoastSeoBox,
+              {
+                tab: yoastAreaTab,
+                setTab: setYoastAreaTab,
+                focusKeyphrase: focusKeyphraseArea,
+                setFocusKeyphrase: setFocusKeyphraseArea,
+                title: form.title,
+                slug: form.slug,
+                metaTitle: form.metaTitle,
+                metaDescription: form.metaDescription,
+                contentType: "page",
+                image: form.heroImage,
+                excerpt: form.description,
+                onMetaTitleChange: (v) => setForm((prev) => ({ ...prev, metaTitle: v })),
+                onSlugChange: (v) => setForm((prev) => ({ ...prev, slug: v })),
+                onMetaDescriptionChange: (v) => setForm((prev) => ({ ...prev, metaDescription: v })),
+                ogTitle: form.ogTitle,
+                onOgTitleChange: (v) => setForm((prev) => ({ ...prev, ogTitle: v })),
+                ogDescription: form.ogDescription,
+                onOgDescriptionChange: (v) => setForm((prev) => ({ ...prev, ogDescription: v })),
+                customSchema: form.customSchema,
+                onCustomSchemaChange: (v) => setForm((prev) => ({ ...prev, customSchema: v }))
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-4 shadow-sm flex items-center justify-between text-xs text-[#2c3338]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-6", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 font-medium cursor-pointer", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "input",
                   {
-                    type: "text",
-                    value: form.metaTitle,
-                    onChange: (e) => setForm({ ...form, metaTitle: e.target.value }),
-                    placeholder: `Executive Chauffeur Service in ${form.title || "Area"} | TravelLuxx`,
-                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                    type: "checkbox",
+                    checked: form.published,
+                    onChange: (e) => setForm({ ...form, published: e.target.checked }),
+                    className: "rounded text-emerald-600 focus:ring-emerald-500"
                   }
-                )
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Published Live" })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Meta Description" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 font-medium cursor-pointer", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "textarea",
+                  "input",
                   {
-                    rows: 2,
-                    value: form.metaDescription,
-                    onChange: (e) => setForm({ ...form, metaDescription: e.target.value }),
-                    placeholder: `Book executive private chauffeur travel and airport transfers across ${form.title || "this area"} with TravelLuxx. Fixed rates, luxury fleet.`,
-                    className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                    type: "checkbox",
+                    checked: form.noIndexNoFollow,
+                    onChange: (e) => setForm({ ...form, noIndexNoFollow: e.target.checked }),
+                    className: "rounded text-emerald-600 focus:ring-emerald-500"
                   }
-                )
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-3 space-y-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "📱 Open Graph (OG) Social Media Tags" }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Title (Facebook, WhatsApp, LinkedIn)" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "text",
-                      value: form.ogTitle || "",
-                      onChange: (e) => setForm({ ...form, ogTitle: e.target.value }),
-                      placeholder: form.metaTitle || form.title || "Custom social sharing title",
-                      className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                    }
-                  )
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Description" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "textarea",
-                    {
-                      rows: 2,
-                      value: form.ogDescription || "",
-                      onChange: (e) => setForm({ ...form, ogDescription: e.target.value }),
-                      placeholder: form.metaDescription || "Custom social sharing description",
-                      className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                    }
-                  )
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Image URL" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx(
-                      "input",
-                      {
-                        type: "text",
-                        value: form.ogImage || "",
-                        onChange: (e) => setForm({ ...form, ogImage: e.target.value }),
-                        placeholder: form.heroImage || "https://...",
-                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                      }
-                    )
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Type" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                      "select",
-                      {
-                        value: form.ogType || "website",
-                        onChange: (e) => setForm({ ...form, ogType: e.target.value }),
-                        className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
-                        children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "website", children: "website" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "article", children: "article" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "place", children: "place" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "business.business", children: "business.business" })
-                        ]
-                      }
-                    )
-                  ] })
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-3 space-y-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚙️ Custom Schema Markup (JSON-LD)" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-400", children: "Optional custom structured data" })
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-slate-500", children: "Enter valid JSON-LD schema markup below (e.g., LocalBusiness, Service, TaxiService). It will be dynamically injected into the <head> of this location page alongside standard FAQPage and TaxiService schema." }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "textarea",
-                  {
-                    rows: 4,
-                    value: form.customSchema || "",
-                    onChange: (e) => setForm({ ...form, customSchema: e.target.value }),
-                    placeholder: '{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "TravelLuxx Solihull"\n}',
-                    className: "w-full border border-[#8c8f94] font-mono text-[11px] rounded-sm p-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#2271b1]"
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-6 pt-1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "checkbox",
-                      checked: form.published,
-                      onChange: (e) => setForm({ ...form, published: e.target.checked }),
-                      className: "rounded text-emerald-600 focus:ring-emerald-500"
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Published Live" })
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "input",
-                    {
-                      type: "checkbox",
-                      checked: form.noIndexNoFollow,
-                      onChange: (e) => setForm({ ...form, noIndexNoFollow: e.target.checked }),
-                      className: "rounded text-emerald-600 focus:ring-emerald-500"
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Discourage search engines (noindex, nofollow)" })
-                ] })
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Discourage search engines (noindex, nofollow)" })
               ] })
-            ] })
+            ] }) })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-hidden", children: [
@@ -41448,7 +41365,13 @@ ${escapeText(this.code(index, length))}
       excerpt,
       onMetaTitleChange,
       onSlugChange,
-      onMetaDescriptionChange
+      onMetaDescriptionChange,
+      ogTitle = "",
+      onOgTitleChange,
+      ogDescription = "",
+      onOgDescriptionChange,
+      customSchema = "",
+      onCustomSchemaChange
     }) {
       const finalTitle = metaTitle || title || "Please enter a title";
       const finalSlug = slug || "slug-url";
@@ -41637,6 +41560,23 @@ ${escapeText(this.code(index, length))}
                 ] })
               ] })
             ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#f6f7f7] border border-[#c3c4c7] p-4 rounded-sm space-y-2 mt-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-bold text-[#2c3338] uppercase tracking-wide", children: "Custom Schema Markup (JSON-LD)" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-500", children: "Optional custom structured data" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-[#646970]", children: "Enter valid JSON-LD schema (e.g. LocalBusiness, TaxiService, Service). It will be dynamically injected into the <head> of this page." }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "textarea",
+                {
+                  rows: 4,
+                  value: customSchema,
+                  onChange: (e) => onCustomSchemaChange && onCustomSchemaChange(e.target.value),
+                  placeholder: '{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "TravelLuxx"\n}',
+                  className: "w-full border border-[#8c8f94] bg-white font-mono text-[11px] rounded-sm p-2 text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                }
+              )
+            ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[11px] text-[#646970] mt-2", children: [
               "You can change the default type for Posts under Content types in the ",
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#2271b1] cursor-pointer hover:underline", children: "Settings" }),
@@ -41677,7 +41617,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5", children: "✨ Generate social title" })
                     ] })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", value: ogTitle, onChange: (e) => onOgTitleChange && onOgTitleChange(e.target.value), placeholder: title, className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
@@ -41687,7 +41627,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5", children: "✨ Generate social description" })
                     ] })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 3, className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 3, value: ogDescription, onChange: (e) => onOgDescriptionChange && onOgDescriptionChange(e.target.value), placeholder: metaDescription || excerpt, className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
                 ] })
               ] })
             ] }),
@@ -42743,8 +42683,8 @@ ${escapeText(this.code(index, length))}
         }
       };
       const openQuickEditPage = (page) => {
-        const pageId2 = page.id || page._id || page.slug;
-        setQuickEditingPageId(pageId2);
+        const pageId = page.id || page._id || page.slug;
+        setQuickEditingPageId(pageId);
         setQuickPageForm({
           title: page.title || "",
           slug: (page.slug || "").replace(/^\/+/, ""),
@@ -42757,10 +42697,10 @@ ${escapeText(this.code(index, length))}
         if (!page) return;
         setIsSaving(true);
         try {
-          const pageId2 = page.id || page._id || page.slug || id;
-          const cleanSlug = (((_a2 = quickPageForm.slug) == null ? void 0 : _a2.trim()) || ((_b = quickPageForm.title) == null ? void 0 : _b.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")) || page.slug || pageId2).replace(/^\/+/, "");
+          const pageId = page.id || page._id || page.slug || id;
+          const cleanSlug = (((_a2 = quickPageForm.slug) == null ? void 0 : _a2.trim()) || ((_b = quickPageForm.title) == null ? void 0 : _b.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")) || page.slug || pageId).replace(/^\/+/, "");
           const updatedPage = { ...page, ...quickPageForm, slug: cleanSlug };
-          const res = await fetch(`/api/admin/pages/${pageId2}`, {
+          const res = await fetch(`/api/admin/pages/${pageId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedPage)
@@ -43894,7 +43834,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
                       p.date || "N/A"
                     ] })
-                  ] }, pageId)) })
+                  ] }, p.id)) })
                 ] }) }) })
               ] })
             ] }),
@@ -45390,8 +45330,8 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e] font-semibold text-emerald-700", children: "Service Areas Directory & Hero" })
                     ] }),
                     pages.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "text-center py-8 text-[#646970]", children: "No pages found." }) }) : pages.filter((p) => (p.title || "").toLowerCase().includes(searchQuery.toLowerCase())).map((p) => {
-                      const pageId2 = p.id || p._id || p.slug;
-                      return quickEditingPageId === pageId2 ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "bg-[#f5f7fa] border-y-2 border-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 text-xs text-[#2c3338]", children: [
+                      const pageId = p.id || p._id || p.slug;
+                      return quickEditingPageId === pageId ? /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { className: "bg-[#f5f7fa] border-y-2 border-[#2271b1]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 5, className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4 text-xs text-[#2c3338]", children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-bold text-xs uppercase tracking-wider text-[#646970] border-b border-[#ddd] pb-1 mb-2", children: "Quick Edit" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
@@ -45503,7 +45443,7 @@ ${escapeText(this.code(index, length))}
                             "button",
                             {
                               type: "button",
-                              onClick: () => saveQuickPage(pageId2),
+                              onClick: () => saveQuickPage(pageId),
                               disabled: isSaving,
                               className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm font-semibold transition shadow-sm",
                               children: [
@@ -45525,7 +45465,7 @@ ${escapeText(this.code(index, length))}
                             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => openQuickEditPage(p), className: "text-[#2271b1] hover:text-[#00a0d2]", children: "Quick Edit" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(pageId2), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => deletePage(pageId), className: "text-[#b32d2e] hover:text-[#d63638]", children: "Trash" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#ddd]", children: "|" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: `/${(p.slug || p.id || "").replace(/^\/+/, "")}`, target: "_blank", rel: "noreferrer", className: "text-[#2271b1] hover:text-[#00a0d2]", children: "View" })
                           ] })
@@ -49160,7 +49100,62 @@ ${escapeText(this.code(index, length))}
                       ] })
                     ] })
                   ] }),
-                  settingsTab === "connectors" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+                  settingsTab === "connectors" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-slate-50 border border-slate-200 rounded p-4 space-y-4", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "font-bold text-[#1d2327] text-sm pb-2 border-b border-slate-200 flex items-center gap-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-amber-500 fill-amber-500" }),
+                        "Google Business Profile & Reviews Integration"
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs leading-relaxed", children: "Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and fetch authentic customer reviews from this Google profile." }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Business Profile / Google Maps URL" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "input",
+                          {
+                            type: "text",
+                            value: settings2.google_business_profile_url || "",
+                            onChange: (e) => setSettings({ ...settings2, google_business_profile_url: e.target.value }),
+                            placeholder: "https://maps.app.goo.gl/... or https://www.google.com/maps/place/...",
+                            className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[#646970] text-[10px] mt-1", children: [
+                          "Example: ",
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "https://maps.google.com/?cid=..." }),
+                          " or your business search URL."
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Places API Key (Optional for live sync)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "password",
+                              value: settings2.google_places_api_key || "",
+                              onChange: (e) => setSettings({ ...settings2, google_places_api_key: e.target.value }),
+                              placeholder: "AIzaSy...",
+                              className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "If empty, the system displays verified TravelLuxx 5-star customer testimonials with direct link to your Google page." })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Place ID (Optional)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings2.google_place_id || "",
+                              onChange: (e) => setSettings({ ...settings2, google_place_id: e.target.value }),
+                              placeholder: "ChIJ...",
+                              className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "Direct Google Place ID identifier if known." })
+                        ] })
+                      ] })
+                    ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1] flex items-center gap-2", children: "💳 Mollie Payment Gateway" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Mollie API Key (Live / Test)" }),

@@ -759,6 +759,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     --color-amber-200: oklch(92.4% .12 95.746);
     --color-amber-300: oklch(87.9% .169 91.605);
     --color-amber-400: oklch(82.8% .189 84.429);
+    --color-amber-500: oklch(76.9% .188 70.08);
     --color-amber-600: oklch(66.6% .179 58.318);
     --color-amber-700: oklch(55.5% .163 48.998);
     --color-amber-800: oklch(47.3% .137 46.201);
@@ -1432,10 +1433,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .mt-6 {
     margin-top: calc(var(--spacing) * 6);
-  }
-
-  .mt-8 {
-    margin-top: calc(var(--spacing) * 8);
   }
 
   .mt-9 {
@@ -2242,12 +2239,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     column-gap: calc(var(--spacing) * 8);
   }
 
-  :where(.space-x-0\.5 > :not(:last-child)) {
-    --tw-space-x-reverse: 0;
-    margin-inline-start: calc(calc(var(--spacing) * .5) * var(--tw-space-x-reverse));
-    margin-inline-end: calc(calc(var(--spacing) * .5) * calc(1 - var(--tw-space-x-reverse)));
-  }
-
   :where(.space-x-1 > :not(:last-child)) {
     --tw-space-x-reverse: 0;
     margin-inline-start: calc(var(--spacing) * var(--tw-space-x-reverse));
@@ -2406,11 +2397,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .border-4 {
     border-style: var(--tw-border-style);
     border-width: 4px;
-  }
-
-  .border-y {
-    border-block-style: var(--tw-border-style);
-    border-block-width: 1px;
   }
 
   .border-y-2 {
@@ -3678,6 +3664,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     fill: var(--color-amber-400);
   }
 
+  .fill-amber-500 {
+    fill: var(--color-amber-500);
+  }
+
   .fill-current {
     fill: currentColor;
   }
@@ -3822,10 +3812,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     padding-block: calc(var(--spacing) * 4);
   }
 
-  .py-5 {
-    padding-block: calc(var(--spacing) * 5);
-  }
-
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
   }
@@ -3924,10 +3910,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .pr-4 {
     padding-right: calc(var(--spacing) * 4);
-  }
-
-  .pr-8 {
-    padding-right: calc(var(--spacing) * 8);
   }
 
   .pr-10 {
@@ -4045,16 +4027,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     line-height: var(--tw-leading, var(--text-4xl--line-height));
   }
 
-  .text-5xl {
-    font-size: var(--text-5xl);
-    line-height: var(--tw-leading, var(--text-5xl--line-height));
-  }
-
-  .text-6xl {
-    font-size: var(--text-6xl);
-    line-height: var(--tw-leading, var(--text-6xl--line-height));
-  }
-
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -4106,11 +4078,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .text-\[19px\] {
     font-size: 19px;
-  }
-
-  .leading-6 {
-    --tw-leading: calc(var(--spacing) * 6);
-    line-height: calc(var(--spacing) * 6);
   }
 
   .leading-7 {
@@ -4337,6 +4304,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     color: var(--color-amber-400);
   }
 
+  .text-amber-500 {
+    color: var(--color-amber-500);
+  }
+
   .text-amber-600 {
     color: var(--color-amber-600);
   }
@@ -4375,10 +4346,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .text-emerald-400 {
     color: var(--color-emerald-400);
-  }
-
-  .text-emerald-500 {
-    color: var(--color-emerald-500);
   }
 
   .text-emerald-600 {
@@ -5405,10 +5372,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .focus\:border-emerald-600:focus {
     border-color: var(--color-emerald-600);
-  }
-
-  .focus\:bg-white:focus {
-    background-color: var(--color-white);
   }
 
   .focus\:ring-1:focus {

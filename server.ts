@@ -2553,15 +2553,58 @@ app.delete("/api/admin/promocodes/:id", async (req, res) => {
 let cachedGoogleReviews: { timestamp: number; data: any } | null = null;
 const GOOGLE_REVIEWS_CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
+// Helper to extract Google Place ID or CID from a Google Maps / GMB URL or query
+function extractPlaceIdentifier(input: string): { placeId?: string; cid?: string; query?: string } {
+  if (!input) return {};
+  const trimmed = input.trim();
+
+  // If already a raw Place ID (typically starts with ChIJ and length ~27)
+  if (/^ChIJ[a-zA-Z0-9_-]{20,}$/.test(trimmed)) {
+    return { placeId: trimmed };
+  }
+
+  // Check for cid parameter (e.g. ?cid=1234567890 or &cid=...)
+  const cidMatch = trimmed.match(/[?&]cid=([0-9]+)/);
+  if (cidMatch) {
+    return { cid: cidMatch[1] };
+  }
+
+  // Check for place_id parameter (e.g. ?place_id=ChIJ...)
+  const placeIdParam = trimmed.match(/[?&]place_id=([a-zA-Z0-9_-]+)/);
+  if (placeIdParam) {
+    return { placeId: placeIdParam[1] };
+  }
+
+  // Check for /place/Name/@... or /place/ChIJ...
+  const placePathMatch = trimmed.match(/\/place\/([^\/@?]+)/);
+  if (placePathMatch) {
+    const segment = decodeURIComponent(placePathMatch[1]);
+    if (/^ChIJ[a-zA-Z0-9_-]{20,}$/.test(segment)) {
+      return { placeId: segment };
+    }
+    return { query: segment.replace(/\+/g, " ") };
+  }
+
+  // Otherwise treat as plain search query / business name
+  return { query: trimmed };
+}
+
 app.get("/api/google-reviews", async (req, res) => {
   const settings = getCurrentWebsiteSettings();
   const apiKey = process.env.GOOGLE_MAPS_API_KEY || settings.google_maps_api_key || settings.google_places_api_key || "";
-  const placeId = process.env.GOOGLE_PLACE_ID || settings.google_place_id || "ChIJrTLr-Gyu2EcRBfy61iWz6vM"; // Default to Solihull/Birmingham area
+  
+  // Link or Place ID configured in Admin Dashboard
+  const gmbInput = (settings.google_business_profile_url || settings.google_place_id || process.env.GOOGLE_PLACE_ID || "").trim();
+  const identifier = extractPlaceIdentifier(gmbInput);
 
-  // Check cache
+  let targetPlaceId = identifier.placeId || "";
+
+  // Check cache (key by targetPlaceId or default)
   const now = Date.now();
   if (cachedGoogleReviews && (now - cachedGoogleReviews.timestamp < GOOGLE_REVIEWS_CACHE_TTL)) {
-    return res.json(cachedGoogleReviews.data);
+    if (!req.query.refresh) {
+      return res.json(cachedGoogleReviews.data);
+    }
   }
 
   // Fallback high-quality curated reviews if API key not provided or request fails
@@ -2600,13 +2643,15 @@ app.get("/api/google-reviews", async (req, res) => {
     }
   ];
 
-  if (!apiKey || !placeId) {
+  // If no API key is provided, return curated reviews with the configured business name / maps link
+  if (!apiKey) {
     const payload = {
       success: true,
       source: "curated",
       businessName: settings.business_name || "TravelLuxx",
       overallRating: 5.0,
       totalReviews: 48,
+      googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
       reviews: fallbackReviews
     };
     cachedGoogleReviews = { timestamp: now, data: payload };
@@ -2614,7 +2659,24 @@ app.get("/api/google-reviews", async (req, res) => {
   }
 
   try {
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(placeId)}&fields=name,rating,user_ratings_total,reviews,url&key=${encodeURIComponent(apiKey)}`;
+    // If we have an API key but no direct placeId, find place using CID or Query
+    if (!targetPlaceId && (identifier.cid || identifier.query)) {
+      const findQuery = identifier.cid ? `cid:${identifier.cid}` : (identifier.query || settings.business_name || "TravelLuxx");
+      const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(findQuery)}&inputtype=textquery&fields=place_id,name&key=${encodeURIComponent(apiKey)}`;
+      const findResp = await fetch(findUrl);
+      if (findResp.ok) {
+        const findData: any = await findResp.json();
+        if (findData.candidates && findData.candidates.length > 0) {
+          targetPlaceId = findData.candidates[0].place_id;
+        }
+      }
+    }
+
+    if (!targetPlaceId) {
+      targetPlaceId = "ChIJrTLr-Gyu2EcRBfy61iWz6vM"; // Fallback to Solihull area
+    }
+
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(targetPlaceId)}&fields=name,rating,user_ratings_total,reviews,url&key=${encodeURIComponent(apiKey)}`;
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Google Places HTTP ${response.status}`);
     const data: any = await response.json();
@@ -2636,7 +2698,7 @@ app.get("/api/google-reviews", async (req, res) => {
         businessName: r.name || settings.business_name || "TravelLuxx",
         overallRating: r.rating || 5.0,
         totalReviews: r.user_ratings_total || reviews.length,
-        googleMapsUrl: r.url || "https://maps.google.com/?cid=12345",
+        googleMapsUrl: r.url || settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
         reviews: reviews.length > 0 ? reviews : fallbackReviews
       };
 
@@ -2650,6 +2712,7 @@ app.get("/api/google-reviews", async (req, res) => {
         businessName: settings.business_name || "TravelLuxx",
         overallRating: 5.0,
         totalReviews: 48,
+        googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
         reviews: fallbackReviews
       };
       cachedGoogleReviews = { timestamp: now, data: payload };
@@ -2663,657 +2726,14 @@ app.get("/api/google-reviews", async (req, res) => {
       businessName: settings.business_name || "TravelLuxx",
       overallRating: 5.0,
       totalReviews: 48,
+      googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
       reviews: fallbackReviews
     };
+    cachedGoogleReviews = { timestamp: now, data: payload };
     return res.json(payload);
   }
 });
 
-
-app.get("/api/places/autocomplete", async (req, res) => {
-  const query = (req.query.q as string || "").trim();
-  if (!query || query.length < 2) {
-    return res.json([]);
-  }
-
-  try {
-    // 1. Query Photon API (fast, OSM based, UK prioritized)
-    const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=8`;
-    const response = await fetch(photonUrl);
-    if (response.ok) {
-      const data: any = await response.json();
-      if (data && data.features && data.features.length > 0) {
-        const results = data.features.map((f: any) => {
-          const p = f.properties || {};
-          const name = p.name || "";
-          const street = [p.housenumber, p.street].filter(Boolean).join(" ");
-          const locParts = [street, p.city || p.town || p.district, p.postcode, p.country].filter(Boolean);
-          const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
-          const isAirport = name.toLowerCase().includes("airport") || (p.osm_value && p.osm_value.includes("aerodrome"));
-          
-          return {
-            lat: f.geometry.coordinates[1],
-            lng: f.geometry.coordinates[0],
-            name: fullLabel || name,
-            mainText: name || locParts[0] || fullLabel,
-            secondaryText: locParts.join(", "),
-            type: isAirport ? "airport" : "address"
-          };
-        });
-        return res.json(results);
-      }
-    }
-  } catch (err) {
-    console.warn("Backend Photon search error:", err);
-  }
-
-  // Fallback to Nominatim
-  try {
-    const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`;
-    const nomRes = await fetch(nomUrl, { headers: { 'User-Agent': 'TravelluxxApp/1.0', 'Accept-Language': 'en' } });
-    if (nomRes.ok) {
-      const nomData: any = await nomRes.json();
-      const results = nomData.map((item: any) => {
-        const parts = (item.display_name || "").split(",");
-        return {
-          lat: parseFloat(item.lat),
-          lng: parseFloat(item.lon),
-          name: item.display_name,
-          mainText: parts[0]?.trim() || item.display_name,
-          secondaryText: parts.slice(1, 3).map((p: any) => p.trim()).join(", "),
-          type: item.display_name.toLowerCase().includes("airport") ? "airport" : "address"
-        };
-      });
-      return res.json(results);
-    }
-  } catch (e) {
-    console.warn("Backend Nominatim fallback error:", e);
-  }
-
-  return res.json([]);
-});
-
-// --- Admin Register (Sign Up - DISABLED) ---
-app.post("/api/admin/register", (req, res) => {
-  return res.status(403).json({ error: "Registration is disabled" });
-});
-
-app.post("/api/bookings/payment-simulate", async (req, res) => {
-  const { bookingId } = req.body;
-  try {
-    await connectToDatabase();
-    if (mongoose.connection.readyState === 1) {
-      await BookingModel.findOneAndUpdate(
-        { id: bookingId },
-        { $set: { paymentStatus: "Paid", status: "Pending" } }
-      );
-      console.log(`💾 Simulated payment (Paid, Pending) for ${bookingId} in MongoDB!`);
-    }
-    
-    const bookings = readBookings();
-    const booking = bookings.find(b => b.id === bookingId);
-    if (booking) {
-      booking.paymentStatus = "Paid";
-      booking.status = "Pending";
-      writeBookings(bookings);
-    }
-    return res.json({ success: true, transactionId: `TXN-${Math.random().toString(36).substring(2, 10).toUpperCase()}` });
-  } catch (err: any) {
-    console.error("Simulation error:", err);
-    return res.status(500).json({ error: err.message });
-  }
-});
-
-// Mollie Payment Gateway Routes
-app.post("/api/mollie/create-payment", async (req, res) => {
-  try {
-    const bookingData = req.body;
-    const mollieClient = getMollieClient();
-
-    if (!mollieClient) {
-      return res.status(400).json({
-        success: false,
-        error: "Mollie API key is missing. Please configure MOLLIE_API_KEY in your .env file or in Website Settings in Admin Panel."
-      });
-    }
-
-    const bookings = readBookings();
-    const bookingId = bookingData.id || `WLC-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-    let booking = bookings.find(b => b.id === bookingId);
-
-    if (!booking) {
-      booking = {
-        id: bookingId,
-        ...bookingData,
-        paymentMethod: "Mollie",
-        paymentStatus: "Pending (Mollie)",
-        status: "Pending Payment",
-        createdAt: new Date().toISOString()
-      };
-      bookings.unshift(booking);
-      writeBookings(bookings);
-
-      // Save draft booking to MongoDB immediately to prevent loss on Vercel
-      if (mongoose.connection.readyState === 1) {
-        const dbBooking = new BookingModel(booking);
-        await dbBooking.save().catch(e => console.error("Error saving draft booking to MongoDB:", e));
-      }
-    }
-
-    const appUrl = (process.env.APP_URL || `${req.protocol}://${req.get("host")}`).replace(/\/$/, "");
-    const rawPrice = Number(bookingData.price || booking.price || 0);
-    const amountVal = rawPrice > 0 ? rawPrice.toFixed(2) : "10.00";
-
-    // Prepare Customer Name & Address for Klarna / Orders API compliance
-    const fullName = (bookingData.passengerName || booking.passengerName || booking.name || "Valued Customer").trim();
-    const nameParts = fullName.split(" ").filter(Boolean);
-    const givenName = nameParts[0] && nameParts[0].length >= 2 ? nameParts[0] : "Customer";
-    const familyName = nameParts.slice(1).join(" ") || "Traveler";
-    const customerEmail = (bookingData.passengerEmail || bookingData.email || booking.passengerEmail || booking.email || "bookings@travelluxx.co.uk").trim();
-
-    // Customer Phone (formatted for international compatibility)
-    let rawPhone = (bookingData.passengerPhone || booking.passengerPhone || booking.phone || "").trim();
-    let formattedPhone = rawPhone.replace(/[^\d+]/g, "");
-    if (formattedPhone.startsWith("0")) {
-      formattedPhone = "+44" + formattedPhone.substring(1);
-    } else if (formattedPhone && !formattedPhone.startsWith("+")) {
-      formattedPhone = "+" + formattedPhone;
-    }
-    if (!formattedPhone || formattedPhone.length < 8) {
-      formattedPhone = "+442079460991"; // Fallback UK number
-    }
-
-    // Extract or fallback UK Postcode & Address for billing & shipping
-    const pickupStr = (bookingData.pickup || booking.pickup || "").trim();
-    const ukPostcodeMatch = pickupStr.match(/[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}/i);
-    const postalCode = ukPostcodeMatch ? ukPostcodeMatch[0].toUpperCase() : "SW1A 1AA";
-    const streetAndNumber = pickupStr.length >= 5 ? pickupStr.substring(0, 80) : "10 Downing Street";
-    const city = "London";
-
-    const customerAddress = {
-      givenName: givenName,
-      familyName: familyName,
-      email: customerEmail,
-      phone: formattedPhone,
-      streetAndNumber: streetAndNumber,
-      postalCode: postalCode,
-      city: city,
-      country: "GB"
-    };
-
-    let checkoutUrl = "";
-    let mollieId = "";
-
-    // 1. Try Mollie Orders API first (Mandatory for seamless Klarna HPP without blank screen)
-    try {
-      const order = await mollieClient.orders.create({
-        amount: {
-          currency: "GBP",
-          value: amountVal,
-        },
-        orderNumber: bookingId,
-        locale: "en_GB",
-        description: `TravelLuxx Booking Ref: ${bookingId}`,
-        redirectUrl: `${appUrl}/?bookingStatus=success&bookingId=${bookingId}`,
-        webhookUrl: `${appUrl}/api/mollie/webhook`,
-        billingAddress: customerAddress,
-        shippingAddress: customerAddress,
-        metadata: {
-          bookingId: bookingId,
-          passengerName: fullName,
-          email: customerEmail,
-          vehicle: bookingData.vehicle || booking.vehicle || "Chauffeur",
-        },
-        lines: [
-          {
-            type: "physical",
-            name: `Chauffeur Service (${bookingData.vehicle || booking.vehicle || "Executive"} Class) - Ref: ${bookingId}`,
-            quantity: 1,
-            unitPrice: {
-              currency: "GBP",
-              value: amountVal,
-            },
-            totalAmount: {
-              currency: "GBP",
-              value: amountVal,
-            },
-            vatRate: "0.00",
-            vatAmount: {
-              currency: "GBP",
-              value: "0.00",
-            }
-          }
-        ]
-      });
-
-      checkoutUrl = order.getCheckoutUrl() || (order as any)._links?.checkout?.href || "";
-      mollieId = order.id;
-    } catch (orderErr: any) {
-      console.warn("Mollie orders.create failed, falling back to payments.create:", orderErr?.message || orderErr);
-
-      // 2. Fallback to payments.create
-      const payment = await mollieClient.payments.create({
-        amount: {
-          currency: "GBP",
-          value: amountVal,
-        },
-        description: `TravelLuxx Booking Ref: ${bookingId}`,
-        redirectUrl: `${appUrl}/?bookingStatus=success&bookingId=${bookingId}`,
-        webhookUrl: `${appUrl}/api/mollie/webhook`,
-        locale: "en_GB",
-        billingAddress: customerAddress,
-        shippingAddress: customerAddress,
-        metadata: {
-          bookingId: bookingId,
-          passengerName: fullName,
-          email: customerEmail,
-          vehicle: bookingData.vehicle || booking.vehicle || "Chauffeur",
-        },
-        lines: [
-          {
-            type: "physical",
-            description: `Chauffeur Service (${bookingData.vehicle || booking.vehicle || "Executive"} Class) - Ref: ${bookingId}`,
-            quantity: 1,
-            unitPrice: {
-              currency: "GBP",
-              value: amountVal,
-            },
-            totalAmount: {
-              currency: "GBP",
-              value: amountVal,
-            },
-            vatRate: "0.00",
-            vatAmount: {
-              currency: "GBP",
-              value: "0.00",
-            }
-          }
-        ]
-      } as any);
-
-      checkoutUrl = payment.getCheckoutUrl() || (payment as any)._links?.checkout?.href || "";
-      mollieId = payment.id;
-    }
-
-    booking.molliePaymentId = mollieId;
-    writeBookings(bookings);
-
-    return res.json({
-      success: true,
-      checkoutUrl,
-      bookingId,
-      molliePaymentId: mollieId
-    });
-  } catch (err: any) {
-    console.error("Mollie payment creation error:", err);
-    return res.status(500).json({
-      success: false,
-      error: err.message || "Failed to create Mollie payment"
-    });
-  }
-});
-
-app.post("/api/mollie/webhook", async (req, res) => {
-  try {
-    const resourceId = req.body?.id;
-    if (!resourceId) {
-      return res.status(400).send("Missing resource id");
-    }
-
-    const mollieClient = getMollieClient();
-    if (!mollieClient) {
-      return res.status(400).send("Mollie not configured");
-    }
-
-    let status = "";
-    let bookingId = "";
-
-    // Check if webhook is for Order (ord_...) or Payment (tr_...)
-    if (resourceId.startsWith("ord_")) {
-      const order = await mollieClient.orders.get(resourceId);
-      status = order.status;
-      bookingId = (order.metadata as any)?.bookingId || order.orderNumber;
-
-      // For Klarna / Orders: if order is authorized, create shipment to capture funds
-      if (order.status === "authorized") {
-        try {
-          await mollieClient.shipments.create({ orderId: resourceId });
-          console.log(`Auto-shipped and captured Mollie order: ${resourceId}`);
-        } catch (shipErr: any) {
-          console.warn("Mollie shipment creation notice:", shipErr?.message || shipErr);
-        }
-      }
-    } else {
-      const payment = await mollieClient.payments.get(resourceId);
-      status = payment.status;
-      bookingId = (payment.metadata as any)?.bookingId;
-    }
-
-    if (bookingId) {
-      const bookings = readBookings();
-      const booking = bookings.find(b => b.id === bookingId || b.molliePaymentId === resourceId);
-      if (booking) {
-        if (status === "paid" || status === "authorized" || status === "completed") {
-          booking.paymentStatus = "Paid";
-          booking.status = "Pending";
-          booking.paymentMethod = "Mollie";
-          writeBookings(bookings);
-
-          if (mongoose.connection.readyState === 1) {
-            await BookingModel.findOneAndUpdate(
-              { id: bookingId },
-              { $set: { paymentStatus: "Paid", status: "Pending", paymentMethod: "Mollie" } }
-            );
-          }
-
-          sendBookingEmails(booking).catch(err => console.error("Mollie email error:", err));
-          sendWhatsAppNotification(booking).catch(err => console.error("Mollie WhatsApp error:", err));
-        } else if (status === "canceled" || status === "expired" || status === "failed") {
-          booking.paymentStatus = "Failed/Canceled";
-          booking.status = "Canceled";
-          writeBookings(bookings);
-          if (mongoose.connection.readyState === 1) {
-            await BookingModel.findOneAndUpdate(
-              { id: bookingId },
-              { $set: { paymentStatus: "Failed/Canceled", status: "Canceled" } }
-            );
-          }
-        }
-      }
-    }
-
-    return res.status(200).send("OK");
-  } catch (err: any) {
-    console.error("Mollie webhook error:", err);
-    return res.status(500).send("Webhook error");
-  }
-});
-
-app.get("/api/mollie/status/:bookingId", async (req, res) => {
-  const { bookingId } = req.params;
-  try {
-    await connectToDatabase();
-    if (mongoose.connection.readyState === 1) {
-      const dbBooking = await BookingModel.findOne({ id: bookingId });
-      if (dbBooking) {
-        const b = dbBooking.toObject ? dbBooking.toObject() : dbBooking;
-        return res.json({
-          success: true,
-          bookingId: b.id,
-          paymentStatus: b.paymentStatus,
-          status: b.status
-        });
-      }
-    }
-  } catch (e) {}
-  
-  const bookings = readBookings();
-  const booking = bookings.find(b => b.id === bookingId);
-  if (!booking) {
-    return res.status(404).json({ success: false, error: "Booking not found" });
-  }
-  return res.json({
-    success: true,
-    bookingId: booking.id,
-    paymentStatus: booking.paymentStatus,
-    status: booking.status
-  });
-});
-
-app.post("/api/contact", async (req, res) => {
-  try {
-    await connectToDatabase();
-    const inquiry = {
-      id: `INQ-${Math.floor(1000 + Math.random() * 9000)}`,
-      ...req.body,
-      status: "Unread",
-      createdAt: new Date().toISOString()
-    };
-
-    // Save to local JSON as fallback
-    const inquiries = readInquiries();
-    inquiries.unshift(inquiry);
-    writeInquiries(inquiries);
-
-    // Save to MongoDB
-    try {
-      if (mongoose.connection.readyState === 1) {
-        const dbInquiry = new InquiryModel(inquiry);
-        await dbInquiry.save();
-        console.log("💾 Saved contact inquiry to MongoDB!");
-      }
-    } catch (err: any) {
-      console.error("MongoDB inquiry save error:", err.message);
-    }
-
-    await sendContactEmails(inquiry).catch(err => console.error("Contact email error:", err));
-    return res.json({ success: true, inquiry });
-  } catch (err: any) {
-    return res.status(500).json({ error: err.message });
-  }
-});
-
-// Admin Inquiries API
-app.get("/api/admin/inquiries", async (req, res) => {
-  try {
-    await connectToDatabase();
-    if (mongoose.connection.readyState === 1) {
-      const rows = await InquiryModel.find().sort({ createdAt: -1 });
-      return res.json(rows.map((r: any) => r.toObject ? r.toObject() : r));
-    }
-  } catch (e: any) {
-    console.error("Error reading from MongoDB inquiries:", e.message);
-  }
-  return res.json(readInquiries());
-});
-
-app.delete("/api/admin/inquiries/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    await connectToDatabase();
-    if (mongoose.connection.readyState === 1) {
-      await InquiryModel.deleteOne({ id });
-    }
-  } catch (e) {}
-  let inquiries = readInquiries();
-  inquiries = inquiries.filter(i => i.id !== id);
-  writeInquiries(inquiries);
-  return res.json({ success: true });
-});
-
-app.get("/api/pricing", async (req, res) => {
-  try {
-    await connectToDatabase();
-    await syncSettingsFromDb();
-  } catch (e) {}
-  res.json(getCurrentPricingSettings());
-});
-
-app.get("/api/settings", async (req, res) => {
-  try {
-    await connectToDatabase();
-    await syncSettingsFromDb();
-  } catch (e) {}
-  res.json(getCurrentWebsiteSettings());
-});
-
-app.post("/api/settings", async (req, res) => {
-  try {
-    await connectToDatabase();
-    const current = getCurrentWebsiteSettings();
-    const updated = { ...current, ...req.body };
-    cachedWebsiteSettings = updated;
-
-    if (mongoose.connection.readyState === 1) {
-      await SettingModel.findOneAndUpdate({ key: "website" }, { value: updated }, { upsert: true });
-      console.log("💾 Saved website settings to MongoDB!");
-    }
-
-    if (!process.env.VERCEL) {
-      fs.writeFileSync(SETTINGS_PATH, JSON.stringify(updated, null, 2));
-      try {
-        const webSettingsPath = path.join(process.cwd(), "website_settings.json");
-        fs.writeFileSync(webSettingsPath, JSON.stringify(updated, null, 2));
-      } catch (e) {}
-    }
-    res.json({ success: true, settings: updated });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || "Failed to update settings" });
-  }
-});
-
-app.get("/api/smtp-settings", async (req, res) => {
-  try {
-    await connectToDatabase();
-    await syncSettingsFromDb();
-  } catch (e) {}
-  const smtp = readSmtpSettings();
-  res.json({
-    smtpHost: smtp.smtpHost,
-    smtpPort: smtp.smtpPort,
-    smtpUser: smtp.smtpUser,
-    smtpPass: smtp.smtpPass ? "••••••••" : "",
-    smtpSecure: smtp.smtpSecure,
-    senderAddress: smtp.senderAddress
-  });
-});
-
-app.post("/api/smtp-settings", async (req, res) => {
-  try {
-    await connectToDatabase();
-    const { smtpHost, smtpPort, smtpUser, smtpPass, smtpSecure, senderAddress } = req.body;
-    const current = readSmtpSettings();
-    const updated = {
-      smtpHost: smtpHost || current.smtpHost,
-      smtpPort: smtpPort || current.smtpPort,
-      smtpUser: smtpUser || current.smtpUser,
-      smtpPass: (smtpPass && smtpPass !== "••••••••") ? smtpPass : current.smtpPass,
-      smtpSecure: smtpSecure !== undefined ? smtpSecure : current.smtpSecure,
-      senderAddress: senderAddress || current.senderAddress || smtpUser || current.smtpUser
-    };
-    cachedSmtpSettings = updated;
-
-    if (mongoose.connection.readyState === 1) {
-      await SettingModel.findOneAndUpdate({ key: "smtp" }, { value: updated }, { upsert: true });
-      console.log("💾 Saved SMTP settings to MongoDB!");
-    }
-
-    if (!process.env.VERCEL) {
-      fs.writeFileSync(SMTP_PATH, JSON.stringify(updated, null, 2));
-    }
-    res.json({ success: true, smtp: updated });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || "Failed to save SMTP settings" });
-  }
-});
-
-app.post("/api/test-email", async (req, res) => {
-  try {
-    const { recipientEmail } = req.body;
-    const ws = getCurrentWebsiteSettings();
-    const target = recipientEmail || ws.business_email || "info@travelluxx.co.uk";
-    const smtpSettings = readSmtpSettings();
-
-    const result = await sendEmailSafely({
-      from: `"${ws.business_name}" <${smtpSettings.senderAddress || smtpSettings.smtpUser || ws.business_email}>`,
-      to: target,
-      subject: `Test Email from ${ws.business_name}`,
-      text: `Hello! This is a test email sent from ${ws.business_name} at ${new Date().toLocaleString()}. SMTP is functioning properly.`
-    });
-
-    if (result.success) {
-      return res.json({ success: true, message: `Test email sent successfully to ${target}`, messageId: result.messageId });
-    } else {
-      return res.status(500).json({ success: false, error: result.error || "Failed to send test email" });
-    }
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message || "Test email exception" });
-  }
-});
-
-app.post("/api/settings/logo", async (req, res) => {
-  try {
-    await connectToDatabase();
-    const { logo } = req.body;
-    if (!logo) {
-      return res.status(400).json({ error: "No logo data provided" });
-    }
-    const current = getCurrentWebsiteSettings();
-    const updated = { ...current, logo_image: logo, logoImage: logo, logo_url: logo };
-    cachedWebsiteSettings = updated;
-
-    if (mongoose.connection.readyState === 1) {
-      await SettingModel.findOneAndUpdate({ key: "website" }, { value: updated }, { upsert: true });
-      console.log("💾 Saved website settings logo to MongoDB!");
-    }
-
-    if (!process.env.VERCEL) {
-      fs.writeFileSync(SETTINGS_PATH, JSON.stringify(updated, null, 2));
-    }
-    res.json({ success: true, logo, settings: updated });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || "Failed to save logo" });
-  }
-});
-
-app.post("/api/stats/click", (req, res) => {
-  res.json({ success: true });
-});
-
-app.post("/api/stats/visit", (req, res) => {
-  res.json({ success: true });
-});
-
-app.post("/api/save-asset-image", (req, res) => {
-  try {
-    const { key, base64 } = req.body;
-    if (!key || !base64) {
-      return res.status(400).json({ error: "Missing key or base64 data" });
-    }
-
-    const matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (!matches || matches.length !== 3) {
-      return res.status(400).json({ error: "Invalid base64 format" });
-    }
-
-    const imageBuffer = Buffer.from(matches[2], "base64");
-
-    const keyToFileMap: Record<string, string> = {
-      logo: "travelluxx_logo_1786403432815.jpg",
-      hero_bg: "hero_background_1786403449488.jpg",
-      fleet_Economy: "fleet_economy_1786403470397.jpg",
-      fleet_Luxury: "fleet_luxury_1786403483244.jpg",
-      fleet_Family: "fleet_family_1786403496325.jpg",
-      transfer_airport: "transfer_airport_1786403518712.jpg",
-      transfer_port: "transfer_port_1786403532912.jpg",
-      transfer_station: "transfer_station_1786403548164.jpg",
-      transfer_city: "transfer_city_1786403562698.jpg",
-      transfer_business: "transfer_business_1786403576291.jpg",
-    };
-
-    const fileName = keyToFileMap[key];
-    if (!fileName) {
-      return res.status(400).json({ error: "Unknown image key: " + key });
-    }
-
-    const targetPath = path.join(process.cwd(), "src", "assets", "images", fileName);
-    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-    fs.writeFileSync(targetPath, imageBuffer);
-
-    const distPath = path.join(process.cwd(), "dist", "assets", "images", fileName);
-    if (fs.existsSync(path.dirname(distPath))) {
-      fs.writeFileSync(distPath, imageBuffer);
-    }
-
-    console.log(`[ASSETS] Successfully saved asset image key ${key} to ${targetPath}`);
-    return res.json({ success: true, fileName, path: targetPath });
-  } catch (err: any) {
-    console.error("Error saving asset image:", err);
-    return res.status(500).json({ error: err.message || "Failed to save asset image" });
-  }
-});
-
-// Dynamic Sitemap.xml
 app.get("/sitemap.xml", async (req, res) => {
   const baseUrl = "https://travelluxx.co.uk";
   const today = new Date().toISOString().split("T")[0];

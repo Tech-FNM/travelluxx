@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { YoastSeoBox } from "./AdminDashboard";
 import {
   ExternalLink,
   Pencil,
@@ -152,6 +153,8 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [selectedMediaUrl, setSelectedMediaUrl] = useState<string | null>(null);
   const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [yoastAreaTab, setYoastAreaTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
+  const [focusKeyphraseArea, setFocusKeyphraseArea] = useState("");
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -1112,120 +1115,34 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
               )}
             </div>
 
-            {/* SEO & Meta Details */}
-            <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 shadow-sm space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#f0f0f1] pb-2">
-                <Globe className="w-4 h-4 text-emerald-600" />
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                  Search Engine Optimization (SEO)
-                </h3>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">
-                  Meta Title
-                </label>
-                <input
-                  type="text"
-                  value={form.metaTitle}
-                  onChange={e => setForm({ ...form, metaTitle: e.target.value })}
-                  placeholder={`Executive Chauffeur Service in ${form.title || "Area"} | TravelLuxx`}
-                  className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">
-                  Meta Description
-                </label>
-                <textarea
-                  rows={2}
-                  value={form.metaDescription}
-                  onChange={e => setForm({ ...form, metaDescription: e.target.value })}
-                  placeholder={`Book executive private chauffeur travel and airport transfers across ${form.title || "this area"} with TravelLuxx. Fixed rates, luxury fleet.`}
-                  className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                />
-              </div>
-              {/* Open Graph (OG) Tags */}
-              <div className="border-t border-[#f0f0f1] pt-3 space-y-3">
-                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                  <span>📱 Open Graph (OG) Social Media Tags</span>
-                </h4>
-                <div>
-                  <label className="block text-xs font-semibold text-[#1d2327] mb-1">
-                    OG Title (Facebook, WhatsApp, LinkedIn)
-                  </label>
-                  <input
-                    type="text"
-                    value={form.ogTitle || ""}
-                    onChange={e => setForm({ ...form, ogTitle: e.target.value })}
-                    placeholder={form.metaTitle || form.title || "Custom social sharing title"}
-                    className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#1d2327] mb-1">
-                    OG Description
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={form.ogDescription || ""}
-                    onChange={e => setForm({ ...form, ogDescription: e.target.value })}
-                    placeholder={form.metaDescription || "Custom social sharing description"}
-                    className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                  />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1d2327] mb-1">
-                      OG Image URL
-                    </label>
-                    <input
-                      type="text"
-                      value={form.ogImage || ""}
-                      onChange={e => setForm({ ...form, ogImage: e.target.value })}
-                      placeholder={form.heroImage || "https://..."}
-                      className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1d2327] mb-1">
-                      OG Type
-                    </label>
-                    <select
-                      value={form.ogType || "website"}
-                      onChange={e => setForm({ ...form, ogType: e.target.value })}
-                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                    >
-                      <option value="website">website</option>
-                      <option value="article">article</option>
-                      <option value="place">place</option>
-                      <option value="business.business">business.business</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+            {/* Yoast SEO Box - Same as Services & Pages */}
+            <YoastSeoBox
+              tab={yoastAreaTab}
+              setTab={setYoastAreaTab}
+              focusKeyphrase={focusKeyphraseArea}
+              setFocusKeyphrase={setFocusKeyphraseArea}
+              title={form.title}
+              slug={form.slug}
+              metaTitle={form.metaTitle}
+              metaDescription={form.metaDescription}
+              contentType="page"
+              image={form.heroImage}
+              excerpt={form.description}
+              onMetaTitleChange={v => setForm(prev => ({ ...prev, metaTitle: v }))}
+              onSlugChange={v => setForm(prev => ({ ...prev, slug: v }))}
+              onMetaDescriptionChange={v => setForm(prev => ({ ...prev, metaDescription: v }))}
+              ogTitle={form.ogTitle}
+              onOgTitleChange={v => setForm(prev => ({ ...prev, ogTitle: v }))}
+              ogDescription={form.ogDescription}
+              onOgDescriptionChange={v => setForm(prev => ({ ...prev, ogDescription: v }))}
+              customSchema={form.customSchema}
+              onCustomSchemaChange={v => setForm(prev => ({ ...prev, customSchema: v }))}
+            />
 
-              {/* Custom Schema Markup (JSON-LD) */}
-              <div className="border-t border-[#f0f0f1] pt-3 space-y-2">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                    <span>⚙️ Custom Schema Markup (JSON-LD)</span>
-                  </h4>
-                  <span className="text-[10px] text-slate-400">Optional custom structured data</span>
-                </div>
-                <p className="text-[11px] text-slate-500">
-                  Enter valid JSON-LD schema markup below (e.g., LocalBusiness, Service, TaxiService). It will be dynamically injected into the &lt;head&gt; of this location page alongside standard FAQPage and TaxiService schema.
-                </p>
-                <textarea
-                  rows={4}
-                  value={form.customSchema || ""}
-                  onChange={e => setForm({ ...form, customSchema: e.target.value })}
-                  placeholder={'{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "TravelLuxx Solihull"\n}'}
-                  className="w-full border border-[#8c8f94] font-mono text-[11px] rounded-sm p-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#2271b1]"
-                />
-              </div>
-
-              <div className="flex items-center gap-6 pt-1">
-                <label className="flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer">
+            {/* Extra Area SEO & Robots Controls */}
+            <div className="bg-white border border-[#c3c4c7] rounded-sm p-4 shadow-sm flex items-center justify-between text-xs text-[#2c3338]">
+              <div className="flex items-center gap-6">
+                <label className="flex items-center gap-2 font-medium cursor-pointer">
                   <input
                     type="checkbox"
                     checked={form.published}
@@ -1234,7 +1151,7 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
                   />
                   <span>Published Live</span>
                 </label>
-                <label className="flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer">
+                <label className="flex items-center gap-2 font-medium cursor-pointer">
                   <input
                     type="checkbox"
                     checked={form.noIndexNoFollow}

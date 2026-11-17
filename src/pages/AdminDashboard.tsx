@@ -30,7 +30,7 @@ const quillModules = {
 };
 
 // Yoast SEO Box Component
-function YoastSeoBox({
+export function YoastSeoBox({
   tab,
   setTab,
   focusKeyphrase,
@@ -44,7 +44,13 @@ function YoastSeoBox({
   excerpt,
   onMetaTitleChange,
   onSlugChange,
-  onMetaDescriptionChange
+  onMetaDescriptionChange,
+  ogTitle = "",
+  onOgTitleChange,
+  ogDescription = "",
+  onOgDescriptionChange,
+  customSchema = "",
+  onCustomSchemaChange
 }: {
   tab: "seo" | "readability" | "schema" | "social";
   setTab: (t: "seo" | "readability" | "schema" | "social") => void;
@@ -60,6 +66,12 @@ function YoastSeoBox({
   onMetaTitleChange: (v: string) => void;
   onSlugChange: (v: string) => void;
   onMetaDescriptionChange: (v: string) => void;
+  ogTitle?: string;
+  onOgTitleChange?: (v: string) => void;
+  ogDescription?: string;
+  onOgDescriptionChange?: (v: string) => void;
+  customSchema?: string;
+  onCustomSchemaChange?: (v: string) => void;
 }) {
   const finalTitle = metaTitle || title || "Please enter a title";
   const finalSlug = slug || "slug-url";
@@ -266,6 +278,25 @@ function YoastSeoBox({
               </div>
             </div>
 
+            {/* Custom Schema Markup (JSON-LD) */}
+            <div className="bg-[#f6f7f7] border border-[#c3c4c7] p-4 rounded-sm space-y-2 mt-4">
+              <div className="flex items-center justify-between">
+                <label className="block text-[11px] font-bold text-[#2c3338] uppercase tracking-wide">
+                  Custom Schema Markup (JSON-LD)
+                </label>
+                <span className="text-[10px] text-slate-500">Optional custom structured data</span>
+              </div>
+              <p className="text-[11px] text-[#646970]">
+                Enter valid JSON-LD schema (e.g. LocalBusiness, TaxiService, Service). It will be dynamically injected into the &lt;head&gt; of this page.
+              </p>
+              <textarea
+                rows={4}
+                value={customSchema}
+                onChange={e => onCustomSchemaChange && onCustomSchemaChange(e.target.value)}
+                placeholder={'{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "TravelLuxx"\n}'}
+                className="w-full border border-[#8c8f94] bg-white font-mono text-[11px] rounded-sm p-2 text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+              />
+            </div>
             <p className="text-[11px] text-[#646970] mt-2">
               You can change the default type for Posts under Content types in the <span className="text-[#2271b1] cursor-pointer hover:underline">Settings</span>.
             </p>
@@ -332,7 +363,7 @@ function YoastSeoBox({
                       <button type="button" className="text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5">✨ Generate social title</button>
                     </div>
                   </div>
-                  <input type="text" className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
+                  <input type="text" value={ogTitle} onChange={e => onOgTitleChange && onOgTitleChange(e.target.value)} placeholder={title} className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
                 </div>
 
                 {/* Social Description */}
@@ -344,7 +375,7 @@ function YoastSeoBox({
                       <button type="button" className="text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5">✨ Generate social description</button>
                     </div>
                   </div>
-                  <textarea rows={3} className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
+                  <textarea rows={3} value={ogDescription} onChange={e => onOgDescriptionChange && onOgDescriptionChange(e.target.value)} placeholder={metaDescription || excerpt} className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
                 </div>
               </div>
             </div>
@@ -2615,7 +2646,7 @@ export default function AdminDashboard() {
                               </td>
                             </tr>
                           ) : (
-                            <tr key={pageId} className="hover:bg-[#f6f7f7] transition group">
+                            <tr key={p.id} className="hover:bg-[#f6f7f7] transition group">
                               <td className="py-3 px-3 text-center"><input type="checkbox" className="rounded-sm border-[#8c8f94]" /></td>
                               <td className="py-3 px-3 font-semibold text-[#2271b1] max-w-xs">
                                 <span onClick={() => openEditPost(p)} className="hover:text-[#00a0d2] cursor-pointer text-sm block mb-1">{p.title}</span>
@@ -7843,7 +7874,67 @@ export default function AdminDashboard() {
                     )}
 
                     {settingsTab === "connectors" && (
-                      <div className="space-y-4">
+                      <div className="space-y-6">
+                        {/* Google Business Profile & Reviews Settings */}
+                        <div className="bg-slate-50 border border-slate-200 rounded p-4 space-y-4">
+                          <h2 className="font-bold text-[#1d2327] text-sm pb-2 border-b border-slate-200 flex items-center gap-2">
+                            <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                            Google Business Profile &amp; Reviews Integration
+                          </h2>
+                          <p className="text-[#646970] text-xs leading-relaxed">
+                            Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and fetch authentic customer reviews from this Google profile.
+                          </p>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                              Google Business Profile / Google Maps URL
+                            </label>
+                            <input
+                              type="text"
+                              value={settings.google_business_profile_url || ""}
+                              onChange={e => setSettings({ ...settings, google_business_profile_url: e.target.value })}
+                              placeholder="https://maps.app.goo.gl/... or https://www.google.com/maps/place/..."
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            />
+                            <p className="text-[#646970] text-[10px] mt-1">
+                              Example: <span className="font-mono">https://maps.google.com/?cid=...</span> or your business search URL.
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                                Google Places API Key (Optional for live sync)
+                              </label>
+                              <input
+                                type="password"
+                                value={settings.google_places_api_key || ""}
+                                onChange={e => setSettings({ ...settings, google_places_api_key: e.target.value })}
+                                placeholder="AIzaSy..."
+                                className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              />
+                              <p className="text-[#646970] text-[10px] mt-1">
+                                If empty, the system displays verified TravelLuxx 5-star customer testimonials with direct link to your Google page.
+                              </p>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                                Google Place ID (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                value={settings.google_place_id || ""}
+                                onChange={e => setSettings({ ...settings, google_place_id: e.target.value })}
+                                placeholder="ChIJ..."
+                                className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              />
+                              <p className="text-[#646970] text-[10px] mt-1">
+                                Direct Google Place ID identifier if known.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
                         <h2 className="font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1] flex items-center gap-2">
                           💳 Mollie Payment Gateway
                         </h2>
