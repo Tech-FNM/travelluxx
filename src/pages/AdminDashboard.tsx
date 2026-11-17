@@ -630,6 +630,7 @@ export default function AdminDashboard() {
   const [editingServiceAreasPage, setEditingServiceAreasPage] = useState(false);
   const [showMollieKey, setShowMollieKey] = useState(false);
   const [testEmailLoading, setTestEmailLoading] = useState(false);
+  const [syncingReviews, setSyncingReviews] = useState(false);
   const [testEmailResult, setTestEmailResult] = useState<{success: boolean; message: string} | null>(null);
 
   const [editorMediaModalOpen, setEditorMediaModalOpen] = useState(false);
@@ -1028,6 +1029,26 @@ export default function AdminDashboard() {
   };
 
   
+    const handleSyncGoogleReviews = async () => {
+    setSyncingReviews(true);
+    try {
+      const res = await fetch("/api/google-reviews/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showToast(data.message || "Google reviews synced and cache updated!", "success");
+      } else {
+        showToast(data.error || "Failed to sync Google reviews", "error");
+      }
+    } catch (err: any) {
+      showToast(err.message || "Network error while syncing reviews", "error");
+    } finally {
+      setSyncingReviews(false);
+    }
+  };
+
   const fetchPromoCodes = async () => {
     setPromoCodesLoading(true);
     try {
@@ -7877,10 +7898,30 @@ export default function AdminDashboard() {
                       <div className="space-y-6">
                         {/* Google Business Profile & Reviews Settings */}
                         <div className="bg-slate-50 border border-slate-200 rounded p-4 space-y-4">
-                          <h2 className="font-bold text-[#1d2327] text-sm pb-2 border-b border-slate-200 flex items-center gap-2">
-                            <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                            Google Business Profile &amp; Reviews Integration
-                          </h2>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200">
+                            <div className="flex items-center gap-2">
+                              <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                              <h2 className="font-bold text-[#1d2327] text-sm">
+                                Google Business Profile &amp; Reviews Integration
+                              </h2>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={handleSyncGoogleReviews}
+                              disabled={syncingReviews}
+                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1.5 transition disabled:opacity-50 shrink-0"
+                            >
+                              {syncingReviews ? (
+                                <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                              ) : (
+                                <Sparkles className="w-3.5 h-3.5" />
+                              )}
+                              <span>{syncingReviews ? "Syncing..." : "Sync Now (Refresh Reviews)"}</span>
+                            </button>
+                          </div>
                           <p className="text-[#646970] text-xs leading-relaxed">
                             Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and fetch authentic customer reviews from this Google profile.
                           </p>
@@ -7931,6 +7972,35 @@ export default function AdminDashboard() {
                               <p className="text-[#646970] text-[10px] mt-1">
                                 Direct Google Place ID identifier if known.
                               </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                                Display Rating (e.g. 5.0)
+                              </label>
+                              <input
+                                type="number"
+                                step="0.1"
+                                min="1"
+                                max="5"
+                                value={settings.google_reviews_rating || 5.0}
+                                onChange={e => setSettings({ ...settings, google_reviews_rating: parseFloat(e.target.value) })}
+                                className="w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                                Total Verified Reviews Count (e.g. 48)
+                              </label>
+                              <input
+                                type="number"
+                                min="1"
+                                value={settings.google_reviews_count || 48}
+                                onChange={e => setSettings({ ...settings, google_reviews_count: parseInt(e.target.value) })}
+                                className="w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              />
                             </div>
                           </div>
                         </div>

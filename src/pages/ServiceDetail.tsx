@@ -26,7 +26,7 @@ export default function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
-  const { settings: websiteSettings, services, servicesPageSettings, isLoading } = useSettings();
+  const { settings, services, servicesPageSettings, isLoading } = useSettings();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   
   const service = services.find((s: any) => s.slug === slug || s.id === slug);
