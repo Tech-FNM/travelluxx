@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles, HelpCircle, ListOrdered, Globe } from "lucide-react";
+import { Tag, Ticket, Percent, ArrowUp, ArrowDown, Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles, HelpCircle, ListOrdered, Globe } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { getServiceIcon, AVAILABLE_SERVICE_ICONS } from "../utils/serviceIcons";
 import ServiceAreasManager from "./ServiceAreasManager";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "service-areas" | "media" | "menus" | "settings" | "inquiries";
+type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "service-areas" | "media" | "menus" | "promocodes" | "settings" | "inquiries";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function toBase64(file: File): Promise<string> {
@@ -666,6 +666,26 @@ export default function AdminDashboard() {
   const [newMenuItem, setNewMenuItem] = useState({ label: "", href: "", target: "_self" });
   const [newSubMenuItems, setNewSubMenuItems] = useState<{ [parentId: string]: { label: string; href: string; target: string } }>({});
 
+  // Promo codes state
+  const [promoCodes, setPromoCodes] = useState<any[]>([]);
+  const [promoCodesLoading, setPromoCodesLoading] = useState(false);
+  const [promoModalOpen, setPromoModalOpen] = useState(false);
+  const [editingPromoId, setEditingPromoId] = useState<string | null>(null);
+  const [promoForm, setPromoForm] = useState({
+    code: "",
+    discountType: "percentage" as "percentage" | "fixed",
+    discountValue: 10,
+    minOrderAmount: 0,
+    maxDiscountAmount: 0,
+    usageLimit: 0,
+    expiresAt: "",
+    isActive: true,
+    description: ""
+  });
+  const [promoSaving, setPromoSaving] = useState(false);
+  const [promoFilter, setPromoFilter] = useState<"all" | "active" | "inactive">("all");
+
+
   useEffect(() => {
     if (token) {
       fetchAll();
@@ -676,7 +696,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!token) return;
     if (routeTab) {
-      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "settings", "inquiries"];
+      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "promocodes", "settings", "inquiries"];
       if (validTabs.includes(routeTab as Tab)) {
         setActiveTab(routeTab as Tab);
       }
@@ -973,7 +993,106 @@ export default function AdminDashboard() {
   };
 
   const fetchAll = () => {
-    fetchBookings(); fetchPosts(); fetchPages(); fetchServices(); fetchServicesPageSettings(); fetchSettings(); fetchMenu(); fetchInquiries(); fetchMedia();
+    fetchBookings(); fetchPosts(); fetchPages(); fetchServices(); fetchServicesPageSettings(); fetchSettings(); fetchMenu(); fetchInquiries(); fetchMedia(); fetchPromoCodes();
+  };
+
+  
+  const fetchPromoCodes = async () => {
+    setPromoCodesLoading(true);
+    try {
+      const res = await fetch("/api/admin/promocodes");
+      if (res.ok) {
+        const data = await res.json();
+        setPromoCodes(Array.isArray(data) ? data : []);
+      }
+    } catch (e) {
+      console.error("Error fetching promo codes:", e);
+    } finally {
+      setPromoCodesLoading(false);
+    }
+  };
+
+  const handleSavePromoCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promoForm.code.trim()) {
+      showToast("Please enter a promo code", "error");
+      return;
+    }
+    setPromoSaving(true);
+    try {
+      const payload = {
+        ...promoForm,
+        code: promoForm.code.trim().toUpperCase(),
+        discountValue: Number(promoForm.discountValue) || 0,
+        minOrderAmount: Number(promoForm.minOrderAmount) || 0,
+        maxDiscountAmount: promoForm.maxDiscountAmount ? Number(promoForm.maxDiscountAmount) : undefined,
+        usageLimit: Number(promoForm.usageLimit) || 0,
+        expiresAt: promoForm.expiresAt ? promoForm.expiresAt : undefined
+      };
+
+      const url = editingPromoId ? `/api/admin/promocodes/${editingPromoId}` : "/api/admin/promocodes";
+      const method = editingPromoId ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.message || "Failed to save promo code", "error");
+      } else {
+        showToast(editingPromoId ? "Promo code updated successfully!" : "Promo code created successfully!", "success");
+        setPromoModalOpen(false);
+        setEditingPromoId(null);
+        setPromoForm({
+          code: "",
+          discountType: "percentage",
+          discountValue: 10,
+          minOrderAmount: 0,
+          maxDiscountAmount: 0,
+          usageLimit: 0,
+          expiresAt: "",
+          isActive: true,
+          description: ""
+        });
+        fetchPromoCodes();
+      }
+    } catch (err: any) {
+      showToast(err.message || "An error occurred", "error");
+    } finally {
+      setPromoSaving(false);
+    }
+  };
+
+  const handleTogglePromoActive = async (promo: any) => {
+    try {
+      const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive: !promo.isActive })
+      });
+      if (res.ok) {
+        showToast(`Promo code ${promo.code} is now ${!promo.isActive ? "active" : "inactive"}`, "success");
+        fetchPromoCodes();
+      }
+    } catch (e) {
+      showToast("Failed to toggle promo code status", "error");
+    }
+  };
+
+  const handleDeletePromo = async (promo: any) => {
+    if (!window.confirm(`Are you sure you want to delete promo code "${promo.code}"?`)) return;
+    try {
+      const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        showToast(`Promo code ${promo.code} deleted`, "success");
+        fetchPromoCodes();
+      }
+    } catch (e) {
+      showToast("Failed to delete promo code", "error");
+    }
   };
 
   const fetchBookings = async () => {
@@ -1642,6 +1761,7 @@ export default function AdminDashboard() {
     { id: "service-areas", icon: <MapPin className="w-4 h-4" />, label: "Service Areas" },
     { id: "media", icon: <Image className="w-4 h-4" />, label: "Media" },
     { id: "menus", icon: <Menu className="w-4 h-4" />, label: "Menus" },
+    { id: "promocodes", icon: <Tag className="w-4 h-4" />, label: "Promo Codes" },
     { id: "settings", icon: <Settings className="w-4 h-4" />, label: "Settings" },
   ];
 
@@ -3060,6 +3180,172 @@ export default function AdminDashboard() {
                                 </div>
                               ))}
                             </div>
+                          </div>
+                        </div>
+
+                        {/* Section 4.5: Homepage FAQs Management */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4 shadow-sm">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#f0f0f1] pb-3">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <HelpCircle className="w-4 h-4 text-[#2271b1]" />
+                                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
+                                  Homepage FAQ Section
+                                </h3>
+                              </div>
+                              <p className="text-xs text-[#646970] mt-0.5">
+                                Manage frequently asked questions displayed on the homepage with an interactive accordion layout.
+                              </p>
+                            </div>
+                            <label className="flex items-center gap-2 text-xs font-semibold cursor-pointer shrink-0">
+                              <input
+                                type="checkbox"
+                                checked={settings.homepage_faqs_enabled !== false}
+                                onChange={e => setSettings({ ...settings, homepage_faqs_enabled: e.target.checked })}
+                                className="rounded text-[#2271b1] focus:ring-[#2271b1]"
+                              />
+                              <span className={settings.homepage_faqs_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400"}>
+                                {settings.homepage_faqs_enabled !== false ? "Section Visible" : "Section Hidden"}
+                              </span>
+                            </label>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Badge</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_faq_badge || ""}
+                                onChange={e => setSettings({ ...settings, homepage_faq_badge: e.target.value })}
+                                placeholder="FREQUENTLY ASKED QUESTIONS"
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Title</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_faq_title || ""}
+                                onChange={e => setSettings({ ...settings, homepage_faq_title: e.target.value })}
+                                placeholder="Got Questions? We Have Answers"
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">Section Subtitle</label>
+                              <input
+                                type="text"
+                                value={settings.homepage_faq_subtitle || ""}
+                                onChange={e => setSettings({ ...settings, homepage_faq_subtitle: e.target.value })}
+                                placeholder="Everything you need to know about our chauffeur services..."
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="pt-2">
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                                Questions &amp; Answers ({Array.isArray(settings.homepage_faqs) ? settings.homepage_faqs.length : 0})
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const current = Array.isArray(settings.homepage_faqs) ? [...settings.homepage_faqs] : [];
+                                  current.push({ question: "", answer: "" });
+                                  setSettings({ ...settings, homepage_faqs: current });
+                                }}
+                                className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1 transition"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                                Add Question &amp; Answer
+                              </button>
+                            </div>
+
+                            {(!settings.homepage_faqs || settings.homepage_faqs.length === 0) ? (
+                              <div className="p-6 text-center border border-dashed border-[#c3c4c7] rounded bg-slate-50 text-slate-500 text-xs">
+                                No questions added yet. Click "+ Add Question &amp; Answer" to create your first homepage FAQ.
+                              </div>
+                            ) : (
+                              <div className="space-y-3">
+                                {settings.homepage_faqs.map((faq: any, idx: number) => (
+                                  <div key={idx} className="border border-[#c3c4c7] rounded bg-[#fcfcfc] p-3 space-y-2">
+                                    <div className="flex items-center justify-between gap-2">
+                                      <span className="text-xs font-bold text-slate-700">FAQ #{idx + 1}</span>
+                                      <div className="flex items-center gap-1">
+                                        <button
+                                          type="button"
+                                          disabled={idx === 0}
+                                          onClick={() => {
+                                            const updated = [...settings.homepage_faqs];
+                                            const temp = updated[idx - 1];
+                                            updated[idx - 1] = updated[idx];
+                                            updated[idx] = temp;
+                                            setSettings({ ...settings, homepage_faqs: updated });
+                                          }}
+                                          className="p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                                          title="Move Up"
+                                        >
+                                          <ArrowUp className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          disabled={idx === settings.homepage_faqs.length - 1}
+                                          onClick={() => {
+                                            const updated = [...settings.homepage_faqs];
+                                            const temp = updated[idx + 1];
+                                            updated[idx + 1] = updated[idx];
+                                            updated[idx] = temp;
+                                            setSettings({ ...settings, homepage_faqs: updated });
+                                          }}
+                                          className="p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                                          title="Move Down"
+                                        >
+                                          <ArrowDown className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = settings.homepage_faqs.filter((_: any, i: number) => i !== idx);
+                                            setSettings({ ...settings, homepage_faqs: updated });
+                                          }}
+                                          className="p-1 text-red-500 hover:text-red-700"
+                                          title="Delete Question"
+                                        >
+                                          <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <input
+                                        type="text"
+                                        value={faq.question || ""}
+                                        onChange={e => {
+                                          const updated = [...settings.homepage_faqs];
+                                          updated[idx] = { ...updated[idx], question: e.target.value };
+                                          setSettings({ ...settings, homepage_faqs: updated });
+                                        }}
+                                        placeholder="Question (e.g. How far in advance do I need to book?)"
+                                        className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] font-semibold focus:outline-none focus:border-[#2271b1]"
+                                      />
+                                    </div>
+                                    <div>
+                                      <textarea
+                                        rows={2}
+                                        value={faq.answer || ""}
+                                        onChange={e => {
+                                          const updated = [...settings.homepage_faqs];
+                                          updated[idx] = { ...updated[idx], answer: e.target.value };
+                                          setSettings({ ...settings, homepage_faqs: updated });
+                                        }}
+                                        placeholder="Detailed Answer..."
+                                        className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
 
@@ -6946,6 +7232,375 @@ export default function AdminDashboard() {
                 )}
                 Save Menu Changes
               </button>
+            </div>
+          )}
+
+          {/* ─── PROMO CODES TAB ──────────────────────────────────── */}
+          {activeTab === "promocodes" && (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h1 className="text-2xl font-bold text-[#1d2327] flex items-center gap-2">
+                    <Tag className="w-6 h-6 text-[#2271b1]" />
+                    Promo Codes &amp; Discounts
+                  </h1>
+                  <p className="text-xs text-[#646970] mt-0.5">
+                    Create, manage, and monitor coupon codes applied by customers on the booking calculator.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingPromoId(null);
+                    setPromoForm({
+                      code: "",
+                      discountType: "percentage",
+                      discountValue: 10,
+                      minOrderAmount: 0,
+                      maxDiscountAmount: 0,
+                      usageLimit: 0,
+                      expiresAt: "",
+                      isActive: true,
+                      description: ""
+                    });
+                    setPromoModalOpen(true);
+                  }}
+                  className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-2 rounded-sm text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add New Promo Code
+                </button>
+              </div>
+
+              {/* Status Filters */}
+              <div className="flex items-center gap-2 text-xs">
+                {[
+                  { id: "all", label: "All Codes" },
+                  { id: "active", label: "Active" },
+                  { id: "inactive", label: "Inactive / Expired" }
+                ].map(f => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => setPromoFilter(f.id as any)}
+                    className={`px-3 py-1.5 rounded-sm font-semibold transition ${
+                      promoFilter === f.id
+                        ? "bg-[#2271b1] text-white"
+                        : "bg-white text-slate-700 border border-[#c3c4c7] hover:bg-slate-50"
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Promo codes table */}
+              <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-x-auto">
+                {promoCodesLoading ? (
+                  <div className="p-12 text-center text-slate-500 text-xs">Loading promo codes...</div>
+                ) : promoCodes.length === 0 ? (
+                  <div className="p-12 text-center text-slate-500 text-xs space-y-3">
+                    <Ticket className="w-10 h-10 text-slate-300 mx-auto" />
+                    <p className="font-semibold text-slate-700">No promo codes found.</p>
+                    <p>Click "Add New Promo Code" above to create discount vouchers for your customers.</p>
+                  </div>
+                ) : (
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-[#f6f7f7] border-b border-[#c3c4c7] text-[#646970] font-semibold uppercase text-[11px]">
+                        <th className="py-2.5 px-4">Code</th>
+                        <th className="py-2.5 px-4">Discount</th>
+                        <th className="py-2.5 px-4">Min. Booking</th>
+                        <th className="py-2.5 px-4">Usage</th>
+                        <th className="py-2.5 px-4">Expiry</th>
+                        <th className="py-2.5 px-4">Status</th>
+                        <th className="py-2.5 px-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#f0f0f1]">
+                      {promoCodes
+                        .filter(p => {
+                          const isExpired = p.expiresAt && new Date(p.expiresAt).getTime() < Date.now();
+                          if (promoFilter === "active") return p.isActive && !isExpired;
+                          if (promoFilter === "inactive") return !p.isActive || isExpired;
+                          return true;
+                        })
+                        .map((promo: any) => {
+                          const isExpired = promo.expiresAt && new Date(promo.expiresAt).getTime() < Date.now();
+                          const promoId = promo.id || promo._id;
+                          return (
+                            <tr key={promoId} className="hover:bg-slate-50/70 transition">
+                              <td className="py-3 px-4 font-mono font-bold text-slate-900">
+                                <div className="flex items-center gap-1.5">
+                                  <Tag className="w-3.5 h-3.5 text-[#2271b1]" />
+                                  <span>{promo.code}</span>
+                                </div>
+                                {promo.description && (
+                                  <span className="block font-sans font-normal text-[10px] text-slate-500 mt-0.5">
+                                    {promo.description}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 font-semibold text-emerald-700">
+                                {promo.discountType === "percentage" ? (
+                                  <span>{promo.discountValue}% OFF {promo.maxDiscountAmount ? `(up to £${promo.maxDiscountAmount})` : ""}</span>
+                                ) : (
+                                  <span>£{promo.discountValue} OFF</span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 text-slate-600">
+                                {promo.minOrderAmount ? `£${promo.minOrderAmount}` : "None (£0)"}
+                              </td>
+                              <td className="py-3 px-4 text-slate-600">
+                                <span>{promo.timesUsed || 0}</span>
+                                <span className="text-slate-400"> / {promo.usageLimit > 0 ? promo.usageLimit : "∞"}</span>
+                              </td>
+                              <td className="py-3 px-4 text-slate-600">
+                                {promo.expiresAt ? (
+                                  <span className={isExpired ? "text-red-600 font-bold" : ""}>
+                                    {new Date(promo.expiresAt).toLocaleDateString("en-GB")}
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-400">Never</span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4">
+                                {isExpired ? (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                                    Expired
+                                  </span>
+                                ) : promo.isActive ? (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                    Active
+                                  </span>
+                                ) : (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">
+                                    Inactive
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleTogglePromoActive(promo)}
+                                    className="p-1 text-slate-600 hover:text-slate-900 border border-[#c3c4c7] rounded hover:bg-slate-100"
+                                    title={promo.isActive ? "Deactivate Code" : "Activate Code"}
+                                  >
+                                    {promo.isActive ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setEditingPromoId(promoId);
+                                      setPromoForm({
+                                        code: promo.code,
+                                        discountType: promo.discountType || "percentage",
+                                        discountValue: promo.discountValue,
+                                        minOrderAmount: promo.minOrderAmount || 0,
+                                        maxDiscountAmount: promo.maxDiscountAmount || 0,
+                                        usageLimit: promo.usageLimit || 0,
+                                        expiresAt: promo.expiresAt ? promo.expiresAt.split("T")[0] : "",
+                                        isActive: promo.isActive !== false,
+                                        description: promo.description || ""
+                                      });
+                                      setPromoModalOpen(true);
+                                    }}
+                                    className="p-1 text-[#2271b1] hover:text-[#135e96] border border-[#c3c4c7] rounded hover:bg-slate-100"
+                                    title="Edit Code"
+                                  >
+                                    <Edit2 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeletePromo(promo)}
+                                    className="p-1 text-red-600 hover:text-red-800 border border-[#c3c4c7] rounded hover:bg-slate-100"
+                                    title="Delete Code"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+
+              {/* Promo Code Create / Edit Modal */}
+              {promoModalOpen && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4">
+                  <div className="bg-white rounded shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-[#c3c4c7]">
+                    <div className="flex items-center justify-between p-4 border-b border-[#f0f0f1] bg-[#f6f7f7]">
+                      <h3 className="font-bold text-[#1d2327] text-sm flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-[#2271b1]" />
+                        {editingPromoId ? "Edit Promo Code" : "Create New Promo Code"}
+                      </h3>
+                      <button onClick={() => setPromoModalOpen(false)} className="text-[#646970] hover:text-[#1d2327]">
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <form onSubmit={handleSavePromoCode} className="p-5 space-y-4 text-xs">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                          Promo Code *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={promoForm.code}
+                          onChange={e => setPromoForm({ ...promoForm, code: e.target.value.toUpperCase() })}
+                          placeholder="e.g. SUMMER10, WELCOME20"
+                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-2 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#2271b1]"
+                        />
+                        <span className="text-[10px] text-slate-500 mt-0.5 block">Customer will type this code during booking.</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Discount Type
+                          </label>
+                          <select
+                            value={promoForm.discountType}
+                            onChange={e => setPromoForm({ ...promoForm, discountType: e.target.value as any })}
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          >
+                            <option value="percentage">Percentage Discount (%)</option>
+                            <option value="fixed">Fixed Amount (£)</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Discount Value *
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="number"
+                              required
+                              min="1"
+                              step="any"
+                              value={promoForm.discountValue}
+                              onChange={e => setPromoForm({ ...promoForm, discountValue: Number(e.target.value) })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="absolute right-3 top-1.5 text-slate-500 font-bold">
+                              {promoForm.discountType === "percentage" ? "%" : "£"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {promoForm.discountType === "percentage" && (
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Max Discount Limit (£)
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            step="any"
+                            value={promoForm.maxDiscountAmount || ""}
+                            onChange={e => setPromoForm({ ...promoForm, maxDiscountAmount: Number(e.target.value) })}
+                            placeholder="Optional cap (e.g. £50 max discount)"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Minimum Order Value (£)
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            step="any"
+                            value={promoForm.minOrderAmount || ""}
+                            onChange={e => setPromoForm({ ...promoForm, minOrderAmount: Number(e.target.value) })}
+                            placeholder="0 (no minimum required)"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Total Usage Limit
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={promoForm.usageLimit || ""}
+                            onChange={e => setPromoForm({ ...promoForm, usageLimit: Number(e.target.value) })}
+                            placeholder="0 (unlimited usage)"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Expiry Date
+                          </label>
+                          <input
+                            type="date"
+                            value={promoForm.expiresAt}
+                            onChange={e => setPromoForm({ ...promoForm, expiresAt: e.target.value })}
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Status
+                          </label>
+                          <select
+                            value={promoForm.isActive ? "true" : "false"}
+                            onChange={e => setPromoForm({ ...promoForm, isActive: e.target.value === "true" })}
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          >
+                            <option value="true">Active &amp; Ready to Use</option>
+                            <option value="false">Disabled / Inactive</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                          Internal Notes / Description
+                        </label>
+                        <input
+                          type="text"
+                          value={promoForm.description}
+                          onChange={e => setPromoForm({ ...promoForm, description: e.target.value })}
+                          placeholder="e.g. 10% off for first-time website bookings"
+                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        />
+                      </div>
+
+                      <div className="flex justify-end gap-2 pt-3 border-t border-[#f0f0f1]">
+                        <button
+                          type="button"
+                          onClick={() => setPromoModalOpen(false)}
+                          className="px-4 py-2 border border-[#c3c4c7] hover:bg-slate-50 text-slate-700 rounded-sm font-semibold transition"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={promoSaving}
+                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-2 rounded-sm font-semibold transition flex items-center gap-1.5 disabled:opacity-50"
+                        >
+                          {promoSaving ? "Saving..." : (editingPromoId ? "Update Code" : "Create Code")}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

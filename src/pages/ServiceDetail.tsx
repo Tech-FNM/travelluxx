@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getServiceIcon } from "../utils/serviceIcons";
 import { useSettings } from "../context/SettingsContext";
+import { usePageSeo } from "../utils/seo";
 import {
   CheckCircle2,
   ArrowRight,
@@ -38,63 +39,61 @@ export default function ServiceDetail() {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  // Dynamic SEO Meta Tags
-  useEffect(() => {
-    if (!service) return;
+  // Dynamic SEO Meta Tags, Open Graph & JSON-LD Schemas
+  const baseUrl = "https://travelluxx.co.uk";
+  const pageUrl = service ? `${baseUrl}/services/${service.slug}` : "";
+  const metaTitle = service?.metaTitle || service?.ogTitle || (service ? `${service.title} | Luxury Chauffeur & Travel Services | TravelLuxx` : "Service | TravelLuxx");
+  const metaDesc = service?.metaDescription || service?.ogDescription || service?.excerpt || (service ? `Premium ${service.title} with TravelLuxx. Fixed rates, professional chauffeurs, and luxury vehicles across the UK.` : "");
+  const serviceFaqs = (Array.isArray(service?.faqs) && service.faqs.length > 0) ? service.faqs : (pageSettings?.faqs || []);
 
-    const baseUrl = "https://travelluxx.co.uk";
-    const pageUrl = `${baseUrl}/services/${service.slug}`;
-    const metaTitle =
-      service.metaTitle || `${service.title} | Luxury Chauffeur & Travel Services | TravelLuxx`;
-    const metaDesc =
-      service.metaDescription ||
-      service.excerpt ||
-      `Premium ${service.title} with TravelLuxx. Fixed rates, professional chauffeurs, and luxury vehicles across the UK.`;
+  const serviceSchemas: any[] = [];
+  if (service) {
+    serviceSchemas.push({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "@id": `${pageUrl}#service`,
+      "name": service.title,
+      "description": metaDesc,
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": settings?.business_name || "TravelLuxx",
+        "url": baseUrl,
+        "telephone": settings?.whatsapp_number ? `+${settings.whatsapp_number}` : "+441217140876"
+      },
+      "areaServed": "United Kingdom"
+    });
 
-    document.title = metaTitle;
-
-    const setMeta = (attr: string, attrVal: string, content: string) => {
-      let el = document.querySelector(`meta[${attr}='${attrVal}']`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute(attr, attrVal);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-
-    setMeta("name", "description", metaDesc);
-    setMeta(
-      "name",
-      "robots",
-      service.noIndexNoFollow ? "noindex, nofollow" : "index, follow"
-    );
-
-    let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
+    if (serviceFaqs.length > 0) {
+      serviceSchemas.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        "mainEntity": serviceFaqs.filter((f: any) => f && (f.question || f.answer)).map((f: any) => ({
+          "@type": "Question",
+          "name": f.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": f.answer
+          }
+        }))
+      });
     }
-    canonical.setAttribute("href", pageUrl);
+  }
 
-    setMeta("property", "og:type", "website");
-    setMeta("property", "og:url", pageUrl);
-    setMeta("property", "og:title", metaTitle);
-    setMeta("property", "og:description", metaDesc);
-    setMeta("property", "og:site_name", "TravelLuxx");
-    if (service.image) {
-      setMeta("property", "og:image", service.image);
-    }
-
-    setMeta("property", "twitter:card", "summary_large_image");
-    setMeta("property", "twitter:url", pageUrl);
-    setMeta("property", "twitter:title", metaTitle);
-    setMeta("property", "twitter:description", metaDesc);
-    if (service.image) {
-      setMeta("property", "twitter:image", service.image);
-    }
-  }, [service]);
+  usePageSeo({
+    title: metaTitle,
+    description: metaDesc,
+    canonicalUrl: pageUrl,
+    ogTitle: service?.ogTitle || metaTitle,
+    ogDescription: service?.ogDescription || metaDesc,
+    ogImage: service?.ogImage || service?.image || "",
+    ogUrl: pageUrl,
+    ogType: service?.ogType || "website",
+    noIndex: Boolean(settings?.search_engine_visibility || service?.noIndexNoFollow),
+    siteName: settings?.business_name || "TravelLuxx",
+    schemas: serviceSchemas,
+    customSchemaJson: service?.customSchema || ""
+  });
 
   if (isLoading) {
     return (

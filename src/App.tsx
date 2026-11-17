@@ -16,6 +16,9 @@ import ServiceDetail from "./pages/ServiceDetail";
 import ServiceAreaPage from "./pages/ServiceAreaPage";
 import ServiceAreas from "./pages/ServiceAreas";
 import RenaxLayout from "./components/RenaxLayout";
+import HomepageFaq from "./components/HomepageFaq";
+import GoogleReviewsSection from "./components/GoogleReviewsSection";
+import { usePageSeo } from "./utils/seo";
 import { trackVisit, trackClick } from "./utils/analytics";
 
 
@@ -84,25 +87,48 @@ function PublicLandingPage() {
       }
       canonical.setAttribute("href", pageUrl);
 
-      // Open Graph
+      // Open Graph & Twitter Card
       setMeta("property", "og:type", "website");
       setMeta("property", "og:url", pageUrl);
-      setMeta("property", "og:title", homepageTitle);
-      setMeta("property", "og:description", homepageDesc);
+      setMeta("property", "og:title", settings.og_title || homepageTitle);
+      setMeta("property", "og:description", settings.og_description || homepageDesc);
       setMeta("property", "og:site_name", settings.business_name || "TravelLuxx");
-      if (settings.logo_image) {
-        const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
+      const shareImg = settings.og_image || settings.logo_image;
+      if (shareImg) {
+        const logoUrl = shareImg.startsWith("http") ? shareImg : baseUrl + shareImg;
         setMeta("property", "og:image", logoUrl);
+        setMeta("name", "twitter:image", logoUrl);
       }
 
-      // Twitter Card
-      setMeta("property", "twitter:card", "summary_large_image");
-      setMeta("property", "twitter:url", pageUrl);
-      setMeta("property", "twitter:title", homepageTitle);
-      setMeta("property", "twitter:description", homepageDesc);
-      if (settings.logo_image) {
-        const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
-        setMeta("property", "twitter:image", logoUrl);
+      setMeta("name", "twitter:card", "summary_large_image");
+      setMeta("name", "twitter:title", settings.og_title || homepageTitle);
+      setMeta("name", "twitter:description", settings.og_description || homepageDesc);
+
+      // JSON-LD Schema: FAQPage if homepage_faqs configured
+      const faqScriptId = "jsonld-homepage-faqs";
+      let faqScript = document.getElementById(faqScriptId) as HTMLScriptElement | null;
+      if (Array.isArray(settings.homepage_faqs) && settings.homepage_faqs.length > 0) {
+        if (!faqScript) {
+          faqScript = document.createElement("script");
+          faqScript.id = faqScriptId;
+          faqScript.type = "application/ld+json";
+          document.head.appendChild(faqScript);
+        }
+        const faqSchema = {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": settings.homepage_faqs.filter((f: any) => f && f.question && f.answer).map((f: any) => ({
+            "@type": "Question",
+            "name": f.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": f.answer
+            }
+          }))
+        };
+        faqScript.text = JSON.stringify(faqSchema);
+      } else if (faqScript) {
+        faqScript.remove();
       }
     }
   }, [settings]);
@@ -219,6 +245,16 @@ function PublicLandingPage() {
         <FleetCatalog onSelectClass={handleSelectClassPreset} settings={settings} />
 
         <AirportsGrid onSelectTransfer={handleSelectTransferPreset} settings={settings} />
+
+        <GoogleReviewsSection isRenax={false} />
+
+        <HomepageFaq
+          faqs={settings?.homepage_faqs}
+          title={settings?.homepage_faq_title}
+          subtitle={settings?.homepage_faq_subtitle}
+          badge={settings?.homepage_faq_badge}
+          isRenax={false}
+        />
 
         <ContactForm settings={settings} />
 

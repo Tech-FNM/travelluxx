@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DYt6FF3q.js"(exports, module) {
+  "assets/index-CnF-eFqS.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -15092,18 +15092,40 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$12 = [
-      ["path", { d: "M5 12h14", key: "1ays0h" }],
-      ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+    const __iconNode$16 = [
+      ["path", { d: "M12 5v14", key: "s699le" }],
+      ["path", { d: "m19 12-7 7-7-7", key: "1idqje" }]
     ];
-    const ArrowRight = createLucideIcon("arrow-right", __iconNode$12);
+    const ArrowDown = createLucideIcon("arrow-down", __iconNode$16);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$11 = [
+    const __iconNode$15 = [
+      ["path", { d: "M5 12h14", key: "1ays0h" }],
+      ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+    ];
+    const ArrowRight = createLucideIcon("arrow-right", __iconNode$15);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$14 = [
+      ["path", { d: "m5 12 7-7 7 7", key: "hav0vg" }],
+      ["path", { d: "M12 19V5", key: "x0mq9r" }]
+    ];
+    const ArrowUp = createLucideIcon("arrow-up", __iconNode$14);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$13 = [
       [
         "path",
         {
@@ -15113,14 +15135,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "8", r: "6", key: "1vp47v" }]
     ];
-    const Award = createLucideIcon("award", __iconNode$11);
+    const Award = createLucideIcon("award", __iconNode$13);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$10 = [
+    const __iconNode$12 = [
       ["path", { d: "M12 7v14", key: "1akyts" }],
       [
         "path",
@@ -15130,25 +15152,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const BookOpen = createLucideIcon("book-open", __iconNode$10);
+    const BookOpen = createLucideIcon("book-open", __iconNode$12);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$$ = [
+    const __iconNode$11 = [
       ["path", { d: "M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16", key: "jecpp" }],
       ["rect", { width: "20", height: "14", x: "2", y: "6", rx: "2", key: "i6l2r4" }]
     ];
-    const Briefcase = createLucideIcon("briefcase", __iconNode$$);
+    const Briefcase = createLucideIcon("briefcase", __iconNode$11);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$_ = [
+    const __iconNode$10 = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -15160,27 +15182,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M12 18h.01", key: "mhygvu" }],
       ["path", { d: "M16 18h.01", key: "kzsmim" }]
     ];
-    const CalendarDays = createLucideIcon("calendar-days", __iconNode$_);
+    const CalendarDays = createLucideIcon("calendar-days", __iconNode$10);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$Z = [
+    const __iconNode$$ = [
       ["path", { d: "M8 2v4", key: "1cmpym" }],
       ["path", { d: "M16 2v4", key: "4m81vk" }],
       ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
       ["path", { d: "M3 10h18", key: "8toen8" }]
     ];
-    const Calendar = createLucideIcon("calendar", __iconNode$Z);
+    const Calendar = createLucideIcon("calendar", __iconNode$$);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$Y = [
+    const __iconNode$_ = [
       [
         "path",
         {
@@ -15192,39 +15214,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M9 17h6", key: "r8uit2" }],
       ["circle", { cx: "17", cy: "17", r: "2", key: "axvx0g" }]
     ];
-    const Car = createLucideIcon("car", __iconNode$Y);
+    const Car = createLucideIcon("car", __iconNode$_);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$X = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-    const Check = createLucideIcon("check", __iconNode$X);
+    const __iconNode$Z = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+    const Check = createLucideIcon("check", __iconNode$Z);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$W = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-    const ChevronDown = createLucideIcon("chevron-down", __iconNode$W);
+    const __iconNode$Y = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
+    const ChevronDown = createLucideIcon("chevron-down", __iconNode$Y);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$V = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-    const ChevronRight = createLucideIcon("chevron-right", __iconNode$V);
+    const __iconNode$X = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+    const ChevronRight = createLucideIcon("chevron-right", __iconNode$X);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$U = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-    const ChevronUp = createLucideIcon("chevron-up", __iconNode$U);
+    const __iconNode$W = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+    const ChevronUp = createLucideIcon("chevron-up", __iconNode$W);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$V = [
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
+      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+    ];
+    const CircleAlert = createLucideIcon("circle-alert", __iconNode$V);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$U = [
+      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
+      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+    ];
+    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$U);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15233,10 +15278,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      */
     const __iconNode$T = [
       ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-      ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const CircleAlert = createLucideIcon("circle-alert", __iconNode$T);
+    const CircleCheck = createLucideIcon("circle-check", __iconNode$T);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15244,10 +15288,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$S = [
-      ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
-      ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+      ["path", { d: "M12 17h.01", key: "p32p05" }]
     ];
-    const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$S);
+    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$S);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15255,10 +15300,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$R = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
     ];
-    const CircleCheck = createLucideIcon("circle-check", __iconNode$R);
+    const Clock = createLucideIcon("clock", __iconNode$R);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15266,11 +15311,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$Q = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
-      ["path", { d: "M12 17h.01", key: "p32p05" }]
+      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
+      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
+      ["path", { d: "M7 6h1v4", key: "1obek4" }],
+      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
     ];
-    const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$Q);
+    const Coins = createLucideIcon("coins", __iconNode$Q);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15278,30 +15324,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$P = [
-      ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-    ];
-    const Clock = createLucideIcon("clock", __iconNode$P);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$O = [
-      ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
-      ["path", { d: "M18.09 10.37A6 6 0 1 1 10.34 18", key: "t5s6rm" }],
-      ["path", { d: "M7 6h1v4", key: "1obek4" }],
-      ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
-    ];
-    const Coins = createLucideIcon("coins", __iconNode$O);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$N = [
       ["path", { d: "M10 2v2", key: "7u0qdc" }],
       ["path", { d: "M14 2v2", key: "6buw04" }],
       [
@@ -15313,7 +15335,41 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "M6 2v2", key: "colzsn" }]
     ];
-    const Coffee = createLucideIcon("coffee", __iconNode$N);
+    const Coffee = createLucideIcon("coffee", __iconNode$P);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$O = [
+      [
+        "path",
+        {
+          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+          key: "9ktpf1"
+        }
+      ],
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+    ];
+    const Compass = createLucideIcon("compass", __iconNode$O);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$N = [
+      [
+        "path",
+        {
+          d: "M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z",
+          key: "1vdc57"
+        }
+      ],
+      ["path", { d: "M5 21h14", key: "11awu3" }]
+    ];
+    const Crown = createLucideIcon("crown", __iconNode$N);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15324,13 +15380,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
-          key: "9ktpf1"
+          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
+          key: "c7niix"
         }
-      ],
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+      ]
     ];
-    const Compass = createLucideIcon("compass", __iconNode$M);
+    const Droplet = createLucideIcon("droplet", __iconNode$M);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15338,16 +15393,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$L = [
-      [
-        "path",
-        {
-          d: "M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z",
-          key: "1vdc57"
-        }
-      ],
-      ["path", { d: "M5 21h14", key: "11awu3" }]
+      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
     ];
-    const Crown = createLucideIcon("crown", __iconNode$L);
+    const ExternalLink = createLucideIcon("external-link", __iconNode$L);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15355,34 +15405,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$K = [
-      [
-        "path",
-        {
-          d: "M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",
-          key: "c7niix"
-        }
-      ]
-    ];
-    const Droplet = createLucideIcon("droplet", __iconNode$K);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$J = [
-      ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-      ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-      ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
-    ];
-    const ExternalLink = createLucideIcon("external-link", __iconNode$J);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$I = [
       [
         "path",
         {
@@ -15400,14 +15422,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["path", { d: "m2 2 20 20", key: "1ooewy" }]
     ];
-    const EyeOff = createLucideIcon("eye-off", __iconNode$I);
+    const EyeOff = createLucideIcon("eye-off", __iconNode$K);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$H = [
+    const __iconNode$J = [
       [
         "path",
         {
@@ -15417,7 +15439,33 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Eye = createLucideIcon("eye", __iconNode$H);
+    const Eye = createLucideIcon("eye", __iconNode$J);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$I = [
+      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
+      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
+      ["path", { d: "M10 9H8", key: "b1mrlr" }],
+      ["path", { d: "M16 13H8", key: "t4e002" }],
+      ["path", { d: "M16 17H8", key: "z1uh3a" }]
+    ];
+    const FileText = createLucideIcon("file-text", __iconNode$I);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$H = [
+      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+      ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
+      ["path", { d: "M2 12h20", key: "9i4pu4" }]
+    ];
+    const Globe = createLucideIcon("globe", __iconNode$H);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15425,32 +15473,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$G = [
-      ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
-      ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
-      ["path", { d: "M10 9H8", key: "b1mrlr" }],
-      ["path", { d: "M16 13H8", key: "t4e002" }],
-      ["path", { d: "M16 17H8", key: "z1uh3a" }]
-    ];
-    const FileText = createLucideIcon("file-text", __iconNode$G);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$F = [
-      ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-      ["path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20", key: "13o1zl" }],
-      ["path", { d: "M2 12h20", key: "9i4pu4" }]
-    ];
-    const Globe = createLucideIcon("globe", __iconNode$F);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$E = [
       ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
       [
         "path",
@@ -15460,7 +15482,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const House = createLucideIcon("house", __iconNode$E);
+    const House = createLucideIcon("house", __iconNode$G);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$F = [
+      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
+      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
+      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+    ];
+    const Image$1 = createLucideIcon("image", __iconNode$F);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$E = [
+      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
+      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
+      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
+    ];
+    const Instagram = createLucideIcon("instagram", __iconNode$E);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15468,11 +15514,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$D = [
-      ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2", key: "1m3agn" }],
-      ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }],
-      ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }]
+      ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
+      ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
+      ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
     ];
-    const Image$1 = createLucideIcon("image", __iconNode$D);
+    const Key = createLucideIcon("key", __iconNode$D);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15480,30 +15526,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$C = [
-      ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "2e1cvw" }],
-      ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "9exkf1" }],
-      ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "r4j83e" }]
-    ];
-    const Instagram = createLucideIcon("instagram", __iconNode$C);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$B = [
-      ["path", { d: "m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4", key: "g0fldk" }],
-      ["path", { d: "m21 2-9.6 9.6", key: "1j0ho8" }],
-      ["circle", { cx: "7.5", cy: "15.5", r: "5.5", key: "yqb3hr" }]
-    ];
-    const Key = createLucideIcon("key", __iconNode$B);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$A = [
       [
         "path",
         {
@@ -15526,27 +15548,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Layers = createLucideIcon("layers", __iconNode$A);
+    const Layers = createLucideIcon("layers", __iconNode$C);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$z = [
+    const __iconNode$B = [
       ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1", key: "10lvy0" }],
       ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1", key: "16une8" }],
       ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1", key: "1hutg5" }],
       ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1", key: "ldoo1y" }]
     ];
-    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$z);
+    const LayoutDashboard = createLucideIcon("layout-dashboard", __iconNode$B);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$y = [
+    const __iconNode$A = [
       ["path", { d: "M11 5h10", key: "1cz7ny" }],
       ["path", { d: "M11 12h10", key: "1438ji" }],
       ["path", { d: "M11 19h10", key: "11t30w" }],
@@ -15554,14 +15576,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M4 9h2", key: "r1h2o0" }],
       ["path", { d: "M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02", key: "xtkcd5" }]
     ];
-    const ListOrdered = createLucideIcon("list-ordered", __iconNode$y);
+    const ListOrdered = createLucideIcon("list-ordered", __iconNode$A);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$x = [
+    const __iconNode$z = [
       [
         "path",
         { d: "M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2", key: "1m57jg" }
@@ -15571,7 +15593,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["circle", { cx: "16", cy: "20", r: "2", key: "1vifvg" }],
       ["circle", { cx: "8", cy: "20", r: "2", key: "ckkr5m" }]
     ];
-    const Luggage = createLucideIcon("luggage", __iconNode$x);
+    const Luggage = createLucideIcon("luggage", __iconNode$z);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$y = [
+      ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+      ["path", { d: "M21 12H9", key: "dn1m92" }],
+      ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+    ];
+    const LogOut = createLucideIcon("log-out", __iconNode$y);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$x = [
+      ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+      ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+    ];
+    const Mail = createLucideIcon("mail", __iconNode$x);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15579,11 +15624,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$w = [
-      ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-      ["path", { d: "M21 12H9", key: "dn1m92" }],
-      ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+      [
+        "path",
+        {
+          d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
+          key: "1r0f0z"
+        }
+      ],
+      ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
     ];
-    const LogOut = createLucideIcon("log-out", __iconNode$w);
+    const MapPin = createLucideIcon("map-pin", __iconNode$w);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15591,10 +15641,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$v = [
-      ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-      ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+      ["path", { d: "M4 5h16", key: "1tepv9" }],
+      ["path", { d: "M4 12h16", key: "1lakjw" }],
+      ["path", { d: "M4 19h16", key: "1djgab" }]
     ];
-    const Mail = createLucideIcon("mail", __iconNode$v);
+    const Menu = createLucideIcon("menu", __iconNode$v);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15605,13 +15656,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
-          key: "1r0f0z"
+          d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
+          key: "18887p"
         }
-      ],
-      ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
+      ]
     ];
-    const MapPin = createLucideIcon("map-pin", __iconNode$u);
+    const MessageSquare = createLucideIcon("message-square", __iconNode$u);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15619,11 +15669,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$t = [
-      ["path", { d: "M4 5h16", key: "1tepv9" }],
-      ["path", { d: "M4 12h16", key: "1lakjw" }],
-      ["path", { d: "M4 19h16", key: "1djgab" }]
+      ["polygon", { points: "3 11 22 2 13 21 11 13 3 11", key: "1ltx0t" }]
     ];
-    const Menu = createLucideIcon("menu", __iconNode$t);
+    const Navigation = createLucideIcon("navigation", __iconNode$t);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15631,32 +15679,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$s = [
-      [
-        "path",
-        {
-          d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
-          key: "18887p"
-        }
-      ]
-    ];
-    const MessageSquare = createLucideIcon("message-square", __iconNode$s);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$r = [
-      ["polygon", { points: "3 11 22 2 13 21 11 13 3 11", key: "1ltx0t" }]
-    ];
-    const Navigation = createLucideIcon("navigation", __iconNode$r);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$q = [
       ["path", { d: "M15 18h-5", key: "95g1m2" }],
       ["path", { d: "M18 14h-8", key: "sponae" }],
       [
@@ -15668,14 +15690,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ],
       ["rect", { width: "8", height: "4", x: "10", y: "6", rx: "1", key: "aywv1n" }]
     ];
-    const Newspaper = createLucideIcon("newspaper", __iconNode$q);
+    const Newspaper = createLucideIcon("newspaper", __iconNode$s);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$p = [
+    const __iconNode$r = [
       [
         "path",
         {
@@ -15684,14 +15706,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Pen = createLucideIcon("pen", __iconNode$p);
+    const Pen = createLucideIcon("pen", __iconNode$r);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$o = [
+    const __iconNode$q = [
       ["path", { d: "M13 2a9 9 0 0 1 9 9", key: "1itnx2" }],
       ["path", { d: "M13 6a5 5 0 0 1 5 5", key: "11nki7" }],
       [
@@ -15702,14 +15724,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const PhoneCall = createLucideIcon("phone-call", __iconNode$o);
+    const PhoneCall = createLucideIcon("phone-call", __iconNode$q);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$n = [
+    const __iconNode$p = [
       [
         "path",
         {
@@ -15718,14 +15740,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Phone = createLucideIcon("phone", __iconNode$n);
+    const Phone = createLucideIcon("phone", __iconNode$p);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$m = [
+    const __iconNode$o = [
       [
         "path",
         {
@@ -15734,7 +15756,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Plane = createLucideIcon("plane", __iconNode$m);
+    const Plane = createLucideIcon("plane", __iconNode$o);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$n = [
+      ["path", { d: "M5 12h14", key: "1ays0h" }],
+      ["path", { d: "M12 5v14", key: "s699le" }]
+    ];
+    const Plus = createLucideIcon("plus", __iconNode$n);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$m = [
+      ["circle", { cx: "6", cy: "19", r: "3", key: "1kj8tv" }],
+      ["path", { d: "M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15", key: "1d8sl" }],
+      ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }]
+    ];
+    const Route = createLucideIcon("route", __iconNode$m);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15742,29 +15787,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$l = [
-      ["path", { d: "M5 12h14", key: "1ays0h" }],
-      ["path", { d: "M12 5v14", key: "s699le" }]
-    ];
-    const Plus = createLucideIcon("plus", __iconNode$l);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$k = [
-      ["circle", { cx: "6", cy: "19", r: "3", key: "1kj8tv" }],
-      ["path", { d: "M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15", key: "1d8sl" }],
-      ["circle", { cx: "18", cy: "5", r: "3", key: "gq8acd" }]
-    ];
-    const Route = createLucideIcon("route", __iconNode$k);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$j = [
       [
         "path",
         {
@@ -15775,7 +15797,35 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
       ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
     ];
-    const Save = createLucideIcon("save", __iconNode$j);
+    const Save = createLucideIcon("save", __iconNode$l);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$k = [
+      ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+      ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+    ];
+    const Search = createLucideIcon("search", __iconNode$k);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$j = [
+      [
+        "path",
+        {
+          d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+          key: "1ffxy3"
+        }
+      ],
+      ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+    ];
+    const Send = createLucideIcon("send", __iconNode$j);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15783,10 +15833,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$i = [
-      ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-      ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+      [
+        "path",
+        {
+          d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+          key: "1i5ecw"
+        }
+      ],
+      ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
     ];
-    const Search = createLucideIcon("search", __iconNode$i);
+    const Settings = createLucideIcon("settings", __iconNode$i);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15797,13 +15853,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
-          key: "1ffxy3"
+          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+          key: "oel41y"
         }
       ],
-      ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
     ];
-    const Send = createLucideIcon("send", __iconNode$h);
+    const ShieldCheck = createLucideIcon("shield-check", __iconNode$h);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15814,13 +15870,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
-          key: "1i5ecw"
+          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+          key: "oel41y"
         }
-      ],
-      ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+      ]
     ];
-    const Settings = createLucideIcon("settings", __iconNode$g);
+    const Shield = createLucideIcon("shield", __iconNode$g);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15828,16 +15883,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$f = [
-      [
-        "path",
-        {
-          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-          key: "oel41y"
-        }
-      ],
-      ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+      ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+      ["path", { d: "M12 18h.01", key: "mhygvu" }]
     ];
-    const ShieldCheck = createLucideIcon("shield-check", __iconNode$f);
+    const Smartphone = createLucideIcon("smartphone", __iconNode$f);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15845,33 +15894,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$e = [
-      [
-        "path",
-        {
-          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-          key: "oel41y"
-        }
-      ]
-    ];
-    const Shield = createLucideIcon("shield", __iconNode$e);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$d = [
-      ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
-      ["path", { d: "M12 18h.01", key: "mhygvu" }]
-    ];
-    const Smartphone = createLucideIcon("smartphone", __iconNode$d);
-    /**
-     * @license lucide-react v0.546.0 - ISC
-     *
-     * This source code is licensed under the ISC license.
-     * See the LICENSE file in the root directory of this source tree.
-     */
-    const __iconNode$c = [
       [
         "path",
         {
@@ -15883,14 +15905,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "M22 4h-4", key: "gwowj6" }],
       ["circle", { cx: "4", cy: "20", r: "2", key: "6kqj1y" }]
     ];
-    const Sparkles = createLucideIcon("sparkles", __iconNode$c);
+    const Sparkles = createLucideIcon("sparkles", __iconNode$e);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
      * This source code is licensed under the ISC license.
      * See the LICENSE file in the root directory of this source tree.
      */
-    const __iconNode$b = [
+    const __iconNode$d = [
       [
         "path",
         {
@@ -15899,7 +15921,41 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       ]
     ];
-    const Star = createLucideIcon("star", __iconNode$b);
+    const Star = createLucideIcon("star", __iconNode$d);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$c = [
+      [
+        "path",
+        {
+          d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
+          key: "vktsd0"
+        }
+      ],
+      ["circle", { cx: "7.5", cy: "7.5", r: ".5", fill: "currentColor", key: "kqv944" }]
+    ];
+    const Tag = createLucideIcon("tag", __iconNode$c);
+    /**
+     * @license lucide-react v0.546.0 - ISC
+     *
+     * This source code is licensed under the ISC license.
+     * See the LICENSE file in the root directory of this source tree.
+     */
+    const __iconNode$b = [
+      ["path", { d: "M7 10v12", key: "1qc93n" }],
+      [
+        "path",
+        {
+          d: "M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z",
+          key: "emmmcr"
+        }
+      ]
+    ];
+    const ThumbsUp = createLucideIcon("thumbs-up", __iconNode$b);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15910,13 +15966,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [
         "path",
         {
-          d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
-          key: "vktsd0"
+          d: "M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z",
+          key: "qn84l0"
         }
       ],
-      ["circle", { cx: "7.5", cy: "7.5", r: ".5", fill: "currentColor", key: "kqv944" }]
+      ["path", { d: "M13 5v2", key: "dyzc3o" }],
+      ["path", { d: "M13 17v2", key: "1ont0d" }],
+      ["path", { d: "M13 11v2", key: "1wjjxi" }]
     ];
-    const Tag = createLucideIcon("tag", __iconNode$a);
+    const Ticket = createLucideIcon("ticket", __iconNode$a);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15924,16 +15982,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$9 = [
-      ["path", { d: "M7 10v12", key: "1qc93n" }],
-      [
-        "path",
-        {
-          d: "M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z",
-          key: "emmmcr"
-        }
-      ]
+      ["path", { d: "M10 11v6", key: "nco0om" }],
+      ["path", { d: "M14 11v6", key: "outv1u" }],
+      ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
+      ["path", { d: "M3 6h18", key: "d0wm0j" }],
+      ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
     ];
-    const ThumbsUp = createLucideIcon("thumbs-up", __iconNode$9);
+    const Trash2 = createLucideIcon("trash-2", __iconNode$9);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -15941,13 +15996,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      * See the LICENSE file in the root directory of this source tree.
      */
     const __iconNode$8 = [
-      ["path", { d: "M10 11v6", key: "nco0om" }],
-      ["path", { d: "M14 11v6", key: "outv1u" }],
-      ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
-      ["path", { d: "M3 6h18", key: "d0wm0j" }],
-      ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
+      [
+        "path",
+        {
+          d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+          key: "wmoenq"
+        }
+      ],
+      ["path", { d: "M12 9v4", key: "juzpu7" }],
+      ["path", { d: "M12 17h.01", key: "p32p05" }]
     ];
-    const Trash2 = createLucideIcon("trash-2", __iconNode$8);
+    const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$8);
     /**
      * @license lucide-react v0.546.0 - ISC
      *
@@ -16104,7 +16163,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     const SettingsContext = reactExports.createContext(void 0);
     function SettingsProvider({ children }) {
-      const [settings, setSettings] = reactExports.useState(() => {
+      const [settings2, setSettings] = reactExports.useState(() => {
         try {
           const cached = localStorage.getItem("travelluxx_cached_settings");
           return cached ? JSON.parse(cached) : null;
@@ -16201,7 +16260,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setSettings(newSettings);
       };
       return /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsContext.Provider, { value: {
-        settings,
+        settings: settings2,
         pages,
         services,
         posts,
@@ -16220,29 +16279,29 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return context;
     }
     function Navbar({ onScrollTo, onAdminClick }) {
-      const { settings, menuItems } = useSettings();
+      const { settings: settings2, menuItems } = useSettings();
       const [isOpen, setIsOpen] = reactExports.useState(false);
       const [openMobileDropdowns, setOpenMobileDropdowns] = reactExports.useState({});
-      const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
+      const brandName = (settings2 == null ? void 0 : settings2.business_name) || (settings2 == null ? void 0 : settings2.businessName) || "Travelluxx";
       const getInitialLogo = () => {
-        const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
+        const customSetting = (settings2 == null ? void 0 : settings2.logo_url) || (settings2 == null ? void 0 : settings2.logo_image) || (settings2 == null ? void 0 : settings2.logoImage);
         const defaultImg = customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : travelluxxLogo;
         return getCustomImage("logo", defaultImg);
       };
       const [brandLogo, setBrandLogo] = reactExports.useState(getInitialLogo);
       reactExports.useEffect(() => {
         const handleUpdate = () => {
-          const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
+          const customSetting = (settings2 == null ? void 0 : settings2.logo_url) || (settings2 == null ? void 0 : settings2.logo_image) || (settings2 == null ? void 0 : settings2.logoImage);
           const defaultImg = customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : travelluxxLogo;
           setBrandLogo(getCustomImage("logo", defaultImg));
         };
         handleUpdate();
         window.addEventListener("custom_images_updated", handleUpdate);
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
-      }, [settings]);
-      const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+      }, [settings2]);
+      const isRenax = (settings2 == null ? void 0 : settings2.active_theme) === "renax";
       const hasCustomLogo = (() => {
-        const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
+        const customSetting = (settings2 == null ? void 0 : settings2.logo_url) || (settings2 == null ? void 0 : settings2.logo_image) || (settings2 == null ? void 0 : settings2.logoImage);
         if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
         return false;
       })();
@@ -16528,39 +16587,39 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     const heroImg = "/assets/hero_background_1786403449488-D8p7z1ht.jpg";
     const FALLBACK_HERO_URL = "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1920&q=80";
-    function HeroSection({ onScrollToCalculator, settings }) {
+    function HeroSection({ onScrollToCalculator, settings: settings2 }) {
       var _a, _b;
-      const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
-      const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+      const brandName = (settings2 == null ? void 0 : settings2.business_name) || (settings2 == null ? void 0 : settings2.businessName) || "Travelluxx";
+      const whatsappNum = (settings2 == null ? void 0 : settings2.whatsapp_number) || "441217140876";
       const getInitialBg = () => {
-        const customSetting = (settings == null ? void 0 : settings.hero_image) || (settings == null ? void 0 : settings.heroImage);
+        const customSetting = (settings2 == null ? void 0 : settings2.hero_image) || (settings2 == null ? void 0 : settings2.heroImage);
         const defaultImg = customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : heroImg;
         return getCustomImage("hero_bg", defaultImg);
       };
       const [bgImage, setBgImage] = reactExports.useState(getInitialBg);
       reactExports.useEffect(() => {
         const handleUpdate = () => {
-          const customSetting = (settings == null ? void 0 : settings.hero_image) || (settings == null ? void 0 : settings.heroImage);
+          const customSetting = (settings2 == null ? void 0 : settings2.hero_image) || (settings2 == null ? void 0 : settings2.heroImage);
           const defaultImg = customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : heroImg;
           setBgImage(getCustomImage("hero_bg", defaultImg));
         };
         handleUpdate();
         window.addEventListener("custom_images_updated", handleUpdate);
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
-      }, [settings]);
+      }, [settings2]);
       const formattedPhone = whatsappNum.startsWith("44") ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` : whatsappNum;
-      const rawTitle = (settings == null ? void 0 : settings.homepage_hero_title) || "Nationwide Airport | Transfers & Private Hire";
+      const rawTitle = (settings2 == null ? void 0 : settings2.homepage_hero_title) || "Nationwide Airport | Transfers & Private Hire";
       const titleParts = rawTitle.split("|");
       const titlePart1 = ((_a = titleParts[0]) == null ? void 0 : _a.trim()) || "Nationwide Airport";
       const titlePart2 = (_b = titleParts[1]) == null ? void 0 : _b.trim();
-      const badgeText = (settings == null ? void 0 : settings.homepage_hero_badge) || `${brandName.toUpperCase()} PRIVATE HIRE`;
-      const heroDesc = (settings == null ? void 0 : settings.homepage_hero_subtitle) || "Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing.";
-      const ind1 = (settings == null ? void 0 : settings.homepage_indicator1) || "Licensed Professional Operators";
-      const ind2 = (settings == null ? void 0 : settings.homepage_indicator2) || "Guaranteed Nationwide Coverage";
-      const btn1Text = (settings == null ? void 0 : settings.homepage_hero_btn_text) || "Calculate & Get Quote";
-      const btn1Link = (settings == null ? void 0 : settings.homepage_hero_btn_link) || "calculator-section";
-      const btn2Text = (settings == null ? void 0 : settings.homepage_hero_phone_text) || formattedPhone;
-      const btn2Link = (settings == null ? void 0 : settings.homepage_hero_phone_link) || `tel:${whatsappNum}`;
+      const badgeText = (settings2 == null ? void 0 : settings2.homepage_hero_badge) || `${brandName.toUpperCase()} PRIVATE HIRE`;
+      const heroDesc = (settings2 == null ? void 0 : settings2.homepage_hero_subtitle) || "Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing.";
+      const ind1 = (settings2 == null ? void 0 : settings2.homepage_indicator1) || "Licensed Professional Operators";
+      const ind2 = (settings2 == null ? void 0 : settings2.homepage_indicator2) || "Guaranteed Nationwide Coverage";
+      const btn1Text = (settings2 == null ? void 0 : settings2.homepage_hero_btn_text) || "Calculate & Get Quote";
+      const btn1Link = (settings2 == null ? void 0 : settings2.homepage_hero_btn_link) || "calculator-section";
+      const btn2Text = (settings2 == null ? void 0 : settings2.homepage_hero_phone_text) || formattedPhone;
+      const btn2Link = (settings2 == null ? void 0 : settings2.homepage_hero_phone_link) || `tel:${whatsappNum}`;
       const handleBtn1Click = () => {
         if (btn1Link === "calculator-section") {
           onScrollToCalculator();
@@ -26447,9 +26506,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       "lcy": { lat: 51.5048, lng: 0.0495, name: "London City Airport (LCY)" },
       "london": { lat: 51.5074, lng: -0.1278, name: "London Central, UK" }
     };
-    function BookingCalculator({ initialPickup = "", initialDropoff = "", settings }) {
-      (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
-      (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+    function BookingCalculator({ initialPickup = "", initialDropoff = "", settings: settings2 }) {
+      (settings2 == null ? void 0 : settings2.business_name) || (settings2 == null ? void 0 : settings2.businessName) || "Travelluxx";
+      (settings2 == null ? void 0 : settings2.whatsapp_number) || "441217140876";
       const [autocompleteService, setAutocompleteService] = reactExports.useState(null);
       const [placesService, setPlacesService] = reactExports.useState(null);
       reactExports.useEffect(() => {
@@ -26497,6 +26556,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const [cardExpiry, setCardExpiry] = reactExports.useState("");
       const [cardCVC, setCardCVC] = reactExports.useState("");
       const [processingPayment, setProcessingPayment] = reactExports.useState(false);
+      const [promoInput, setPromoInput] = reactExports.useState("");
+      const [promoLoading, setPromoLoading] = reactExports.useState(false);
+      const [appliedPromo, setAppliedPromo] = reactExports.useState(null);
+      const [promoDiscountAmount, setPromoDiscountAmount] = reactExports.useState(0);
+      const [promoError, setPromoError] = reactExports.useState("");
+      const [promoSuccessMsg, setPromoSuccessMsg] = reactExports.useState("");
       const [paypalSimulating, setPaypalSimulating] = reactExports.useState(false);
       const [completedBookingId, setCompletedBookingId] = reactExports.useState("");
       const [completedBookingPrice, setCompletedBookingPrice] = reactExports.useState(0);
@@ -27272,6 +27337,51 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
         setCurrentStep(3);
       };
+      const handleApplyPromoCode = async () => {
+        const raw = promoInput.trim().toUpperCase();
+        if (!raw) {
+          setPromoError("Please enter a promo code.");
+          return;
+        }
+        const baseAmount = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+        if (baseAmount <= 0) {
+          setPromoError("Please select a valid ride option first.");
+          return;
+        }
+        setPromoLoading(true);
+        setPromoError("");
+        setPromoSuccessMsg("");
+        try {
+          const res = await fetch("/api/promocodes/validate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code: raw, amount: baseAmount })
+          });
+          const data = await res.json();
+          if (res.ok && data.valid) {
+            setAppliedPromo(data.promo);
+            setPromoDiscountAmount(data.discountAmount);
+            setPromoSuccessMsg(data.message || `Promo code '${raw}' applied!`);
+          } else {
+            setAppliedPromo(null);
+            setPromoDiscountAmount(0);
+            setPromoError(data.message || "Invalid or ineligible promo code.");
+          }
+        } catch (err) {
+          setAppliedPromo(null);
+          setPromoDiscountAmount(0);
+          setPromoError("Could not connect to promo verification server.");
+        } finally {
+          setPromoLoading(false);
+        }
+      };
+      const handleRemovePromo = () => {
+        setAppliedPromo(null);
+        setPromoDiscountAmount(0);
+        setPromoInput("");
+        setPromoError("");
+        setPromoSuccessMsg("");
+      };
       const processCheckoutPayment = async (e) => {
         if (e) e.preventDefault();
         if (!distanceResult || !selectedVehicle) return;
@@ -27289,7 +27399,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           date: rideDate,
           time: rideTime,
           vehicle: selectedVehicle,
-          price,
+          price: finalPayablePrice,
+          originalPrice: originalBasePrice,
+          promoCode: appliedPromo ? appliedPromo.code : void 0,
+          discountAmount: promoDiscountAmount,
           passengerName,
           passengerEmail,
           passengerPhone,
@@ -27357,7 +27470,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const handleMollieCheckout = async () => {
         if (!distanceResult || !selectedVehicle) return;
         setProcessingPayment(true);
-        const price = distanceResult.prices[selectedVehicle];
+        distanceResult.prices[selectedVehicle];
         const payload = {
           pickup: distanceResult.pickupDisplay || pickupInput,
           dropoff: distanceResult.dropoffDisplay || dropoffInput,
@@ -27370,7 +27483,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           date: rideDate,
           time: rideTime,
           vehicle: selectedVehicle,
-          price,
+          price: finalPayablePrice,
+          originalPrice: originalBasePrice,
+          promoCode: appliedPromo ? appliedPromo.code : void 0,
+          discountAmount: promoDiscountAmount,
           passengerName,
           passengerEmail,
           passengerPhone,
@@ -27399,7 +27515,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           setProcessingPayment(false);
         }
       };
-      const selectedPrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+      const originalBasePrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+      const finalPayablePrice = Math.max(0, Math.round((originalBasePrice - promoDiscountAmount) * 100) / 100);
+      const selectedPrice = finalPayablePrice;
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "calculator", className: "py-20 bg-white text-slate-800 relative", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-2xl mx-auto mb-12", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-semibold", children: "Instant Booking System" }),
@@ -27750,14 +27868,91 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             ] }),
             currentStep === 3 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center border-b border-slate-100 pb-4", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-slate-900 font-display", children: "Secure Transaction Checkout" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-400 block font-sans", children: "Amount Payable:" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-lg font-bold font-display text-emerald-700", children: [
-                      "£",
-                      selectedPrice.toFixed(2)
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-b border-slate-100 pb-4", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold text-slate-900 font-display", children: "Secure Transaction Checkout" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-400 block font-sans", children: "Total Payable:" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xl font-extrabold font-display text-emerald-700", children: [
+                        "£",
+                        finalPayablePrice.toFixed(2)
+                      ] })
                     ] })
+                  ] }),
+                  appliedPromo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3 p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-xs space-y-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between text-slate-600", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Standard Fare:" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "line-through", children: [
+                        "£",
+                        originalBasePrice.toFixed(2)
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between font-semibold text-emerald-700", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                        "Promo Discount (",
+                        appliedPromo.code,
+                        "):"
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                        "-£",
+                        promoDiscountAmount.toFixed(2)
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between pt-1 border-t border-emerald-200 text-slate-900 font-bold", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Final Amount:" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                        "£",
+                        finalPayablePrice.toFixed(2)
+                      ] })
+                    ] })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-slate-700", children: "🎟️ Have a Promo Code or Discount Voucher?" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        value: promoInput,
+                        onChange: (e) => {
+                          setPromoInput(e.target.value.toUpperCase());
+                          setPromoError("");
+                        },
+                        placeholder: "ENTER CODE (e.g. LUXURY10)",
+                        disabled: !!appliedPromo || promoLoading,
+                        className: "flex-1 uppercase font-mono tracking-wider border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 bg-white focus:outline-none focus:border-emerald-600 disabled:bg-slate-100"
+                      }
+                    ),
+                    appliedPromo ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: handleRemovePromo,
+                        className: "px-4 py-2.5 bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 font-semibold text-xs rounded-xl transition cursor-pointer",
+                        children: "Remove"
+                      }
+                    ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: handleApplyPromoCode,
+                        disabled: promoLoading || !promoInput.trim(),
+                        className: "px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shadow-sm",
+                        children: [
+                          promoLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" }) : null,
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Apply" })
+                        ]
+                      }
+                    )
+                  ] }),
+                  promoError && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-rose-600 font-medium flex items-center gap-1 pt-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(TriangleAlert, { className: "w-3.5 h-3.5" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: promoError })
+                  ] }),
+                  promoSuccessMsg && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-emerald-700 font-medium flex items-center gap-1 pt-1", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-3.5 h-3.5" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: promoSuccessMsg })
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
@@ -27975,7 +28170,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const mercedesEconomyImg = "/assets/fleet_economy_1786403470397-ZbSk7mPw.jpg";
     const mercedesLuxuryImg = "/assets/fleet_luxury_1786403483244-GsvqzRW5.jpg";
     const mercedesFamilyImg = "/assets/fleet_family_1786403496325-DL-h_ExR.jpg";
-    function FleetCatalog({ onSelectClass, settings }) {
+    function FleetCatalog({ onSelectClass, settings: settings2 }) {
       var _a, _b, _c;
       const [activeTab, setActiveTab] = React.useState("Luxury");
       const [pricing, setPricing] = React.useState(null);
@@ -27990,31 +28185,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }, []);
       const fleet = {
         Economy: {
-          name: (settings == null ? void 0 : settings.fleet_economy_name) || "Business Economy Class",
-          tagline: (settings == null ? void 0 : settings.fleet_economy_tagline) || "Elegant, clean, and highly efficient travel.",
-          image: (settings == null ? void 0 : settings.fleet_economy_image) || getCustomImage("fleet_Economy", mercedesEconomyImg),
+          name: (settings2 == null ? void 0 : settings2.fleet_economy_name) || "Business Economy Class",
+          tagline: (settings2 == null ? void 0 : settings2.fleet_economy_tagline) || "Elegant, clean, and highly efficient travel.",
+          image: (settings2 == null ? void 0 : settings2.fleet_economy_image) || getCustomImage("fleet_Economy", mercedesEconomyImg),
           rate: ((_a = pricing == null ? void 0 : pricing.Economy) == null ? void 0 : _a.perMile) !== void 0 ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
-          description: (settings == null ? void 0 : settings.fleet_economy_description) || "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
+          description: (settings2 == null ? void 0 : settings2.fleet_economy_description) || "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
           cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
-          features: ((settings == null ? void 0 : settings.fleet_economy_features) || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(",").map((s) => s.trim()).filter(Boolean)
+          features: ((settings2 == null ? void 0 : settings2.fleet_economy_features) || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(",").map((s) => s.trim()).filter(Boolean)
         },
         Luxury: {
-          name: (settings == null ? void 0 : settings.fleet_luxury_name) || "First Class Luxury Chauffeur",
-          tagline: (settings == null ? void 0 : settings.fleet_luxury_tagline) || "The pinnacle of executive comfort and style.",
-          image: (settings == null ? void 0 : settings.fleet_luxury_image) || getCustomImage("fleet_Luxury", mercedesLuxuryImg),
+          name: (settings2 == null ? void 0 : settings2.fleet_luxury_name) || "First Class Luxury Chauffeur",
+          tagline: (settings2 == null ? void 0 : settings2.fleet_luxury_tagline) || "The pinnacle of executive comfort and style.",
+          image: (settings2 == null ? void 0 : settings2.fleet_luxury_image) || getCustomImage("fleet_Luxury", mercedesLuxuryImg),
           rate: ((_b = pricing == null ? void 0 : pricing.Luxury) == null ? void 0 : _b.perMile) !== void 0 ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
-          description: (settings == null ? void 0 : settings.fleet_luxury_description) || "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
+          description: (settings2 == null ? void 0 : settings2.fleet_luxury_description) || "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
           cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
-          features: ((settings == null ? void 0 : settings.fleet_luxury_features) || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(",").map((s) => s.trim()).filter(Boolean)
+          features: ((settings2 == null ? void 0 : settings2.fleet_luxury_features) || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(",").map((s) => s.trim()).filter(Boolean)
         },
         Family: {
-          name: (settings == null ? void 0 : settings.fleet_family_name) || "Family & Executive MPV",
-          tagline: (settings == null ? void 0 : settings.fleet_family_tagline) || "Generous space for luggage and loved ones.",
-          image: (settings == null ? void 0 : settings.fleet_family_image) || getCustomImage("fleet_Family", mercedesFamilyImg),
+          name: (settings2 == null ? void 0 : settings2.fleet_family_name) || "Family & Executive MPV",
+          tagline: (settings2 == null ? void 0 : settings2.fleet_family_tagline) || "Generous space for luggage and loved ones.",
+          image: (settings2 == null ? void 0 : settings2.fleet_family_image) || getCustomImage("fleet_Family", mercedesFamilyImg),
           rate: ((_c = pricing == null ? void 0 : pricing.Family) == null ? void 0 : _c.perMile) !== void 0 ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
-          description: (settings == null ? void 0 : settings.fleet_family_description) || "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
+          description: (settings2 == null ? void 0 : settings2.fleet_family_description) || "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
           cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
-          features: ((settings == null ? void 0 : settings.fleet_family_features) || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(",").map((s) => s.trim()).filter(Boolean)
+          features: ((settings2 == null ? void 0 : settings2.fleet_family_features) || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(",").map((s) => s.trim()).filter(Boolean)
         }
       };
       const selectedClass = fleet[activeTab];
@@ -28035,9 +28230,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "fleet", className: "py-24 bg-slate-50 border-t border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-3xl mx-auto mb-16", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold", children: (settings == null ? void 0 : settings.homepage_fleet_subtitle) || "Our Premium Fleet" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4", children: (settings == null ? void 0 : settings.homepage_fleet_title) || "Travel in Premium Comfort" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base leading-relaxed", children: (settings == null ? void 0 : settings.homepage_fleet_description) || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers." })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold", children: (settings2 == null ? void 0 : settings2.homepage_fleet_subtitle) || "Our Premium Fleet" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4", children: (settings2 == null ? void 0 : settings2.homepage_fleet_title) || "Travel in Premium Comfort" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-500 text-sm sm:text-base leading-relaxed", children: (settings2 == null ? void 0 : settings2.homepage_fleet_description) || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers." })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center mb-12", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-slate-200 p-1.5 rounded-2xl flex space-x-1 sm:space-x-2 shadow-sm", children: Object.keys(fleet).map((tab) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
@@ -28109,7 +28304,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const stationTransfersImg = "/assets/transfer_station_1786403548164-CFCuDDFB.jpg";
     const popularCitiesImg = "/assets/transfer_city_1786403562698-CTOpR5C2.jpg";
     const businessTravelImg = "/assets/transfer_business_1786403576291-d6AxRFiS.jpg";
-    function AirportsGrid({ onSelectTransfer, settings }) {
+    function AirportsGrid({ onSelectTransfer, settings: settings2 }) {
       const [, setRefreshKey] = reactExports.useState(0);
       reactExports.useEffect(() => {
         const handleUpdate = () => setRefreshKey((prev) => prev + 1);
@@ -28117,57 +28312,57 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, []);
       const airports = [
-        { name: (settings == null ? void 0 : settings.airport_name_1) || "Heathrow", code: (settings == null ? void 0 : settings.airport_code_1) || "LHR", fullName: `${(settings == null ? void 0 : settings.airport_name_1) || "Heathrow"} Airport (${(settings == null ? void 0 : settings.airport_code_1) || "LHR"})` },
-        { name: (settings == null ? void 0 : settings.airport_name_2) || "Gatwick", code: (settings == null ? void 0 : settings.airport_code_2) || "LGW", fullName: `${(settings == null ? void 0 : settings.airport_name_2) || "Gatwick"} Airport (${(settings == null ? void 0 : settings.airport_code_2) || "LGW"})` },
-        { name: (settings == null ? void 0 : settings.airport_name_3) || "Luton", code: (settings == null ? void 0 : settings.airport_code_3) || "LTN", fullName: `${(settings == null ? void 0 : settings.airport_name_3) || "Luton"} Airport (${(settings == null ? void 0 : settings.airport_code_3) || "LTN"})` },
-        { name: (settings == null ? void 0 : settings.airport_name_4) || "Stansted", code: (settings == null ? void 0 : settings.airport_code_4) || "STN", fullName: `${(settings == null ? void 0 : settings.airport_name_4) || "Stansted"} Airport (${(settings == null ? void 0 : settings.airport_code_4) || "STN"})` },
-        { name: (settings == null ? void 0 : settings.airport_name_5) || "London City", code: (settings == null ? void 0 : settings.airport_code_5) || "LCY", fullName: `${(settings == null ? void 0 : settings.airport_name_5) || "London City"} Airport (${(settings == null ? void 0 : settings.airport_code_5) || "LCY"})` },
-        { name: (settings == null ? void 0 : settings.airport_name_6) || "Southend", code: (settings == null ? void 0 : settings.airport_code_6) || "SEN", fullName: `${(settings == null ? void 0 : settings.airport_name_6) || "Southend"} Airport (${(settings == null ? void 0 : settings.airport_code_6) || "SEN"})` }
+        { name: (settings2 == null ? void 0 : settings2.airport_name_1) || "Heathrow", code: (settings2 == null ? void 0 : settings2.airport_code_1) || "LHR", fullName: `${(settings2 == null ? void 0 : settings2.airport_name_1) || "Heathrow"} Airport (${(settings2 == null ? void 0 : settings2.airport_code_1) || "LHR"})` },
+        { name: (settings2 == null ? void 0 : settings2.airport_name_2) || "Gatwick", code: (settings2 == null ? void 0 : settings2.airport_code_2) || "LGW", fullName: `${(settings2 == null ? void 0 : settings2.airport_name_2) || "Gatwick"} Airport (${(settings2 == null ? void 0 : settings2.airport_code_2) || "LGW"})` },
+        { name: (settings2 == null ? void 0 : settings2.airport_name_3) || "Luton", code: (settings2 == null ? void 0 : settings2.airport_code_3) || "LTN", fullName: `${(settings2 == null ? void 0 : settings2.airport_name_3) || "Luton"} Airport (${(settings2 == null ? void 0 : settings2.airport_code_3) || "LTN"})` },
+        { name: (settings2 == null ? void 0 : settings2.airport_name_4) || "Stansted", code: (settings2 == null ? void 0 : settings2.airport_code_4) || "STN", fullName: `${(settings2 == null ? void 0 : settings2.airport_name_4) || "Stansted"} Airport (${(settings2 == null ? void 0 : settings2.airport_code_4) || "STN"})` },
+        { name: (settings2 == null ? void 0 : settings2.airport_name_5) || "London City", code: (settings2 == null ? void 0 : settings2.airport_code_5) || "LCY", fullName: `${(settings2 == null ? void 0 : settings2.airport_name_5) || "London City"} Airport (${(settings2 == null ? void 0 : settings2.airport_code_5) || "LCY"})` },
+        { name: (settings2 == null ? void 0 : settings2.airport_name_6) || "Southend", code: (settings2 == null ? void 0 : settings2.airport_code_6) || "SEN", fullName: `${(settings2 == null ? void 0 : settings2.airport_name_6) || "Southend"} Airport (${(settings2 == null ? void 0 : settings2.airport_code_6) || "SEN"})` }
       ];
       const services = [
         {
           id: "airport",
-          title: (settings == null ? void 0 : settings.service_title_1) || "Airport Transfers",
-          description: (settings == null ? void 0 : settings.service_desc_1) || "Reliable private transfers to Heathrow, Gatwick, and all major UK airports.",
-          image: (settings == null ? void 0 : settings.service_image_1) || getCustomImage("transfer_airport", airportTransfersImg),
-          pickup: (settings == null ? void 0 : settings.service_pickup_1) || "Shirley, Solihull B90",
-          dropoff: (settings == null ? void 0 : settings.service_dropoff_1) || "London Heathrow Airport (LHR)"
+          title: (settings2 == null ? void 0 : settings2.service_title_1) || "Airport Transfers",
+          description: (settings2 == null ? void 0 : settings2.service_desc_1) || "Reliable private transfers to Heathrow, Gatwick, and all major UK airports.",
+          image: (settings2 == null ? void 0 : settings2.service_image_1) || getCustomImage("transfer_airport", airportTransfersImg),
+          pickup: (settings2 == null ? void 0 : settings2.service_pickup_1) || "Shirley, Solihull B90",
+          dropoff: (settings2 == null ? void 0 : settings2.service_dropoff_1) || "London Heathrow Airport (LHR)"
         },
         {
           id: "port",
-          title: (settings == null ? void 0 : settings.service_title_2) || "Port Transfers",
-          description: (settings == null ? void 0 : settings.service_desc_2) || "Reliable transfers to and from all major UK ports and cruise terminals.",
-          image: (settings == null ? void 0 : settings.service_image_2) || getCustomImage("transfer_port", transferPortImg),
-          pickup: (settings == null ? void 0 : settings.service_pickup_2) || "Shirley, Solihull B90",
-          dropoff: (settings == null ? void 0 : settings.service_dropoff_2) || "Southampton Cruise Port"
+          title: (settings2 == null ? void 0 : settings2.service_title_2) || "Port Transfers",
+          description: (settings2 == null ? void 0 : settings2.service_desc_2) || "Reliable transfers to and from all major UK ports and cruise terminals.",
+          image: (settings2 == null ? void 0 : settings2.service_image_2) || getCustomImage("transfer_port", transferPortImg),
+          pickup: (settings2 == null ? void 0 : settings2.service_pickup_2) || "Shirley, Solihull B90",
+          dropoff: (settings2 == null ? void 0 : settings2.service_dropoff_2) || "Southampton Cruise Port"
         },
         {
           id: "station",
-          title: (settings == null ? void 0 : settings.service_title_3) || "Station Transfers",
-          description: (settings == null ? void 0 : settings.service_desc_3) || "Seamless transfers to and from rail stations across London and the UK.",
-          image: (settings == null ? void 0 : settings.service_image_3) || getCustomImage("transfer_station", stationTransfersImg),
-          pickup: (settings == null ? void 0 : settings.service_pickup_3) || "Shirley, Solihull B90",
-          dropoff: (settings == null ? void 0 : settings.service_dropoff_3) || "London Euston Station"
+          title: (settings2 == null ? void 0 : settings2.service_title_3) || "Station Transfers",
+          description: (settings2 == null ? void 0 : settings2.service_desc_3) || "Seamless transfers to and from rail stations across London and the UK.",
+          image: (settings2 == null ? void 0 : settings2.service_image_3) || getCustomImage("transfer_station", stationTransfersImg),
+          pickup: (settings2 == null ? void 0 : settings2.service_pickup_3) || "Shirley, Solihull B90",
+          dropoff: (settings2 == null ? void 0 : settings2.service_dropoff_3) || "London Euston Station"
         },
         {
           id: "city",
-          title: (settings == null ? void 0 : settings.service_title_4) || "Popular Cities",
-          description: (settings == null ? void 0 : settings.service_desc_4) || "Travel to all major cities across the UK in comfort and style.",
-          image: (settings == null ? void 0 : settings.service_image_4) || getCustomImage("transfer_city", popularCitiesImg),
-          pickup: (settings == null ? void 0 : settings.service_pickup_4) || "Shirley, Solihull B90",
-          dropoff: (settings == null ? void 0 : settings.service_dropoff_4) || "London Central, UK"
+          title: (settings2 == null ? void 0 : settings2.service_title_4) || "Popular Cities",
+          description: (settings2 == null ? void 0 : settings2.service_desc_4) || "Travel to all major cities across the UK in comfort and style.",
+          image: (settings2 == null ? void 0 : settings2.service_image_4) || getCustomImage("transfer_city", popularCitiesImg),
+          pickup: (settings2 == null ? void 0 : settings2.service_pickup_4) || "Shirley, Solihull B90",
+          dropoff: (settings2 == null ? void 0 : settings2.service_dropoff_4) || "London Central, UK"
         },
         {
           id: "business",
-          title: (settings == null ? void 0 : settings.service_title_5) || "Business Travel",
-          description: (settings == null ? void 0 : settings.service_desc_5) || "Executive travel solutions tailored for business and professionals.",
-          image: (settings == null ? void 0 : settings.service_image_5) || getCustomImage("transfer_business", businessTravelImg),
-          pickup: (settings == null ? void 0 : settings.service_pickup_5) || "Shirley, Solihull B90",
-          dropoff: (settings == null ? void 0 : settings.service_dropoff_5) || "Birmingham Airport (BHX)"
+          title: (settings2 == null ? void 0 : settings2.service_title_5) || "Business Travel",
+          description: (settings2 == null ? void 0 : settings2.service_desc_5) || "Executive travel solutions tailored for business and professionals.",
+          image: (settings2 == null ? void 0 : settings2.service_image_5) || getCustomImage("transfer_business", businessTravelImg),
+          pickup: (settings2 == null ? void 0 : settings2.service_pickup_5) || "Shirley, Solihull B90",
+          dropoff: (settings2 == null ? void 0 : settings2.service_dropoff_5) || "Birmingham Airport (BHX)"
         }
       ];
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "airports", className: "py-20 bg-white border-t border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center mb-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: (settings == null ? void 0 : settings.homepage_airports_title) || "We cover all major London airports" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-center mb-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight", children: (settings2 == null ? void 0 : settings2.homepage_airports_title) || "We cover all major London airports" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm mb-16", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-y lg:divide-y-0 divide-slate-200", children: airports.map((airport, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
@@ -28216,16 +28411,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         )) })
       ] }) });
     }
-    function ContactForm({ settings }) {
+    function ContactForm({ settings: settings2 }) {
       const [name, setName] = reactExports.useState("");
       const [email, setEmail] = reactExports.useState("");
       const [phone, setPhone] = reactExports.useState("");
       const [message, setMessage] = reactExports.useState("");
       const [loading, setLoading] = reactExports.useState(false);
       const [success, setSuccess] = reactExports.useState(false);
-      const officeAddress = (settings == null ? void 0 : settings.office_address) || (settings == null ? void 0 : settings.officeAddress) || "Shirley B90 Shirley, Solihull, West Midlands, UK";
-      const businessEmail = (settings == null ? void 0 : settings.business_email) || (settings == null ? void 0 : settings.businessEmail) || "info@travelluxx.co.uk";
-      const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+      const officeAddress = (settings2 == null ? void 0 : settings2.office_address) || (settings2 == null ? void 0 : settings2.officeAddress) || "Shirley B90 Shirley, Solihull, West Midlands, UK";
+      const businessEmail = (settings2 == null ? void 0 : settings2.business_email) || (settings2 == null ? void 0 : settings2.businessEmail) || "info@travelluxx.co.uk";
+      const whatsappNum = (settings2 == null ? void 0 : settings2.whatsapp_number) || "441217140876";
       const formattedPhone = whatsappNum.startsWith("44") ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` : whatsappNum;
       const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28385,15 +28580,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className, viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.334 1.357-.053.225-.174.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" }) });
     }
     function Footer({ onScrollTo, onAdminClick }) {
-      const { settings } = useSettings();
-      const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
-      const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
-      const emailAddr = (settings == null ? void 0 : settings.business_email) || "info@travelluxx.co.uk";
-      const officeAddr = (settings == null ? void 0 : settings.office_address) || "Shirley B90 Shirley, Solihull, West Midlands, UK";
-      const instagramUrl = (settings == null ? void 0 : settings.social_instagram) || "https://www.instagram.com/trave_lluxx/";
-      const tiktokUrl = (settings == null ? void 0 : settings.social_tiktok) || "https://www.tiktok.com/@traveluxx";
-      const pinterestUrl = (settings == null ? void 0 : settings.social_pinterest) || "https://uk.pinterest.com/travelluxx01/";
-      const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+      const { settings: settings2 } = useSettings();
+      const brandName = (settings2 == null ? void 0 : settings2.business_name) || (settings2 == null ? void 0 : settings2.businessName) || "Travelluxx";
+      const whatsappNum = (settings2 == null ? void 0 : settings2.whatsapp_number) || "441217140876";
+      const emailAddr = (settings2 == null ? void 0 : settings2.business_email) || "info@travelluxx.co.uk";
+      const officeAddr = (settings2 == null ? void 0 : settings2.office_address) || "Shirley B90 Shirley, Solihull, West Midlands, UK";
+      const instagramUrl = (settings2 == null ? void 0 : settings2.social_instagram) || "https://www.instagram.com/trave_lluxx/";
+      const tiktokUrl = (settings2 == null ? void 0 : settings2.social_tiktok) || "https://www.tiktok.com/@traveluxx";
+      const pinterestUrl = (settings2 == null ? void 0 : settings2.social_pinterest) || "https://uk.pinterest.com/travelluxx01/";
+      const isRenax = (settings2 == null ? void 0 : settings2.active_theme) === "renax";
       const formattedPhone = whatsappNum.startsWith("44") ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` : whatsappNum;
       return /* @__PURE__ */ jsxRuntimeExports.jsx(
         "footer",
@@ -39729,7 +39924,13 @@ ${escapeText(this.code(index, length))}
       published: true,
       metaTitle: "",
       metaDescription: "",
-      noIndexNoFollow: false
+      noIndexNoFollow: false,
+      ogTitle: "",
+      ogDescription: "",
+      ogImage: "",
+      ogUrl: "",
+      ogType: "website",
+      customSchema: ""
     };
     const quillModules$1 = {
       toolbar: [
@@ -39824,7 +40025,13 @@ ${escapeText(this.code(index, length))}
           ...emptyArea,
           ...area,
           faqs: Array.isArray(area.faqs) ? area.faqs : [],
-          noIndexNoFollow: !!area.noIndexNoFollow
+          noIndexNoFollow: !!area.noIndexNoFollow,
+          ogTitle: area.ogTitle || "",
+          ogDescription: area.ogDescription || "",
+          ogImage: area.ogImage || "",
+          ogUrl: area.ogUrl || "",
+          ogType: area.ogType || "website",
+          customSchema: area.customSchema || ""
         });
         setError("");
         setViewMode("form");
@@ -40709,6 +40916,84 @@ ${escapeText(this.code(index, length))}
                   }
                 )
               ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-3 space-y-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "📱 Open Graph (OG) Social Media Tags" }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Title (Facebook, WhatsApp, LinkedIn)" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: form.ogTitle || "",
+                      onChange: (e) => setForm({ ...form, ogTitle: e.target.value }),
+                      placeholder: form.metaTitle || form.title || "Custom social sharing title",
+                      className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Description" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "textarea",
+                    {
+                      rows: 2,
+                      value: form.ogDescription || "",
+                      onChange: (e) => setForm({ ...form, ogDescription: e.target.value }),
+                      placeholder: form.metaDescription || "Custom social sharing description",
+                      className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Image URL" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        value: form.ogImage || "",
+                        onChange: (e) => setForm({ ...form, ogImage: e.target.value }),
+                        placeholder: form.heroImage || "https://...",
+                        className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "OG Type" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "select",
+                      {
+                        value: form.ogType || "website",
+                        onChange: (e) => setForm({ ...form, ogType: e.target.value }),
+                        className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "website", children: "website" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "article", children: "article" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "place", children: "place" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "business.business", children: "business.business" })
+                        ]
+                      }
+                    )
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-[#f0f0f1] pt-3 space-y-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚙️ Custom Schema Markup (JSON-LD)" }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-400", children: "Optional custom structured data" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-slate-500", children: "Enter valid JSON-LD schema markup below (e.g., LocalBusiness, Service, TaxiService). It will be dynamically injected into the <head> of this location page alongside standard FAQPage and TaxiService schema." }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "textarea",
+                  {
+                    rows: 4,
+                    value: form.customSchema || "",
+                    onChange: (e) => setForm({ ...form, customSchema: e.target.value }),
+                    placeholder: '{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "TravelLuxx Solihull"\n}',
+                    className: "w-full border border-[#8c8f94] font-mono text-[11px] rounded-sm p-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#2271b1]"
+                  }
+                )
+              ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-6 pt-1", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -41584,7 +41869,7 @@ ${escapeText(this.code(index, length))}
       const [selectedInquiryIds, setSelectedInquiryIds] = reactExports.useState([]);
       const [media, setMedia] = reactExports.useState([]);
       const [menuItems, setMenuItems] = reactExports.useState([]);
-      const [settings, setSettings] = reactExports.useState({});
+      const [settings2, setSettings] = reactExports.useState({});
       const [settingsTab, setSettingsTab] = reactExports.useState("general");
       const [searchQuery, setSearchQuery] = reactExports.useState("");
       const [statusFilter, setStatusFilter] = reactExports.useState("All");
@@ -41669,6 +41954,23 @@ ${escapeText(this.code(index, length))}
       const [uploading, setUploading] = reactExports.useState(false);
       const [newMenuItem, setNewMenuItem] = reactExports.useState({ label: "", href: "", target: "_self" });
       const [newSubMenuItems, setNewSubMenuItems] = reactExports.useState({});
+      const [promoCodes, setPromoCodes] = reactExports.useState([]);
+      const [promoCodesLoading, setPromoCodesLoading] = reactExports.useState(false);
+      const [promoModalOpen, setPromoModalOpen] = reactExports.useState(false);
+      const [editingPromoId, setEditingPromoId] = reactExports.useState(null);
+      const [promoForm, setPromoForm] = reactExports.useState({
+        code: "",
+        discountType: "percentage",
+        discountValue: 10,
+        minOrderAmount: 0,
+        maxDiscountAmount: 0,
+        usageLimit: 0,
+        expiresAt: "",
+        isActive: true,
+        description: ""
+      });
+      const [promoSaving, setPromoSaving] = reactExports.useState(false);
+      const [promoFilter, setPromoFilter] = reactExports.useState("all");
       reactExports.useEffect(() => {
         if (token) {
           fetchAll();
@@ -41677,7 +41979,7 @@ ${escapeText(this.code(index, length))}
       reactExports.useEffect(() => {
         if (!token) return;
         if (routeTab) {
-          const validTabs = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "settings", "inquiries"];
+          const validTabs = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "promocodes", "settings", "inquiries"];
           if (validTabs.includes(routeTab)) {
             setActiveTab(routeTab);
           }
@@ -41973,6 +42275,100 @@ ${escapeText(this.code(index, length))}
         fetchMenu();
         fetchInquiries();
         fetchMedia();
+        fetchPromoCodes();
+      };
+      const fetchPromoCodes = async () => {
+        setPromoCodesLoading(true);
+        try {
+          const res = await fetch("/api/admin/promocodes");
+          if (res.ok) {
+            const data = await res.json();
+            setPromoCodes(Array.isArray(data) ? data : []);
+          }
+        } catch (e) {
+          console.error("Error fetching promo codes:", e);
+        } finally {
+          setPromoCodesLoading(false);
+        }
+      };
+      const handleSavePromoCode = async (e) => {
+        e.preventDefault();
+        if (!promoForm.code.trim()) {
+          showToast("Please enter a promo code", "error");
+          return;
+        }
+        setPromoSaving(true);
+        try {
+          const payload = {
+            ...promoForm,
+            code: promoForm.code.trim().toUpperCase(),
+            discountValue: Number(promoForm.discountValue) || 0,
+            minOrderAmount: Number(promoForm.minOrderAmount) || 0,
+            maxDiscountAmount: promoForm.maxDiscountAmount ? Number(promoForm.maxDiscountAmount) : void 0,
+            usageLimit: Number(promoForm.usageLimit) || 0,
+            expiresAt: promoForm.expiresAt ? promoForm.expiresAt : void 0
+          };
+          const url = editingPromoId ? `/api/admin/promocodes/${editingPromoId}` : "/api/admin/promocodes";
+          const method = editingPromoId ? "PUT" : "POST";
+          const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            showToast(data.message || "Failed to save promo code", "error");
+          } else {
+            showToast(editingPromoId ? "Promo code updated successfully!" : "Promo code created successfully!", "success");
+            setPromoModalOpen(false);
+            setEditingPromoId(null);
+            setPromoForm({
+              code: "",
+              discountType: "percentage",
+              discountValue: 10,
+              minOrderAmount: 0,
+              maxDiscountAmount: 0,
+              usageLimit: 0,
+              expiresAt: "",
+              isActive: true,
+              description: ""
+            });
+            fetchPromoCodes();
+          }
+        } catch (err) {
+          showToast(err.message || "An error occurred", "error");
+        } finally {
+          setPromoSaving(false);
+        }
+      };
+      const handleTogglePromoActive = async (promo) => {
+        try {
+          const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isActive: !promo.isActive })
+          });
+          if (res.ok) {
+            showToast(`Promo code ${promo.code} is now ${!promo.isActive ? "active" : "inactive"}`, "success");
+            fetchPromoCodes();
+          }
+        } catch (e) {
+          showToast("Failed to toggle promo code status", "error");
+        }
+      };
+      const handleDeletePromo = async (promo) => {
+        if (!window.confirm(`Are you sure you want to delete promo code "${promo.code}"?`)) return;
+        try {
+          const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
+            method: "DELETE"
+          });
+          if (res.ok) {
+            showToast(`Promo code ${promo.code} deleted`, "success");
+            fetchPromoCodes();
+          }
+        } catch (e) {
+          showToast("Failed to delete promo code", "error");
+        }
       };
       const fetchBookings = async () => {
         setBookingsLoading(true);
@@ -42512,10 +42908,10 @@ ${escapeText(this.code(index, length))}
         setSaveStatus("Saving...");
         setIsSaving(true);
         try {
-          const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings) });
+          const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings2) });
           if (res.ok) {
             setSaveStatus("Settings saved!");
-            window.dispatchEvent(new CustomEvent("settingsUpdated", { detail: settings }));
+            window.dispatchEvent(new CustomEvent("settingsUpdated", { detail: settings2 }));
             showToast("Settings and code snippets saved successfully!");
             setTimeout(() => setSaveStatus(""), 4e3);
           } else setSaveStatus("Failed to save.");
@@ -42530,7 +42926,7 @@ ${escapeText(this.code(index, length))}
         setSaveStatus("Saving...");
         setIsSaving(true);
         try {
-          const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings) });
+          const res = await fetch("/api/admin/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings2) });
           if (res.ok) {
             setSaveStatus("Homepage updated successfully!");
             setTimeout(() => setSaveStatus(""), 4e3);
@@ -42626,6 +43022,7 @@ ${escapeText(this.code(index, length))}
         { id: "service-areas", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-4 h-4" }), label: "Service Areas" },
         { id: "media", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Image$1, { className: "w-4 h-4" }), label: "Media" },
         { id: "menus", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { className: "w-4 h-4" }), label: "Menus" },
+        { id: "promocodes", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "w-4 h-4" }), label: "Promo Codes" },
         { id: "settings", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Settings, { className: "w-4 h-4" }), label: "Settings" }
       ];
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#f0f0f1] font-sans flex flex-col text-[#1d2327] text-sm", children: [
@@ -43555,8 +43952,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_hero_badge || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_badge: e.target.value }),
+                              value: settings2.homepage_hero_badge || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_hero_badge: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. TRAVELLUXX PRIVATE HIRE"
                             }
@@ -43568,8 +43965,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_hero_title || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_title: e.target.value }),
+                              value: settings2.homepage_hero_title || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_hero_title: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Nationwide Airport | Transfers & Private Hire"
                             }
@@ -43582,8 +43979,8 @@ ${escapeText(this.code(index, length))}
                           "textarea",
                           {
                             rows: 3,
-                            value: settings.homepage_hero_subtitle || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_hero_subtitle: e.target.value }),
+                            value: settings2.homepage_hero_subtitle || "",
+                            onChange: (e) => setSettings({ ...settings2, homepage_hero_subtitle: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. Experience premium private hire..."
                           }
@@ -43596,8 +43993,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_hero_btn_text || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_text: e.target.value }),
+                              value: settings2.homepage_hero_btn_text || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_hero_btn_text: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Calculate & Get Quote"
                             }
@@ -43609,8 +44006,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_hero_btn_link || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_btn_link: e.target.value }),
+                              value: settings2.homepage_hero_btn_link || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_hero_btn_link: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. calculator-section"
                             }
@@ -43624,8 +44021,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_hero_phone_text || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_text: e.target.value }),
+                              value: settings2.homepage_hero_phone_text || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_hero_phone_text: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. +44 121 714 0876"
                             }
@@ -43637,8 +44034,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_hero_phone_link || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_hero_phone_link: e.target.value }),
+                              value: settings2.homepage_hero_phone_link || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_hero_phone_link: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. tel:441217140876"
                             }
@@ -43647,13 +44044,13 @@ ${escapeText(this.code(index, length))}
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-2 uppercase tracking-wide", children: "Hero Background Image" }),
-                        settings.hero_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center max-w-md", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.hero_image, alt: "preview", className: "max-w-full max-h-full object-cover" }),
+                        settings2.hero_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center max-w-md", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2.hero_image, alt: "preview", className: "max-w-full max-h-full object-cover" }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx(
                             "button",
                             {
                               type: "button",
-                              onClick: () => setSettings({ ...settings, hero_image: "" }),
+                              onClick: () => setSettings({ ...settings2, hero_image: "" }),
                               className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700",
                               children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                             }
@@ -43681,8 +44078,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_indicator1 || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_indicator1: e.target.value }),
+                              value: settings2.homepage_indicator1 || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_indicator1: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Licensed Professional Operators"
                             }
@@ -43694,8 +44091,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_indicator2 || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_indicator2: e.target.value }),
+                              value: settings2.homepage_indicator2 || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_indicator2: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Guaranteed Nationwide Coverage"
                             }
@@ -43707,8 +44104,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_indicator3 || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_indicator3: e.target.value }),
+                              value: settings2.homepage_indicator3 || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_indicator3: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Zero Surge Pricing"
                             }
@@ -43725,8 +44122,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_fleet_subtitle || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_fleet_subtitle: e.target.value }),
+                              value: settings2.homepage_fleet_subtitle || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_fleet_subtitle: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Our Premium Fleet"
                             }
@@ -43738,8 +44135,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.homepage_fleet_title || "",
-                              onChange: (e) => setSettings({ ...settings, homepage_fleet_title: e.target.value }),
+                              value: settings2.homepage_fleet_title || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_fleet_title: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                               placeholder: "e.g. Travel in Premium Comfort"
                             }
@@ -43752,8 +44149,8 @@ ${escapeText(this.code(index, length))}
                           "textarea",
                           {
                             rows: 3,
-                            value: settings.homepage_fleet_description || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_fleet_description: e.target.value }),
+                            value: settings2.homepage_fleet_description || "",
+                            onChange: (e) => setSettings({ ...settings2, homepage_fleet_description: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. Our curated fleet features..."
                           }
@@ -43768,8 +44165,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings.fleet_economy_name || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_economy_name: e.target.value }),
+                                value: settings2.fleet_economy_name || "",
+                                onChange: (e) => setSettings({ ...settings2, fleet_economy_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -43780,8 +44177,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings.fleet_economy_tagline || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_economy_tagline: e.target.value }),
+                                value: settings2.fleet_economy_tagline || "",
+                                onChange: (e) => setSettings({ ...settings2, fleet_economy_tagline: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -43793,8 +44190,8 @@ ${escapeText(this.code(index, length))}
                             "textarea",
                             {
                               rows: 2,
-                              value: settings.fleet_economy_description || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_economy_description: e.target.value }),
+                              value: settings2.fleet_economy_description || "",
+                              onChange: (e) => setSettings({ ...settings2, fleet_economy_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -43805,8 +44202,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.fleet_economy_features || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_economy_features: e.target.value }),
+                              value: settings2.fleet_economy_features || "",
+                              onChange: (e) => setSettings({ ...settings2, fleet_economy_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Complimentary 4G Wi-Fi, USB Charging, etc."
                             }
@@ -43814,13 +44211,13 @@ ${escapeText(this.code(index, length))}
                         ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Vehicle Image" }),
-                          settings.fleet_economy_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.fleet_economy_image, alt: "Economy", className: "max-w-full max-h-full object-contain" }),
+                          settings2.fleet_economy_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2.fleet_economy_image, alt: "Economy", className: "max-w-full max-h-full object-contain" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, fleet_economy_image: "" }),
+                                onClick: () => setSettings({ ...settings2, fleet_economy_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -43848,8 +44245,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings.fleet_luxury_name || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_luxury_name: e.target.value }),
+                                value: settings2.fleet_luxury_name || "",
+                                onChange: (e) => setSettings({ ...settings2, fleet_luxury_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -43860,8 +44257,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings.fleet_luxury_tagline || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_luxury_tagline: e.target.value }),
+                                value: settings2.fleet_luxury_tagline || "",
+                                onChange: (e) => setSettings({ ...settings2, fleet_luxury_tagline: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -43873,8 +44270,8 @@ ${escapeText(this.code(index, length))}
                             "textarea",
                             {
                               rows: 2,
-                              value: settings.fleet_luxury_description || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_luxury_description: e.target.value }),
+                              value: settings2.fleet_luxury_description || "",
+                              onChange: (e) => setSettings({ ...settings2, fleet_luxury_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -43885,8 +44282,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.fleet_luxury_features || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_luxury_features: e.target.value }),
+                              value: settings2.fleet_luxury_features || "",
+                              onChange: (e) => setSettings({ ...settings2, fleet_luxury_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Premium Leather Reclining Seats, Ambient Lighting, etc."
                             }
@@ -43894,13 +44291,13 @@ ${escapeText(this.code(index, length))}
                         ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Vehicle Image" }),
-                          settings.fleet_luxury_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.fleet_luxury_image, alt: "Luxury", className: "max-w-full max-h-full object-contain" }),
+                          settings2.fleet_luxury_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2.fleet_luxury_image, alt: "Luxury", className: "max-w-full max-h-full object-contain" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, fleet_luxury_image: "" }),
+                                onClick: () => setSettings({ ...settings2, fleet_luxury_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -43928,8 +44325,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings.fleet_family_name || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_family_name: e.target.value }),
+                                value: settings2.fleet_family_name || "",
+                                onChange: (e) => setSettings({ ...settings2, fleet_family_name: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -43940,8 +44337,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings.fleet_family_tagline || "",
-                                onChange: (e) => setSettings({ ...settings, fleet_family_family: e.target.value }),
+                                value: settings2.fleet_family_tagline || "",
+                                onChange: (e) => setSettings({ ...settings2, fleet_family_family: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                               }
                             )
@@ -43953,8 +44350,8 @@ ${escapeText(this.code(index, length))}
                             "textarea",
                             {
                               rows: 2,
-                              value: settings.fleet_family_description || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_family_description: e.target.value }),
+                              value: settings2.fleet_family_description || "",
+                              onChange: (e) => setSettings({ ...settings2, fleet_family_description: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                             }
                           )
@@ -43965,8 +44362,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "text",
-                              value: settings.fleet_family_features || "",
-                              onChange: (e) => setSettings({ ...settings, fleet_family_features: e.target.value }),
+                              value: settings2.fleet_family_features || "",
+                              onChange: (e) => setSettings({ ...settings2, fleet_family_features: e.target.value }),
                               className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
                               placeholder: "Conference Seating, Massive Boot, etc."
                             }
@@ -43974,13 +44371,13 @@ ${escapeText(this.code(index, length))}
                         ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1.5", children: "Vehicle Image" }),
-                          settings.fleet_family_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.fleet_family_image, alt: "Family", className: "max-w-full max-h-full object-contain" }),
+                          settings2.fleet_family_image ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2.fleet_family_image, alt: "Family", className: "max-w-full max-h-full object-contain" }),
                             /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, fleet_family_image: "" }),
+                                onClick: () => setSettings({ ...settings2, fleet_family_image: "" }),
                                 className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                               }
@@ -44008,8 +44405,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: "text",
-                            value: settings.homepage_airports_title || "",
-                            onChange: (e) => setSettings({ ...settings, homepage_airports_title: e.target.value }),
+                            value: settings2.homepage_airports_title || "",
+                            onChange: (e) => setSettings({ ...settings2, homepage_airports_title: e.target.value }),
                             className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]",
                             placeholder: "e.g. We cover all major London airports"
                           }
@@ -44028,8 +44425,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings[`airport_name_${num}`] || "",
-                                onChange: (e) => setSettings({ ...settings, [`airport_name_${num}`]: e.target.value }),
+                                value: settings2[`airport_name_${num}`] || "",
+                                onChange: (e) => setSettings({ ...settings2, [`airport_name_${num}`]: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
                               }
                             )
@@ -44040,8 +44437,8 @@ ${escapeText(this.code(index, length))}
                               "input",
                               {
                                 type: "text",
-                                value: settings[`airport_code_${num}`] || "",
-                                onChange: (e) => setSettings({ ...settings, [`airport_code_${num}`]: e.target.value }),
+                                value: settings2[`airport_code_${num}`] || "",
+                                onChange: (e) => setSettings({ ...settings2, [`airport_code_${num}`]: e.target.value }),
                                 className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs"
                               }
                             )
@@ -44062,8 +44459,8 @@ ${escapeText(this.code(index, length))}
                                 "input",
                                 {
                                   type: "text",
-                                  value: settings[`service_title_${num}`] || "",
-                                  onChange: (e) => setSettings({ ...settings, [`service_title_${num}`]: e.target.value }),
+                                  value: settings2[`service_title_${num}`] || "",
+                                  onChange: (e) => setSettings({ ...settings2, [`service_title_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 }
                               )
@@ -44074,8 +44471,8 @@ ${escapeText(this.code(index, length))}
                                 "input",
                                 {
                                   type: "text",
-                                  value: settings[`service_desc_${num}`] || "",
-                                  onChange: (e) => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value }),
+                                  value: settings2[`service_desc_${num}`] || "",
+                                  onChange: (e) => setSettings({ ...settings2, [`service_desc_${num}`]: e.target.value }),
                                   className: "w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 }
                               )
@@ -44083,13 +44480,13 @@ ${escapeText(this.code(index, length))}
                           ] }),
                           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Card Image" }),
-                            settings[`service_image_${num}`] ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-20 rounded border border-[#c3c4c7] overflow-hidden bg-slate-100 flex items-center justify-center", children: [
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings[`service_image_${num}`], alt: `Service ${num}`, className: "max-w-full max-h-full object-cover" }),
+                            settings2[`service_image_${num}`] ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative group w-36 h-20 rounded border border-[#c3c4c7] overflow-hidden bg-slate-100 flex items-center justify-center", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2[`service_image_${num}`], alt: `Service ${num}`, className: "max-w-full max-h-full object-cover" }),
                               /* @__PURE__ */ jsxRuntimeExports.jsx(
                                 "button",
                                 {
                                   type: "button",
-                                  onClick: () => setSettings({ ...settings, [`service_image_${num}`]: "" }),
+                                  onClick: () => setSettings({ ...settings2, [`service_image_${num}`]: "" }),
                                   className: "absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700",
                                   children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
                                 }
@@ -44110,19 +44507,193 @@ ${escapeText(this.code(index, length))}
                         ] }, num)) })
                       ] })
                     ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4 shadow-sm", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#f0f0f1] pb-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-4 h-4 text-[#2271b1]" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider", children: "Homepage FAQ Section" })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-[#646970] mt-0.5", children: "Manage frequently asked questions displayed on the homepage with an interactive accordion layout." })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer shrink-0", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "checkbox",
+                              checked: settings2.homepage_faqs_enabled !== false,
+                              onChange: (e) => setSettings({ ...settings2, homepage_faqs_enabled: e.target.checked }),
+                              className: "rounded text-[#2271b1] focus:ring-[#2271b1]"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: settings2.homepage_faqs_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: settings2.homepage_faqs_enabled !== false ? "Section Visible" : "Section Hidden" })
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Badge" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings2.homepage_faq_badge || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_faq_badge: e.target.value }),
+                              placeholder: "FREQUENTLY ASKED QUESTIONS",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Title" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings2.homepage_faq_title || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_faq_title: e.target.value }),
+                              placeholder: "Got Questions? We Have Answers",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Subtitle" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings2.homepage_faq_subtitle || "",
+                              onChange: (e) => setSettings({ ...settings2, homepage_faq_subtitle: e.target.value }),
+                              placeholder: "Everything you need to know about our chauffeur services...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-3", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-800 uppercase tracking-wide", children: [
+                            "Questions & Answers (",
+                            Array.isArray(settings2.homepage_faqs) ? settings2.homepage_faqs.length : 0,
+                            ")"
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const current = Array.isArray(settings2.homepage_faqs) ? [...settings2.homepage_faqs] : [];
+                                current.push({ question: "", answer: "" });
+                                setSettings({ ...settings2, homepage_faqs: current });
+                              },
+                              className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1 transition",
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3.5 h-3.5" }),
+                                "Add Question & Answer"
+                              ]
+                            }
+                          )
+                        ] }),
+                        !settings2.homepage_faqs || settings2.homepage_faqs.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-6 text-center border border-dashed border-[#c3c4c7] rounded bg-slate-50 text-slate-500 text-xs", children: 'No questions added yet. Click "+ Add Question & Answer" to create your first homepage FAQ.' }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: settings2.homepage_faqs.map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded bg-[#fcfcfc] p-3 space-y-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-700", children: [
+                              "FAQ #",
+                              idx + 1
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "button",
+                                {
+                                  type: "button",
+                                  disabled: idx === 0,
+                                  onClick: () => {
+                                    const updated = [...settings2.homepage_faqs];
+                                    const temp = updated[idx - 1];
+                                    updated[idx - 1] = updated[idx];
+                                    updated[idx] = temp;
+                                    setSettings({ ...settings2, homepage_faqs: updated });
+                                  },
+                                  className: "p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed",
+                                  title: "Move Up",
+                                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowUp, { className: "w-3.5 h-3.5" })
+                                }
+                              ),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "button",
+                                {
+                                  type: "button",
+                                  disabled: idx === settings2.homepage_faqs.length - 1,
+                                  onClick: () => {
+                                    const updated = [...settings2.homepage_faqs];
+                                    const temp = updated[idx + 1];
+                                    updated[idx + 1] = updated[idx];
+                                    updated[idx] = temp;
+                                    setSettings({ ...settings2, homepage_faqs: updated });
+                                  },
+                                  className: "p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed",
+                                  title: "Move Down",
+                                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowDown, { className: "w-3.5 h-3.5" })
+                                }
+                              ),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "button",
+                                {
+                                  type: "button",
+                                  onClick: () => {
+                                    const updated = settings2.homepage_faqs.filter((_, i) => i !== idx);
+                                    setSettings({ ...settings2, homepage_faqs: updated });
+                                  },
+                                  className: "p-1 text-red-500 hover:text-red-700",
+                                  title: "Delete Question",
+                                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                                }
+                              )
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: faq.question || "",
+                              onChange: (e) => {
+                                const updated = [...settings2.homepage_faqs];
+                                updated[idx] = { ...updated[idx], question: e.target.value };
+                                setSettings({ ...settings2, homepage_faqs: updated });
+                              },
+                              placeholder: "Question (e.g. How far in advance do I need to book?)",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] font-semibold focus:outline-none focus:border-[#2271b1]"
+                            }
+                          ) }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "textarea",
+                            {
+                              rows: 2,
+                              value: faq.answer || "",
+                              onChange: (e) => {
+                                const updated = [...settings2.homepage_faqs];
+                                updated[idx] = { ...updated[idx], answer: e.target.value };
+                                setSettings({ ...settings2, homepage_faqs: updated });
+                              },
+                              placeholder: "Detailed Answer...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          ) })
+                        ] }, idx)) })
+                      ] })
+                    ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx(
                       YoastSeoBox,
                       {
                         tab: yoastHomeTab,
                         setTab: setYoastHomeTab,
-                        focusKeyphrase: settings.homepage_seo_focus_keyphrase || "",
+                        focusKeyphrase: settings2.homepage_seo_focus_keyphrase || "",
                         setFocusKeyphrase: (v) => setSettings((prev) => ({ ...prev, homepage_seo_focus_keyphrase: v })),
-                        title: settings.hero_title || "Travelluxx",
+                        title: settings2.hero_title || "Travelluxx",
                         slug: "",
-                        metaTitle: settings.homepage_seo_title || "",
-                        metaDescription: settings.homepage_seo_description || "",
+                        metaTitle: settings2.homepage_seo_title || "",
+                        metaDescription: settings2.homepage_seo_description || "",
                         contentType: "homepage",
-                        image: settings.hero_bg_image || "",
+                        image: settings2.hero_bg_image || "",
                         excerpt: "",
                         onMetaTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_title: v })),
                         onSlugChange: () => {
@@ -44139,7 +44710,7 @@ ${escapeText(this.code(index, length))}
                         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[11px] leading-relaxed", children: "Use this interface to manage all custom texts, indicators, links, and background banners for the front page layout." }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "py-2 border-t border-[#f0f0f1] text-[12px] space-y-1.5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970]", children: "Active Theme:" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold uppercase text-emerald-700", children: settings.active_theme || "default" })
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold uppercase text-emerald-700", children: settings2.active_theme || "default" })
                         ] }) })
                       ] })
                     ] }),
@@ -44787,7 +45358,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-3 text-[#50575e]", children: "System" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-3 text-[#50575e] font-semibold text-emerald-700", children: [
                         "Active Theme: ",
-                        settings.active_theme || "default"
+                        settings2.active_theme || "default"
                       ] })
                     ] }),
                     (!searchQuery || "services".includes(searchQuery.toLowerCase()) || "our services".includes(searchQuery.toLowerCase())) && /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-[#f6f7f7] transition group bg-emerald-50/20", children: [
@@ -48041,6 +48612,324 @@ ${escapeText(this.code(index, length))}
                 }
               )
             ] }),
+            activeTab === "promocodes" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-2xl font-bold text-[#1d2327] flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "w-6 h-6 text-[#2271b1]" }),
+                    "Promo Codes & Discounts"
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-[#646970] mt-0.5", children: "Create, manage, and monitor coupon codes applied by customers on the booking calculator." })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => {
+                      setEditingPromoId(null);
+                      setPromoForm({
+                        code: "",
+                        discountType: "percentage",
+                        discountValue: 10,
+                        minOrderAmount: 0,
+                        maxDiscountAmount: 0,
+                        usageLimit: 0,
+                        expiresAt: "",
+                        isActive: true,
+                        description: ""
+                      });
+                      setPromoModalOpen(true);
+                    },
+                    className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-2 rounded-sm text-xs font-semibold flex items-center gap-1.5 shadow-sm transition",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-4 h-4" }),
+                      "Add New Promo Code"
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-2 text-xs", children: [
+                { id: "all", label: "All Codes" },
+                { id: "active", label: "Active" },
+                { id: "inactive", label: "Inactive / Expired" }
+              ].map((f) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => setPromoFilter(f.id),
+                  className: `px-3 py-1.5 rounded-sm font-semibold transition ${promoFilter === f.id ? "bg-[#2271b1] text-white" : "bg-white text-slate-700 border border-[#c3c4c7] hover:bg-slate-50"}`,
+                  children: f.label
+                },
+                f.id
+              )) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-x-auto", children: promoCodesLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-12 text-center text-slate-500 text-xs", children: "Loading promo codes..." }) : promoCodes.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-12 text-center text-slate-500 text-xs space-y-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Ticket, { className: "w-10 h-10 text-slate-300 mx-auto" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-semibold text-slate-700", children: "No promo codes found." }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: 'Click "Add New Promo Code" above to create discount vouchers for your customers.' })
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-left text-xs border-collapse", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "bg-[#f6f7f7] border-b border-[#c3c4c7] text-[#646970] font-semibold uppercase text-[11px]", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4", children: "Code" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4", children: "Discount" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4", children: "Min. Booking" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4", children: "Usage" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4", children: "Expiry" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4", children: "Status" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2.5 px-4 text-right", children: "Actions" })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { className: "divide-y divide-[#f0f0f1]", children: promoCodes.filter((p) => {
+                  const isExpired = p.expiresAt && new Date(p.expiresAt).getTime() < Date.now();
+                  if (promoFilter === "active") return p.isActive && !isExpired;
+                  if (promoFilter === "inactive") return !p.isActive || isExpired;
+                  return true;
+                }).map((promo) => {
+                  const isExpired = promo.expiresAt && new Date(promo.expiresAt).getTime() < Date.now();
+                  const promoId = promo.id || promo._id;
+                  return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "hover:bg-slate-50/70 transition", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-4 font-mono font-bold text-slate-900", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "w-3.5 h-3.5 text-[#2271b1]" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: promo.code })
+                      ] }),
+                      promo.description && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block font-sans font-normal text-[10px] text-slate-500 mt-0.5", children: promo.description })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-4 font-semibold text-emerald-700", children: promo.discountType === "percentage" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                      promo.discountValue,
+                      "% OFF ",
+                      promo.maxDiscountAmount ? `(up to £${promo.maxDiscountAmount})` : ""
+                    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                      "£",
+                      promo.discountValue,
+                      " OFF"
+                    ] }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-4 text-slate-600", children: promo.minOrderAmount ? `£${promo.minOrderAmount}` : "None (£0)" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "py-3 px-4 text-slate-600", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: promo.timesUsed || 0 }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-slate-400", children: [
+                        " / ",
+                        promo.usageLimit > 0 ? promo.usageLimit : "∞"
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-4 text-slate-600", children: promo.expiresAt ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: isExpired ? "text-red-600 font-bold" : "", children: new Date(promo.expiresAt).toLocaleDateString("en-GB") }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-slate-400", children: "Never" }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-4", children: isExpired ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300", children: "Expired" }) : promo.isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300", children: "Active" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300", children: "Inactive" }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-3 px-4 text-right", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-end gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => handleTogglePromoActive(promo),
+                          className: "p-1 text-slate-600 hover:text-slate-900 border border-[#c3c4c7] rounded hover:bg-slate-100",
+                          title: promo.isActive ? "Deactivate Code" : "Activate Code",
+                          children: promo.isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-3.5 h-3.5 text-amber-600" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-3.5 h-3.5 text-emerald-600" })
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            setEditingPromoId(promoId);
+                            setPromoForm({
+                              code: promo.code,
+                              discountType: promo.discountType || "percentage",
+                              discountValue: promo.discountValue,
+                              minOrderAmount: promo.minOrderAmount || 0,
+                              maxDiscountAmount: promo.maxDiscountAmount || 0,
+                              usageLimit: promo.usageLimit || 0,
+                              expiresAt: promo.expiresAt ? promo.expiresAt.split("T")[0] : "",
+                              isActive: promo.isActive !== false,
+                              description: promo.description || ""
+                            });
+                            setPromoModalOpen(true);
+                          },
+                          className: "p-1 text-[#2271b1] hover:text-[#135e96] border border-[#c3c4c7] rounded hover:bg-slate-100",
+                          title: "Edit Code",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Pen, { className: "w-3.5 h-3.5" })
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => handleDeletePromo(promo),
+                          className: "p-1 text-red-600 hover:text-red-800 border border-[#c3c4c7] rounded hover:bg-slate-100",
+                          title: "Delete Code",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                        }
+                      )
+                    ] }) })
+                  ] }, promoId);
+                }) })
+              ] }) }),
+              promoModalOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-[#c3c4c7]", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 border-b border-[#f0f0f1] bg-[#f6f7f7]", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "font-bold text-[#1d2327] text-sm flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Tag, { className: "w-4 h-4 text-[#2271b1]" }),
+                    editingPromoId ? "Edit Promo Code" : "Create New Promo Code"
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => setPromoModalOpen(false), className: "text-[#646970] hover:text-[#1d2327]", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4" }) })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSavePromoCode, className: "p-5 space-y-4 text-xs", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Promo Code *" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        required: true,
+                        value: promoForm.code,
+                        onChange: (e) => setPromoForm({ ...promoForm, code: e.target.value.toUpperCase() }),
+                        placeholder: "e.g. SUMMER10, WELCOME20",
+                        className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-2 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#2271b1]"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] text-slate-500 mt-0.5 block", children: "Customer will type this code during booking." })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Discount Type" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "select",
+                        {
+                          value: promoForm.discountType,
+                          onChange: (e) => setPromoForm({ ...promoForm, discountType: e.target.value }),
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "percentage", children: "Percentage Discount (%)" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "fixed", children: "Fixed Amount (£)" })
+                          ]
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Discount Value *" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "input",
+                          {
+                            type: "number",
+                            required: true,
+                            min: "1",
+                            step: "any",
+                            value: promoForm.discountValue,
+                            onChange: (e) => setPromoForm({ ...promoForm, discountValue: Number(e.target.value) }),
+                            className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute right-3 top-1.5 text-slate-500 font-bold", children: promoForm.discountType === "percentage" ? "%" : "£" })
+                      ] })
+                    ] })
+                  ] }),
+                  promoForm.discountType === "percentage" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Max Discount Limit (£)" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "number",
+                        min: "0",
+                        step: "any",
+                        value: promoForm.maxDiscountAmount || "",
+                        onChange: (e) => setPromoForm({ ...promoForm, maxDiscountAmount: Number(e.target.value) }),
+                        placeholder: "Optional cap (e.g. £50 max discount)",
+                        className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Minimum Order Value (£)" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "number",
+                          min: "0",
+                          step: "any",
+                          value: promoForm.minOrderAmount || "",
+                          onChange: (e) => setPromoForm({ ...promoForm, minOrderAmount: Number(e.target.value) }),
+                          placeholder: "0 (no minimum required)",
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Total Usage Limit" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "number",
+                          min: "0",
+                          value: promoForm.usageLimit || "",
+                          onChange: (e) => setPromoForm({ ...promoForm, usageLimit: Number(e.target.value) }),
+                          placeholder: "0 (unlimited usage)",
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        }
+                      )
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Expiry Date" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "input",
+                        {
+                          type: "date",
+                          value: promoForm.expiresAt,
+                          onChange: (e) => setPromoForm({ ...promoForm, expiresAt: e.target.value }),
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Status" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                        "select",
+                        {
+                          value: promoForm.isActive ? "true" : "false",
+                          onChange: (e) => setPromoForm({ ...promoForm, isActive: e.target.value === "true" }),
+                          className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
+                          children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "true", children: "Active & Ready to Use" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "false", children: "Disabled / Inactive" })
+                          ]
+                        }
+                      )
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1", children: "Internal Notes / Description" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "text",
+                        value: promoForm.description,
+                        onChange: (e) => setPromoForm({ ...promoForm, description: e.target.value }),
+                        placeholder: "e.g. 10% off for first-time website bookings",
+                        className: "w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 pt-3 border-t border-[#f0f0f1]", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setPromoModalOpen(false),
+                        className: "px-4 py-2 border border-[#c3c4c7] hover:bg-slate-50 text-slate-700 rounded-sm font-semibold transition",
+                        children: "Cancel"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "button",
+                      {
+                        type: "submit",
+                        disabled: promoSaving,
+                        className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-2 rounded-sm font-semibold transition flex items-center gap-1.5 disabled:opacity-50",
+                        children: promoSaving ? "Saving..." : editingPromoId ? "Update Code" : "Create Code"
+                      }
+                    )
+                  ] })
+                ] })
+              ] }) })
+            ] }),
             activeTab === "settings" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold text-[#1d2327]", children: "Settings" }),
               saveStatus && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm font-medium", children: saveStatus }),
@@ -48070,8 +48959,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: "text",
-                            value: settings.business_name || "",
-                            onChange: (e) => setSettings({ ...settings, business_name: e.target.value }),
+                            value: settings2.business_name || "",
+                            onChange: (e) => setSettings({ ...settings2, business_name: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -48082,8 +48971,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: "email",
-                            value: settings.business_email || "",
-                            onChange: (e) => setSettings({ ...settings, business_email: e.target.value }),
+                            value: settings2.business_email || "",
+                            onChange: (e) => setSettings({ ...settings2, business_email: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -48094,8 +48983,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: "text",
-                            value: settings.whatsapp_number || "",
-                            onChange: (e) => setSettings({ ...settings, whatsapp_number: e.target.value }),
+                            value: settings2.whatsapp_number || "",
+                            onChange: (e) => setSettings({ ...settings2, whatsapp_number: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -48106,8 +48995,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: "text",
-                            value: settings.office_address || "",
-                            onChange: (e) => setSettings({ ...settings, office_address: e.target.value }),
+                            value: settings2.office_address || "",
+                            onChange: (e) => setSettings({ ...settings2, office_address: e.target.value }),
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
                         )
@@ -48118,8 +49007,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: "text",
-                            value: settings.footer_info || "",
-                            onChange: (e) => setSettings({ ...settings, footer_info: e.target.value }),
+                            value: settings2.footer_info || "",
+                            onChange: (e) => setSettings({ ...settings2, footer_info: e.target.value }),
                             placeholder: "© 2026 Travelluxx. All rights reserved.",
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
@@ -48130,7 +49019,7 @@ ${escapeText(this.code(index, length))}
                         /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-4", children: "🎨 Logo & Favicon Management" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-2", children: "Site Logo" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-40 h-24 bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm flex items-center justify-center overflow-hidden", children: settings.logo_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.logo_url, alt: "Site Logo", className: "max-w-full max-h-full object-contain" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-xs", children: "No Logo" }) }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-40 h-24 bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm flex items-center justify-center overflow-hidden", children: settings2.logo_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2.logo_url, alt: "Site Logo", className: "max-w-full max-h-full object-contain" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-xs", children: "No Logo" }) }),
                           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
@@ -48141,14 +49030,14 @@ ${escapeText(this.code(index, length))}
                                   setEditorMediaModalOpen(true);
                                 },
                                 className: "bg-white border border-[#2271b1] text-[#2271b1] hover:bg-[#f6f7f7] px-3 py-1.5 rounded-sm text-xs font-semibold transition cursor-pointer",
-                                children: settings.logo_url ? "Replace Logo" : "Select Logo"
+                                children: settings2.logo_url ? "Replace Logo" : "Select Logo"
                               }
                             ),
-                            settings.logo_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            settings2.logo_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, logo_url: "" }),
+                                onClick: () => setSettings({ ...settings2, logo_url: "" }),
                                 className: "block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer",
                                 children: "Remove Logo"
                               }
@@ -48160,7 +49049,7 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "md:col-span-2 border-t border-[#f0f0f1] pt-4", children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-2", children: "Site Favicon (Browser Tab Icon)" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm flex items-center justify-center overflow-hidden shrink-0", children: settings.favicon_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings.favicon_url, alt: "Site Favicon", className: "w-10 h-10 object-contain" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-[10px] text-center px-1", children: "No Favicon" }) }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-[#f0f0f1] border border-[#c3c4c7] rounded-sm flex items-center justify-center overflow-hidden shrink-0", children: settings2.favicon_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: settings2.favicon_url, alt: "Site Favicon", className: "w-10 h-10 object-contain" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[#646970] text-[10px] text-center px-1", children: "No Favicon" }) }),
                           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
@@ -48171,14 +49060,14 @@ ${escapeText(this.code(index, length))}
                                   setEditorMediaModalOpen(true);
                                 },
                                 className: "bg-white border border-[#2271b1] text-[#2271b1] hover:bg-[#f6f7f7] px-3 py-1.5 rounded-sm text-xs font-semibold transition cursor-pointer",
-                                children: settings.favicon_url ? "Replace Favicon" : "Select Favicon"
+                                children: settings2.favicon_url ? "Replace Favicon" : "Select Favicon"
                               }
                             ),
-                            settings.favicon_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            settings2.favicon_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setSettings({ ...settings, favicon_url: "" }),
+                                onClick: () => setSettings({ ...settings2, favicon_url: "" }),
                                 className: "block text-[#d63638] hover:text-[#b32d2e] text-xs underline cursor-pointer",
                                 children: "Remove Favicon"
                               }
@@ -48194,8 +49083,8 @@ ${escapeText(this.code(index, length))}
                             "input",
                             {
                               type: "checkbox",
-                              checked: !!settings.search_engine_visibility,
-                              onChange: (e) => setSettings({ ...settings, search_engine_visibility: e.target.checked }),
+                              checked: !!settings2.search_engine_visibility,
+                              onChange: (e) => setSettings({ ...settings2, search_engine_visibility: e.target.checked }),
                               className: "rounded-sm border-[#8c8f94] text-[#2271b1] mt-0.5"
                             }
                           ),
@@ -48212,8 +49101,8 @@ ${escapeText(this.code(index, length))}
                               {
                                 type: "radio",
                                 name: "homepage_displays",
-                                checked: settings.homepage_displays !== "page",
-                                onChange: () => setSettings({ ...settings, homepage_displays: "latest" }),
+                                checked: settings2.homepage_displays !== "page",
+                                onChange: () => setSettings({ ...settings2, homepage_displays: "latest" }),
                                 className: "text-[#2271b1] focus:ring-[#2271b1]"
                               }
                             ),
@@ -48226,21 +49115,21 @@ ${escapeText(this.code(index, length))}
                                 {
                                   type: "radio",
                                   name: "homepage_displays",
-                                  checked: settings.homepage_displays === "page",
-                                  onChange: () => setSettings({ ...settings, homepage_displays: "page" }),
+                                  checked: settings2.homepage_displays === "page",
+                                  onChange: () => setSettings({ ...settings2, homepage_displays: "page" }),
                                   className: "text-[#2271b1]"
                                 }
                               ),
                               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "A static page (select below)" })
                             ] }),
-                            settings.homepage_displays === "page" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pl-6 space-y-2 text-[11px] text-black", children: [
+                            settings2.homepage_displays === "page" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pl-6 space-y-2 text-[11px] text-black", children: [
                               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
                                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-24", children: "Homepage:" }),
                                 /* @__PURE__ */ jsxRuntimeExports.jsxs(
                                   "select",
                                   {
-                                    value: settings.homepage_page_id || "",
-                                    onChange: (e) => setSettings({ ...settings, homepage_page_id: e.target.value }),
+                                    value: settings2.homepage_page_id || "",
+                                    onChange: (e) => setSettings({ ...settings2, homepage_page_id: e.target.value }),
                                     className: "border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs w-48 text-black",
                                     children: [
                                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "— Select —" }),
@@ -48254,8 +49143,8 @@ ${escapeText(this.code(index, length))}
                                 /* @__PURE__ */ jsxRuntimeExports.jsxs(
                                   "select",
                                   {
-                                    value: settings.posts_page_id || "",
-                                    onChange: (e) => setSettings({ ...settings, posts_page_id: e.target.value }),
+                                    value: settings2.posts_page_id || "",
+                                    onChange: (e) => setSettings({ ...settings2, posts_page_id: e.target.value }),
                                     className: "border border-[#8c8f94] bg-white rounded px-2 py-1 text-xs w-48 text-black",
                                     children: [
                                       /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "— Select —" }),
@@ -48280,8 +49169,8 @@ ${escapeText(this.code(index, length))}
                           "input",
                           {
                             type: showMollieKey ? "text" : "password",
-                            value: settings.mollie_api_key || "",
-                            onChange: (e) => setSettings({ ...settings, mollie_api_key: e.target.value }),
+                            value: settings2.mollie_api_key || "",
+                            onChange: (e) => setSettings({ ...settings2, mollie_api_key: e.target.value }),
                             placeholder: "live_... or test_...",
                             className: "w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-sm font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
                           }
@@ -48365,8 +49254,8 @@ ${escapeText(this.code(index, length))}
                         {
                           type: "number",
                           step: "0.10",
-                          value: settings[f.key] || "",
-                          onChange: (e) => setSettings({ ...settings, [f.key]: parseFloat(e.target.value) }),
+                          value: settings2[f.key] || "",
+                          onChange: (e) => setSettings({ ...settings2, [f.key]: parseFloat(e.target.value) }),
                           className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black"
                         }
                       )
@@ -48405,8 +49294,8 @@ ${escapeText(this.code(index, length))}
                           "textarea",
                           {
                             rows: 8,
-                            value: settings.custom_header_code || "",
-                            onChange: (e) => setSettings({ ...settings, custom_header_code: e.target.value }),
+                            value: settings2.custom_header_code || "",
+                            onChange: (e) => setSettings({ ...settings2, custom_header_code: e.target.value }),
                             placeholder: `<!-- Example 1: Google Search Console Verification -->
 <meta name="google-site-verification" content="YOUR_CODE_HERE" />
 
@@ -48437,8 +49326,8 @@ ${escapeText(this.code(index, length))}
                           "textarea",
                           {
                             rows: 8,
-                            value: settings.custom_footer_code || "",
-                            onChange: (e) => setSettings({ ...settings, custom_footer_code: e.target.value }),
+                            value: settings2.custom_footer_code || "",
+                            onChange: (e) => setSettings({ ...settings2, custom_footer_code: e.target.value }),
                             placeholder: `<!-- Example: Live Chat or Customer Support Widget -->
 <script>
   // Your custom footer javascript or chat script here
@@ -49058,7 +49947,7 @@ ${escapeText(this.code(index, length))}
     }
     function BlogPostDetail() {
       const { slug } = useParams();
-      const { settings, posts, isLoading: loading } = useSettings();
+      const { settings: settings2, posts, isLoading: loading } = useSettings();
       const post = posts.find((p) => p.slug === slug || p.id === slug);
       reactExports.useEffect(() => {
         if (post) {
@@ -49076,7 +49965,7 @@ ${escapeText(this.code(index, length))}
           };
           const desc = post.metaDescription || post.excerpt || "";
           setMeta("name", "description", desc);
-          const isNoIndex = !!(settings == null ? void 0 : settings.search_engine_visibility) || !!post.noIndexNoFollow;
+          const isNoIndex = !!(settings2 == null ? void 0 : settings2.search_engine_visibility) || !!post.noIndexNoFollow;
           setMeta("name", "robots", isNoIndex ? "noindex, nofollow" : "index, follow");
           let canonical = document.querySelector("link[rel='canonical']");
           if (!canonical) {
@@ -49089,7 +49978,7 @@ ${escapeText(this.code(index, length))}
           setMeta("property", "og:url", postUrl);
           setMeta("property", "og:title", post.metaTitle || post.title || "");
           setMeta("property", "og:description", desc);
-          setMeta("property", "og:site_name", (settings == null ? void 0 : settings.business_name) || "TravelLuxx");
+          setMeta("property", "og:site_name", (settings2 == null ? void 0 : settings2.business_name) || "TravelLuxx");
           if (post.socialImage || post.image) {
             const img = post.socialImage || post.image;
             setMeta("property", "og:image", img.startsWith("http") ? img : baseUrl + img);
@@ -49127,10 +50016,10 @@ ${escapeText(this.code(index, length))}
               },
               "publisher": {
                 "@type": "Organization",
-                "name": (settings == null ? void 0 : settings.business_name) || "Travelluxx",
-                "logo": (settings == null ? void 0 : settings.logo_image) ? {
+                "name": (settings2 == null ? void 0 : settings2.business_name) || "Travelluxx",
+                "logo": (settings2 == null ? void 0 : settings2.logo_image) ? {
                   "@type": "ImageObject",
-                  "url": settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image
+                  "url": settings2.logo_image.startsWith("http") ? settings2.logo_image : baseUrl + settings2.logo_image
                 } : void 0
               },
               "description": desc
@@ -49293,141 +50182,205 @@ ${escapeText(this.code(index, length))}
         } })
       ] });
     }
+    const DEFAULT_BASE_URL = "https://travelluxx.co.uk";
+    const DEFAULT_SITE_NAME = "TravelLuxx";
+    const DEFAULT_OG_IMAGE = "https://travelluxx.co.uk/assets/images/travelluxx_logo_1784064660967.webp";
+    function usePageSeo(props) {
+      reactExports.useEffect(() => {
+        const title = (props.title || DEFAULT_SITE_NAME).trim();
+        const description = (props.description || "").trim();
+        const siteName = props.siteName || DEFAULT_SITE_NAME;
+        const pageUrl = props.canonicalUrl || (typeof window !== "undefined" ? window.location.href : DEFAULT_BASE_URL);
+        if (title) {
+          document.title = title;
+        }
+        const setMeta = (attributeName, attributeValue, contentValue) => {
+          if (!contentValue) return;
+          let el = document.querySelector(`meta[${attributeName}="${attributeValue}"]`);
+          if (!el) {
+            el = document.createElement("meta");
+            el.setAttribute(attributeName, attributeValue);
+            document.head.appendChild(el);
+          }
+          el.setAttribute("content", contentValue);
+        };
+        if (description) {
+          setMeta("name", "description", description);
+        }
+        setMeta("name", "robots", props.noIndex ? "noindex, nofollow" : "index, follow");
+        const ogTitle = (props.ogTitle || title).trim();
+        const ogDesc = (props.ogDescription || description).trim();
+        const ogUrl = props.ogUrl || pageUrl;
+        const ogType = props.ogType || "website";
+        const ogImage = props.ogImage || DEFAULT_OG_IMAGE;
+        setMeta("property", "og:site_name", siteName);
+        setMeta("property", "og:type", ogType);
+        setMeta("property", "og:url", ogUrl);
+        setMeta("property", "og:title", ogTitle);
+        setMeta("property", "og:description", ogDesc);
+        setMeta("property", "og:image", ogImage);
+        setMeta("name", "twitter:card", props.twitterCard || "summary_large_image");
+        setMeta("name", "twitter:title", props.twitterTitle || ogTitle);
+        setMeta("name", "twitter:description", props.twitterDescription || ogDesc);
+        if (props.twitterImage || ogImage) {
+          setMeta("name", "twitter:image", props.twitterImage || ogImage);
+        }
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+          canonical = document.createElement("link");
+          canonical.rel = "canonical";
+          document.head.appendChild(canonical);
+        }
+        canonical.href = ogUrl;
+        const scriptId = "dynamic-page-schema-jsonld";
+        let scriptEl = document.getElementById(scriptId);
+        if (!scriptEl) {
+          scriptEl = document.createElement("script");
+          scriptEl.id = scriptId;
+          scriptEl.type = "application/ld+json";
+          document.head.appendChild(scriptEl);
+        }
+        const combinedSchemas = [];
+        if (props.schemas) {
+          if (Array.isArray(props.schemas)) {
+            combinedSchemas.push(...props.schemas.filter(Boolean));
+          } else if (typeof props.schemas === "object") {
+            combinedSchemas.push(props.schemas);
+          }
+        }
+        if (props.customSchemaJson && typeof props.customSchemaJson === "string") {
+          try {
+            const parsed = JSON.parse(props.customSchemaJson.trim());
+            if (Array.isArray(parsed)) {
+              combinedSchemas.push(...parsed);
+            } else if (parsed && typeof parsed === "object") {
+              combinedSchemas.push(parsed);
+            }
+          } catch (err) {
+            console.warn("Invalid customSchemaJson provided to usePageSeo:", err);
+          }
+        }
+        if (combinedSchemas.length > 0) {
+          scriptEl.text = JSON.stringify(combinedSchemas.length === 1 ? combinedSchemas[0] : combinedSchemas, null, 2);
+        } else {
+          scriptEl.text = "";
+        }
+        return () => {
+        };
+      }, [
+        props.title,
+        props.description,
+        props.canonicalUrl,
+        props.ogType,
+        props.ogTitle,
+        props.ogDescription,
+        props.ogImage,
+        props.ogUrl,
+        props.noIndex,
+        props.schemas,
+        props.customSchemaJson
+      ]);
+    }
     function DynamicPage() {
       const { slug } = useParams();
-      const cleanSlug = (slug == null ? void 0 : slug.replace(/^\/+|\/+$/g, "")) || "";
-      const { settings, pages, isLoading: globalLoading } = useSettings();
-      const [page, setPage] = reactExports.useState(() => {
-        return pages.find((p) => p.slug === cleanSlug || p.id === cleanSlug) || null;
-      });
-      const [fetching, setFetching] = reactExports.useState(!page);
-      const [notFound, setNotFound] = reactExports.useState(false);
+      const navigate = useNavigate();
+      const [page, setPage] = reactExports.useState(null);
+      const [fetching, setFetching] = reactExports.useState(true);
+      const { settings: settings2, isLoading: globalLoading } = useSettings();
+      const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
+      const cleanSlug = (slug || "").replace(/^\/+|\/+$/g, "");
       reactExports.useEffect(() => {
         window.scrollTo(0, 0);
-        const fromContext = pages.find((p) => p.slug === cleanSlug || p.id === cleanSlug);
-        if (fromContext) {
-          setPage(fromContext);
-          setFetching(false);
-          setNotFound(false);
-        }
-        let active = true;
-        if (!fromContext) setFetching(true);
-        setNotFound(false);
-        fetch(`/api/pages/${encodeURIComponent(cleanSlug)}`).then(async (res) => {
-          if (!res.ok) throw new Error("Page not found");
-          const data = await res.json();
-          if (active) {
-            setPage(data);
-            setNotFound(false);
-          }
+        setFetching(true);
+        fetch(`/api/pages/${encodeURIComponent(cleanSlug)}`).then((res) => {
+          if (!res.ok) throw new Error("Not found");
+          return res.json();
+        }).then((data) => {
+          setPage(data);
         }).catch(() => {
-          if (active && !fromContext) {
-            setPage(null);
-            setNotFound(true);
-          }
+          setPage(null);
         }).finally(() => {
-          if (active) setFetching(false);
+          setFetching(false);
         });
-        return () => {
-          active = false;
-        };
-      }, [cleanSlug, pages]);
-      reactExports.useEffect(() => {
-        if (page) {
-          const baseUrl = "https://travelluxx.co.uk";
-          const pageUrl = `${baseUrl}/${page.slug || cleanSlug}`;
-          document.title = page.metaTitle || page.title || "Travelluxx";
-          const setMeta = (attr, attrVal, content) => {
-            let el = document.querySelector(`meta[${attr}='${attrVal}']`);
-            if (!el) {
-              el = document.createElement("meta");
-              el.setAttribute(attr, attrVal);
-              document.head.appendChild(el);
-            }
-            el.setAttribute("content", content);
-          };
-          const desc = page.metaDescription || "";
-          setMeta("name", "description", desc);
-          const isNoIndex = !!(settings == null ? void 0 : settings.search_engine_visibility) || !!page.noIndexNoFollow;
-          setMeta("name", "robots", isNoIndex ? "noindex, nofollow" : "index, follow");
-          let canonical = document.querySelector("link[rel='canonical']");
-          if (!canonical) {
-            canonical = document.createElement("link");
-            canonical.setAttribute("rel", "canonical");
-            document.head.appendChild(canonical);
-          }
-          canonical.setAttribute("href", pageUrl);
-          setMeta("property", "og:type", "website");
-          setMeta("property", "og:url", pageUrl);
-          setMeta("property", "og:title", page.metaTitle || page.title || "");
-          setMeta("property", "og:description", desc);
-          setMeta("property", "og:site_name", (settings == null ? void 0 : settings.business_name) || "TravelLuxx");
-          if (page.socialImage || page.image) {
-            const img = page.socialImage || page.image;
-            setMeta("property", "og:image", img.startsWith("http") ? img : baseUrl + img);
-          }
-          setMeta("property", "twitter:card", "summary_large_image");
-          setMeta("property", "twitter:url", pageUrl);
-          setMeta("property", "twitter:title", page.metaTitle || page.title || "");
-          setMeta("property", "twitter:description", desc);
-          if (page.xImage || page.socialImage || page.image) {
-            const img = page.xImage || page.socialImage || page.image;
-            setMeta("property", "twitter:image", img.startsWith("http") ? img : baseUrl + img);
-          }
-          const existingScript = document.getElementById("jsonld-page-schema");
-          if (existingScript) existingScript.remove();
-          const schema = {
+      }, [cleanSlug]);
+      const baseUrl = "https://travelluxx.co.uk";
+      const pageUrl = page ? `${baseUrl}/${page.slug || cleanSlug}` : "";
+      const metaTitle = (page == null ? void 0 : page.metaTitle) || (page == null ? void 0 : page.ogTitle) || (page ? `${page.title} | TravelLuxx` : "Page | TravelLuxx");
+      const metaDesc = (page == null ? void 0 : page.metaDescription) || (page == null ? void 0 : page.ogDescription) || "";
+      const pageImage = (page == null ? void 0 : page.socialImage) || (page == null ? void 0 : page.image) || "";
+      const pageFaqs = reactExports.useMemo(() => {
+        return (Array.isArray(page == null ? void 0 : page.faqs) ? page.faqs : []).filter((f) => f && (f.question || f.answer));
+      }, [page]);
+      const pageSchemas = reactExports.useMemo(() => {
+        if (!page) return [];
+        const list = [
+          {
             "@context": "https://schema.org",
             "@type": page.template === "About Page" ? "AboutPage" : page.template === "Contact Page" ? "ContactPage" : "WebPage",
             "@id": pageUrl,
             "name": page.title,
-            "description": desc,
+            "description": metaDesc,
             "url": pageUrl,
             "inLanguage": "en-GB",
             "datePublished": page.date || void 0,
             "dateModified": page.updatedAt || page.date || void 0,
-            "image": page.image ? page.image.startsWith("http") ? page.image : baseUrl + page.image : void 0,
-            "isPartOf": {
-              "@id": `${baseUrl}/#website`
-            },
+            "image": pageImage ? pageImage.startsWith("http") ? pageImage : baseUrl + pageImage : void 0,
             "publisher": {
               "@type": "Organization",
-              "name": (settings == null ? void 0 : settings.business_name) || "Travelluxx",
-              "logo": (settings == null ? void 0 : settings.logo_image) ? {
-                "@type": "ImageObject",
-                "url": settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image
-              } : void 0
+              "name": (settings2 == null ? void 0 : settings2.business_name) || "TravelLuxx",
+              "url": baseUrl
             }
-          };
-          const script = document.createElement("script");
-          script.id = "jsonld-page-schema";
-          script.type = "application/ld+json";
-          script.innerHTML = JSON.stringify(schema);
-          document.head.appendChild(script);
+          }
+        ];
+        if (pageFaqs.length > 0) {
+          list.push({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": `${pageUrl}#faq`,
+            "mainEntity": pageFaqs.map((f) => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f.answer
+              }
+            }))
+          });
         }
-        return () => {
-          const existingScript = document.getElementById("jsonld-page-schema");
-          if (existingScript) existingScript.remove();
-        };
-      }, [page, settings, cleanSlug]);
-      const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+        return list;
+      }, [page, pageUrl, metaDesc, pageImage, pageFaqs, settings2, baseUrl]);
+      usePageSeo({
+        title: metaTitle,
+        description: metaDesc,
+        canonicalUrl: pageUrl,
+        ogTitle: (page == null ? void 0 : page.ogTitle) || metaTitle,
+        ogDescription: (page == null ? void 0 : page.ogDescription) || metaDesc,
+        ogImage: pageImage ? pageImage.startsWith("http") ? pageImage : baseUrl + pageImage : "",
+        ogUrl: pageUrl,
+        ogType: (page == null ? void 0 : page.ogType) || "website",
+        noIndex: Boolean((settings2 == null ? void 0 : settings2.search_engine_visibility) || (page == null ? void 0 : page.noIndexNoFollow)),
+        siteName: (settings2 == null ? void 0 : settings2.business_name) || "TravelLuxx",
+        schemas: pageSchemas,
+        customSchemaJson: (page == null ? void 0 : page.customSchema) || ""
+      });
+      const isRenax = (settings2 == null ? void 0 : settings2.active_theme) === "renax";
       if (fetching || globalLoading && !page) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `min-h-screen flex items-center justify-center font-sans ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }) });
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `min-h-screen flex items-center justify-center ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) });
       }
-      if (notFound || !page) {
+      if (!page) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
           } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 flex flex-col items-center justify-center text-center px-6 py-28", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-6xl font-black text-emerald-500 mb-4", children: "404" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold mb-2", children: "Page Not Found" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-400 max-w-md mb-8", children: "The page you are looking for does not exist or may have been moved." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "flex-1 flex flex-col items-center justify-center p-6 text-center max-w-lg mx-auto py-28", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 text-slate-400", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-8 h-8", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" }) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold mb-2", children: "Page Not Found" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-slate-500 mb-6", children: "The page you are looking for does not exist or may have been moved." }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Link$1,
+              "button",
               {
-                to: "/",
-                className: "bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition duration-200",
-                children: "Back to Homepage"
+                onClick: () => navigate("/"),
+                className: "px-5 py-2.5 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm",
+                children: "Back to Home"
               }
             )
           ] }),
@@ -49446,7 +50399,47 @@ ${escapeText(this.code(index, length))}
               className: `ql-editor page-rich-content ${isRenax ? "text-slate-200" : "text-slate-800"}`,
               dangerouslySetInnerHTML: { __html: page.content }
             }
-          ) })
+          ) }),
+          pageFaqs.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-16 pt-12 border-t border-slate-200 max-w-4xl", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2 border border-emerald-200", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-3.5 h-3.5 text-emerald-600" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Frequently Asked Questions" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl sm:text-3xl font-extrabold text-slate-900", children: page.faqTitle || `${page.title} FAQ` })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3", children: pageFaqs.map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-emerald-300 bg-emerald-50/30 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        "aria-expanded": isOpen,
+                        onClick: () => setOpenFaqIndex(isOpen ? null : index),
+                        className: "flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg", children: faq.question }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            ChevronDown,
+                            {
+                              className: `h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`
+                            }
+                          ) })
+                        ]
+                      }
+                    ),
+                    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: faq.answer }) })
+                  ]
+                },
+                faq.question || index
+              );
+            }) })
+          ] })
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: () => {
         } })
@@ -49587,7 +50580,7 @@ ${escapeText(this.code(index, length))}
       }
     ];
     function Services() {
-      const { settings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
+      const { settings: settings2, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
       const services = ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES;
       const pageSettings = ctxPageSettings;
       const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
@@ -49788,51 +50781,57 @@ ${escapeText(this.code(index, length))}
       reactExports.useEffect(() => {
         window.scrollTo(0, 0);
       }, [slug]);
-      reactExports.useEffect(() => {
-        if (!service) return;
-        const baseUrl = "https://travelluxx.co.uk";
-        const pageUrl = `${baseUrl}/services/${service.slug}`;
-        const metaTitle = service.metaTitle || `${service.title} | Luxury Chauffeur & Travel Services | TravelLuxx`;
-        const metaDesc = service.metaDescription || service.excerpt || `Premium ${service.title} with TravelLuxx. Fixed rates, professional chauffeurs, and luxury vehicles across the UK.`;
-        document.title = metaTitle;
-        const setMeta = (attr, attrVal, content) => {
-          let el = document.querySelector(`meta[${attr}='${attrVal}']`);
-          if (!el) {
-            el = document.createElement("meta");
-            el.setAttribute(attr, attrVal);
-            document.head.appendChild(el);
-          }
-          el.setAttribute("content", content);
-        };
-        setMeta("name", "description", metaDesc);
-        setMeta(
-          "name",
-          "robots",
-          service.noIndexNoFollow ? "noindex, nofollow" : "index, follow"
-        );
-        let canonical = document.querySelector("link[rel='canonical']");
-        if (!canonical) {
-          canonical = document.createElement("link");
-          canonical.setAttribute("rel", "canonical");
-          document.head.appendChild(canonical);
+      const baseUrl = "https://travelluxx.co.uk";
+      const pageUrl = service ? `${baseUrl}/services/${service.slug}` : "";
+      const metaTitle = (service == null ? void 0 : service.metaTitle) || (service == null ? void 0 : service.ogTitle) || (service ? `${service.title} | Luxury Chauffeur & Travel Services | TravelLuxx` : "Service | TravelLuxx");
+      const metaDesc = (service == null ? void 0 : service.metaDescription) || (service == null ? void 0 : service.ogDescription) || (service == null ? void 0 : service.excerpt) || (service ? `Premium ${service.title} with TravelLuxx. Fixed rates, professional chauffeurs, and luxury vehicles across the UK.` : "");
+      const serviceFaqs = Array.isArray(service == null ? void 0 : service.faqs) && service.faqs.length > 0 ? service.faqs : (pageSettings == null ? void 0 : pageSettings.faqs) || [];
+      const serviceSchemas = [];
+      if (service) {
+        serviceSchemas.push({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "@id": `${pageUrl}#service`,
+          "name": service.title,
+          "description": metaDesc,
+          "provider": {
+            "@type": "LocalBusiness",
+            "name": (settings == null ? void 0 : settings.business_name) || "TravelLuxx",
+            "url": baseUrl,
+            "telephone": (settings == null ? void 0 : settings.whatsapp_number) ? `+${settings.whatsapp_number}` : "+441217140876"
+          },
+          "areaServed": "United Kingdom"
+        });
+        if (serviceFaqs.length > 0) {
+          serviceSchemas.push({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": `${pageUrl}#faq`,
+            "mainEntity": serviceFaqs.filter((f) => f && (f.question || f.answer)).map((f) => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f.answer
+              }
+            }))
+          });
         }
-        canonical.setAttribute("href", pageUrl);
-        setMeta("property", "og:type", "website");
-        setMeta("property", "og:url", pageUrl);
-        setMeta("property", "og:title", metaTitle);
-        setMeta("property", "og:description", metaDesc);
-        setMeta("property", "og:site_name", "TravelLuxx");
-        if (service.image) {
-          setMeta("property", "og:image", service.image);
-        }
-        setMeta("property", "twitter:card", "summary_large_image");
-        setMeta("property", "twitter:url", pageUrl);
-        setMeta("property", "twitter:title", metaTitle);
-        setMeta("property", "twitter:description", metaDesc);
-        if (service.image) {
-          setMeta("property", "twitter:image", service.image);
-        }
-      }, [service]);
+      }
+      usePageSeo({
+        title: metaTitle,
+        description: metaDesc,
+        canonicalUrl: pageUrl,
+        ogTitle: (service == null ? void 0 : service.ogTitle) || metaTitle,
+        ogDescription: (service == null ? void 0 : service.ogDescription) || metaDesc,
+        ogImage: (service == null ? void 0 : service.ogImage) || (service == null ? void 0 : service.image) || "",
+        ogUrl: pageUrl,
+        ogType: (service == null ? void 0 : service.ogType) || "website",
+        noIndex: Boolean((settings == null ? void 0 : settings.search_engine_visibility) || (service == null ? void 0 : service.noIndexNoFollow)),
+        siteName: (settings == null ? void 0 : settings.business_name) || "TravelLuxx",
+        schemas: serviceSchemas,
+        customSchemaJson: (service == null ? void 0 : service.customSchema) || ""
+      });
       if (isLoading) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4" }),
@@ -50208,7 +51207,7 @@ ${escapeText(this.code(index, length))}
     }
     function ServiceAreaPage() {
       const { slug } = useParams();
-      const { settings, isLoading } = useSettings();
+      const { settings: settings2, isLoading } = useSettings();
       const [serviceArea, setServiceArea] = reactExports.useState(null);
       const [areaLoading, setAreaLoading] = reactExports.useState(true);
       const [areaError, setAreaError] = reactExports.useState("");
@@ -50234,40 +51233,64 @@ ${escapeText(this.code(index, length))}
           active = false;
         };
       }, [slug]);
-      reactExports.useEffect(() => {
-        if (!serviceArea) return;
-        const baseUrl = "https://travelluxx.co.uk";
-        const pageUrl = `${baseUrl}/service-areas/${serviceArea.slug}`;
-        const title = serviceArea.metaTitle || `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx`;
-        const description = serviceArea.metaDescription || serviceArea.heroDescription || "";
-        document.title = title;
-        const setMeta = (selector, attr, value) => {
-          let element = document.querySelector(selector);
-          if (!element) {
-            element = document.createElement("meta");
-            document.head.appendChild(element);
+      const baseUrl = "https://travelluxx.co.uk";
+      const pageUrl = serviceArea ? `${baseUrl}/service-areas/${serviceArea.slug}` : "";
+      const title = (serviceArea == null ? void 0 : serviceArea.metaTitle) || (serviceArea == null ? void 0 : serviceArea.ogTitle) || (serviceArea ? `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx` : "Service Area | TravelLuxx");
+      const description = (serviceArea == null ? void 0 : serviceArea.metaDescription) || (serviceArea == null ? void 0 : serviceArea.ogDescription) || (serviceArea == null ? void 0 : serviceArea.heroDescription) || "Private chauffeur travel and airport transfers tailored around your location and schedule.";
+      const ogImage = (serviceArea == null ? void 0 : serviceArea.ogImage) || (serviceArea == null ? void 0 : serviceArea.heroImage) || "";
+      const validFaqs = reactExports.useMemo(() => {
+        return (Array.isArray(serviceArea == null ? void 0 : serviceArea.faqs) ? serviceArea.faqs : []).filter((f) => f && (f.question || f.answer));
+      }, [serviceArea]);
+      const pageSchemas = reactExports.useMemo(() => {
+        if (!serviceArea) return [];
+        const list = [
+          {
+            "@context": "https://schema.org",
+            "@type": "TaxiService",
+            "@id": `${pageUrl}#service`,
+            "name": `TravelLuxx - ${serviceArea.title} Chauffeur & Airport Transfers`,
+            "url": pageUrl,
+            "areaServed": serviceArea.title,
+            "description": description,
+            "provider": {
+              "@type": "LocalBusiness",
+              "name": (settings2 == null ? void 0 : settings2.business_name) || "TravelLuxx",
+              "telephone": (settings2 == null ? void 0 : settings2.whatsapp_number) ? `+${settings2.whatsapp_number}` : "+441217140876",
+              "url": baseUrl
+            }
           }
-          element.setAttribute(attr, value);
-        };
-        setMeta('meta[name="description"]', "content", description);
-        setMeta('meta[name="robots"]', "content", (settings == null ? void 0 : settings.search_engine_visibility) || serviceArea.noIndexNoFollow ? "noindex, nofollow" : "index, follow");
-        setMeta('meta[property="og:type"]', "content", "website");
-        setMeta('meta[property="og:url"]', "content", pageUrl);
-        setMeta('meta[property="og:title"]', "content", title);
-        setMeta('meta[property="og:description"]', "content", description);
-        setMeta('meta[property="og:site_name"]', "content", (settings == null ? void 0 : settings.business_name) || "TravelLuxx");
-        if (serviceArea.heroImage) setMeta('meta[property="og:image"]', "content", serviceArea.heroImage);
-        let canonical = document.querySelector('link[rel="canonical"]');
-        if (!canonical) {
-          canonical = document.createElement("link");
-          canonical.rel = "canonical";
-          document.head.appendChild(canonical);
+        ];
+        if (validFaqs.length > 0) {
+          list.push({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": `${pageUrl}#faq`,
+            "mainEntity": validFaqs.map((f) => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f.answer
+              }
+            }))
+          });
         }
-        canonical.href = pageUrl;
-        return () => {
-          document.title = (settings == null ? void 0 : settings.homepage_meta_title) || "TravelLuxx";
-        };
-      }, [serviceArea, settings]);
+        return list;
+      }, [serviceArea, validFaqs, pageUrl, description, settings2, baseUrl]);
+      usePageSeo({
+        title,
+        description,
+        canonicalUrl: pageUrl,
+        ogTitle: (serviceArea == null ? void 0 : serviceArea.ogTitle) || title,
+        ogDescription: (serviceArea == null ? void 0 : serviceArea.ogDescription) || description,
+        ogImage,
+        ogUrl: pageUrl,
+        ogType: (serviceArea == null ? void 0 : serviceArea.ogType) || "website",
+        noIndex: Boolean((settings2 == null ? void 0 : settings2.search_engine_visibility) || (serviceArea == null ? void 0 : serviceArea.noIndexNoFollow)),
+        siteName: (settings2 == null ? void 0 : settings2.business_name) || "TravelLuxx",
+        schemas: pageSchemas,
+        customSchemaJson: (serviceArea == null ? void 0 : serviceArea.customSchema) || ""
+      });
       if (isLoading || areaLoading) {
         return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-slate-950 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) });
       }
@@ -50283,7 +51306,7 @@ ${escapeText(this.code(index, length))}
           } })
         ] });
       }
-      const phone = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+      const phone = (settings2 == null ? void 0 : settings2.whatsapp_number) || "441217140876";
       const phoneLabel = phone.startsWith("44") ? `+44 ${phone.slice(2, 6)} ${phone.slice(6)}` : phone;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white font-sans text-slate-800", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
@@ -50329,41 +51352,56 @@ ${escapeText(this.code(index, length))}
               ] })
             ] }) })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-slate-50 px-4 py-10 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ql-snow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          serviceArea.content && /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-slate-50 px-4 py-10 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ql-snow", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             "div",
             {
               className: "ql-editor page-rich-content service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base !p-0",
               dangerouslySetInnerHTML: { __html: serviceArea.content || "" }
             }
           ) }) }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20", children: [
+          validFaqs.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-bold uppercase tracking-[0.2em] text-emerald-700", children: "Frequently asked questions" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-3 text-3xl font-extrabold tracking-tight text-slate-900", children: serviceArea.faqTitle || `${serviceArea.title} chauffeur services` })
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3 border border-emerald-200", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-3.5 h-3.5 text-emerald-600" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Frequently Asked Questions" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl", children: serviceArea.faqTitle || `${serviceArea.title} Chauffeur & Transfers FAQ` }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "mt-3 text-sm text-slate-500 max-w-xl mx-auto", children: [
+                "Got questions about traveling in or around ",
+                serviceArea.title,
+                "? Here are quick answers to the most common questions."
+              ] })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-8 divide-y divide-slate-200 border-y border-slate-200", children: (Array.isArray(serviceArea.faqs) ? serviceArea.faqs : []).filter((faq) => faq.question || faq.answer).map((faq, index) => {
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-10 space-y-3", children: validFaqs.map((faq, index) => {
               const isOpen = openFaqIndex === index;
-              return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "py-5", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "button",
-                  {
-                    type: "button",
-                    "aria-expanded": isOpen,
-                    onClick: () => setOpenFaqIndex(isOpen ? null : index),
-                    className: "flex w-full items-center justify-between gap-4 text-left font-semibold text-slate-900",
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: faq.question }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        ChevronDown,
-                        {
-                          className: `h-5 w-5 shrink-0 text-emerald-700 transition-transform ${isOpen ? "rotate-180" : ""}`
-                        }
-                      )
-                    ]
-                  }
-                ),
-                isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 pr-8 text-sm leading-6 text-slate-600", children: faq.answer })
-              ] }, faq.question);
+              return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "div",
+                {
+                  className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-emerald-300 bg-emerald-50/30 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"}`,
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        type: "button",
+                        "aria-expanded": isOpen,
+                        onClick: () => setOpenFaqIndex(isOpen ? null : index),
+                        className: "flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg", children: faq.question }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            ChevronDown,
+                            {
+                              className: `h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`
+                            }
+                          ) })
+                        ]
+                      }
+                    ),
+                    isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: faq.answer }) })
+                  ]
+                },
+                faq.question || index
+              );
             }) })
           ] })
         ] }),
@@ -50372,7 +51410,7 @@ ${escapeText(this.code(index, length))}
       ] });
     }
     function ServiceAreas() {
-      const { settings } = useSettings();
+      const { settings: settings2 } = useSettings();
       const [areas, setAreas] = reactExports.useState([]);
       const [loading, setLoading] = reactExports.useState(true);
       const [pageSettings, setPageSettings] = reactExports.useState({
@@ -50481,8 +51519,243 @@ ${escapeText(this.code(index, length))}
         } })
       ] });
     }
+    const defaultHomepageFaqs = [
+      {
+        question: "How do I book an executive transfer with TravelLuxx?",
+        answer: "You can book easily online using our instant Fare Calculator above, select your desired vehicle class (Economy, Luxury, or Family MPV), specify your pickup time and date, and complete your reservation with instant confirmation."
+      },
+      {
+        question: "Do you provide flight monitoring for airport pickups?",
+        answer: "Yes, our team actively monitors all inbound commercial flights in real-time. Whether your flight is delayed or lands early, your chauffeur will adjust their schedule accordingly and meet you inside the terminal with a name board."
+      },
+      {
+        question: "What vehicle classes are available?",
+        answer: "We offer Mercedes-Benz E-Class & S-Class executive sedans for up to 4 passengers, and Mercedes V-Class / luxury multi-passenger vehicles (MPVs) for families and business groups carrying up to 7-8 passengers and substantial luggage."
+      },
+      {
+        question: "Can I apply a promo code or discount voucher?",
+        answer: "Yes! At Step 3 (Secure Checkout) in our Booking Calculator, you can enter your promo code in the discount field and click 'Apply' to instantly receive your calculated savings before confirming your reservation."
+      },
+      {
+        question: "What payment methods do you accept?",
+        answer: "We accept all major credit and debit cards, Apple Pay, Google Pay, and Klarna through our secure Mollie payments integration, as well as pre-authorized Cash on Departure / Pay Later options."
+      }
+    ];
+    function HomepageFaq({
+      faqs,
+      title,
+      subtitle,
+      badge = "FAQ & Information",
+      isRenax = false
+    }) {
+      const displayFaqs = Array.isArray(faqs) && faqs.length > 0 ? faqs.filter((f) => f.question && f.answer) : defaultHomepageFaqs;
+      const [openIndex, setOpenIndex] = reactExports.useState(0);
+      if (!displayFaqs || displayFaqs.length === 0) return null;
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: `py-20 sm:py-24 transition-colors ${isRenax ? "bg-[#0a0b0e] border-t border-slate-900/80 text-white" : "bg-slate-50 border-t border-slate-200/80 text-slate-900"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-12 sm:mb-16", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-3.5 h-3.5 text-emerald-400" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: badge })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: `text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isRenax ? "text-white" : "text-slate-900"}`, children: title || "Frequently Asked Questions" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `mt-4 text-base sm:text-lg max-w-2xl mx-auto ${isRenax ? "text-slate-400" : "text-slate-600"}`, children: subtitle || "Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3.5", children: displayFaqs.map((faq, index) => {
+          const isOpen = openIndex === index;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: `rounded-2xl border transition-all duration-300 overflow-hidden ${isRenax ? isOpen ? "border-emerald-500/50 bg-[#12141c] shadow-lg shadow-emerald-500/5" : "border-slate-800/80 bg-[#0d0e14] hover:border-slate-700" : isOpen ? "border-emerald-300 bg-white shadow-md shadow-emerald-600/5 ring-1 ring-emerald-500/20" : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    "aria-expanded": isOpen,
+                    onClick: () => setOpenIndex(isOpen ? null : index),
+                    className: `w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${isRenax ? isOpen ? "text-emerald-400" : "text-white hover:text-slate-200" : isOpen ? "text-emerald-800" : "text-slate-900 hover:text-slate-700"}`,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg leading-snug", children: faq.question }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: `h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm" : isRenax ? "bg-slate-800/80 text-slate-400 hover:bg-slate-700" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`,
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
+                        }
+                      )
+                    ]
+                  }
+                ),
+                isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t ${isRenax ? "border-slate-800/60 text-slate-300" : "border-slate-100 text-slate-600"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "whitespace-pre-line", children: faq.answer }) })
+              ]
+            },
+            faq.question || index
+          );
+        }) })
+      ] }) });
+    }
+    function GoogleReviewsSection({ isRenax = false }) {
+      const [reviewsData, setReviewsData] = reactExports.useState(null);
+      const [loading, setLoading] = reactExports.useState(true);
+      reactExports.useEffect(() => {
+        let active = true;
+        fetch("/api/google-reviews").then((res) => res.json()).then((data) => {
+          if (active && data && Array.isArray(data.reviews)) {
+            setReviewsData(data);
+          }
+        }).catch((err) => {
+          console.warn("Could not load Google reviews:", err);
+        }).finally(() => {
+          if (active) setLoading(false);
+        });
+        return () => {
+          active = false;
+        };
+      }, []);
+      if (loading && !reviewsData) {
+        return null;
+      }
+      const reviews = (reviewsData == null ? void 0 : reviewsData.reviews) || [];
+      if (reviews.length === 0) return null;
+      const rating = (reviewsData == null ? void 0 : reviewsData.overallRating) || 5;
+      const totalCount = (reviewsData == null ? void 0 : reviewsData.totalReviews) || 48;
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: `py-20 sm:py-24 relative overflow-hidden transition-colors ${isRenax ? "bg-[#08090d] border-t border-slate-900/80 text-white" : "bg-white border-t border-slate-200/80 text-slate-900"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-2xl", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-3 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-3.5 h-3.5 text-emerald-400" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Verified Client Testimonials" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: `text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isRenax ? "text-white" : "text-slate-900"}`, children: "Trusted by Discerning Travelers" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `mt-3 text-base sm:text-lg ${isRenax ? "text-slate-400" : "text-slate-600"}`, children: "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `p-5 rounded-2xl border shrink-0 flex items-center gap-4 ${isRenax ? "bg-[#10121a] border-slate-800" : "bg-slate-50 border-slate-200 shadow-sm"}`, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-2.5 shrink-0 border border-slate-100", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 24 24", className: "w-full h-full", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "path",
+                {
+                  fill: "#4285F4",
+                  d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "path",
+                {
+                  fill: "#34A853",
+                  d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "path",
+                {
+                  fill: "#FBBC05",
+                  d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "path",
+                {
+                  fill: "#EA4335",
+                  d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                }
+              )
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 mb-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xl font-extrabold ${isRenax ? "text-white" : "text-slate-900"}`, children: rating.toFixed(1) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex text-amber-400", children: [...Array(5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: `text-xs ${isRenax ? "text-slate-400" : "text-slate-500"}`, children: [
+                "Based on ",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold", children: [
+                  totalCount,
+                  "+ reviews"
+                ] }),
+                " on Google"
+              ] })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: reviews.slice(0, 4).map((rev, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: `rounded-2xl p-6 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${isRenax ? "bg-[#0d0e14] border-slate-800/80 hover:border-slate-700 shadow-lg shadow-black/40" : "bg-white border-slate-200/90 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-600/5 shadow-sm"}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 text-amber-400 mb-4", children: [...Array(rev.rating || 5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: `text-sm leading-relaxed mb-6 ${isRenax ? "text-slate-300" : "text-slate-600"}`, children: [
+                  '"',
+                  rev.text,
+                  '"'
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                  rev.profile_photo_url ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "img",
+                    {
+                      src: rev.profile_photo_url,
+                      alt: rev.author_name,
+                      className: "w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                    }
+                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs", children: rev.author_name.charAt(0) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: `text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`, children: rev.author_name }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[10px] ${isRenax ? "text-slate-500" : "text-slate-400"}`, children: rev.relative_time_description || "Verified Google Review" })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 24 24", className: "w-4 h-4 opacity-70", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "path",
+                    {
+                      fill: "#4285F4",
+                      d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "path",
+                    {
+                      fill: "#34A853",
+                      d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "path",
+                    {
+                      fill: "#FBBC05",
+                      d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "path",
+                    {
+                      fill: "#EA4335",
+                      d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                    }
+                  )
+                ] })
+              ] })
+            ]
+          },
+          index
+        )) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-10 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "a",
+          {
+            href: (reviewsData == null ? void 0 : reviewsData.googleMapsUrl) || "https://maps.google.com",
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: `inline-flex items-center gap-2 text-xs font-bold transition ${isRenax ? "text-emerald-400 hover:text-emerald-300" : "text-emerald-700 hover:text-emerald-800"}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Read all reviews on Google Business Profile" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3.5 h-3.5" })
+            ]
+          }
+        ) })
+      ] }) });
+    }
     function RenaxLayout({
-      settings,
+      settings: settings2,
       calculatorPickup,
       calculatorDropoff,
       setCalculatorPickup,
@@ -50492,37 +51765,37 @@ ${escapeText(this.code(index, length))}
       handleSelectClassPreset
     }) {
       var _a, _b, _c, _d, _e;
-      const brandName = (settings == null ? void 0 : settings.business_name) || (settings == null ? void 0 : settings.businessName) || "Travelluxx";
-      const whatsappNum = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
-      const emailAddr = (settings == null ? void 0 : settings.business_email) || "info@travelluxx.co.uk";
-      const officeAddr = (settings == null ? void 0 : settings.office_address) || "Shirley B90 Shirley, Solihull, West Midlands, UK";
+      const brandName = (settings2 == null ? void 0 : settings2.business_name) || (settings2 == null ? void 0 : settings2.businessName) || "Travelluxx";
+      const whatsappNum = (settings2 == null ? void 0 : settings2.whatsapp_number) || "441217140876";
+      const emailAddr = (settings2 == null ? void 0 : settings2.business_email) || "info@travelluxx.co.uk";
+      const officeAddr = (settings2 == null ? void 0 : settings2.office_address) || "Shirley B90 Shirley, Solihull, West Midlands, UK";
       const [pricing, setPricing] = reactExports.useState(null);
       const [activeFleetTab, setActiveFleetTab] = reactExports.useState("Luxury");
       const [bgImage, setBgImage] = reactExports.useState(() => {
-        const customSetting = (settings == null ? void 0 : settings.hero_image) || (settings == null ? void 0 : settings.heroImage);
+        const customSetting = (settings2 == null ? void 0 : settings2.hero_image) || (settings2 == null ? void 0 : settings2.heroImage);
         return customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : heroImg;
       });
       reactExports.useEffect(() => {
-        const customSetting = (settings == null ? void 0 : settings.hero_image) || (settings == null ? void 0 : settings.heroImage);
+        const customSetting = (settings2 == null ? void 0 : settings2.hero_image) || (settings2 == null ? void 0 : settings2.heroImage);
         setBgImage(customSetting && typeof customSetting === "string" && customSetting.trim() !== "" ? customSetting : heroImg);
-      }, [settings]);
+      }, [settings2]);
       reactExports.useEffect(() => {
         fetch("/api/pricing").then((res) => res.json()).then((data) => setPricing(data)).catch((err) => console.error("Failed to fetch fleet pricing:", err));
       }, []);
       const formattedPhone = whatsappNum.startsWith("44") ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` : whatsappNum;
-      const rawTitle = (settings == null ? void 0 : settings.homepage_hero_title) || "Nationwide Airport | Transfers & Private Chauffeur";
+      const rawTitle = (settings2 == null ? void 0 : settings2.homepage_hero_title) || "Nationwide Airport | Transfers & Private Chauffeur";
       const titleParts = rawTitle.split("|");
       const titlePart1 = ((_a = titleParts[0]) == null ? void 0 : _a.trim()) || "Nationwide Airport";
       const titlePart2 = (_b = titleParts[1]) == null ? void 0 : _b.trim();
-      const badgeText = (settings == null ? void 0 : settings.homepage_hero_badge) || "Premium Chauffeur Service";
-      const heroDesc = (settings == null ? void 0 : settings.homepage_hero_subtitle) || "Experience the pinnacle of luxury private hire. Highly maintained Mercedes-Benz & Audi fleets for your comfort with guaranteed fixed rates.";
-      const ind1 = (settings == null ? void 0 : settings.homepage_indicator1) || "Licensed Operators";
-      const ind2 = (settings == null ? void 0 : settings.homepage_indicator2) || "Nationwide Coverage";
-      const ind3 = (settings == null ? void 0 : settings.homepage_indicator3) || "Zero Surge Pricing";
-      const btn1Text = (settings == null ? void 0 : settings.homepage_hero_btn_text) || "Book Chauffeur Now";
-      const btn1Link = (settings == null ? void 0 : settings.homepage_hero_btn_link) || "calculator-section";
-      const btn2Text = (settings == null ? void 0 : settings.homepage_hero_phone_text) || formattedPhone;
-      const btn2Link = (settings == null ? void 0 : settings.homepage_hero_phone_link) || `tel:${whatsappNum}`;
+      const badgeText = (settings2 == null ? void 0 : settings2.homepage_hero_badge) || "Premium Chauffeur Service";
+      const heroDesc = (settings2 == null ? void 0 : settings2.homepage_hero_subtitle) || "Experience the pinnacle of luxury private hire. Highly maintained Mercedes-Benz & Audi fleets for your comfort with guaranteed fixed rates.";
+      const ind1 = (settings2 == null ? void 0 : settings2.homepage_indicator1) || "Licensed Operators";
+      const ind2 = (settings2 == null ? void 0 : settings2.homepage_indicator2) || "Nationwide Coverage";
+      const ind3 = (settings2 == null ? void 0 : settings2.homepage_indicator3) || "Zero Surge Pricing";
+      const btn1Text = (settings2 == null ? void 0 : settings2.homepage_hero_btn_text) || "Book Chauffeur Now";
+      const btn1Link = (settings2 == null ? void 0 : settings2.homepage_hero_btn_link) || "calculator-section";
+      const btn2Text = (settings2 == null ? void 0 : settings2.homepage_hero_phone_text) || formattedPhone;
+      const btn2Link = (settings2 == null ? void 0 : settings2.homepage_hero_phone_link) || `tel:${whatsappNum}`;
       const handleBtn1Click = () => {
         if (btn1Link === "calculator-section") {
           handleScrollTo("calculator-section");
@@ -50663,7 +51936,7 @@ ${escapeText(this.code(index, length))}
             {
               initialPickup: calculatorPickup,
               initialDropoff: calculatorDropoff,
-              settings
+              settings: settings2
             }
           )
         ] }) }),
@@ -50833,65 +52106,7 @@ ${escapeText(this.code(index, length))}
             ] })
           ] })
         ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-24 bg-[#0a0b0e] border-t border-slate-900", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-2xl mx-auto mb-16", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold", children: "Testimonials" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-bold text-white uppercase", children: "What Clients Say" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#0e1017] border border-slate-800/60 p-8 rounded-3xl relative overflow-hidden shadow-lg space-y-6", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 font-serif text-5xl leading-none block select-none", children: "“" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-xs sm:text-sm leading-relaxed font-light italic", children: '"Outstanding service from Heathrow. The Mercedes S-class was immaculate and the driver was prompt, professional, and took care of all our luggage. Highly recommended for corporate transfers."' }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-slate-850 pt-4 flex justify-between items-center", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-sm font-bold text-white", children: "David Miller" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-slate-500 uppercase tracking-widest mt-0.5", children: "Corporate Client" })
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-0.5 text-emerald-400 shrink-0", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" })
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#0e1017] border border-slate-800/60 p-8 rounded-3xl relative overflow-hidden shadow-lg space-y-6", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 font-serif text-5xl leading-none block select-none", children: "“" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-xs sm:text-sm leading-relaxed font-light italic", children: '"Booked the MPV class for our family vacation to Gatwick. Plenty of space for 6 suitcases and our children. The driver was extremely polite and monitored our flights for our return."' }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-slate-850 pt-4 flex justify-between items-center", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-sm font-bold text-white", children: "Sarah Jenkins" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-slate-500 uppercase tracking-widest mt-0.5", children: "Family Transfer" })
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-0.5 text-emerald-400 shrink-0", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" })
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-[#0e1017] border border-slate-800/60 p-8 rounded-3xl relative overflow-hidden shadow-lg space-y-6", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 font-serif text-5xl leading-none block select-none", children: "“" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-slate-300 text-xs sm:text-sm leading-relaxed font-light italic", children: '"The fixed price booking was exactly as quoted, without any hidden charges. The best chauffeur service in Solihull. Will certainly use Travelluxx for all my executive trips."' }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-slate-850 pt-4 flex justify-between items-center", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-sm font-bold text-white", children: "James Sterling" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[10px] text-slate-500 uppercase tracking-widest mt-0.5", children: "Executive Commuter" })
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-0.5 text-emerald-400 shrink-0", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 fill-current" })
-                ] })
-              ] })
-            ] })
-          ] })
-        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(GoogleReviewsSection, { isRenax: true }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-24 bg-[#08090d] border-t border-slate-900", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-2xl mx-auto mb-16", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold", children: "Fixed Presets" }),
@@ -50899,6 +52114,16 @@ ${escapeText(this.code(index, length))}
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(AirportsGrid, { onSelectTransfer: handleSelectTransferPreset })
         ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          HomepageFaq,
+          {
+            faqs: settings2 == null ? void 0 : settings2.homepage_faqs,
+            title: settings2 == null ? void 0 : settings2.homepage_faq_title,
+            subtitle: settings2 == null ? void 0 : settings2.homepage_faq_subtitle,
+            badge: settings2 == null ? void 0 : settings2.homepage_faq_badge,
+            isRenax: true
+          }
+        ),
         /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "contact", className: "py-24 bg-[#0e1017] border-t border-slate-900", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto px-4 sm:px-6", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-16", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold font-sans", children: "Get In Touch" }),
@@ -50931,20 +52156,20 @@ ${escapeText(this.code(index, length))}
     function PublicLandingPage() {
       const [calculatorPickup, setCalculatorPickup] = reactExports.useState("");
       const [calculatorDropoff, setCalculatorDropoff] = reactExports.useState("");
-      const { settings, isLoading, updateSettingsLocally } = useSettings();
+      const { settings: settings2, isLoading, updateSettingsLocally } = useSettings();
       const [homepageContent, setHomepageContent] = reactExports.useState(null);
       reactExports.useEffect(() => {
         trackVisit();
       }, []);
       reactExports.useEffect(() => {
-        if (settings && settings.homepage_displays === "page" && settings.homepage_page_id) {
-          fetch(`/api/pages/${settings.homepage_page_id}`).then((res) => res.json()).then((data) => {
+        if (settings2 && settings2.homepage_displays === "page" && settings2.homepage_page_id) {
+          fetch(`/api/pages/${settings2.homepage_page_id}`).then((res) => res.json()).then((data) => {
             if (!data.error) setHomepageContent(data);
           }).catch((err) => console.error("Failed to load static homepage:", err));
         }
-      }, [settings]);
+      }, [settings2]);
       reactExports.useEffect(() => {
-        if (settings) {
+        if (settings2) {
           const baseUrl = "https://travelluxx.co.uk";
           const pageUrl = `${baseUrl}/`;
           const setMeta = (attr, attrVal, content) => {
@@ -50956,8 +52181,8 @@ ${escapeText(this.code(index, length))}
             }
             el.setAttribute("content", content);
           };
-          const homepageTitle = settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
-          const homepageDesc = settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
+          const homepageTitle = settings2.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
+          const homepageDesc = settings2.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
           document.title = homepageTitle;
           setMeta("name", "description", homepageDesc);
           let robotsMeta = document.querySelector("meta[name='robots']");
@@ -50966,7 +52191,7 @@ ${escapeText(this.code(index, length))}
             robotsMeta.setAttribute("name", "robots");
             document.head.appendChild(robotsMeta);
           }
-          robotsMeta.setAttribute("content", settings.search_engine_visibility ? "noindex, nofollow" : "index, follow");
+          robotsMeta.setAttribute("content", settings2.search_engine_visibility ? "noindex, nofollow" : "index, follow");
           let canonical = document.querySelector("link[rel='canonical']");
           if (!canonical) {
             canonical = document.createElement("link");
@@ -50976,23 +52201,45 @@ ${escapeText(this.code(index, length))}
           canonical.setAttribute("href", pageUrl);
           setMeta("property", "og:type", "website");
           setMeta("property", "og:url", pageUrl);
-          setMeta("property", "og:title", homepageTitle);
-          setMeta("property", "og:description", homepageDesc);
-          setMeta("property", "og:site_name", settings.business_name || "TravelLuxx");
-          if (settings.logo_image) {
-            const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
+          setMeta("property", "og:title", settings2.og_title || homepageTitle);
+          setMeta("property", "og:description", settings2.og_description || homepageDesc);
+          setMeta("property", "og:site_name", settings2.business_name || "TravelLuxx");
+          const shareImg = settings2.og_image || settings2.logo_image;
+          if (shareImg) {
+            const logoUrl = shareImg.startsWith("http") ? shareImg : baseUrl + shareImg;
             setMeta("property", "og:image", logoUrl);
+            setMeta("name", "twitter:image", logoUrl);
           }
-          setMeta("property", "twitter:card", "summary_large_image");
-          setMeta("property", "twitter:url", pageUrl);
-          setMeta("property", "twitter:title", homepageTitle);
-          setMeta("property", "twitter:description", homepageDesc);
-          if (settings.logo_image) {
-            const logoUrl = settings.logo_image.startsWith("http") ? settings.logo_image : baseUrl + settings.logo_image;
-            setMeta("property", "twitter:image", logoUrl);
+          setMeta("name", "twitter:card", "summary_large_image");
+          setMeta("name", "twitter:title", settings2.og_title || homepageTitle);
+          setMeta("name", "twitter:description", settings2.og_description || homepageDesc);
+          const faqScriptId = "jsonld-homepage-faqs";
+          let faqScript = document.getElementById(faqScriptId);
+          if (Array.isArray(settings2.homepage_faqs) && settings2.homepage_faqs.length > 0) {
+            if (!faqScript) {
+              faqScript = document.createElement("script");
+              faqScript.id = faqScriptId;
+              faqScript.type = "application/ld+json";
+              document.head.appendChild(faqScript);
+            }
+            const faqSchema = {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": settings2.homepage_faqs.filter((f) => f && f.question && f.answer).map((f) => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": f.answer
+                }
+              }))
+            };
+            faqScript.text = JSON.stringify(faqSchema);
+          } else if (faqScript) {
+            faqScript.remove();
           }
         }
-      }, [settings]);
+      }, [settings2]);
       const handleScrollTo = (elementId) => {
         const element = document.getElementById(elementId);
         if (element) {
@@ -51009,13 +52256,13 @@ ${escapeText(this.code(index, length))}
         setCalculatorDropoff("London Heathrow Airport (LHR)");
         handleScrollTo("calculator-section");
       };
-      if (isLoading || !settings) {
+      if (isLoading || !settings2) {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white flex flex-col items-center justify-center font-sans", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-[#047857] text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse", children: "Loading Travelluxx..." })
         ] });
       }
-      if (settings.homepage_displays === "page") {
+      if (settings2.homepage_displays === "page") {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-white text-slate-800 flex flex-col selection:bg-emerald-600 selection:text-white font-sans", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Navbar,
@@ -51043,7 +52290,7 @@ ${escapeText(this.code(index, length))}
           )
         ] });
       }
-      if (settings.active_theme === "renax") {
+      if (settings2.active_theme === "renax") {
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#0c0d12] text-slate-100 flex flex-col selection:bg-emerald-600 selection:text-white font-sans", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Navbar,
@@ -51054,7 +52301,7 @@ ${escapeText(this.code(index, length))}
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             RenaxLayout,
             {
-              settings,
+              settings: settings2,
               calculatorPickup,
               calculatorDropoff,
               setCalculatorPickup,
@@ -51084,7 +52331,7 @@ ${escapeText(this.code(index, length))}
             HeroSection,
             {
               onScrollToCalculator: () => handleScrollTo("calculator-section"),
-              settings
+              settings: settings2
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: "calculator-section", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -51092,12 +52339,23 @@ ${escapeText(this.code(index, length))}
             {
               initialPickup: calculatorPickup,
               initialDropoff: calculatorDropoff,
-              settings
+              settings: settings2
             }
           ) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(FleetCatalog, { onSelectClass: handleSelectClassPreset, settings }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(AirportsGrid, { onSelectTransfer: handleSelectTransferPreset, settings }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(ContactForm, { settings }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(FleetCatalog, { onSelectClass: handleSelectClassPreset, settings: settings2 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(AirportsGrid, { onSelectTransfer: handleSelectTransferPreset, settings: settings2 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(GoogleReviewsSection, { isRenax: false }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            HomepageFaq,
+            {
+              faqs: settings2 == null ? void 0 : settings2.homepage_faqs,
+              title: settings2 == null ? void 0 : settings2.homepage_faq_title,
+              subtitle: settings2 == null ? void 0 : settings2.homepage_faq_subtitle,
+              badge: settings2 == null ? void 0 : settings2.homepage_faq_badge,
+              isRenax: false
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(ContactForm, { settings: settings2 }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Footer,
             {

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "promo-1794951621322-jr9og",
+    "code": "WELCOME10",
+    "discountType": "percentage",
+    "discountValue": 10,
+    "minOrderAmount": 20,
+    "maxDiscountAmount": 50,
+    "expiryDate": "",
+    "usageLimit": 100,
+    "timesUsed": 0,
+    "isActive": true,
+    "description": "10% off welcome voucher",
+    "createdAt": "2026-11-17T21:40:21.322Z",
+    "updatedAt": "2026-11-17T21:40:21.322Z"
+  }
+]

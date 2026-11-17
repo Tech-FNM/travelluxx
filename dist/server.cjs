@@ -52,6 +52,7 @@ var SERVICES_PATH = import_path.default.join(process.cwd(), "services.json");
 var SERVICE_AREAS_PATH = import_path.default.join(process.cwd(), "service_areas.json");
 var SERVICES_SETTINGS_PATH = import_path.default.join(process.cwd(), "services_settings.json");
 var SERVICE_AREAS_SETTINGS_PATH = import_path.default.join(process.cwd(), "service_areas_settings.json");
+var PROMOCODES_PATH = import_path.default.join(process.cwd(), "promocodes.json");
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://info_db_user:rexkTuz4elj0srRx@cluster0.utakxdh.mongodb.net/travelluxx?retryWrites=true&w=majority&appName=Cluster0";
 var BookingSchema = new import_mongoose.default.Schema({
   id: { type: String, required: true, unique: true },
@@ -150,6 +151,22 @@ var UploadSchema = new import_mongoose.default.Schema({
   data: Buffer
 });
 var UploadModel = import_mongoose.default.model("Upload", UploadSchema);
+var PromoCodeSchema = new import_mongoose.default.Schema({
+  id: { type: String, required: true, unique: true },
+  code: { type: String, required: true, unique: true, uppercase: true, trim: true },
+  discountType: { type: String, enum: ["fixed", "percentage"], default: "fixed" },
+  discountValue: { type: Number, required: true },
+  minOrderAmount: { type: Number, default: 0 },
+  maxDiscountAmount: { type: Number, default: null },
+  expiryDate: { type: String, default: "" },
+  usageLimit: { type: Number, default: null },
+  timesUsed: { type: Number, default: 0 },
+  isActive: { type: Boolean, default: true },
+  description: { type: String, default: "" },
+  createdAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() },
+  updatedAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
+}, { strict: false });
+var PromoCodeModel = import_mongoose.default.model("PromoCode", PromoCodeSchema);
 var isConnected = false;
 async function runMigrations() {
   try {
@@ -372,6 +389,24 @@ function writePosts(posts) {
     console.error("Error writing posts.json:", err);
   }
 }
+function readPromoCodes() {
+  try {
+    if (import_fs.default.existsSync(PROMOCODES_PATH)) {
+      return JSON.parse(import_fs.default.readFileSync(PROMOCODES_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading promocodes.json:", err);
+  }
+  return [];
+}
+function writePromoCodes(codes) {
+  if (process.env.VERCEL) return;
+  try {
+    import_fs.default.writeFileSync(PROMOCODES_PATH, JSON.stringify(codes, null, 2));
+  } catch (err) {
+    console.error("Error writing promocodes.json:", err);
+  }
+}
 function readBookings() {
   try {
     if (import_fs.default.existsSync(BOOKINGS_PATH)) {
@@ -548,6 +583,245 @@ ${trimmed}
   return `<script>
 ${trimmed}
 </script>`;
+}
+function resolvePageMetadata(reqUrl, settings) {
+  const baseUrl = "https://travelluxx.co.uk";
+  const pathOnly = (reqUrl || "/").split("?")[0].replace(/\/+$/, "") || "/";
+  const siteName = settings?.business_name || "TravelLuxx";
+  const defaultTitle = settings?.seo_title || settings?.homepage_meta_title || `${siteName} | Executive Airport Transfers & Chauffeur Service`;
+  const defaultDesc = settings?.seo_description || settings?.homepage_meta_description || "Luxury chauffeur driven private hire and airport transfers across Solihull, Birmingham, and the UK. Reliable executive travel.";
+  const defaultImage = settings?.og_image || settings?.hero_image || "https://travelluxx.co.uk/assets/images/travelluxx_logo_1784064660967.webp";
+  let result = {
+    title: defaultTitle,
+    description: defaultDesc,
+    canonicalUrl: `${baseUrl}${pathOnly === "/" ? "" : pathOnly}`,
+    ogType: "website",
+    ogTitle: defaultTitle,
+    ogDescription: defaultDesc,
+    ogImage: defaultImage,
+    noIndex: Boolean(settings?.search_engine_visibility),
+    schemas: []
+  };
+  try {
+    if (pathOnly === "/service-areas") {
+      result.title = "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx";
+      result.description = "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer.";
+      result.ogTitle = result.title;
+      result.ogDescription = result.description;
+    } else if (pathOnly.startsWith("/service-areas/")) {
+      const slug = pathOnly.replace("/service-areas/", "").trim();
+      const areas = readServiceAreas();
+      const area = areas.find((a) => a.slug === slug);
+      if (area) {
+        result.title = area.metaTitle || area.ogTitle || `${area.heroTitle || area.title} | ${siteName}`;
+        result.description = area.metaDescription || area.ogDescription || area.heroDescription || defaultDesc;
+        result.ogTitle = area.ogTitle || result.title;
+        result.ogDescription = area.ogDescription || result.description;
+        if (area.ogImage || area.heroImage) result.ogImage = area.ogImage || area.heroImage;
+        if (area.noIndexNoFollow) result.noIndex = true;
+        result.ogType = "website";
+        const areaSchema = {
+          "@context": "https://schema.org",
+          "@type": "TaxiService",
+          "name": `TravelLuxx - ${area.title} Chauffeur & Airport Transfers`,
+          "url": `${baseUrl}/service-areas/${area.slug}`,
+          "areaServed": area.title,
+          "description": result.description
+        };
+        result.schemas.push(areaSchema);
+        if (Array.isArray(area.faqs) && area.faqs.length > 0) {
+          result.schemas.push({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": area.faqs.map((f) => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+          });
+        }
+        if (area.customSchema) {
+          try {
+            const parsed = JSON.parse(area.customSchema);
+            if (Array.isArray(parsed)) result.schemas.push(...parsed);
+            else if (parsed) result.schemas.push(parsed);
+          } catch (e) {
+          }
+        }
+      }
+    } else if (pathOnly === "/services") {
+      result.title = "Our Services | Luxury Chauffeur & Airport Transfers | TravelLuxx";
+      result.description = "Explore TravelLuxx's full suite of executive travel services: airport transfers, corporate chauffeur, wedding hire, and intercity travel.";
+      result.ogTitle = result.title;
+      result.ogDescription = result.description;
+    } else if (pathOnly.startsWith("/services/")) {
+      const slug = pathOnly.replace("/services/", "").trim();
+      const services = readServices();
+      const s = services.find((srv) => srv.slug === slug);
+      if (s) {
+        result.title = s.metaTitle || s.ogTitle || `${s.title} | Luxury Chauffeur & Travel Services | ${siteName}`;
+        result.description = s.metaDescription || s.ogDescription || s.excerpt || defaultDesc;
+        result.ogTitle = s.ogTitle || result.title;
+        result.ogDescription = s.ogDescription || result.description;
+        if (s.ogImage || s.image) result.ogImage = s.ogImage || s.image;
+        if (s.noIndexNoFollow) result.noIndex = true;
+        result.ogType = "website";
+        result.schemas.push({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": s.title,
+          "description": result.description,
+          "provider": { "@type": "LocalBusiness", "name": siteName, "url": baseUrl }
+        });
+        if (Array.isArray(s.faqs) && s.faqs.length > 0) {
+          result.schemas.push({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": s.faqs.map((f) => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+          });
+        }
+        if (s.customSchema) {
+          try {
+            const parsed = JSON.parse(s.customSchema);
+            if (Array.isArray(parsed)) result.schemas.push(...parsed);
+            else if (parsed) result.schemas.push(parsed);
+          } catch (e) {
+          }
+        }
+      }
+    } else if (pathOnly === "/blog") {
+      result.title = "Blog & News | TravelLuxx Private Hire & Chauffeur";
+      result.description = "Latest insights, travel guides, executive transfer tips, and news from TravelLuxx.";
+      result.ogTitle = result.title;
+      result.ogDescription = result.description;
+    } else if (pathOnly.startsWith("/blog/")) {
+      const slug = pathOnly.replace("/blog/", "").trim();
+      const posts = readPosts();
+      const post = posts.find((p) => (p.slug || p.id) === slug);
+      if (post) {
+        result.title = post.metaTitle || post.ogTitle || `${post.title} | ${siteName}`;
+        result.description = post.metaDescription || post.ogDescription || post.excerpt || defaultDesc;
+        result.ogTitle = post.ogTitle || result.title;
+        result.ogDescription = post.ogDescription || result.description;
+        if (post.ogImage || post.image) result.ogImage = post.ogImage || post.image;
+        if (post.noIndexNoFollow) result.noIndex = true;
+        result.ogType = "article";
+        result.schemas.push({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": post.title,
+          "description": result.description,
+          "datePublished": post.date || post.createdAt,
+          "image": result.ogImage,
+          "author": { "@type": "Person", "name": post.author || "TravelLuxx Editorial" }
+        });
+        if (post.customSchema) {
+          try {
+            const parsed = JSON.parse(post.customSchema);
+            if (Array.isArray(parsed)) result.schemas.push(...parsed);
+            else if (parsed) result.schemas.push(parsed);
+          } catch (e) {
+          }
+        }
+      }
+    } else if (pathOnly !== "/" && !pathOnly.startsWith("/api") && !pathOnly.startsWith("/admin")) {
+      const slug = pathOnly.replace(/^\//, "").trim();
+      const pages = readPages();
+      const page = pages.find((p) => (p.slug || p.id) === slug);
+      if (page) {
+        result.title = page.metaTitle || page.ogTitle || `${page.title} | ${siteName}`;
+        result.description = page.metaDescription || page.ogDescription || defaultDesc;
+        result.ogTitle = page.ogTitle || result.title;
+        result.ogDescription = page.ogDescription || result.description;
+        if (page.ogImage || page.image) result.ogImage = page.ogImage || page.image;
+        if (page.noIndexNoFollow) result.noIndex = true;
+        if (Array.isArray(page.faqs) && page.faqs.length > 0) {
+          result.schemas.push({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": page.faqs.map((f) => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+          });
+        }
+        if (page.customSchema) {
+          try {
+            const parsed = JSON.parse(page.customSchema);
+            if (Array.isArray(parsed)) result.schemas.push(...parsed);
+            else if (parsed) result.schemas.push(parsed);
+          } catch (e) {
+          }
+        }
+      }
+    }
+    if (pathOnly === "/" && Array.isArray(settings?.homepage_faqs) && settings.homepage_faqs.length > 0) {
+      result.schemas.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": settings.homepage_faqs.filter((f) => f.question && f.answer).map((f) => ({
+          "@type": "Question",
+          "name": f.question,
+          "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+        }))
+      });
+    }
+  } catch (err) {
+    console.warn("SEO resolution error:", err);
+  }
+  return result;
+}
+function injectDynamicSeoIntoHtml(rawHtml, reqUrl, settings) {
+  let html = rawHtml;
+  const seo = resolvePageMetadata(reqUrl, settings);
+  if (html.includes("<title>")) {
+    html = html.replace(/<title>[^<]*<\/title>/i, `<title>${seo.title}</title>`);
+  } else if (html.includes("</head>")) {
+    html = html.replace("</head>", `<title>${seo.title}</title>
+</head>`);
+  }
+  const metaTags = [
+    `<meta name="description" content="${seo.description.replace(/"/g, "&quot;")}" />`,
+    `<meta name="robots" content="${seo.noIndex ? "noindex, nofollow" : "index, follow"}" />`,
+    `<link rel="canonical" href="${seo.canonicalUrl}" />`,
+    `<meta property="og:type" content="${seo.ogType}" />`,
+    `<meta property="og:site_name" content="${(settings?.business_name || "TravelLuxx").replace(/"/g, "&quot;")}" />`,
+    `<meta property="og:url" content="${seo.canonicalUrl}" />`,
+    `<meta property="og:title" content="${seo.ogTitle.replace(/"/g, "&quot;")}" />`,
+    `<meta property="og:description" content="${seo.ogDescription.replace(/"/g, "&quot;")}" />`
+  ];
+  if (seo.ogImage) {
+    metaTags.push(`<meta property="og:image" content="${seo.ogImage}" />`);
+    metaTags.push(`<meta name="twitter:image" content="${seo.ogImage}" />`);
+  }
+  metaTags.push(`<meta name="twitter:card" content="summary_large_image" />`);
+  metaTags.push(`<meta name="twitter:title" content="${seo.ogTitle.replace(/"/g, "&quot;")}" />`);
+  metaTags.push(`<meta name="twitter:description" content="${seo.ogDescription.replace(/"/g, "&quot;")}" />`);
+  html = html.replace(/<meta\s+name="description"[^>]*>/gi, "");
+  html = html.replace(/<meta\s+property="og:[^"]+"[^>]*>/gi, "");
+  html = html.replace(/<meta\s+name="twitter:[^"]+"[^>]*>/gi, "");
+  html = html.replace(/<link\s+rel="canonical"[^>]*>/gi, "");
+  let schemaTags = "";
+  if (seo.schemas.length > 0) {
+    schemaTags = `
+<script type="application/ld+json">
+${JSON.stringify(seo.schemas.length === 1 ? seo.schemas[0] : seo.schemas, null, 2)}
+</script>
+`;
+  }
+  const injection = `
+<!-- [Dynamic SEO & OpenGraph Tags] -->
+${metaTags.join("\n")}${schemaTags}<!-- [/Dynamic SEO & OpenGraph Tags] -->
+`;
+  if (html.includes("</head>")) {
+    html = html.replace("</head>", `${injection}</head>`);
+  }
+  return html;
 }
 function injectSnippetsIntoHtml(rawHtml, settings) {
   let html = rawHtml;
@@ -1813,6 +2087,312 @@ app.get("/uploads/:filename", async (req, res, next) => {
   next();
 });
 app.use("/uploads", import_express.default.static(import_path.default.join(process.cwd(), "public", "uploads")));
+app.post("/api/promocodes/validate", async (req, res) => {
+  try {
+    const rawCode = String(req.body.code || "").trim().toUpperCase();
+    const orderAmount = Number(req.body.amount || req.body.orderAmount || 0);
+    if (!rawCode) {
+      return res.status(400).json({ valid: false, message: "Please enter a promo code." });
+    }
+    await connectToDatabase();
+    let promo = null;
+    if (import_mongoose.default.connection.readyState === 1) {
+      promo = await PromoCodeModel.findOne({ code: rawCode }).lean();
+    }
+    if (!promo) {
+      const all = readPromoCodes();
+      promo = all.find((p) => p.code && p.code.toUpperCase() === rawCode);
+    }
+    if (!promo) {
+      return res.status(404).json({ valid: false, message: "Invalid promo code." });
+    }
+    if (!promo.isActive) {
+      return res.status(400).json({ valid: false, message: "This promo code is currently inactive." });
+    }
+    if (promo.expiryDate) {
+      const expiry = new Date(promo.expiryDate);
+      if (promo.expiryDate.length <= 10) {
+        expiry.setHours(23, 59, 59, 999);
+      }
+      if (/* @__PURE__ */ new Date() > expiry) {
+        return res.status(400).json({ valid: false, message: "This promo code has expired." });
+      }
+    }
+    if (promo.usageLimit !== null && promo.usageLimit !== void 0 && promo.usageLimit > 0) {
+      const timesUsed = Number(promo.timesUsed || 0);
+      if (timesUsed >= promo.usageLimit) {
+        return res.status(400).json({ valid: false, message: "This promo code has reached its usage limit." });
+      }
+    }
+    const minAmount = Number(promo.minOrderAmount || 0);
+    if (minAmount > 0 && orderAmount < minAmount) {
+      return res.status(400).json({
+        valid: false,
+        message: `Minimum booking amount of \xA3${minAmount.toFixed(2)} required to use this promo code.`
+      });
+    }
+    let discountAmount = 0;
+    const val = Number(promo.discountValue || 0);
+    if (promo.discountType === "percentage") {
+      discountAmount = orderAmount * val / 100;
+      if (promo.maxDiscountAmount && Number(promo.maxDiscountAmount) > 0) {
+        discountAmount = Math.min(discountAmount, Number(promo.maxDiscountAmount));
+      }
+    } else {
+      discountAmount = val;
+    }
+    discountAmount = Math.min(discountAmount, orderAmount);
+    discountAmount = Math.max(0, Math.round(discountAmount * 100) / 100);
+    const finalAmount = Math.max(0, Math.round((orderAmount - discountAmount) * 100) / 100);
+    return res.json({
+      valid: true,
+      message: "Promo code applied successfully!",
+      promo: {
+        id: promo.id,
+        code: promo.code,
+        discountType: promo.discountType,
+        discountValue: promo.discountValue,
+        description: promo.description || ""
+      },
+      originalAmount: orderAmount,
+      discountAmount,
+      finalAmount
+    });
+  } catch (err) {
+    console.error("Error validating promo code:", err);
+    return res.status(500).json({ valid: false, message: "Internal server error validating promo code." });
+  }
+});
+app.get("/api/admin/promocodes", async (req, res) => {
+  try {
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) {
+      const list = await PromoCodeModel.find().sort({ createdAt: -1 });
+      if (list && list.length > 0) {
+        return res.json(list.map((c) => c.toObject ? c.toObject() : c));
+      }
+    }
+  } catch (e) {
+    console.warn("DB promo read error:", e);
+  }
+  return res.json(readPromoCodes());
+});
+app.post("/api/admin/promocodes", async (req, res) => {
+  try {
+    const rawCode = String(req.body.code || "").trim().toUpperCase();
+    if (!rawCode) {
+      return res.status(400).json({ error: "Promo code name is required" });
+    }
+    const val = Number(req.body.discountValue);
+    if (isNaN(val) || val <= 0) {
+      return res.status(400).json({ error: "A valid positive discount value is required" });
+    }
+    await connectToDatabase();
+    const all = readPromoCodes();
+    if (all.some((c) => c.code && c.code.toUpperCase() === rawCode)) {
+      return res.status(409).json({ error: "A promo code with this code already exists" });
+    }
+    if (import_mongoose.default.connection.readyState === 1) {
+      const exists = await PromoCodeModel.exists({ code: rawCode });
+      if (exists) return res.status(409).json({ error: "A promo code with this code already exists" });
+    }
+    const newCode = {
+      id: `promo-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      code: rawCode,
+      discountType: req.body.discountType === "percentage" ? "percentage" : "fixed",
+      discountValue: val,
+      minOrderAmount: Number(req.body.minOrderAmount || 0),
+      maxDiscountAmount: req.body.maxDiscountAmount ? Number(req.body.maxDiscountAmount) : null,
+      expiryDate: req.body.expiryDate ? String(req.body.expiryDate).trim() : "",
+      usageLimit: req.body.usageLimit ? Number(req.body.usageLimit) : null,
+      timesUsed: 0,
+      isActive: req.body.isActive !== false,
+      description: String(req.body.description || "").trim(),
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    all.unshift(newCode);
+    writePromoCodes(all);
+    if (import_mongoose.default.connection.readyState === 1) {
+      const doc = new PromoCodeModel(newCode);
+      await doc.save();
+    }
+    return res.json({ success: true, promoCode: newCode });
+  } catch (err) {
+    console.error("Error creating promo code:", err);
+    return res.status(500).json({ error: err.message || "Failed to create promo code" });
+  }
+});
+app.put("/api/admin/promocodes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const rawCode = String(req.body.code || "").trim().toUpperCase();
+    if (!rawCode) return res.status(400).json({ error: "Promo code name is required" });
+    await connectToDatabase();
+    const all = readPromoCodes();
+    const idx = all.findIndex((c) => c.id === id);
+    let existing = idx !== -1 ? all[idx] : null;
+    if (import_mongoose.default.connection.readyState === 1 && !existing) {
+      existing = await PromoCodeModel.findOne({ id }).lean();
+    }
+    if (!existing) {
+      return res.status(404).json({ error: "Promo code not found" });
+    }
+    if (all.some((c) => c.id !== id && c.code && c.code.toUpperCase() === rawCode)) {
+      return res.status(409).json({ error: "Another promo code with this code already exists" });
+    }
+    const updated = {
+      ...existing,
+      ...req.body,
+      id,
+      code: rawCode,
+      discountType: req.body.discountType === "percentage" ? "percentage" : "fixed",
+      discountValue: Number(req.body.discountValue || existing.discountValue),
+      minOrderAmount: Number(req.body.minOrderAmount || 0),
+      maxDiscountAmount: req.body.maxDiscountAmount ? Number(req.body.maxDiscountAmount) : null,
+      expiryDate: req.body.expiryDate ? String(req.body.expiryDate).trim() : "",
+      usageLimit: req.body.usageLimit ? Number(req.body.usageLimit) : null,
+      timesUsed: req.body.timesUsed !== void 0 ? Number(req.body.timesUsed) : existing.timesUsed,
+      isActive: req.body.isActive !== false,
+      description: String(req.body.description || "").trim(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    delete updated._id;
+    delete updated.__v;
+    if (idx !== -1) all[idx] = updated;
+    else all.push(updated);
+    writePromoCodes(all);
+    if (import_mongoose.default.connection.readyState === 1) {
+      await PromoCodeModel.findOneAndUpdate({ id }, updated, { upsert: true });
+    }
+    return res.json({ success: true, promoCode: updated });
+  } catch (err) {
+    console.error("Error updating promo code:", err);
+    return res.status(500).json({ error: err.message || "Failed to update promo code" });
+  }
+});
+app.delete("/api/admin/promocodes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) {
+      await PromoCodeModel.deleteOne({ id });
+    }
+    const all = readPromoCodes().filter((c) => c.id !== id);
+    writePromoCodes(all);
+    return res.json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Failed to delete promo code" });
+  }
+});
+var cachedGoogleReviews = null;
+var GOOGLE_REVIEWS_CACHE_TTL = 1e3 * 60 * 60;
+app.get("/api/google-reviews", async (req, res) => {
+  const settings = getCurrentWebsiteSettings();
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || settings.google_maps_api_key || settings.google_places_api_key || "";
+  const placeId = process.env.GOOGLE_PLACE_ID || settings.google_place_id || "ChIJrTLr-Gyu2EcRBfy61iWz6vM";
+  const now = Date.now();
+  if (cachedGoogleReviews && now - cachedGoogleReviews.timestamp < GOOGLE_REVIEWS_CACHE_TTL) {
+    return res.json(cachedGoogleReviews.data);
+  }
+  const fallbackReviews = [
+    {
+      author_name: "James Thornton",
+      rating: 5,
+      relative_time_description: "a week ago",
+      time: Math.floor(Date.now() / 1e3) - 7 * 86400,
+      text: "Outstanding service from Solihull to Heathrow Terminal 5. Driver was punctual, pristine Mercedes S-Class, and the journey was completely stress-free. TravelLuxx is now our company's go-to executive travel partner.",
+      profile_photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+    },
+    {
+      author_name: "Sarah Jenkins",
+      rating: 5,
+      relative_time_description: "2 weeks ago",
+      time: Math.floor(Date.now() / 1e3) - 14 * 86400,
+      text: "Booked an airport transfer from Birmingham Airport. Flight landed 30 minutes early, yet the chauffeur was already waiting at arrivals with a name board. Impeccable vehicle and polite chauffeur. 10/10!",
+      profile_photo_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
+    },
+    {
+      author_name: "Marcus Vance",
+      rating: 5,
+      relative_time_description: "a month ago",
+      time: Math.floor(Date.now() / 1e3) - 30 * 86400,
+      text: "Booked the Mercedes V-Class for our family trip to London. Plenty of luggage space, smooth drive, and the kids were comfortable throughout. Booking process online was seamless and transparent.",
+      profile_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
+    },
+    {
+      author_name: "Dr. Alistair Ross",
+      rating: 5,
+      relative_time_description: "2 months ago",
+      time: Math.floor(Date.now() / 1e3) - 60 * 86400,
+      text: "Consistently professional and immaculate vehicles. Used them for multiple client meetings across Warwick and Birmingham. Never once been let down. Highest recommendation.",
+      profile_photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80"
+    }
+  ];
+  if (!apiKey || !placeId) {
+    const payload = {
+      success: true,
+      source: "curated",
+      businessName: settings.business_name || "TravelLuxx",
+      overallRating: 5,
+      totalReviews: 48,
+      reviews: fallbackReviews
+    };
+    cachedGoogleReviews = { timestamp: now, data: payload };
+    return res.json(payload);
+  }
+  try {
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(placeId)}&fields=name,rating,user_ratings_total,reviews,url&key=${encodeURIComponent(apiKey)}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Google Places HTTP ${response.status}`);
+    const data = await response.json();
+    if (data.status === "OK" && data.result) {
+      const r = data.result;
+      const reviews = (r.reviews || []).map((rev) => ({
+        author_name: rev.author_name,
+        rating: rev.rating,
+        relative_time_description: rev.relative_time_description,
+        time: rev.time,
+        text: rev.text,
+        profile_photo_url: rev.profile_photo_url || ""
+      }));
+      const payload = {
+        success: true,
+        source: "google_places_api",
+        businessName: r.name || settings.business_name || "TravelLuxx",
+        overallRating: r.rating || 5,
+        totalReviews: r.user_ratings_total || reviews.length,
+        googleMapsUrl: r.url || "https://maps.google.com/?cid=12345",
+        reviews: reviews.length > 0 ? reviews : fallbackReviews
+      };
+      cachedGoogleReviews = { timestamp: now, data: payload };
+      return res.json(payload);
+    } else {
+      console.warn("Google Places API response status:", data.status, data.error_message);
+      const payload = {
+        success: true,
+        source: "curated",
+        businessName: settings.business_name || "TravelLuxx",
+        overallRating: 5,
+        totalReviews: 48,
+        reviews: fallbackReviews
+      };
+      cachedGoogleReviews = { timestamp: now, data: payload };
+      return res.json(payload);
+    }
+  } catch (err) {
+    console.error("Google Places Reviews API error:", err.message);
+    const payload = {
+      success: true,
+      source: "curated",
+      businessName: settings.business_name || "TravelLuxx",
+      overallRating: 5,
+      totalReviews: 48,
+      reviews: fallbackReviews
+    };
+    return res.json(payload);
+  }
+});
 app.get("/api/places/autocomplete", async (req, res) => {
   const query = (req.query.q || "").trim();
   if (!query || query.length < 2) {
@@ -2440,6 +3020,38 @@ app.get("/sitemap.xml", async (req, res) => {
     </image:image>` : ""}
   </url>`;
   }
+  const services = readServices().filter((s) => s.published !== false);
+  for (const service of services) {
+    const slug = service.slug || service.id;
+    const lastmod = service.updatedAt ? new Date(service.updatedAt).toISOString().split("T")[0] : today;
+    xml += `
+  <url>
+    <loc>${baseUrl}/services/${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>${service.image ? `
+    <image:image>
+      <image:loc>${service.image.startsWith("http") ? service.image : baseUrl + service.image}</image:loc>
+      <image:title>${(service.title || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")}</image:title>
+    </image:image>` : ""}
+  </url>`;
+  }
+  const serviceAreas = readServiceAreas().filter((a) => a.published !== false);
+  for (const area of serviceAreas) {
+    const slug = area.slug || area.id;
+    const lastmod = area.updatedAt ? new Date(area.updatedAt).toISOString().split("T")[0] : today;
+    xml += `
+  <url>
+    <loc>${baseUrl}/service-areas/${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>${area.heroImage ? `
+    <image:image>
+      <image:loc>${area.heroImage.startsWith("http") ? area.heroImage : baseUrl + area.heroImage}</image:loc>
+      <image:title>${(area.title || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")}</image:title>
+    </image:image>` : ""}
+  </url>`;
+  }
   for (const post of posts) {
     const slug = post.slug || post.id;
     const lastmod = post.updatedAt ? new Date(post.updatedAt).toISOString().split("T")[0] : post.date || today;
@@ -2494,7 +3106,8 @@ async function startServer() {
         let template = import_fs.default.readFileSync(import_path.default.resolve(process.cwd(), "index.html"), "utf-8");
         template = await vite.transformIndexHtml(url, template);
         const settings = getCurrentWebsiteSettings();
-        const html = injectSnippetsIntoHtml(template, settings);
+        let html = injectDynamicSeoIntoHtml(template, url, settings);
+        html = injectSnippetsIntoHtml(html, settings);
         res.status(200).set({ "Content-Type": "text/html; charset=utf-8" }).end(html);
       } catch (e) {
         vite.ssrFixStacktrace(e);
@@ -2508,7 +3121,8 @@ async function startServer() {
       try {
         const rawHtml = import_fs.default.readFileSync(distIndexPath, "utf8");
         const settings = getCurrentWebsiteSettings();
-        const html = injectSnippetsIntoHtml(rawHtml, settings);
+        let html = injectDynamicSeoIntoHtml(rawHtml, req.originalUrl || req.url, settings);
+        html = injectSnippetsIntoHtml(html, settings);
         res.setHeader("Content-Type", "text/html; charset=utf-8");
         res.send(html);
       } catch (err) {

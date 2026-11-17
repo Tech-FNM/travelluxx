@@ -275,6 +275,14 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   const [cardExpiry, setCardExpiry] = useState("");
   const [cardCVC, setCardCVC] = useState("");
   const [processingPayment, setProcessingPayment] = useState(false);
+
+  // Promo Code / Discount state
+  const [promoInput, setPromoInput] = useState("");
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [appliedPromo, setAppliedPromo] = useState<any>(null);
+  const [promoDiscountAmount, setPromoDiscountAmount] = useState(0);
+  const [promoError, setPromoError] = useState("");
+  const [promoSuccessMsg, setPromoSuccessMsg] = useState("");
   const [paypalSimulating, setPaypalSimulating] = useState(false);
 
   // Completed reservation details
@@ -1245,6 +1253,56 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     setCurrentStep(3);
   };
 
+  // Promo Code validation & application
+  const handleApplyPromoCode = async () => {
+    const raw = promoInput.trim().toUpperCase();
+    if (!raw) {
+      setPromoError("Please enter a promo code.");
+      return;
+    }
+    const baseAmount = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+    if (baseAmount <= 0) {
+      setPromoError("Please select a valid ride option first.");
+      return;
+    }
+
+    setPromoLoading(true);
+    setPromoError("");
+    setPromoSuccessMsg("");
+
+    try {
+      const res = await fetch("/api/promocodes/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: raw, amount: baseAmount })
+      });
+      const data = await res.json();
+      if (res.ok && data.valid) {
+        setAppliedPromo(data.promo);
+        setPromoDiscountAmount(data.discountAmount);
+        setPromoSuccessMsg(data.message || `Promo code '${raw}' applied!`);
+      } else {
+        setAppliedPromo(null);
+        setPromoDiscountAmount(0);
+        setPromoError(data.message || "Invalid or ineligible promo code.");
+      }
+    } catch (err: any) {
+      setAppliedPromo(null);
+      setPromoDiscountAmount(0);
+      setPromoError("Could not connect to promo verification server.");
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoDiscountAmount(0);
+    setPromoInput("");
+    setPromoError("");
+    setPromoSuccessMsg("");
+  };
+
   // Payment finalizer
   const processCheckoutPayment = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -1266,7 +1324,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       date: rideDate,
       time: rideTime,
       vehicle: selectedVehicle,
-      price: price,
+      price: finalPayablePrice,
+      originalPrice: originalBasePrice,
+      promoCode: appliedPromo ? appliedPromo.code : undefined,
+      discountAmount: promoDiscountAmount,
       passengerName,
       passengerEmail,
       passengerPhone,
@@ -1363,7 +1424,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       date: rideDate,
       time: rideTime,
       vehicle: selectedVehicle,
-      price: price,
+      price: finalPayablePrice,
+      originalPrice: originalBasePrice,
+      promoCode: appliedPromo ? appliedPromo.code : undefined,
+      discountAmount: promoDiscountAmount,
       passengerName,
       passengerEmail,
       passengerPhone,
@@ -1406,7 +1470,9 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   };
 
   // Distance parameters
-  const selectedPrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+  const originalBasePrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+  const finalPayablePrice = Math.max(0, Math.round((originalBasePrice - promoDiscountAmount) * 100) / 100);
+  const selectedPrice = finalPayablePrice;
 
   return (
     <section id="calculator" className="py-20 bg-white text-slate-800 relative">
@@ -1815,12 +1881,87 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
               <div className="space-y-4">
                 <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-6">
                   <div className="space-y-6">
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-                      <h3 className="text-sm font-semibold text-slate-900 font-display">Secure Transaction Checkout</h3>
-                      <div className="text-right">
-                        <span className="text-[10px] text-slate-400 block font-sans">Amount Payable:</span>
-                        <span className="text-lg font-bold font-display text-emerald-700">£{selectedPrice.toFixed(2)}</span>
+                    <div className="border-b border-slate-100 pb-4">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-sm font-semibold text-slate-900 font-display">Secure Transaction Checkout</h3>
+                        <div className="text-right">
+                          <span className="text-[10px] text-slate-400 block font-sans">Total Payable:</span>
+                          <span className="text-xl font-extrabold font-display text-emerald-700">£{finalPayablePrice.toFixed(2)}</span>
+                        </div>
                       </div>
+
+                      {/* Price breakdown when promo applied */}
+                      {appliedPromo && (
+                        <div className="mt-3 p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-xs space-y-1">
+                          <div className="flex justify-between text-slate-600">
+                            <span>Standard Fare:</span>
+                            <span className="line-through">£{originalBasePrice.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between font-semibold text-emerald-700">
+                            <span>Promo Discount ({appliedPromo.code}):</span>
+                            <span>-£{promoDiscountAmount.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between pt-1 border-t border-emerald-200 text-slate-900 font-bold">
+                            <span>Final Amount:</span>
+                            <span>£{finalPayablePrice.toFixed(2)}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* PROMO CODE INPUT BOX */}
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                      <label className="block text-xs font-semibold text-slate-700">
+                        🎟️ Have a Promo Code or Discount Voucher?
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={promoInput}
+                          onChange={e => {
+                            setPromoInput(e.target.value.toUpperCase());
+                            setPromoError("");
+                          }}
+                          placeholder="ENTER CODE (e.g. LUXURY10)"
+                          disabled={!!appliedPromo || promoLoading}
+                          className="flex-1 uppercase font-mono tracking-wider border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 bg-white focus:outline-none focus:border-emerald-600 disabled:bg-slate-100"
+                        />
+                        {appliedPromo ? (
+                          <button
+                            type="button"
+                            onClick={handleRemovePromo}
+                            className="px-4 py-2.5 bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 font-semibold text-xs rounded-xl transition cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleApplyPromoCode}
+                            disabled={promoLoading || !promoInput.trim()}
+                            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                          >
+                            {promoLoading ? (
+                              <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : null}
+                            <span>Apply</span>
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Error or Success feedback */}
+                      {promoError && (
+                        <p className="text-xs text-rose-600 font-medium flex items-center gap-1 pt-1">
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                          <span>{promoError}</span>
+                        </p>
+                      )}
+                      {promoSuccessMsg && (
+                        <p className="text-xs text-emerald-700 font-medium flex items-center gap-1 pt-1">
+                          <Check className="w-3.5 h-3.5" />
+                          <span>{promoSuccessMsg}</span>
+                        </p>
+                      )}
                     </div>
 
                     {/* Payment Tab selectors */}

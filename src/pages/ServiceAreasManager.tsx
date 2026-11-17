@@ -43,6 +43,12 @@ type ServiceArea = {
   metaTitle: string;
   metaDescription: string;
   noIndexNoFollow: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogUrl?: string;
+  ogType?: string;
+  customSchema?: string;
 };
 
 type ServiceAreasPageSettings = {
@@ -90,7 +96,13 @@ const emptyArea: Omit<ServiceArea, "id"> = {
   published: true,
   metaTitle: "",
   metaDescription: "",
-  noIndexNoFollow: false
+  noIndexNoFollow: false,
+  ogTitle: "",
+  ogDescription: "",
+  ogImage: "",
+  ogUrl: "",
+  ogType: "website",
+  customSchema: ""
 };
 
 const quillModules = {
@@ -203,7 +215,13 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
       ...emptyArea,
       ...area,
       faqs: Array.isArray(area.faqs) ? area.faqs : [],
-      noIndexNoFollow: !!area.noIndexNoFollow
+      noIndexNoFollow: !!area.noIndexNoFollow,
+      ogTitle: area.ogTitle || "",
+      ogDescription: area.ogDescription || "",
+      ogImage: area.ogImage || "",
+      ogUrl: area.ogUrl || "",
+      ogType: area.ogType || "website",
+      customSchema: area.customSchema || ""
     });
     setError("");
     setViewMode("form");
@@ -1126,6 +1144,86 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
                   className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                 />
               </div>
+              {/* Open Graph (OG) Tags */}
+              <div className="border-t border-[#f0f0f1] pt-3 space-y-3">
+                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                  <span>📱 Open Graph (OG) Social Media Tags</span>
+                </h4>
+                <div>
+                  <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                    OG Title (Facebook, WhatsApp, LinkedIn)
+                  </label>
+                  <input
+                    type="text"
+                    value={form.ogTitle || ""}
+                    onChange={e => setForm({ ...form, ogTitle: e.target.value })}
+                    placeholder={form.metaTitle || form.title || "Custom social sharing title"}
+                    className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                    OG Description
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={form.ogDescription || ""}
+                    onChange={e => setForm({ ...form, ogDescription: e.target.value })}
+                    placeholder={form.metaDescription || "Custom social sharing description"}
+                    className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                      OG Image URL
+                    </label>
+                    <input
+                      type="text"
+                      value={form.ogImage || ""}
+                      onChange={e => setForm({ ...form, ogImage: e.target.value })}
+                      placeholder={form.heroImage || "https://..."}
+                      className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                      OG Type
+                    </label>
+                    <select
+                      value={form.ogType || "website"}
+                      onChange={e => setForm({ ...form, ogType: e.target.value })}
+                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                    >
+                      <option value="website">website</option>
+                      <option value="article">article</option>
+                      <option value="place">place</option>
+                      <option value="business.business">business.business</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Custom Schema Markup (JSON-LD) */}
+              <div className="border-t border-[#f0f0f1] pt-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <span>⚙️ Custom Schema Markup (JSON-LD)</span>
+                  </h4>
+                  <span className="text-[10px] text-slate-400">Optional custom structured data</span>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Enter valid JSON-LD schema markup below (e.g., LocalBusiness, Service, TaxiService). It will be dynamically injected into the &lt;head&gt; of this location page alongside standard FAQPage and TaxiService schema.
+                </p>
+                <textarea
+                  rows={4}
+                  value={form.customSchema || ""}
+                  onChange={e => setForm({ ...form, customSchema: e.target.value })}
+                  placeholder={'{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "TravelLuxx Solihull"\n}'}
+                  className="w-full border border-[#8c8f94] font-mono text-[11px] rounded-sm p-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-[#2271b1]"
+                />
+              </div>
+
               <div className="flex items-center gap-6 pt-1">
                 <label className="flex items-center gap-2 text-xs font-medium text-[#50575e] cursor-pointer">
                   <input

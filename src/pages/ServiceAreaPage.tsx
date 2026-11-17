@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { ArrowRight, ChevronDown, MapPin } from "lucide-react";
+import { ArrowRight, ChevronDown, MapPin, HelpCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
+import { usePageSeo } from "../utils/seo";
 
 export default function ServiceAreaPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -40,45 +41,69 @@ export default function ServiceAreaPage() {
     };
   }, [slug]);
 
-  useEffect(() => {
-    if (!serviceArea) return;
-    const baseUrl = "https://travelluxx.co.uk";
-    const pageUrl = `${baseUrl}/service-areas/${serviceArea.slug}`;
-    const title = serviceArea.metaTitle || `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx`;
-    const description = serviceArea.metaDescription || serviceArea.heroDescription || "";
+  // Compute schemas & SEO metadata
+  const baseUrl = "https://travelluxx.co.uk";
+  const pageUrl = serviceArea ? `${baseUrl}/service-areas/${serviceArea.slug}` : "";
+  const title = serviceArea?.metaTitle || serviceArea?.ogTitle || (serviceArea ? `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx` : "Service Area | TravelLuxx");
+  const description = serviceArea?.metaDescription || serviceArea?.ogDescription || serviceArea?.heroDescription || "Private chauffeur travel and airport transfers tailored around your location and schedule.";
+  const ogImage = serviceArea?.ogImage || serviceArea?.heroImage || "";
+  const validFaqs = useMemo(() => {
+    return (Array.isArray(serviceArea?.faqs) ? serviceArea.faqs : []).filter((f: any) => f && (f.question || f.answer));
+  }, [serviceArea]);
 
-    document.title = title;
-
-    const setMeta = (selector: string, attr: string, value: string) => {
-      let element = document.querySelector(selector);
-      if (!element) {
-        element = document.createElement("meta");
-        document.head.appendChild(element);
+  const pageSchemas = useMemo(() => {
+    if (!serviceArea) return [];
+    const list: any[] = [
+      {
+        "@context": "https://schema.org",
+        "@type": "TaxiService",
+        "@id": `${pageUrl}#service`,
+        "name": `TravelLuxx - ${serviceArea.title} Chauffeur & Airport Transfers`,
+        "url": pageUrl,
+        "areaServed": serviceArea.title,
+        "description": description,
+        "provider": {
+          "@type": "LocalBusiness",
+          "name": settings?.business_name || "TravelLuxx",
+          "telephone": settings?.whatsapp_number ? `+${settings.whatsapp_number}` : "+441217140876",
+          "url": baseUrl
+        }
       }
-      element.setAttribute(attr, value);
-    };
+    ];
 
-    setMeta('meta[name="description"]', "content", description);
-    setMeta('meta[name="robots"]', "content", settings?.search_engine_visibility || serviceArea.noIndexNoFollow ? "noindex, nofollow" : "index, follow");
-    setMeta('meta[property="og:type"]', "content", "website");
-    setMeta('meta[property="og:url"]', "content", pageUrl);
-    setMeta('meta[property="og:title"]', "content", title);
-    setMeta('meta[property="og:description"]', "content", description);
-    setMeta('meta[property="og:site_name"]', "content", settings?.business_name || "TravelLuxx");
-    if (serviceArea.heroImage) setMeta('meta[property="og:image"]', "content", serviceArea.heroImage);
-
-    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
+    if (validFaqs.length > 0) {
+      list.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        "mainEntity": validFaqs.map((f: any) => ({
+          "@type": "Question",
+          "name": f.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": f.answer
+          }
+        }))
+      });
     }
-    canonical.href = pageUrl;
 
-    return () => {
-      document.title = settings?.homepage_meta_title || "TravelLuxx";
-    };
-  }, [serviceArea, settings]);
+    return list;
+  }, [serviceArea, validFaqs, pageUrl, description, settings, baseUrl]);
+
+  usePageSeo({
+    title,
+    description,
+    canonicalUrl: pageUrl,
+    ogTitle: serviceArea?.ogTitle || title,
+    ogDescription: serviceArea?.ogDescription || description,
+    ogImage,
+    ogUrl: pageUrl,
+    ogType: serviceArea?.ogType || "website",
+    noIndex: Boolean(settings?.search_engine_visibility || serviceArea?.noIndexNoFollow),
+    siteName: settings?.business_name || "TravelLuxx",
+    schemas: pageSchemas,
+    customSchemaJson: serviceArea?.customSchema || ""
+  });
 
   if (isLoading || areaLoading) {
     return (
@@ -109,6 +134,7 @@ export default function ServiceAreaPage() {
       <Navbar onScrollTo={() => {}} />
 
       <main>
+        {/* Hero Section */}
         <section className="relative isolate overflow-hidden bg-slate-950 text-white">
           <div
             className="absolute inset-0 -z-20 bg-cover bg-center opacity-30"
@@ -146,48 +172,74 @@ export default function ServiceAreaPage() {
           </div>
         </section>
 
-        <section className="bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10">
-            <div className="ql-snow">
-              <div
-                className="ql-editor page-rich-content service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base !p-0"
-                dangerouslySetInnerHTML={{ __html: serviceArea.content || "" }}
-              />
+        {/* Content Body */}
+        {serviceArea.content && (
+          <section className="bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10">
+              <div className="ql-snow">
+                <div
+                  className="ql-editor page-rich-content service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base !p-0"
+                  dangerouslySetInnerHTML={{ __html: serviceArea.content || "" }}
+                />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
-              Frequently asked questions
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900">
-              {serviceArea.faqTitle || `${serviceArea.title} chauffeur services`}
-            </h2>
-          </div>
-          <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200">
-            {(Array.isArray(serviceArea.faqs) ? serviceArea.faqs : []).filter((faq: any) => faq.question || faq.answer).map((faq: any, index: number) => {
-              const isOpen = openFaqIndex === index;
-              return (
-                <div key={faq.question} className="py-5">
-                  <button
-                    type="button"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-4 text-left font-semibold text-slate-900"
+        {/* FAQs Section */}
+        {validFaqs.length > 0 && (
+          <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3 border border-emerald-200">
+                <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Frequently Asked Questions</span>
+              </div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                {serviceArea.faqTitle || `${serviceArea.title} Chauffeur & Transfers FAQ`}
+              </h2>
+              <p className="mt-3 text-sm text-slate-500 max-w-xl mx-auto">
+                Got questions about traveling in or around {serviceArea.title}? Here are quick answers to the most common questions.
+              </p>
+            </div>
+
+            <div className="mt-10 space-y-3">
+              {validFaqs.map((faq: any, index: number) => {
+                const isOpen = openFaqIndex === index;
+                return (
+                  <div
+                    key={faq.question || index}
+                    className={`rounded-xl border transition-all duration-200 overflow-hidden ${
+                      isOpen
+                        ? "border-emerald-300 bg-emerald-50/30 shadow-sm"
+                        : "border-slate-200 bg-white hover:border-slate-300"
+                    }`}
                   >
-                    <span>{faq.question}</span>
-                    <ChevronDown
-                      className={`h-5 w-5 shrink-0 text-emerald-700 transition-transform ${isOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                  {isOpen && <p className="mt-3 pr-8 text-sm leading-6 text-slate-600">{faq.answer}</p>}
-                </div>
-              );
-            })}
-          </div>
-        </section>
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                      className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition"
+                    >
+                      <span className="text-base sm:text-lg">{faq.question}</span>
+                      <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                        isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
+                      }`}>
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                        />
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer onScrollTo={() => {}} />
