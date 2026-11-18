@@ -145,9 +145,9 @@ export default function ServiceDetail() {
         "24/7 dedicated support"
       ];
 
-  const whatsappNumber = websiteSettings?.whatsapp_number || "441217140876";
-  const formattedPhone = websiteSettings?.whatsapp_number
-    ? `+${websiteSettings.whatsapp_number}`
+  const whatsappNumber = settings?.whatsapp_number || "441217140876";
+  const formattedPhone = settings?.whatsapp_number
+    ? `+${settings.whatsapp_number}`
     : "+44 121 714 0876";
 
   const defaultPerks = [

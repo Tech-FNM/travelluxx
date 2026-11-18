@@ -2226,6 +2226,14 @@ function extractPlaceIdentifier(input) {
   if (/^ChIJ[a-zA-Z0-9_-]{20,}$/.test(trimmed)) {
     return { placeId: trimmed };
   }
+  const hexMatch = trimmed.match(/!1s(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
+  if (hexMatch) {
+    try {
+      const cidDecimal = BigInt(hexMatch[2]).toString(10);
+      return { cid: cidDecimal };
+    } catch (e) {
+    }
+  }
   const cidMatch = trimmed.match(/[?&]cid=([0-9]+)/);
   if (cidMatch) {
     return { cid: cidMatch[1] };

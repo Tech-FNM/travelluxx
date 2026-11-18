@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DcMbUHv9.js"(exports, module) {
+  "assets/index-CK9sjYUc.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -41839,6 +41839,7 @@ ${escapeText(this.code(index, length))}
       const [editingServicesPage, setEditingServicesPage] = reactExports.useState(false);
       const [editingServiceAreasPage, setEditingServiceAreasPage] = reactExports.useState(false);
       const [showMollieKey, setShowMollieKey] = reactExports.useState(false);
+      const [showPlacesApiKey, setShowPlacesApiKey] = reactExports.useState(false);
       const [testEmailLoading, setTestEmailLoading] = reactExports.useState(false);
       const [syncingReviews, setSyncingReviews] = reactExports.useState(false);
       const [testEmailResult, setTestEmailResult] = reactExports.useState(null);
@@ -44465,6 +44466,67 @@ ${escapeText(this.code(index, length))}
                             )
                           ] })
                         ] }, num)) })
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4 shadow-sm", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#f0f0f1] pb-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-amber-500 fill-amber-500" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider", children: "Client Reviews & Testimonials Section Headings" })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "flex items-center gap-2 text-xs font-semibold cursor-pointer shrink-0", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "checkbox",
+                              checked: settings.homepage_reviews_enabled !== false,
+                              onChange: (e) => setSettings({ ...settings, homepage_reviews_enabled: e.target.checked }),
+                              className: "rounded text-[#2271b1] focus:ring-[#2271b1]"
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: settings.homepage_reviews_enabled !== false ? "text-emerald-700 font-bold" : "text-slate-400", children: settings.homepage_reviews_enabled !== false ? "Section Visible" : "Section Hidden" })
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Section Badge" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_reviews_badge || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_reviews_badge: e.target.value }),
+                              placeholder: "VERIFIED CLIENT TESTIMONIALS",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Main Heading" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_reviews_title || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_reviews_title: e.target.value }),
+                              placeholder: "Trusted by Discerning Travelers",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "Subtitle / Description" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.homepage_reviews_subtitle || "",
+                              onChange: (e) => setSettings({ ...settings, homepage_reviews_subtitle: e.target.value }),
+                              placeholder: "Real experiences from clients who rely on TravelLuxx...",
+                              className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                            }
+                          )
+                        ] })
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4 shadow-sm", children: [
@@ -49166,16 +49228,27 @@ ${escapeText(this.code(index, length))}
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2", children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Places API Key (Optional for live sync)" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "input",
-                            {
-                              type: "password",
-                              value: settings.google_places_api_key || "",
-                              onChange: (e) => setSettings({ ...settings, google_places_api_key: e.target.value }),
-                              placeholder: "AIzaSy...",
-                              className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                            }
-                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: showPlacesApiKey ? "text" : "password",
+                                value: settings.google_places_api_key || "",
+                                onChange: (e) => setSettings({ ...settings, google_places_api_key: e.target.value }),
+                                placeholder: "AIzaSy...",
+                                className: "w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setShowPlacesApiKey(!showPlacesApiKey),
+                                className: "absolute right-3 top-1/2 -translate-y-1/2 text-[#50575e] hover:text-[#1d2327] transition",
+                                children: showPlacesApiKey ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-4 h-4" })
+                              }
+                            )
+                          ] }),
                           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "If empty, the system displays verified TravelLuxx 5-star customer testimonials with direct link to your Google page." })
                         ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -49222,6 +49295,132 @@ ${escapeText(this.code(index, length))}
                             }
                           )
                         ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-3 border-t border-slate-200 space-y-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 text-amber-500 fill-amber-500" }),
+                            "Custom Customer Reviews List (",
+                            Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list.length : 0,
+                            ")"
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => {
+                                const current = Array.isArray(settings.google_reviews_list) ? [...settings.google_reviews_list] : [];
+                                current.push({
+                                  author_name: "",
+                                  rating: 5,
+                                  relative_time_description: "recent",
+                                  text: "",
+                                  profile_photo_url: ""
+                                });
+                                setSettings({ ...settings, google_reviews_list: current });
+                              },
+                              className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1 rounded text-xs font-semibold flex items-center gap-1 transition",
+                              children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3 h-3" }),
+                                "Add Custom Review"
+                              ]
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-[#646970]", children: "Optional: You can manually add/edit authentic customer reviews that appear on the website if not fetching automatically via Google Places API." }),
+                        Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3 pt-1", children: settings.google_reviews_list.map((rev, rIdx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-slate-200 rounded p-3 space-y-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-700", children: [
+                              "Reviewer #",
+                              rIdx + 1
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = settings.google_reviews_list.filter((_, idx) => idx !== rIdx);
+                                  setSettings({ ...settings, google_reviews_list: list });
+                                },
+                                className: "text-red-500 hover:text-red-700 p-1",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Author Name" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: rev.author_name || "",
+                                  onChange: (e) => {
+                                    const list = [...settings.google_reviews_list];
+                                    list[rIdx] = { ...list[rIdx], author_name: e.target.value };
+                                    setSettings({ ...settings, google_reviews_list: list });
+                                  },
+                                  placeholder: "e.g. John Doe",
+                                  className: "w-full border border-slate-300 rounded px-2 py-1 text-xs"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Star Rating" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                "select",
+                                {
+                                  value: rev.rating || 5,
+                                  onChange: (e) => {
+                                    const list = [...settings.google_reviews_list];
+                                    list[rIdx] = { ...list[rIdx], rating: parseInt(e.target.value) };
+                                    setSettings({ ...settings, google_reviews_list: list });
+                                  },
+                                  className: "w-full border border-slate-300 rounded px-2 py-1 text-xs bg-white",
+                                  children: [
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 5, children: "⭐⭐⭐⭐⭐ (5 Stars)" }),
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 4, children: "⭐⭐⭐⭐ (4 Stars)" }),
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 3, children: "⭐⭐⭐ (3 Stars)" })
+                                  ]
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Date / Relative Time" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: rev.relative_time_description || "",
+                                  onChange: (e) => {
+                                    const list = [...settings.google_reviews_list];
+                                    list[rIdx] = { ...list[rIdx], relative_time_description: e.target.value };
+                                    setSettings({ ...settings, google_reviews_list: list });
+                                  },
+                                  placeholder: "e.g. 2 weeks ago",
+                                  className: "w-full border border-slate-300 rounded px-2 py-1 text-xs"
+                                }
+                              )
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Review Text" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "textarea",
+                              {
+                                rows: 2,
+                                value: rev.text || "",
+                                onChange: (e) => {
+                                  const list = [...settings.google_reviews_list];
+                                  list[rIdx] = { ...list[rIdx], text: e.target.value };
+                                  setSettings({ ...settings, google_reviews_list: list });
+                                },
+                                placeholder: "Customer review comment...",
+                                className: "w-full border border-slate-300 rounded px-2 py-1 text-xs"
+                              }
+                            )
+                          ] })
+                        ] }, rIdx)) })
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1] flex items-center gap-2", children: "💳 Mollie Payment Gateway" }),
@@ -50934,8 +51133,8 @@ ${escapeText(this.code(index, length))}
         "Fixed & transparent pricing",
         "24/7 dedicated support"
       ];
-      const whatsappNumber = (websiteSettings == null ? void 0 : websiteSettings.whatsapp_number) || "441217140876";
-      const formattedPhone = (websiteSettings == null ? void 0 : websiteSettings.whatsapp_number) ? `+${websiteSettings.whatsapp_number}` : "+44 121 714 0876";
+      const whatsappNumber = (settings == null ? void 0 : settings.whatsapp_number) || "441217140876";
+      const formattedPhone = (settings == null ? void 0 : settings.whatsapp_number) ? `+${settings.whatsapp_number}` : "+44 121 714 0876";
       const defaultPerks = [
         "24/7 Availability & Instant Confirmation",
         "Fixed Price Guarantee — No Hidden Fees",
@@ -51658,6 +51857,7 @@ ${escapeText(this.code(index, length))}
       ] }) });
     }
     function GoogleReviewsSection({ isRenax = false }) {
+      const { settings } = useSettings();
       const [reviewsData, setReviewsData] = reactExports.useState(null);
       const [loading, setLoading] = reactExports.useState(true);
       reactExports.useEffect(() => {
@@ -51675,22 +51875,29 @@ ${escapeText(this.code(index, length))}
           active = false;
         };
       }, []);
+      if ((settings == null ? void 0 : settings.homepage_reviews_enabled) === false) {
+        return null;
+      }
       if (loading && !reviewsData) {
         return null;
       }
       const reviews = (reviewsData == null ? void 0 : reviewsData.reviews) || [];
       if (reviews.length === 0) return null;
-      const rating = (reviewsData == null ? void 0 : reviewsData.overallRating) || 5;
-      const totalCount = (reviewsData == null ? void 0 : reviewsData.totalReviews) || 48;
+      const rating = Number(settings == null ? void 0 : settings.google_reviews_rating) || (reviewsData == null ? void 0 : reviewsData.overallRating) || 5;
+      const totalCount = Number(settings == null ? void 0 : settings.google_reviews_count) || (reviewsData == null ? void 0 : reviewsData.totalReviews) || 48;
+      const mapsUrl = (settings == null ? void 0 : settings.google_business_profile_url) || (reviewsData == null ? void 0 : reviewsData.googleMapsUrl) || "https://maps.google.com";
+      const badgeText = (settings == null ? void 0 : settings.homepage_reviews_badge) || "Verified Client Testimonials";
+      const mainTitle = (settings == null ? void 0 : settings.homepage_reviews_title) || "Trusted by Discerning Travelers";
+      const subtitle = (settings == null ? void 0 : settings.homepage_reviews_subtitle) || "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel.";
       return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: `py-20 sm:py-24 relative overflow-hidden transition-colors ${isRenax ? "bg-[#08090d] border-t border-slate-900/80 text-white" : "bg-white border-t border-slate-200/80 text-slate-900"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-2xl", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-3 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-3.5 h-3.5 text-emerald-400" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Verified Client Testimonials" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: badgeText })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: `text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isRenax ? "text-white" : "text-slate-900"}`, children: "Trusted by Discerning Travelers" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `mt-3 text-base sm:text-lg ${isRenax ? "text-slate-400" : "text-slate-600"}`, children: "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel." })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: `text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isRenax ? "text-white" : "text-slate-900"}`, children: mainTitle }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `mt-3 text-base sm:text-lg ${isRenax ? "text-slate-400" : "text-slate-600"}`, children: subtitle })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `p-5 rounded-2xl border shrink-0 flex items-center gap-4 ${isRenax ? "bg-[#10121a] border-slate-800" : "bg-slate-50 border-slate-200 shadow-sm"}`, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-2.5 shrink-0 border border-slate-100", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 24 24", className: "w-full h-full", children: [
@@ -51725,96 +51932,107 @@ ${escapeText(this.code(index, length))}
             ] }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 mb-1", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xl font-extrabold ${isRenax ? "text-white" : "text-slate-900"}`, children: rating.toFixed(1) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-2xl font-black ${isRenax ? "text-white" : "text-slate-900"}`, children: Number(rating).toFixed(1) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex text-amber-400", children: [...Array(5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: `text-xs ${isRenax ? "text-slate-400" : "text-slate-500"}`, children: [
-                "Based on ",
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold", children: [
-                  totalCount,
-                  "+ reviews"
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `text-xs ${isRenax ? "text-slate-400" : "text-slate-500"}`, children: [
+                  "Based on ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("strong", { children: [
+                    totalCount,
+                    " Google Reviews"
+                  ] })
                 ] }),
-                " on Google"
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "a",
+                  {
+                    href: mapsUrl,
+                    target: "_blank",
+                    rel: "noreferrer",
+                    className: "text-xs text-emerald-500 hover:text-emerald-400 font-semibold inline-flex items-center gap-0.5 hover:underline",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "View All" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3 h-3" })
+                    ]
+                  }
+                )
               ] })
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: reviews.slice(0, 4).map((rev, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: reviews.slice(0, 4).map((review, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
-            className: `rounded-2xl p-6 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${isRenax ? "bg-[#0d0e14] border-slate-800/80 hover:border-slate-700 shadow-lg shadow-black/40" : "bg-white border-slate-200/90 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-600/5 shadow-sm"}`,
+            className: `p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${isRenax ? "bg-[#0f1118]/90 border-slate-800/80 hover:border-emerald-500/40" : "bg-white border-slate-200/90 shadow-sm hover:border-slate-300"}`,
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 text-amber-400 mb-4", children: [...Array(rev.rating || 5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: `text-sm leading-relaxed mb-6 ${isRenax ? "text-slate-300" : "text-slate-600"}`, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 text-amber-400 mb-4", children: [...Array(review.rating || 5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: `text-sm leading-relaxed mb-6 font-normal ${isRenax ? "text-slate-300" : "text-slate-700"}`, children: [
                   '"',
-                  rev.text,
+                  review.text,
                   '"'
                 ] })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `pt-4 border-t flex items-center justify-between ${isRenax ? "border-slate-800/80" : "border-slate-100"}`, children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                  rev.profile_photo_url ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  review.profile_photo_url ? /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "img",
                     {
-                      src: rev.profile_photo_url,
-                      alt: rev.author_name,
-                      className: "w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                      src: review.profile_photo_url,
+                      alt: review.author_name,
+                      className: "w-9 h-9 rounded-full object-cover border border-slate-200"
                     }
-                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs", children: rev.author_name.charAt(0) }),
+                  ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-500 font-bold flex items-center justify-center text-sm border border-emerald-500/30", children: review.author_name ? review.author_name.charAt(0) : "G" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: `text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`, children: rev.author_name }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[10px] ${isRenax ? "text-slate-500" : "text-slate-400"}`, children: rev.relative_time_description || "Verified Google Review" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: `text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`, children: review.author_name }),
+                    review.relative_time_description && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[11px] ${isRenax ? "text-slate-500" : "text-slate-400"}`, children: review.relative_time_description })
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 24 24", className: "w-4 h-4 opacity-70", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "path",
-                    {
-                      fill: "#4285F4",
-                      d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "path",
-                    {
-                      fill: "#34A853",
-                      d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "path",
-                    {
-                      fill: "#FBBC05",
-                      d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    "path",
-                    {
-                      fill: "#EA4335",
-                      d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                    }
-                  )
-                ] })
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "a",
+                  {
+                    href: mapsUrl,
+                    target: "_blank",
+                    rel: "noreferrer",
+                    title: "Verified Google Review",
+                    className: "w-5 h-5 opacity-80 hover:opacity-100 transition",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 24 24", className: "w-full h-full", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "path",
+                        {
+                          fill: "#4285F4",
+                          d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "path",
+                        {
+                          fill: "#34A853",
+                          d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "path",
+                        {
+                          fill: "#FBBC05",
+                          d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "path",
+                        {
+                          fill: "#EA4335",
+                          d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                        }
+                      )
+                    ] })
+                  }
+                )
               ] })
             ]
           },
-          index
-        )) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-10 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "a",
-          {
-            href: (reviewsData == null ? void 0 : reviewsData.googleMapsUrl) || "https://maps.google.com",
-            target: "_blank",
-            rel: "noopener noreferrer",
-            className: `inline-flex items-center gap-2 text-xs font-bold transition ${isRenax ? "text-emerald-400 hover:text-emerald-300" : "text-emerald-700 hover:text-emerald-800"}`,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Read all reviews on Google Business Profile" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-3.5 h-3.5" })
-            ]
-          }
-        ) })
+          idx
+        )) })
       ] }) });
     }
     function RenaxLayout({

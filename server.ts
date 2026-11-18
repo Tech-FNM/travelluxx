@@ -2563,6 +2563,16 @@ function extractPlaceIdentifier(input: string): { placeId?: string; cid?: string
     return { placeId: trimmed };
   }
 
+  // Check for hex CID pair in Google Maps URLs (!1s0x...:0x...)
+  // e.g. !1s0x478a6a6e33d30571:0xba67a9ca79388dca -> decimal CID: 13431891100738031050
+  const hexMatch = trimmed.match(/!1s(0x[0-9a-fA-F]+):(0x[0-9a-fA-F]+)/);
+  if (hexMatch) {
+    try {
+      const cidDecimal = BigInt(hexMatch[2]).toString(10);
+      return { cid: cidDecimal };
+    } catch (e) {}
+  }
+
   // Check for cid parameter (e.g. ?cid=1234567890 or &cid=...)
   const cidMatch = trimmed.match(/[?&]cid=([0-9]+)/);
   if (cidMatch) {
