@@ -51,11 +51,12 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
     return null;
   }
 
-  if (loading && !reviewsData) {
-    return null;
-  }
+  // If dashboard has custom reviews configured in settings, use them directly with instant sync
+  const customSettingsReviews = Array.isArray(settings?.google_reviews_list) && settings.google_reviews_list.length > 0
+    ? settings.google_reviews_list
+    : null;
 
-  const reviews = reviewsData?.reviews || [];
+  const reviews = customSettingsReviews || reviewsData?.reviews || [];
   if (reviews.length === 0) return null;
 
   const rating = Number(settings?.google_reviews_rating) || reviewsData?.overallRating || 5.0;

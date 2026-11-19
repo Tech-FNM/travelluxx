@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-5rRH0TwF.js"(exports, module) {
+  "assets/index-yb9ENzj4.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -41488,6 +41488,10 @@ ${escapeText(this.code(index, length))}
       onXTitleChange,
       xDescription = "",
       onXDescriptionChange,
+      socialImage = "",
+      onSocialImageChange,
+      xImage = "",
+      onXImageChange,
       customSchema = "",
       onCustomSchemaChange
     }) {
@@ -41495,6 +41499,12 @@ ${escapeText(this.code(index, length))}
       const [localOgDesc, setLocalOgDesc] = reactExports.useState(ogDescription);
       const [localXTitle, setLocalXTitle] = reactExports.useState(xTitle);
       const [localXDesc, setLocalXDesc] = reactExports.useState(xDescription);
+      const [localSocialImg, setLocalSocialImg] = reactExports.useState(socialImage);
+      const [localXImg, setLocalXImg] = reactExports.useState(xImage);
+      const [uploadingSocialImg, setUploadingSocialImg] = reactExports.useState(false);
+      const [uploadingXImg, setUploadingXImg] = reactExports.useState(false);
+      const socialFileInputRef = reactExports.useRef(null);
+      const xFileInputRef = reactExports.useRef(null);
       reactExports.useEffect(() => {
         setLocalOgTitle(ogTitle);
       }, [ogTitle]);
@@ -41507,6 +41517,68 @@ ${escapeText(this.code(index, length))}
       reactExports.useEffect(() => {
         setLocalXDesc(xDescription);
       }, [xDescription]);
+      reactExports.useEffect(() => {
+        setLocalSocialImg(socialImage);
+      }, [socialImage]);
+      reactExports.useEffect(() => {
+        setLocalXImg(xImage);
+      }, [xImage]);
+      const handleSocialFile = async (e) => {
+        var _a;
+        const file = (_a = e.target.files) == null ? void 0 : _a[0];
+        if (!file) return;
+        setUploadingSocialImg(true);
+        try {
+          const reader = new FileReader();
+          const base64 = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+          const res = await fetch("/api/admin/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename: file.name, data: base64 })
+          });
+          const json = await res.json();
+          if (json.url) {
+            setLocalSocialImg(json.url);
+            onSocialImageChange && onSocialImageChange(json.url);
+          }
+        } catch (err) {
+          console.error("Social image upload error:", err);
+        } finally {
+          setUploadingSocialImg(false);
+        }
+      };
+      const handleXFile = async (e) => {
+        var _a;
+        const file = (_a = e.target.files) == null ? void 0 : _a[0];
+        if (!file) return;
+        setUploadingXImg(true);
+        try {
+          const reader = new FileReader();
+          const base64 = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+          const res = await fetch("/api/admin/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename: file.name, data: base64 })
+          });
+          const json = await res.json();
+          if (json.url) {
+            setLocalXImg(json.url);
+            onXImageChange && onXImageChange(json.url);
+          }
+        } catch (err) {
+          console.error("X image upload error:", err);
+        } finally {
+          setUploadingXImg(false);
+        }
+      };
       const finalTitle = metaTitle || title || "Please enter a title";
       const finalSlug = slug || "slug-url";
       const finalDesc = metaDescription || "Please provide a meta description by editing the SEO settings below to see how this page will look in Google.";
@@ -41728,19 +41800,55 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide", children: "Social share preview" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded-sm bg-white overflow-hidden max-w-lg shadow-sm", children: [
-                    image ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: image, alt: "Social preview", className: "w-full h-full object-cover" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400", children: "No image set" }),
+                    localSocialImg || image ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: localSocialImg || image, alt: "Social preview", className: "w-full h-full object-cover" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400", children: "No image set" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 bg-[#f2f3f5] font-sans text-xs", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-[#606770] uppercase tracking-wide", children: "travelluxx.co.uk" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1", children: title || (contentType === "post" ? "Post Title" : "Page Title") }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[#606770] mt-0.5 line-clamp-2 leading-relaxed", children: excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...") })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1", children: localOgTitle || title || (contentType === "post" ? "Post Title" : "Page Title") }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[#606770] mt-0.5 line-clamp-2 leading-relaxed", children: localOgDesc || excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...") })
                     ] })
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide", children: "Social image" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 border border-dashed border-[#8c8f94] bg-slate-50 flex items-center justify-center rounded-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-6 h-6 text-slate-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "1.5", d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 px-3 py-1.5 rounded-sm font-semibold transition bg-white", children: "Select image" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 border border-dashed border-[#8c8f94] bg-slate-50 flex items-center justify-center rounded-sm overflow-hidden", children: localSocialImg ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: localSocialImg, alt: "Social", className: "w-full h-full object-cover" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-6 h-6 text-slate-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "1.5", d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" }) }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            var _a;
+                            return (_a = socialFileInputRef.current) == null ? void 0 : _a.click();
+                          },
+                          disabled: uploadingSocialImg,
+                          className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 px-3 py-1.5 rounded-sm font-semibold transition bg-white disabled:opacity-50",
+                          children: uploadingSocialImg ? "Uploading..." : localSocialImg ? "Replace image" : "Select image"
+                        }
+                      ),
+                      localSocialImg && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            setLocalSocialImg("");
+                            onSocialImageChange && onSocialImageChange("");
+                          },
+                          className: "text-red-600 hover:underline text-xs",
+                          children: "Remove"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        ref: socialFileInputRef,
+                        type: "file",
+                        accept: "image/*",
+                        className: "hidden",
+                        onChange: handleSocialFile
+                      }
+                    )
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -41800,7 +41908,7 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide", children: "X share preview" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-[#c3c4c7] rounded-sm bg-white overflow-hidden max-w-lg shadow-sm", children: [
-                    image ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: image, alt: "X preview", className: "w-full h-full object-cover" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400", children: "No image set" }),
+                    localXImg || localSocialImg || image ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: localXImg || localSocialImg || image, alt: "X preview", className: "w-full h-full object-cover" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400", children: "No image set" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 bg-white font-sans text-xs", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-[#606770] uppercase tracking-wide", children: "travelluxx.co.uk" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1", children: localXTitle || localOgTitle || title || (contentType === "post" ? "Post Title" : "Page Title") }),
@@ -41811,8 +41919,44 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase mb-1.5 tracking-wide", children: "X image" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 border border-dashed border-[#8c8f94] bg-slate-50 flex items-center justify-center rounded-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-6 h-6 text-slate-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "1.5", d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" }) }) }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 px-3 py-1.5 rounded-sm font-semibold transition bg-white", children: "Select image" })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 border border-dashed border-[#8c8f94] bg-slate-50 flex items-center justify-center rounded-sm overflow-hidden", children: localXImg ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: localXImg, alt: "X", className: "w-full h-full object-cover" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "w-6 h-6 text-slate-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "1.5", d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" }) }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            var _a;
+                            return (_a = xFileInputRef.current) == null ? void 0 : _a.click();
+                          },
+                          disabled: uploadingXImg,
+                          className: "border border-[#2271b1] text-[#2271b1] hover:bg-slate-50 px-3 py-1.5 rounded-sm font-semibold transition bg-white disabled:opacity-50",
+                          children: uploadingXImg ? "Uploading..." : localXImg ? "Replace image" : "Select image"
+                        }
+                      ),
+                      localXImg && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "button",
+                        {
+                          type: "button",
+                          onClick: () => {
+                            setLocalXImg("");
+                            onXImageChange && onXImageChange("");
+                          },
+                          className: "text-red-600 hover:underline text-xs",
+                          children: "Remove"
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        ref: xFileInputRef,
+                        type: "file",
+                        accept: "image/*",
+                        className: "hidden",
+                        onChange: handleXFile
+                      }
+                    )
                   ] })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -43622,7 +43766,21 @@ ${escapeText(this.code(index, length))}
                         excerpt: postForm.excerpt,
                         onMetaTitleChange: (v) => setPostForm((prev) => ({ ...prev, metaTitle: v })),
                         onSlugChange: (v) => setPostForm((prev) => ({ ...prev, slug: v })),
-                        onMetaDescriptionChange: (v) => setPostForm((prev) => ({ ...prev, metaDescription: v }))
+                        onMetaDescriptionChange: (v) => setPostForm((prev) => ({ ...prev, metaDescription: v })),
+                        ogTitle: postForm.ogTitle || "",
+                        onOgTitleChange: (v) => setPostForm((prev) => ({ ...prev, ogTitle: v })),
+                        ogDescription: postForm.ogDescription || "",
+                        onOgDescriptionChange: (v) => setPostForm((prev) => ({ ...prev, ogDescription: v })),
+                        xTitle: postForm.xTitle || "",
+                        onXTitleChange: (v) => setPostForm((prev) => ({ ...prev, xTitle: v })),
+                        xDescription: postForm.xDescription || "",
+                        onXDescriptionChange: (v) => setPostForm((prev) => ({ ...prev, xDescription: v })),
+                        socialImage: postForm.socialImage || "",
+                        onSocialImageChange: (v) => setPostForm((prev) => ({ ...prev, socialImage: v })),
+                        xImage: postForm.xImage || "",
+                        onXImageChange: (v) => setPostForm((prev) => ({ ...prev, xImage: v })),
+                        customSchema: postForm.customSchema || "",
+                        onCustomSchemaChange: (v) => setPostForm((prev) => ({ ...prev, customSchema: v }))
                       }
                     ),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm shadow-sm mt-6", children: [
@@ -44895,7 +45053,21 @@ ${escapeText(this.code(index, length))}
                         onMetaTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_title: v })),
                         onSlugChange: () => {
                         },
-                        onMetaDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_description: v }))
+                        onMetaDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_seo_description: v })),
+                        ogTitle: settings.homepage_og_title || "",
+                        onOgTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_og_title: v })),
+                        ogDescription: settings.homepage_og_description || "",
+                        onOgDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_og_description: v })),
+                        xTitle: settings.homepage_x_title || "",
+                        onXTitleChange: (v) => setSettings((prev) => ({ ...prev, homepage_x_title: v })),
+                        xDescription: settings.homepage_x_description || "",
+                        onXDescriptionChange: (v) => setSettings((prev) => ({ ...prev, homepage_x_description: v })),
+                        socialImage: settings.homepage_social_image || "",
+                        onSocialImageChange: (v) => setSettings((prev) => ({ ...prev, homepage_social_image: v })),
+                        xImage: settings.homepage_x_image || "",
+                        onXImageChange: (v) => setSettings((prev) => ({ ...prev, homepage_x_image: v })),
+                        customSchema: settings.homepage_custom_schema || "",
+                        onCustomSchemaChange: (v) => setSettings((prev) => ({ ...prev, homepage_custom_schema: v }))
                       }
                     )
                   ] }),
@@ -45183,7 +45355,11 @@ ${escapeText(this.code(index, length))}
                         xDescription: servicesPageSettings.x_description || "",
                         onXDescriptionChange: (v) => setServicesPageSettings({ ...servicesPageSettings, x_description: v }),
                         customSchema: servicesPageSettings.custom_schema || "",
-                        onCustomSchemaChange: (v) => setServicesPageSettings({ ...servicesPageSettings, custom_schema: v })
+                        onCustomSchemaChange: (v) => setServicesPageSettings({ ...servicesPageSettings, custom_schema: v }),
+                        socialImage: servicesPageSettings.social_image || "",
+                        onSocialImageChange: (v) => setServicesPageSettings({ ...servicesPageSettings, social_image: v }),
+                        xImage: servicesPageSettings.x_image || "",
+                        onXImageChange: (v) => setServicesPageSettings({ ...servicesPageSettings, x_image: v })
                       }
                     )
                   ] }),
@@ -45363,7 +45539,21 @@ ${escapeText(this.code(index, length))}
                         excerpt: "",
                         onMetaTitleChange: (v) => setPageForm((prev) => ({ ...prev, metaTitle: v })),
                         onSlugChange: (v) => setPageForm((prev) => ({ ...prev, slug: v })),
-                        onMetaDescriptionChange: (v) => setPageForm((prev) => ({ ...prev, metaDescription: v }))
+                        onMetaDescriptionChange: (v) => setPageForm((prev) => ({ ...prev, metaDescription: v })),
+                        ogTitle: pageForm.ogTitle || "",
+                        onOgTitleChange: (v) => setPageForm((prev) => ({ ...prev, ogTitle: v })),
+                        ogDescription: pageForm.ogDescription || "",
+                        onOgDescriptionChange: (v) => setPageForm((prev) => ({ ...prev, ogDescription: v })),
+                        xTitle: pageForm.xTitle || "",
+                        onXTitleChange: (v) => setPageForm((prev) => ({ ...prev, xTitle: v })),
+                        xDescription: pageForm.xDescription || "",
+                        onXDescriptionChange: (v) => setPageForm((prev) => ({ ...prev, xDescription: v })),
+                        socialImage: pageForm.socialImage || "",
+                        onSocialImageChange: (v) => setPageForm((prev) => ({ ...prev, socialImage: v })),
+                        xImage: pageForm.xImage || "",
+                        onXImageChange: (v) => setPageForm((prev) => ({ ...prev, xImage: v })),
+                        customSchema: pageForm.customSchema || "",
+                        onCustomSchemaChange: (v) => setPageForm((prev) => ({ ...prev, customSchema: v }))
                       }
                     )
                   ] }),
@@ -47840,7 +48030,21 @@ ${escapeText(this.code(index, length))}
                         excerpt: serviceForm.excerpt,
                         onMetaTitleChange: (v) => setServiceForm((prev) => ({ ...prev, metaTitle: v })),
                         onSlugChange: (v) => setServiceForm((prev) => ({ ...prev, slug: v })),
-                        onMetaDescriptionChange: (v) => setServiceForm((prev) => ({ ...prev, metaDescription: v }))
+                        onMetaDescriptionChange: (v) => setServiceForm((prev) => ({ ...prev, metaDescription: v })),
+                        ogTitle: serviceForm.ogTitle || "",
+                        onOgTitleChange: (v) => setServiceForm((prev) => ({ ...prev, ogTitle: v })),
+                        ogDescription: serviceForm.ogDescription || "",
+                        onOgDescriptionChange: (v) => setServiceForm((prev) => ({ ...prev, ogDescription: v })),
+                        xTitle: serviceForm.xTitle || "",
+                        onXTitleChange: (v) => setServiceForm((prev) => ({ ...prev, xTitle: v })),
+                        xDescription: serviceForm.xDescription || "",
+                        onXDescriptionChange: (v) => setServiceForm((prev) => ({ ...prev, xDescription: v })),
+                        socialImage: serviceForm.socialImage || "",
+                        onSocialImageChange: (v) => setServiceForm((prev) => ({ ...prev, socialImage: v })),
+                        xImage: serviceForm.xImage || "",
+                        onXImageChange: (v) => setServiceForm((prev) => ({ ...prev, xImage: v })),
+                        customSchema: serviceForm.customSchema || "",
+                        onCustomSchemaChange: (v) => setServiceForm((prev) => ({ ...prev, customSchema: v }))
                       }
                     )
                   ] }),
@@ -49398,44 +49602,16 @@ ${escapeText(this.code(index, length))}
                         ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Total Verified Reviews Count (e.g. 48)" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "button",
-                              {
-                                type: "button",
-                                onClick: () => setSettings({
-                                  ...settings,
-                                  google_reviews_count: Math.max(1, (Number(settings.google_reviews_count) || 48) - 1)
-                                }),
-                                className: "w-8 h-[34px] flex items-center justify-center bg-white hover:bg-slate-100 border border-[#8c8f94] border-r-0 rounded-l text-slate-700 font-bold text-sm select-none transition",
-                                title: "Decrease",
-                                children: "-"
-                              }
-                            ),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "input",
-                              {
-                                type: "number",
-                                min: "1",
-                                value: settings.google_reviews_count !== void 0 ? settings.google_reviews_count : 48,
-                                onChange: (e) => setSettings({ ...settings, google_reviews_count: Math.max(1, parseInt(e.target.value) || 1) }),
-                                className: "w-full border border-[#8c8f94] px-3 py-1.5 text-xs text-center focus:outline-none focus:border-[#2271b1] bg-white text-black font-semibold h-[34px]"
-                              }
-                            ),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "button",
-                              {
-                                type: "button",
-                                onClick: () => setSettings({
-                                  ...settings,
-                                  google_reviews_count: (Number(settings.google_reviews_count) || 48) + 1
-                                }),
-                                className: "w-8 h-[34px] flex items-center justify-center bg-white hover:bg-slate-100 border border-[#8c8f94] border-l-0 rounded-r text-slate-700 font-bold text-sm select-none transition",
-                                title: "Increase",
-                                children: "+"
-                              }
-                            )
-                          ] })
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.google_reviews_count !== void 0 ? settings.google_reviews_count : "48",
+                              onChange: (e) => setSettings({ ...settings, google_reviews_count: e.target.value }),
+                              placeholder: "e.g. 48",
+                              className: "w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            }
+                          )
                         ] })
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-3 border-t border-slate-200 space-y-3", children: [
@@ -52065,10 +52241,8 @@ ${escapeText(this.code(index, length))}
       if ((settings == null ? void 0 : settings.homepage_reviews_enabled) === false) {
         return null;
       }
-      if (loading && !reviewsData) {
-        return null;
-      }
-      const reviews = (reviewsData == null ? void 0 : reviewsData.reviews) || [];
+      const customSettingsReviews = Array.isArray(settings == null ? void 0 : settings.google_reviews_list) && settings.google_reviews_list.length > 0 ? settings.google_reviews_list : null;
+      const reviews = customSettingsReviews || (reviewsData == null ? void 0 : reviewsData.reviews) || [];
       if (reviews.length === 0) return null;
       const rating = Number(settings == null ? void 0 : settings.google_reviews_rating) || (reviewsData == null ? void 0 : reviewsData.overallRating) || 5;
       const totalCount = Number(settings == null ? void 0 : settings.google_reviews_count) || (reviewsData == null ? void 0 : reviewsData.totalReviews) || 48;

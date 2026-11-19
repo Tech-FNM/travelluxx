@@ -1487,6 +1487,7 @@ app.post("/api/admin/settings", async (req, res) => {
       }
     }
     cachedWebsiteSettings = updated;
+    cachedGoogleReviews = null;
     if (import_mongoose.default.connection.readyState === 1) {
       await SettingModel.findOneAndUpdate({ key: "website" }, { value: updated }, { upsert: true });
       console.log("\u{1F4BE} Saved admin settings to MongoDB!");
@@ -2480,15 +2481,15 @@ app.get("/api/google-reviews", async (req, res) => {
     }
   ];
   if (!apiKey) {
-    const customList = Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 ? settings.google_reviews_list : null;
+    const customList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
     const payload = {
       success: true,
-      source: customList ? "custom_admin" : "curated",
+      source: "custom_admin",
       businessName: settings.business_name || "TravelLuxx",
       overallRating: Number(settings.google_reviews_rating) || 5,
-      totalReviews: Number(settings.google_reviews_count) || (customList ? customList.length : 48),
-      googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
-      reviews: customList || fallbackReviews
+      totalReviews: Number(settings.google_reviews_count) || customList.length,
+      googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com",
+      reviews: customList
     };
     cachedGoogleReviews = { timestamp: now, data: payload };
     return res.json(payload);
@@ -2535,28 +2536,30 @@ app.get("/api/google-reviews", async (req, res) => {
       return res.json(payload);
     } else {
       console.warn("Google Places API response status:", data.status, data.error_message);
+      const fallbackList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
       const payload = {
         success: true,
-        source: "curated",
+        source: "custom_admin",
         businessName: settings.business_name || "TravelLuxx",
-        overallRating: 5,
-        totalReviews: 48,
-        googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
-        reviews: fallbackReviews
+        overallRating: Number(settings.google_reviews_rating) || 5,
+        totalReviews: Number(settings.google_reviews_count) || fallbackList.length,
+        googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com",
+        reviews: fallbackList
       };
       cachedGoogleReviews = { timestamp: now, data: payload };
       return res.json(payload);
     }
   } catch (err) {
     console.error("Google Places Reviews API error:", err.message);
+    const fallbackList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
     const payload = {
       success: true,
-      source: "curated",
+      source: "custom_admin",
       businessName: settings.business_name || "TravelLuxx",
-      overallRating: 5,
-      totalReviews: 48,
-      googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
-      reviews: fallbackReviews
+      overallRating: Number(settings.google_reviews_rating) || 5,
+      totalReviews: Number(settings.google_reviews_count) || fallbackList.length,
+      googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com",
+      reviews: fallbackList
     };
     cachedGoogleReviews = { timestamp: now, data: payload };
     return res.json(payload);
