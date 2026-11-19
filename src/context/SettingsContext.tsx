@@ -62,13 +62,36 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         servicesPageSettingsRes,
         menuItemsRes
       ] = await Promise.all([
-        fetch("/api/settings"),
-        fetch("/api/pages"),
-        fetch("/api/services"),
-        fetch("/api/posts"),
-        fetch("/api/services-page-settings"),
-        fetch("/api/menu")
+        fetch("/api/settings").catch(() => null),
+        fetch("/api/pages").catch(() => null),
+        fetch("/api/services").catch(() => null),
+        fetch("/api/posts").catch(() => null),
+        fetch("/api/services-page-settings").catch(() => null),
+        fetch("/api/menu").catch(() => null)
       ]);
+
+      const safeJson = async (res: Response | null, fallbackUrl?: string) => {
+        if (!res || !res.ok) {
+          if (fallbackUrl) {
+            try {
+              const fb = await fetch(fallbackUrl);
+              if (fb.ok) return await fb.json();
+            } catch (e) {}
+          }
+          return null;
+        }
+        try {
+          return await res.json();
+        } catch (e) {
+          if (fallbackUrl) {
+            try {
+              const fb = await fetch(fallbackUrl);
+              if (fb.ok) return await fb.json();
+            } catch (err) {}
+          }
+          return null;
+        }
+      };
 
       const [
         settingsData,
@@ -78,21 +101,20 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         servicesPageSettingsData,
         menuItemsData
       ] = await Promise.all([
-        settingsRes.json(),
-        pagesRes.json(),
-        servicesRes.json(),
-        postsRes.json(),
-        servicesPageSettingsRes.json(),
-        menuItemsRes.json()
+        safeJson(settingsRes, "/api/admin/settings"),
+        safeJson(pagesRes),
+        safeJson(servicesRes),
+        safeJson(postsRes),
+        safeJson(servicesPageSettingsRes),
+        safeJson(menuItemsRes)
       ]);
 
-      setSettings(settingsData);
-      try {
-        localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
-        localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
-        localStorage.setItem("travelluxx_cached_pages", JSON.stringify(pagesData));
-        localStorage.setItem("travelluxx_cached_services", JSON.stringify(servicesData));
-      } catch (e) {}
+      if (settingsData) {
+        setSettings(settingsData);
+        try {
+          localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
+        } catch (e) {}
+      }
       setPages(Array.isArray(pagesData) ? pagesData : []);
       setServices(Array.isArray(servicesData) ? servicesData : []);
       setPosts(Array.isArray(postsData) ? postsData : []);

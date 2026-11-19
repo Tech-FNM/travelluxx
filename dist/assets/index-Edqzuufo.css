@@ -4572,16 +4572,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .shadow-black\/40 {
-    --tw-shadow-color: #0006;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .shadow-black\/40 {
-      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-black) 40%, transparent) var(--tw-shadow-alpha), transparent);
-    }
-  }
-
   .shadow-black\/60 {
     --tw-shadow-color: #0009;
   }
@@ -4995,10 +4985,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       border-color: var(--color-emerald-200);
     }
 
-    .hover\:border-emerald-300:hover {
-      border-color: var(--color-emerald-300);
-    }
-
     .hover\:border-emerald-400:hover {
       border-color: var(--color-emerald-400);
     }
@@ -5255,10 +5241,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .hover\:text-cyan-400:hover {
       color: var(--color-cyan-400);
-    }
-
-    .hover\:text-emerald-300:hover {
-      color: var(--color-emerald-300);
     }
 
     .hover\:text-emerald-400:hover {
@@ -6047,14 +6029,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
 
   @media (prefers-color-scheme: dark) {
-    .dark\:border-slate-700 {
-      border-color: var(--color-slate-700);
-    }
-
-    .dark\:border-slate-800 {
-      border-color: var(--color-slate-800);
-    }
-
     .dark\:bg-slate-800 {
       background-color: var(--color-slate-800);
     }

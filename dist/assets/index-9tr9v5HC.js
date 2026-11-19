@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-CK9sjYUc.js"(exports, module) {
+  "assets/index-9tr9v5HC.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16209,13 +16209,37 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             servicesPageSettingsRes,
             menuItemsRes
           ] = await Promise.all([
-            fetch("/api/settings"),
-            fetch("/api/pages"),
-            fetch("/api/services"),
-            fetch("/api/posts"),
-            fetch("/api/services-page-settings"),
-            fetch("/api/menu")
+            fetch("/api/settings").catch(() => null),
+            fetch("/api/pages").catch(() => null),
+            fetch("/api/services").catch(() => null),
+            fetch("/api/posts").catch(() => null),
+            fetch("/api/services-page-settings").catch(() => null),
+            fetch("/api/menu").catch(() => null)
           ]);
+          const safeJson = async (res, fallbackUrl) => {
+            if (!res || !res.ok) {
+              if (fallbackUrl) {
+                try {
+                  const fb = await fetch(fallbackUrl);
+                  if (fb.ok) return await fb.json();
+                } catch (e) {
+                }
+              }
+              return null;
+            }
+            try {
+              return await res.json();
+            } catch (e) {
+              if (fallbackUrl) {
+                try {
+                  const fb = await fetch(fallbackUrl);
+                  if (fb.ok) return await fb.json();
+                } catch (err) {
+                }
+              }
+              return null;
+            }
+          };
           const [
             settingsData,
             pagesData,
@@ -16224,20 +16248,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             servicesPageSettingsData,
             menuItemsData
           ] = await Promise.all([
-            settingsRes.json(),
-            pagesRes.json(),
-            servicesRes.json(),
-            postsRes.json(),
-            servicesPageSettingsRes.json(),
-            menuItemsRes.json()
+            safeJson(settingsRes, "/api/admin/settings"),
+            safeJson(pagesRes),
+            safeJson(servicesRes),
+            safeJson(postsRes),
+            safeJson(servicesPageSettingsRes),
+            safeJson(menuItemsRes)
           ]);
-          setSettings(settingsData);
-          try {
-            localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
-            localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
-            localStorage.setItem("travelluxx_cached_pages", JSON.stringify(pagesData));
-            localStorage.setItem("travelluxx_cached_services", JSON.stringify(servicesData));
-          } catch (e) {
+          if (settingsData) {
+            setSettings(settingsData);
+            try {
+              localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
+            } catch (e) {
+            }
           }
           setPages(Array.isArray(pagesData) ? pagesData : []);
           setServices(Array.isArray(servicesData) ? servicesData : []);
@@ -52462,8 +52485,8 @@ ${escapeText(this.code(index, length))}
             }
             el.setAttribute("content", content);
           };
-          const homepageTitle = settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
-          const homepageDesc = settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
+          const homepageTitle = settings.homepage_seo_title || settings.seo_title || settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
+          const homepageDesc = settings.homepage_seo_description || settings.seo_description || settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
           document.title = homepageTitle;
           setMeta("name", "description", homepageDesc);
           let robotsMeta = document.querySelector("meta[name='robots']");

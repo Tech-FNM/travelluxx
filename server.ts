@@ -633,8 +633,8 @@ function resolvePageMetadata(reqUrl: string, settings: any): {
   const baseUrl = "https://travelluxx.co.uk";
   const pathOnly = (reqUrl || "/").split("?")[0].replace(/\/+$/, "") || "/";
   const siteName = settings?.business_name || "TravelLuxx";
-  const defaultTitle = settings?.seo_title || settings?.homepage_meta_title || `${siteName} | Executive Airport Transfers & Chauffeur Service`;
-  const defaultDesc = settings?.seo_description || settings?.homepage_meta_description || "Luxury chauffeur driven private hire and airport transfers across Solihull, Birmingham, and the UK. Reliable executive travel.";
+  const defaultTitle = settings?.homepage_seo_title || settings?.seo_title || settings?.homepage_meta_title || `${siteName} | Executive Airport Transfers & Chauffeur Service`;
+  const defaultDesc = settings?.homepage_seo_description || settings?.seo_description || settings?.homepage_meta_description || "Luxury chauffeur driven private hire and airport transfers across Solihull, Birmingham, and the UK. Reliable executive travel.";
   const defaultImage = settings?.og_image || settings?.hero_image || "https://travelluxx.co.uk/assets/images/travelluxx_logo_1784064660967.webp";
 
   // Default homepage
@@ -1661,6 +1661,16 @@ app.delete("/api/admin/posts/:id", async (req, res) => {
   return res.json({ success: true });
 });
 
+
+// Public Settings Endpoint (matches /api/settings called by frontend)
+app.get("/api/settings", async (req, res) => {
+  try {
+    await connectToDatabase();
+    await syncSettingsFromDb();
+  } catch (e) {}
+  const settings = getCurrentWebsiteSettings();
+  return res.json(settings);
+});
 
 // Admin Settings & Mollie API key update
 app.get("/api/admin/settings", async (req, res) => {

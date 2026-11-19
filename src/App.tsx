@@ -63,8 +63,8 @@ function PublicLandingPage() {
       };
 
       // Set Title and Description
-      const homepageTitle = settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
-      const homepageDesc = settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
+      const homepageTitle = settings.homepage_seo_title || settings.seo_title || settings.homepage_meta_title || "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
+      const homepageDesc = settings.homepage_seo_description || settings.seo_description || settings.homepage_meta_description || "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
       
       document.title = homepageTitle;
       setMeta("name", "description", homepageDesc);
