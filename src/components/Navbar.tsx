@@ -80,7 +80,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
       }`}>
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-20 sm:h-24">
 
           {/* Logo Section */}
           <div className="flex items-center group/logo relative">
@@ -88,10 +88,10 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
               <img
                 src={brandLogo || travelluxxLogoBase64}
                 alt={`${brandName} Logo`}
-                width={210}
-                height={60}
+                width={260}
+                height={80}
                 decoding="async"
-                className="h-12 sm:h-14 w-auto max-w-[180px] sm:max-w-[220px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
+                className="h-14 sm:h-16 md:h-18 w-auto max-w-[210px] sm:max-w-[260px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
                 onError={() => {
                   if (brandLogo !== travelluxxLogoBase64) {
                     setBrandLogo(travelluxxLogoBase64);

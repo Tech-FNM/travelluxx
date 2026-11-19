@@ -2026,12 +2026,14 @@ app.post("/api/admin/upload", async (req, res) => {
   }
 });
 app.get("/api/admin/media", async (req, res) => {
+  const mediaSet = /* @__PURE__ */ new Set();
   try {
     await connectToDatabase();
     if (import_mongoose.default.connection.readyState === 1) {
       const uploads = await UploadModel.find({}, "filename");
-      const urls = uploads.map((u) => `/uploads/${u.filename}`);
-      return res.json(urls);
+      uploads.forEach((u) => {
+        if (u.filename) mediaSet.add(`/uploads/${u.filename}`);
+      });
     }
   } catch (e) {
     console.error("Error fetching media from DB:", e.message);
@@ -2040,11 +2042,35 @@ app.get("/api/admin/media", async (req, res) => {
     const uploadDir = import_path.default.join(process.cwd(), "public", "uploads");
     if (import_fs.default.existsSync(uploadDir)) {
       const files = import_fs.default.readdirSync(uploadDir);
-      return res.json(files.map((f) => `/uploads/${f}`));
+      files.forEach((f) => {
+        if (!f.startsWith(".")) mediaSet.add(`/uploads/${f}`);
+      });
     }
   } catch (e) {
   }
-  return res.json([]);
+  try {
+    const assetsDir = import_path.default.join(process.cwd(), "public", "assets", "images");
+    if (import_fs.default.existsSync(assetsDir)) {
+      const files = import_fs.default.readdirSync(assetsDir);
+      files.forEach((f) => {
+        if (!f.startsWith(".")) mediaSet.add(`/assets/images/${f}`);
+      });
+    }
+  } catch (e) {
+  }
+  try {
+    const publicDir = import_path.default.join(process.cwd(), "public");
+    if (import_fs.default.existsSync(publicDir)) {
+      const rootFiles = import_fs.default.readdirSync(publicDir);
+      rootFiles.forEach((f) => {
+        if (/\.(png|jpe?g|webp|svg)$/i.test(f)) {
+          mediaSet.add(`/${f}`);
+        }
+      });
+    }
+  } catch (e) {
+  }
+  return res.json(Array.from(mediaSet));
 });
 app.delete("/api/admin/media/:filename", async (req, res) => {
   try {

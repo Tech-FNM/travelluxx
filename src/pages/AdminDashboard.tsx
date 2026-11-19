@@ -49,6 +49,10 @@ export function YoastSeoBox({
   onOgTitleChange,
   ogDescription = "",
   onOgDescriptionChange,
+  xTitle = "",
+  onXTitleChange,
+  xDescription = "",
+  onXDescriptionChange,
   customSchema = "",
   onCustomSchemaChange
 }: {
@@ -70,9 +74,33 @@ export function YoastSeoBox({
   onOgTitleChange?: (v: string) => void;
   ogDescription?: string;
   onOgDescriptionChange?: (v: string) => void;
+  xTitle?: string;
+  onXTitleChange?: (v: string) => void;
+  xDescription?: string;
+  onXDescriptionChange?: (v: string) => void;
   customSchema?: string;
   onCustomSchemaChange?: (v: string) => void;
 }) {
+  const [localOgTitle, setLocalOgTitle] = useState(ogTitle);
+  const [localOgDesc, setLocalOgDesc] = useState(ogDescription);
+  const [localXTitle, setLocalXTitle] = useState(xTitle);
+  const [localXDesc, setLocalXDesc] = useState(xDescription);
+
+  useEffect(() => {
+    setLocalOgTitle(ogTitle);
+  }, [ogTitle]);
+
+  useEffect(() => {
+    setLocalOgDesc(ogDescription);
+  }, [ogDescription]);
+
+  useEffect(() => {
+    setLocalXTitle(xTitle);
+  }, [xTitle]);
+
+  useEffect(() => {
+    setLocalXDesc(xDescription);
+  }, [xDescription]);
   const finalTitle = metaTitle || title || "Please enter a title";
   const finalSlug = slug || "slug-url";
   const finalDesc = metaDescription || "Please provide a meta description by editing the SEO settings below to see how this page will look in Google.";
@@ -359,11 +387,19 @@ export function YoastSeoBox({
                   <div className="flex justify-between items-center mb-1">
                     <span className="block text-[11px] font-semibold text-[#646970] uppercase tracking-wide">Social title</span>
                     <div className="flex gap-2">
-                      <button type="button" className="text-[#2271b1] hover:underline font-semibold text-[10px]">Insert variable</button>
-                      <button type="button" className="text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5">✨ Generate social title</button>
+                      <button type="button" onClick={() => { setLocalOgTitle(title); onOgTitleChange && onOgTitleChange(title); }} className="text-[#2271b1] hover:underline font-semibold text-[10px]">Use Title</button>
                     </div>
                   </div>
-                  <input type="text" value={ogTitle} onChange={e => onOgTitleChange && onOgTitleChange(e.target.value)} placeholder={title} className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
+                  <input
+                    type="text"
+                    value={localOgTitle}
+                    onChange={e => {
+                      setLocalOgTitle(e.target.value);
+                      onOgTitleChange && onOgTitleChange(e.target.value);
+                    }}
+                    placeholder={title || "Enter social title..."}
+                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                  />
                 </div>
 
                 {/* Social Description */}
@@ -371,11 +407,19 @@ export function YoastSeoBox({
                   <div className="flex justify-between items-center mb-1">
                     <span className="block text-[11px] font-semibold text-[#646970] uppercase tracking-wide">Social description</span>
                     <div className="flex gap-2">
-                      <button type="button" className="text-[#2271b1] hover:underline font-semibold text-[10px]">Insert variable</button>
-                      <button type="button" className="text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5">✨ Generate social description</button>
+                      <button type="button" onClick={() => { const fallback = metaDescription || excerpt || ""; setLocalOgDesc(fallback); onOgDescriptionChange && onOgDescriptionChange(fallback); }} className="text-[#2271b1] hover:underline font-semibold text-[10px]">Use Description</button>
                     </div>
                   </div>
-                  <textarea rows={3} value={ogDescription} onChange={e => onOgDescriptionChange && onOgDescriptionChange(e.target.value)} placeholder={metaDescription || excerpt} className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
+                  <textarea
+                    rows={3}
+                    value={localOgDesc}
+                    onChange={e => {
+                      setLocalOgDesc(e.target.value);
+                      onOgDescriptionChange && onOgDescriptionChange(e.target.value);
+                    }}
+                    placeholder={metaDescription || excerpt || "Enter social description..."}
+                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                  />
                 </div>
               </div>
             </div>
@@ -407,10 +451,10 @@ export function YoastSeoBox({
                     <div className="p-3 bg-white font-sans text-xs">
                       <div className="text-[10px] text-[#606770] uppercase tracking-wide">travelluxx.co.uk</div>
                       <div className="font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1">
-                        {title || (contentType === "post" ? "Post Title" : "Page Title")}
+                        {localXTitle || localOgTitle || title || (contentType === "post" ? "Post Title" : "Page Title")}
                       </div>
                       <div className="text-[#606770] mt-0.5 line-clamp-2 leading-relaxed">
-                        {excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...")}
+                        {localXDesc || localOgDesc || excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...")}
                       </div>
                     </div>
                   </div>
@@ -434,11 +478,19 @@ export function YoastSeoBox({
                   <div className="flex justify-between items-center mb-1">
                     <span className="block text-[11px] font-semibold text-[#646970] uppercase tracking-wide">X title</span>
                     <div className="flex gap-2">
-                      <button type="button" className="text-[#2271b1] hover:underline font-semibold text-[10px]">Insert variable</button>
-                      <button type="button" className="text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5">✨ Generate social title</button>
+                      <button type="button" onClick={() => { const val = localOgTitle || title; setLocalXTitle(val); onXTitleChange && onXTitleChange(val); }} className="text-[#2271b1] hover:underline font-semibold text-[10px]">Copy from Social</button>
                     </div>
                   </div>
-                  <input type="text" className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
+                  <input
+                    type="text"
+                    value={localXTitle}
+                    onChange={e => {
+                      setLocalXTitle(e.target.value);
+                      onXTitleChange && onXTitleChange(e.target.value);
+                    }}
+                    placeholder={localOgTitle || title || "Enter X title..."}
+                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                  />
                 </div>
 
                 {/* X Description */}
@@ -446,11 +498,19 @@ export function YoastSeoBox({
                   <div className="flex justify-between items-center mb-1">
                     <span className="block text-[11px] font-semibold text-[#646970] uppercase tracking-wide">X description</span>
                     <div className="flex gap-2">
-                      <button type="button" className="text-[#2271b1] hover:underline font-semibold text-[10px]">Insert variable</button>
-                      <button type="button" className="text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5">✨ Generate social description</button>
+                      <button type="button" onClick={() => { const val = localOgDesc || metaDescription || excerpt || ""; setLocalXDesc(val); onXDescriptionChange && onXDescriptionChange(val); }} className="text-[#2271b1] hover:underline font-semibold text-[10px]">Copy from Social</button>
                     </div>
                   </div>
-                  <textarea rows={3} className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" />
+                  <textarea
+                    rows={3}
+                    value={localXDesc}
+                    onChange={e => {
+                      setLocalXDesc(e.target.value);
+                      onXDescriptionChange && onXDescriptionChange(e.target.value);
+                    }}
+                    placeholder={localOgDesc || metaDescription || excerpt || "Enter X description..."}
+                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                  />
                 </div>
               </div>
             </div>
@@ -623,6 +683,7 @@ export default function AdminDashboard() {
   const [yoastPostTab, setYoastPostTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [yoastPageTab, setYoastPageTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [yoastHomeTab, setYoastHomeTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
+  const [yoastServicesTab, setYoastServicesTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [focusKeyphrasePost, setFocusKeyphrasePost] = useState("");
   const [focusKeyphrasePage, setFocusKeyphrasePage] = useState("");
   const [editingHomepage, setEditingHomepage] = useState(false);
@@ -848,15 +909,23 @@ export default function AdminDashboard() {
       } else if (routeSubtab === "homepage") {
         setEditingHomepage(true);
         setEditingServicesPage(false);
+        setEditingServiceAreasPage(false);
         setEditingPage(undefined);
       } else if (routeSubtab === "services-page") {
         setEditingServicesPage(true);
         setEditingHomepage(false);
+        setEditingServiceAreasPage(false);
+        setEditingPage(undefined);
+      } else if (routeSubtab === "service-areas-page") {
+        setEditingServiceAreasPage(true);
+        setEditingHomepage(false);
+        setEditingServicesPage(false);
         setEditingPage(undefined);
       } else {
         setEditingPage(undefined);
         setEditingHomepage(false);
         setEditingServicesPage(false);
+        setEditingServiceAreasPage(false);
       }
     }
   }, [routeTab, routeSubtab, routeId, pages, token]);
@@ -3736,33 +3805,33 @@ export default function AdminDashboard() {
                           </div>
                         </div>
 
-                        {/* 3. SEO Meta Tags */}
-                        <div className="bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4">
-                          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-[#f0f0f1] pb-2">
-                            <Globe className="w-4 h-4 text-emerald-600" />
-                            3. Services Page SEO &amp; Meta Tags
-                          </h3>
-                          <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">SEO Meta Title</label>
-                            <input
-                              type="text"
-                              value={servicesPageSettings.meta_title || ""}
-                              onChange={e => setServicesPageSettings({ ...servicesPageSettings, meta_title: e.target.value })}
-                              className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                              placeholder="Premium Chauffeur & Airport Travel Services | TravelLuxx UK"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide">SEO Meta Description</label>
-                            <textarea
-                              rows={2}
-                              value={servicesPageSettings.meta_description || ""}
-                              onChange={e => setServicesPageSettings({ ...servicesPageSettings, meta_description: e.target.value })}
-                              className="w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                              placeholder="Explore TravelLuxx's premier private travel solutions across the UK..."
-                            />
-                          </div>
-                        </div>
+                        {/* 3. Yoast SEO Box for Services Main Page */}
+                        <YoastSeoBox
+                          tab={yoastServicesTab}
+                          setTab={setYoastServicesTab}
+                          focusKeyphrase={servicesPageSettings.focus_keyphrase || ""}
+                          setFocusKeyphrase={v => setServicesPageSettings({ ...servicesPageSettings, focus_keyphrase: v })}
+                          title={servicesPageSettings.hero_title || "Our Services"}
+                          slug="services"
+                          metaTitle={servicesPageSettings.meta_title || ""}
+                          metaDescription={servicesPageSettings.meta_description || ""}
+                          contentType="page"
+                          image={servicesPageSettings.hero_image || ""}
+                          excerpt={servicesPageSettings.hero_description || ""}
+                          onMetaTitleChange={v => setServicesPageSettings({ ...servicesPageSettings, meta_title: v })}
+                          onSlugChange={() => {}}
+                          onMetaDescriptionChange={v => setServicesPageSettings({ ...servicesPageSettings, meta_description: v })}
+                          ogTitle={servicesPageSettings.og_title || ""}
+                          onOgTitleChange={v => setServicesPageSettings({ ...servicesPageSettings, og_title: v })}
+                          ogDescription={servicesPageSettings.og_description || ""}
+                          onOgDescriptionChange={v => setServicesPageSettings({ ...servicesPageSettings, og_description: v })}
+                          xTitle={servicesPageSettings.x_title || ""}
+                          onXTitleChange={v => setServicesPageSettings({ ...servicesPageSettings, x_title: v })}
+                          xDescription={servicesPageSettings.x_description || ""}
+                          onXDescriptionChange={v => setServicesPageSettings({ ...servicesPageSettings, x_description: v })}
+                          customSchema={servicesPageSettings.custom_schema || ""}
+                          onCustomSchemaChange={v => setServicesPageSettings({ ...servicesPageSettings, custom_schema: v })}
+                        />
                       </div>
 
                       {/* Right Sidebar */}
@@ -7971,25 +8040,9 @@ export default function AdminDashboard() {
                                 Google Business Profile &amp; Reviews Integration
                               </h2>
                             </div>
-                            <button
-                              type="button"
-                              onClick={handleSyncGoogleReviews}
-                              disabled={syncingReviews}
-                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1.5 transition disabled:opacity-50 shrink-0"
-                            >
-                              {syncingReviews ? (
-                                <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
-                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                </svg>
-                              ) : (
-                                <Sparkles className="w-3.5 h-3.5" />
-                              )}
-                              <span>{syncingReviews ? "Syncing..." : "Sync Now (Refresh Reviews)"}</span>
-                            </button>
                           </div>
                           <p className="text-[#646970] text-xs leading-relaxed">
-                            Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and fetch authentic customer reviews from this Google profile.
+                            Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and display your verified reviews with direct link to your Google profile.
                           </p>
 
                           <div>
@@ -8006,48 +8059,6 @@ export default function AdminDashboard() {
                             <p className="text-[#646970] text-[10px] mt-1">
                               Example: <span className="font-mono">https://maps.google.com/?cid=...</span> or your business search URL.
                             </p>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                            <div>
-                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">
-                                Google Places API Key (Optional for live sync)
-                              </label>
-                              <div className="relative">
-                                <input
-                                  type={showPlacesApiKey ? "text" : "password"}
-                                  value={settings.google_places_api_key || ""}
-                                  onChange={e => setSettings({ ...settings, google_places_api_key: e.target.value })}
-                                  placeholder="AIzaSy..."
-                                  className="w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => setShowPlacesApiKey(!showPlacesApiKey)}
-                                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#50575e] hover:text-[#1d2327] transition"
-                                >
-                                  {showPlacesApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                </button>
-                              </div>
-                              <p className="text-[#646970] text-[10px] mt-1">
-                                If empty, the system displays verified TravelLuxx 5-star customer testimonials with direct link to your Google page.
-                              </p>
-                            </div>
-                            <div>
-                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">
-                                Google Place ID (Optional)
-                              </label>
-                              <input
-                                type="text"
-                                value={settings.google_place_id || ""}
-                                onChange={e => setSettings({ ...settings, google_place_id: e.target.value })}
-                                placeholder="ChIJ..."
-                                className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                              />
-                              <p className="text-[#646970] text-[10px] mt-1">
-                                Direct Google Place ID identifier if known.
-                              </p>
-                            </div>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
@@ -8069,13 +8080,37 @@ export default function AdminDashboard() {
                               <label className="block text-xs font-semibold text-[#1d2327] mb-1">
                                 Total Verified Reviews Count (e.g. 48)
                               </label>
-                              <input
-                                type="number"
-                                min="1"
-                                value={settings.google_reviews_count || 48}
-                                onChange={e => setSettings({ ...settings, google_reviews_count: parseInt(e.target.value) })}
-                                className="w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                              />
+                              <div className="flex items-center">
+                                <button
+                                  type="button"
+                                  onClick={() => setSettings({
+                                    ...settings,
+                                    google_reviews_count: Math.max(1, (Number(settings.google_reviews_count) || 48) - 1)
+                                  })}
+                                  className="w-8 h-[34px] flex items-center justify-center bg-white hover:bg-slate-100 border border-[#8c8f94] border-r-0 rounded-l text-slate-700 font-bold text-sm select-none transition"
+                                  title="Decrease"
+                                >
+                                  -
+                                </button>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={settings.google_reviews_count !== undefined ? settings.google_reviews_count : 48}
+                                  onChange={e => setSettings({ ...settings, google_reviews_count: Math.max(1, parseInt(e.target.value) || 1) })}
+                                  className="w-full border border-[#8c8f94] px-3 py-1.5 text-xs text-center focus:outline-none focus:border-[#2271b1] bg-white text-black font-semibold h-[34px]"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setSettings({
+                                    ...settings,
+                                    google_reviews_count: (Number(settings.google_reviews_count) || 48) + 1
+                                  })}
+                                  className="w-8 h-[34px] flex items-center justify-center bg-white hover:bg-slate-100 border border-[#8c8f94] border-l-0 rounded-r text-slate-700 font-bold text-sm select-none transition"
+                                  title="Increase"
+                                >
+                                  +
+                                </button>
+                              </div>
                             </div>
                           </div>
 
@@ -8149,7 +8184,7 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
                             <p className="text-[11px] text-[#646970]">
-                              Optional: You can manually add/edit authentic customer reviews that appear on the website if not fetching automatically via Google Places API.
+                              Manage customer reviews that appear in the homepage reviews section. You can add new reviews, edit text/ratings, or remove any review.
                             </p>
 
                             {Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 && (

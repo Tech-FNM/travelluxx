@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-DXG-a5R0.js"(exports, module) {
+  "assets/index-5rRH0TwF.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16427,16 +16427,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ];
       const activeNavItems = Array.isArray(menuItems) && menuItems.length > 0 ? menuItems : fallbackMenuItems;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: `sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']" : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"}`, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-20", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-20 sm:h-24", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center group/logo relative", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative flex items-center justify-center shrink-0 cursor-pointer", onClick: () => onScrollTo("hero"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             "img",
             {
               src: brandLogo || travelluxxLogoBase64,
               alt: `${brandName} Logo`,
-              width: 210,
-              height: 60,
+              width: 260,
+              height: 80,
               decoding: "async",
-              className: "h-12 sm:h-14 w-auto max-w-[180px] sm:max-w-[220px] object-contain transition-transform duration-300 group-hover/logo:scale-105",
+              className: "h-14 sm:h-16 md:h-18 w-auto max-w-[210px] sm:max-w-[260px] object-contain transition-transform duration-300 group-hover/logo:scale-105",
               onError: () => {
                 if (brandLogo !== travelluxxLogoBase64) {
                   setBrandLogo(travelluxxLogoBase64);
@@ -41484,9 +41484,29 @@ ${escapeText(this.code(index, length))}
       onOgTitleChange,
       ogDescription = "",
       onOgDescriptionChange,
+      xTitle = "",
+      onXTitleChange,
+      xDescription = "",
+      onXDescriptionChange,
       customSchema = "",
       onCustomSchemaChange
     }) {
+      const [localOgTitle, setLocalOgTitle] = reactExports.useState(ogTitle);
+      const [localOgDesc, setLocalOgDesc] = reactExports.useState(ogDescription);
+      const [localXTitle, setLocalXTitle] = reactExports.useState(xTitle);
+      const [localXDesc, setLocalXDesc] = reactExports.useState(xDescription);
+      reactExports.useEffect(() => {
+        setLocalOgTitle(ogTitle);
+      }, [ogTitle]);
+      reactExports.useEffect(() => {
+        setLocalOgDesc(ogDescription);
+      }, [ogDescription]);
+      reactExports.useEffect(() => {
+        setLocalXTitle(xTitle);
+      }, [xTitle]);
+      reactExports.useEffect(() => {
+        setLocalXDesc(xDescription);
+      }, [xDescription]);
       const finalTitle = metaTitle || title || "Please enter a title";
       const finalSlug = slug || "slug-url";
       const finalDesc = metaDescription || "Please provide a meta description by editing the SEO settings below to see how this page will look in Google.";
@@ -41726,22 +41746,47 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase tracking-wide", children: "Social title" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Insert variable" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5", children: "✨ Generate social title" })
-                    ] })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => {
+                      setLocalOgTitle(title);
+                      onOgTitleChange && onOgTitleChange(title);
+                    }, className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Use Title" }) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", value: ogTitle, onChange: (e) => onOgTitleChange && onOgTitleChange(e.target.value), placeholder: title, className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: localOgTitle,
+                      onChange: (e) => {
+                        setLocalOgTitle(e.target.value);
+                        onOgTitleChange && onOgTitleChange(e.target.value);
+                      },
+                      placeholder: title || "Enter social title...",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase tracking-wide", children: "Social description" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Insert variable" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5", children: "✨ Generate social description" })
-                    ] })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => {
+                      const fallback = metaDescription || excerpt || "";
+                      setLocalOgDesc(fallback);
+                      onOgDescriptionChange && onOgDescriptionChange(fallback);
+                    }, className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Use Description" }) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 3, value: ogDescription, onChange: (e) => onOgDescriptionChange && onOgDescriptionChange(e.target.value), placeholder: metaDescription || excerpt, className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "textarea",
+                    {
+                      rows: 3,
+                      value: localOgDesc,
+                      onChange: (e) => {
+                        setLocalOgDesc(e.target.value);
+                        onOgDescriptionChange && onOgDescriptionChange(e.target.value);
+                      },
+                      placeholder: metaDescription || excerpt || "Enter social description...",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
                 ] })
               ] })
             ] }),
@@ -41758,8 +41803,8 @@ ${escapeText(this.code(index, length))}
                     image ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full overflow-hidden bg-slate-100 border-b border-[#e5e7eb]", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: image, alt: "X preview", className: "w-full h-full object-cover" }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "aspect-[1.91/1] w-full bg-[#f3f4f6] border-b border-[#e5e7eb] flex items-center justify-center text-slate-400", children: "No image set" }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-3 bg-white font-sans text-xs", children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-[#606770] uppercase tracking-wide", children: "travelluxx.co.uk" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1", children: title || (contentType === "post" ? "Post Title" : "Page Title") }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[#606770] mt-0.5 line-clamp-2 leading-relaxed", children: excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...") })
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-[#1d2129] mt-1 text-sm line-clamp-1", children: localXTitle || localOgTitle || title || (contentType === "post" ? "Post Title" : "Page Title") }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[#606770] mt-0.5 line-clamp-2 leading-relaxed", children: localXDesc || localOgDesc || excerpt || (contentType === "post" ? "Post excerpt..." : "Page description...") })
                     ] })
                   ] })
                 ] }),
@@ -41773,22 +41818,48 @@ ${escapeText(this.code(index, length))}
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase tracking-wide", children: "X title" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Insert variable" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5", children: "✨ Generate social title" })
-                    ] })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => {
+                      const val = localOgTitle || title;
+                      setLocalXTitle(val);
+                      onXTitleChange && onXTitleChange(val);
+                    }, className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Copy from Social" }) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "text", className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      type: "text",
+                      value: localXTitle,
+                      onChange: (e) => {
+                        setLocalXTitle(e.target.value);
+                        onXTitleChange && onXTitleChange(e.target.value);
+                      },
+                      placeholder: localOgTitle || title || "Enter X title...",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-1", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-[11px] font-semibold text-[#646970] uppercase tracking-wide", children: "X description" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Insert variable" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "text-[#7200e6] hover:underline font-semibold text-[10px] flex items-center gap-0.5", children: "✨ Generate social description" })
-                    ] })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => {
+                      const val = localOgDesc || metaDescription || excerpt || "";
+                      setLocalXDesc(val);
+                      onXDescriptionChange && onXDescriptionChange(val);
+                    }, className: "text-[#2271b1] hover:underline font-semibold text-[10px]", children: "Copy from Social" }) })
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 3, className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "textarea",
+                    {
+                      rows: 3,
+                      value: localXDesc,
+                      onChange: (e) => {
+                        setLocalXDesc(e.target.value);
+                        onXDescriptionChange && onXDescriptionChange(e.target.value);
+                      },
+                      placeholder: localOgDesc || metaDescription || excerpt || "Enter X description...",
+                      className: "w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
+                    }
+                  )
                 ] })
               ] })
             ] })
@@ -41947,6 +42018,7 @@ ${escapeText(this.code(index, length))}
       const [yoastPostTab, setYoastPostTab] = reactExports.useState("seo");
       const [yoastPageTab, setYoastPageTab] = reactExports.useState("seo");
       const [yoastHomeTab, setYoastHomeTab] = reactExports.useState("seo");
+      const [yoastServicesTab, setYoastServicesTab] = reactExports.useState("seo");
       const [focusKeyphrasePost, setFocusKeyphrasePost] = reactExports.useState("");
       const [focusKeyphrasePage, setFocusKeyphrasePage] = reactExports.useState("");
       const [editingHomepage, setEditingHomepage] = reactExports.useState(false);
@@ -42150,15 +42222,23 @@ ${escapeText(this.code(index, length))}
           } else if (routeSubtab === "homepage") {
             setEditingHomepage(true);
             setEditingServicesPage(false);
+            setEditingServiceAreasPage(false);
             setEditingPage(void 0);
           } else if (routeSubtab === "services-page") {
             setEditingServicesPage(true);
             setEditingHomepage(false);
+            setEditingServiceAreasPage(false);
+            setEditingPage(void 0);
+          } else if (routeSubtab === "service-areas-page") {
+            setEditingServiceAreasPage(true);
+            setEditingHomepage(false);
+            setEditingServicesPage(false);
             setEditingPage(void 0);
           } else {
             setEditingPage(void 0);
             setEditingHomepage(false);
             setEditingServicesPage(false);
+            setEditingServiceAreasPage(false);
           }
         }
       }, [routeTab, routeSubtab, routeId, pages, token]);
@@ -42332,33 +42412,6 @@ ${escapeText(this.code(index, length))}
         fetchInquiries();
         fetchMedia();
         fetchPromoCodes();
-      };
-      const handleSyncGoogleReviews = async () => {
-        setSyncingReviews(true);
-        try {
-          const res = await fetch("/api/google-reviews/sync", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-          });
-          const data = await res.json();
-          if (res.ok && data.success) {
-            showToast(data.message || "Google reviews synced and cache updated!", "success");
-            if (data.payload && Array.isArray(data.payload.reviews)) {
-              setSettings((prev) => ({
-                ...prev,
-                google_reviews_list: data.payload.reviews,
-                google_reviews_count: data.payload.totalReviews || prev.google_reviews_count,
-                google_reviews_rating: data.payload.overallRating || prev.google_reviews_rating
-              }));
-            }
-          } else {
-            showToast(data.error || "Failed to sync Google reviews", "error");
-          }
-        } catch (err) {
-          showToast(err.message || "Network error while syncing reviews", "error");
-        } finally {
-          setSyncingReviews(false);
-        }
       };
       const fetchPromoCodes = async () => {
         setPromoCodesLoading(true);
@@ -45103,38 +45156,36 @@ ${escapeText(this.code(index, length))}
                         )
                       ] })
                     ] }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { className: "text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-[#f0f0f1] pb-2", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(Globe, { className: "w-4 h-4 text-emerald-600" }),
-                        "3. Services Page SEO & Meta Tags"
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "SEO Meta Title" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "input",
-                          {
-                            type: "text",
-                            value: servicesPageSettings.meta_title || "",
-                            onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, meta_title: e.target.value }),
-                            className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
-                            placeholder: "Premium Chauffeur & Airport Travel Services | TravelLuxx UK"
-                          }
-                        )
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1 uppercase tracking-wide", children: "SEO Meta Description" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "textarea",
-                          {
-                            rows: 2,
-                            value: servicesPageSettings.meta_description || "",
-                            onChange: (e) => setServicesPageSettings({ ...servicesPageSettings, meta_description: e.target.value }),
-                            className: "w-full border border-[#8c8f94] rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]",
-                            placeholder: "Explore TravelLuxx's premier private travel solutions across the UK..."
-                          }
-                        )
-                      ] })
-                    ] })
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      YoastSeoBox,
+                      {
+                        tab: yoastServicesTab,
+                        setTab: setYoastServicesTab,
+                        focusKeyphrase: servicesPageSettings.focus_keyphrase || "",
+                        setFocusKeyphrase: (v) => setServicesPageSettings({ ...servicesPageSettings, focus_keyphrase: v }),
+                        title: servicesPageSettings.hero_title || "Our Services",
+                        slug: "services",
+                        metaTitle: servicesPageSettings.meta_title || "",
+                        metaDescription: servicesPageSettings.meta_description || "",
+                        contentType: "page",
+                        image: servicesPageSettings.hero_image || "",
+                        excerpt: servicesPageSettings.hero_description || "",
+                        onMetaTitleChange: (v) => setServicesPageSettings({ ...servicesPageSettings, meta_title: v }),
+                        onSlugChange: () => {
+                        },
+                        onMetaDescriptionChange: (v) => setServicesPageSettings({ ...servicesPageSettings, meta_description: v }),
+                        ogTitle: servicesPageSettings.og_title || "",
+                        onOgTitleChange: (v) => setServicesPageSettings({ ...servicesPageSettings, og_title: v }),
+                        ogDescription: servicesPageSettings.og_description || "",
+                        onOgDescriptionChange: (v) => setServicesPageSettings({ ...servicesPageSettings, og_description: v }),
+                        xTitle: servicesPageSettings.x_title || "",
+                        onXTitleChange: (v) => setServicesPageSettings({ ...servicesPageSettings, x_title: v }),
+                        xDescription: servicesPageSettings.x_description || "",
+                        onXDescriptionChange: (v) => setServicesPageSettings({ ...servicesPageSettings, x_description: v }),
+                        customSchema: servicesPageSettings.custom_schema || "",
+                        onCustomSchemaChange: (v) => setServicesPageSettings({ ...servicesPageSettings, custom_schema: v })
+                      }
+                    )
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lg:col-span-1 bg-white border border-[#c3c4c7] rounded-sm shadow-sm flex flex-col justify-between overflow-hidden", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4 space-y-3", children: [
@@ -49306,29 +49357,11 @@ ${escapeText(this.code(index, length))}
                   ] }),
                   settingsTab === "connectors" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-slate-50 border border-slate-200 rounded p-4 space-y-4", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-amber-500 fill-amber-500" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm", children: "Google Business Profile & Reviews Integration" })
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                          "button",
-                          {
-                            type: "button",
-                            onClick: handleSyncGoogleReviews,
-                            disabled: syncingReviews,
-                            className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1.5 transition disabled:opacity-50 shrink-0",
-                            children: [
-                              syncingReviews ? /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "animate-spin h-3.5 w-3.5 text-white", fill: "none", viewBox: "0 0 24 24", children: [
-                                /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
-                                /* @__PURE__ */ jsxRuntimeExports.jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
-                              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-3.5 h-3.5" }),
-                              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: syncingReviews ? "Syncing..." : "Sync Now (Refresh Reviews)" })
-                            ]
-                          }
-                        )
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs leading-relaxed", children: "Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and fetch authentic customer reviews from this Google profile." }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-amber-500 fill-amber-500" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-bold text-[#1d2327] text-sm", children: "Google Business Profile & Reviews Integration" })
+                      ] }) }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-xs leading-relaxed", children: "Paste your Google Maps / Google Business Profile (GBP) link below. The homepage reviews section will automatically link to and display your verified reviews with direct link to your Google profile." }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Business Profile / Google Maps URL" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -49345,47 +49378,6 @@ ${escapeText(this.code(index, length))}
                           "Example: ",
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "https://maps.google.com/?cid=..." }),
                           " or your business search URL."
-                        ] })
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Places API Key (Optional for live sync)" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "input",
-                              {
-                                type: showPlacesApiKey ? "text" : "password",
-                                value: settings.google_places_api_key || "",
-                                onChange: (e) => setSettings({ ...settings, google_places_api_key: e.target.value }),
-                                placeholder: "AIzaSy...",
-                                className: "w-full border border-[#8c8f94] rounded px-3 py-2 pr-10 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                              }
-                            ),
-                            /* @__PURE__ */ jsxRuntimeExports.jsx(
-                              "button",
-                              {
-                                type: "button",
-                                onClick: () => setShowPlacesApiKey(!showPlacesApiKey),
-                                className: "absolute right-3 top-1/2 -translate-y-1/2 text-[#50575e] hover:text-[#1d2327] transition",
-                                children: showPlacesApiKey ? /* @__PURE__ */ jsxRuntimeExports.jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-4 h-4" })
-                              }
-                            )
-                          ] }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "If empty, the system displays verified TravelLuxx 5-star customer testimonials with direct link to your Google page." })
-                        ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Google Place ID (Optional)" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "input",
-                            {
-                              type: "text",
-                              value: settings.google_place_id || "",
-                              onChange: (e) => setSettings({ ...settings, google_place_id: e.target.value }),
-                              placeholder: "ChIJ...",
-                              className: "w-full border border-[#8c8f94] rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                            }
-                          ),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[#646970] text-[10px] mt-1", children: "Direct Google Place ID identifier if known." })
                         ] })
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-200", children: [
@@ -49406,16 +49398,44 @@ ${escapeText(this.code(index, length))}
                         ] }),
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Total Verified Reviews Count (e.g. 48)" }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "input",
-                            {
-                              type: "number",
-                              min: "1",
-                              value: settings.google_reviews_count || 48,
-                              onChange: (e) => setSettings({ ...settings, google_reviews_count: parseInt(e.target.value) }),
-                              className: "w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
-                            }
-                          )
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setSettings({
+                                  ...settings,
+                                  google_reviews_count: Math.max(1, (Number(settings.google_reviews_count) || 48) - 1)
+                                }),
+                                className: "w-8 h-[34px] flex items-center justify-center bg-white hover:bg-slate-100 border border-[#8c8f94] border-r-0 rounded-l text-slate-700 font-bold text-sm select-none transition",
+                                title: "Decrease",
+                                children: "-"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "input",
+                              {
+                                type: "number",
+                                min: "1",
+                                value: settings.google_reviews_count !== void 0 ? settings.google_reviews_count : 48,
+                                onChange: (e) => setSettings({ ...settings, google_reviews_count: Math.max(1, parseInt(e.target.value) || 1) }),
+                                className: "w-full border border-[#8c8f94] px-3 py-1.5 text-xs text-center focus:outline-none focus:border-[#2271b1] bg-white text-black font-semibold h-[34px]"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setSettings({
+                                  ...settings,
+                                  google_reviews_count: (Number(settings.google_reviews_count) || 48) + 1
+                                }),
+                                className: "w-8 h-[34px] flex items-center justify-center bg-white hover:bg-slate-100 border border-[#8c8f94] border-l-0 rounded-r text-slate-700 font-bold text-sm select-none transition",
+                                title: "Increase",
+                                children: "+"
+                              }
+                            )
+                          ] })
                         ] })
                       ] }),
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-3 border-t border-slate-200 space-y-3", children: [
@@ -49494,7 +49514,7 @@ ${escapeText(this.code(index, length))}
                             )
                           ] })
                         ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-[#646970]", children: "Optional: You can manually add/edit authentic customer reviews that appear on the website if not fetching automatically via Google Places API." }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-[#646970]", children: "Manage customer reviews that appear in the homepage reviews section. You can add new reviews, edit text/ratings, or remove any review." }),
                         Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3 pt-1", children: settings.google_reviews_list.map((rev, rIdx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-slate-200 rounded p-3 space-y-2", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
                             /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-700", children: [

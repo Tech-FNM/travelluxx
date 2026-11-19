@@ -1692,6 +1692,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     height: calc(var(--spacing) * 96);
   }
 
+  .h-\[34px\] {
+    height: 34px;
+  }
+
   .h-\[360px\] {
     height: 360px;
   }
@@ -1930,6 +1934,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   .max-w-\[200px\] {
     max-width: 200px;
+  }
+
+  .max-w-\[210px\] {
+    max-width: 210px;
   }
 
   .max-w-\[280px\] {
@@ -2383,6 +2391,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-top-right-radius: var(--radius-sm);
   }
 
+  .rounded-l {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+  }
+
+  .rounded-r {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+  }
+
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -2418,6 +2436,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-right-width: 1px;
   }
 
+  .border-r-0 {
+    border-right-style: var(--tw-border-style);
+    border-right-width: 0;
+  }
+
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
@@ -2431,6 +2454,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .border-l {
     border-left-style: var(--tw-border-style);
     border-left-width: 1px;
+  }
+
+  .border-l-0 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 0;
   }
 
   .border-l-2 {
@@ -4252,10 +4280,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     color: #2271b1;
   }
 
-  .text-\[\#7200e6\] {
-    color: #7200e6;
-  }
-
   .text-\[\#23282d\] {
     color: #23282d;
   }
@@ -5476,8 +5500,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
       display: inline-flex;
     }
 
-    .sm\:h-14 {
-      height: calc(var(--spacing) * 14);
+    .sm\:h-16 {
+      height: calc(var(--spacing) * 16);
+    }
+
+    .sm\:h-24 {
+      height: calc(var(--spacing) * 24);
     }
 
     .sm\:h-\[420px\] {
@@ -5492,8 +5520,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       width: auto;
     }
 
-    .sm\:max-w-\[220px\] {
-      max-width: 220px;
+    .sm\:max-w-\[260px\] {
+      max-width: 260px;
     }
 
     .sm\:max-w-none {
@@ -5717,6 +5745,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .md\:hidden {
       display: none;
+    }
+
+    .md\:h-18 {
+      height: calc(var(--spacing) * 18);
     }
 
     .md\:h-\[calc\(100vh-36px\)\] {

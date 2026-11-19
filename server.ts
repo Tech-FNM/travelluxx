@@ -2301,27 +2301,59 @@ app.post("/api/admin/upload", async (req, res) => {
   }
 });
 
-// GET all media URLs from MongoDB / local storage
+// GET all media URLs from MongoDB, local uploads, and website bundled assets
 app.get("/api/admin/media", async (req, res) => {
+  const mediaSet = new Set<string>();
+
+  // 1. Fetch from MongoDB uploads collection
   try {
     await connectToDatabase();
     if (mongoose.connection.readyState === 1) {
       const uploads = await UploadModel.find({}, "filename");
-      const urls = uploads.map(u => `/uploads/${u.filename}`);
-      return res.json(urls);
+      uploads.forEach(u => {
+        if (u.filename) mediaSet.add(`/uploads/${u.filename}`);
+      });
     }
   } catch (e: any) {
     console.error("Error fetching media from DB:", e.message);
   }
-  // Local fallback
+
+  // 2. Fetch from public/uploads folder
   try {
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     if (fs.existsSync(uploadDir)) {
       const files = fs.readdirSync(uploadDir);
-      return res.json(files.map(f => `/uploads/${f}`));
+      files.forEach(f => {
+        if (!f.startsWith(".")) mediaSet.add(`/uploads/${f}`);
+      });
     }
   } catch (e) {}
-  return res.json([]);
+
+  // 3. Fetch from public/assets/images folder (all bundled website assets)
+  try {
+    const assetsDir = path.join(process.cwd(), "public", "assets", "images");
+    if (fs.existsSync(assetsDir)) {
+      const files = fs.readdirSync(assetsDir);
+      files.forEach(f => {
+        if (!f.startsWith(".")) mediaSet.add(`/assets/images/${f}`);
+      });
+    }
+  } catch (e) {}
+
+  // 4. Also check public root images like logo
+  try {
+    const publicDir = path.join(process.cwd(), "public");
+    if (fs.existsSync(publicDir)) {
+      const rootFiles = fs.readdirSync(publicDir);
+      rootFiles.forEach(f => {
+        if (/\.(png|jpe?g|webp|svg)$/i.test(f)) {
+          mediaSet.add(`/${f}`);
+        }
+      });
+    }
+  } catch (e) {}
+
+  return res.json(Array.from(mediaSet));
 });
 
 // DELETE media file
