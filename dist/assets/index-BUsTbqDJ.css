@@ -1888,6 +1888,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     width: calc(var(--spacing) * 96);
   }
 
+  .w-auto {
+    width: auto;
+  }
+
   .w-full {
     width: 100%;
   }
@@ -5472,6 +5476,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
       display: inline-flex;
     }
 
+    .sm\:h-16 {
+      height: calc(var(--spacing) * 16);
+    }
+
     .sm\:h-\[96px\] {
       height: 96px;
     }
@@ -5490,6 +5498,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     .sm\:w-auto {
       width: auto;
+    }
+
+    .sm\:max-w-\[240px\] {
+      max-width: 240px;
     }
 
     .sm\:max-w-none {

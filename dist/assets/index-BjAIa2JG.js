@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-9tr9v5HC.js"(exports, module) {
+  "assets/index-BjAIa2JG.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16109,7 +16109,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
     ];
     const X = createLucideIcon("x", __iconNode);
-    const travelluxxLogo = "/assets/travelluxx_logo_1786403432815-CscAlFeQ.jpg";
+    const travelluxxLogo = "/assets/travelluxx_logo-9q6fi2fY.webp";
     function getCustomImage(key, defaultSrc) {
       try {
         const saved = localStorage.getItem(`custom_img_${key}`);
@@ -16323,11 +16323,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, [settings]);
       const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
-      const hasCustomLogo = (() => {
-        const customSetting = (settings == null ? void 0 : settings.logo_url) || (settings == null ? void 0 : settings.logo_image) || (settings == null ? void 0 : settings.logoImage);
-        if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
-        return false;
-      })();
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: `sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']" : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-24", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2 sm:space-x-2.5 group/logo relative", children: [
@@ -16336,10 +16331,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               {
                 src: brandLogo,
                 alt: `${brandName} Logo`,
-                width: 200,
-                height: 96,
+                width: 220,
+                height: 70,
                 decoding: "async",
-                className: "w-20 h-20 sm:w-[170px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105",
+                className: "h-14 sm:h-16 w-auto max-w-[200px] sm:max-w-[240px] object-contain transition-transform duration-300 group-hover/logo:scale-105",
                 referrerPolicy: "no-referrer",
                 onError: () => {
                   if (brandLogo !== travelluxxLogo) {
@@ -16348,10 +16343,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 }
               }
             ) }),
-            !hasCustomLogo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col justify-center select-none cursor-pointer", onClick: () => onScrollTo("hero"), children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-extrabold text-2xl sm:text-[28px] tracking-tight block leading-tight ${isRenax ? "text-white font-bold" : "text-slate-900 font-sans"}`, children: brandName }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[11px] sm:text-[12px] tracking-[0.18em] block font-bold uppercase mt-0.5 leading-none ${isRenax ? "text-emerald-400" : "text-emerald-600 font-sans"}`, children: "- PRIVATE HIRE -" })
-            ] })
+            false
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "hidden md:flex items-center space-x-7 text-sm font-bold", children: menuItems.map((item) => {
             var _a, _b, _c, _d;
