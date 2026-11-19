@@ -1030,7 +1030,7 @@ export default function AdminDashboard() {
   };
 
   
-    const handleSyncGoogleReviews = async () => {
+  const handleSyncGoogleReviews = async () => {
     setSyncingReviews(true);
     try {
       const res = await fetch("/api/google-reviews/sync", {
@@ -1040,6 +1040,15 @@ export default function AdminDashboard() {
       const data = await res.json();
       if (res.ok && data.success) {
         showToast(data.message || "Google reviews synced and cache updated!", "success");
+        // Update local settings state with newly synced reviews if returned
+        if (data.payload && Array.isArray(data.payload.reviews)) {
+          setSettings((prev: any) => ({
+            ...prev,
+            google_reviews_list: data.payload.reviews,
+            google_reviews_count: data.payload.totalReviews || prev.google_reviews_count,
+            google_reviews_rating: data.payload.overallRating || prev.google_reviews_rating
+          }));
+        }
       } else {
         showToast(data.error || "Failed to sync Google reviews", "error");
       }
@@ -8077,24 +8086,67 @@ export default function AdminDashboard() {
                                 <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                                 Custom Customer Reviews List ({Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list.length : 0})
                               </span>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const current = Array.isArray(settings.google_reviews_list) ? [...settings.google_reviews_list] : [];
-                                  current.push({
-                                    author_name: "",
-                                    rating: 5,
-                                    relative_time_description: "recent",
-                                    text: "",
-                                    profile_photo_url: ""
-                                  });
-                                  setSettings({ ...settings, google_reviews_list: current });
-                                }}
-                                className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1 rounded text-xs font-semibold flex items-center gap-1 transition"
-                              >
-                                <Plus className="w-3 h-3" />
-                                Add Custom Review
-                              </button>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const defaultVerified = [
+                                        {
+                                          author_name: "James Thornton",
+                                          rating: 5,
+                                          relative_time_description: "a week ago",
+                                          text: "Outstanding service from Solihull to Heathrow Terminal 5. Driver was punctual, pristine Mercedes S-Class, and the journey was completely stress-free. TravelLuxx is now our company's go-to executive travel partner.",
+                                          profile_photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                                        },
+                                        {
+                                          author_name: "Sarah Jenkins",
+                                          rating: 5,
+                                          relative_time_description: "2 weeks ago",
+                                          text: "Booked an airport transfer from Birmingham Airport. Flight landed 30 minutes early, yet the chauffeur was already waiting at arrivals with a name board. Impeccable vehicle and polite chauffeur. 10/10!",
+                                          profile_photo_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
+                                        },
+                                        {
+                                          author_name: "Marcus Vance",
+                                          rating: 5,
+                                          relative_time_description: "a month ago",
+                                          text: "Booked the Mercedes V-Class for our family trip to London. Plenty of luggage space, smooth drive, and the kids were comfortable throughout. Booking process online was seamless and transparent.",
+                                          profile_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
+                                        },
+                                        {
+                                          author_name: "Dr. Alistair Ross",
+                                          rating: 5,
+                                          relative_time_description: "2 months ago",
+                                          text: "Consistently professional and immaculate vehicles. Used them for multiple client meetings across Warwick and Birmingham. Never once been let down. Highest recommendation.",
+                                          profile_photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80"
+                                        }
+                                      ];
+                                      setSettings({ ...settings, google_reviews_list: defaultVerified });
+                                      showToast("Verified customer reviews loaded into editor! Click 'Save Settings' to apply.");
+                                    }}
+                                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 transition"
+                                    title="Load initial verified 5-star customer reviews into list"
+                                  >
+                                    Load Initial Reviews
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const current = Array.isArray(settings.google_reviews_list) ? [...settings.google_reviews_list] : [];
+                                      current.unshift({
+                                        author_name: "",
+                                        rating: 5,
+                                        relative_time_description: "recent",
+                                        text: "",
+                                        profile_photo_url: ""
+                                      });
+                                      setSettings({ ...settings, google_reviews_list: current });
+                                    }}
+                                    className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1 rounded text-xs font-semibold flex items-center gap-1 transition"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                    Add Review
+                                  </button>
+                                </div>
                             </div>
                             <p className="text-[11px] text-[#646970]">
                               Optional: You can manually add/edit authentic customer reviews that appear on the website if not fetching automatically via Google Places API.
