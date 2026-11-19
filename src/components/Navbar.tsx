@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Compass, Shield, Menu, X, ChevronDown } from "lucide-react";
-import travelluxxLogo from "../assets/images/travelluxx_logo.webp";
+import travelluxxLogo from "../assets/images/travelluxx_logo_1786403432815.jpg";
 import { trackClick } from "../utils/analytics";
 import { getCustomImage } from "../utils/customImages";
 import { useSettings } from "../context/SettingsContext";
@@ -43,7 +43,11 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
   const isRenax = settings?.active_theme === "renax";
 
   // Check if a custom logo was uploaded (not the default bundled logo)
-  const hasCustomLogo = true;
+  const hasCustomLogo = (() => {
+    const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
+    if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
+    return false;
+  })();
 
   return (
     <header className={`sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax
@@ -60,10 +64,10 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
               <img
                 src={brandLogo}
                 alt={`${brandName} Logo`}
-                width={220}
-                height={70}
+                width={200}
+                height={96}
                 decoding="async"
-                className="h-14 sm:h-16 w-auto max-w-[200px] sm:max-w-[240px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
+                className="w-20 h-20 sm:w-[170px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
                 referrerPolicy="no-referrer"
                 onError={() => {
                   if (brandLogo !== travelluxxLogo) {

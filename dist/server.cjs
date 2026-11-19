@@ -1438,6 +1438,27 @@ app.get("/api/settings", async (req, res) => {
   const settings = getCurrentWebsiteSettings();
   return res.json(settings);
 });
+app.get("/api/pricing", async (req, res) => {
+  try {
+    await connectToDatabase();
+    await syncSettingsFromDb();
+  } catch (e) {
+  }
+  const settings = getCurrentWebsiteSettings();
+  return res.json({
+    economy_price_per_mile: settings.economy_price || 1.5,
+    luxury_price_per_mile: settings.luxury_price || 2,
+    family_price_per_mile: settings.family_price || 2.5,
+    minimum_billable_distance: settings.minimum_distance || 10,
+    extra_stop_charge: settings.extra_stop_charge || 15
+  });
+});
+app.post("/api/stats/visit", (req, res) => {
+  return res.json({ success: true });
+});
+app.post("/api/stats/click", (req, res) => {
+  return res.json({ success: true });
+});
 app.get("/api/admin/settings", async (req, res) => {
   try {
     await connectToDatabase();
