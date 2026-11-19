@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-Ce9GYmE9.js"(exports, module) {
+  "assets/index-DLbRQ_wq.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -16192,10 +16192,42 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const [menuItems, setMenuItems] = reactExports.useState(() => {
         try {
           const cached = localStorage.getItem("travelluxx_cached_menu");
-          return cached ? JSON.parse(cached) : [];
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          }
         } catch (e) {
-          return [];
         }
+        return [
+          { id: "nav-home", label: "Home", href: "/", target: "_self" },
+          {
+            id: "nav-services",
+            label: "Services",
+            href: "/services",
+            target: "_self",
+            children: [
+              { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
+              { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
+              { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
+              { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+              { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+            ]
+          },
+          {
+            id: "nav-service-areas",
+            label: "Service Areas",
+            href: "/service-areas",
+            target: "_self",
+            children: [
+              { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+              { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+              { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
+              { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+              { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+            ]
+          },
+          { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+        ];
       });
       const [isLoading, setIsLoading] = reactExports.useState(true);
       const fetchSettings = async () => {
@@ -16266,7 +16298,47 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           setServices(Array.isArray(servicesData) ? servicesData : []);
           setPosts(Array.isArray(postsData) ? postsData : []);
           setServicesPageSettings(servicesPageSettingsData);
-          setMenuItems(Array.isArray(menuItemsData) ? menuItemsData : []);
+          if (Array.isArray(menuItemsData) && menuItemsData.length > 0) {
+            setMenuItems(menuItemsData);
+            try {
+              localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
+            } catch (e) {
+            }
+          } else {
+            const defaultMenu = [
+              { id: "nav-home", label: "Home", href: "/", target: "_self" },
+              {
+                id: "nav-services",
+                label: "Services",
+                href: "/services",
+                target: "_self",
+                children: Array.isArray(servicesData) && servicesData.length > 0 ? servicesData.map((s) => ({
+                  id: `srv-${s.slug}`,
+                  label: s.title || s.name || s.slug,
+                  href: `/services/${s.slug}`,
+                  target: "_self"
+                })) : [
+                  { id: "srv-airport-transfers", label: "Airport Transfers", href: "/services/airport-transfers", target: "_self" },
+                  { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+                  { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+                ]
+              },
+              {
+                id: "nav-service-areas",
+                label: "Service Areas",
+                href: "/service-areas",
+                target: "_self",
+                children: [
+                  { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+                  { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+                  { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+                  { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+                ]
+              },
+              { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+            ];
+            setMenuItems(defaultMenu);
+          }
         } catch (err) {
           console.error("Failed to load global data:", err);
         } finally {
@@ -16323,6 +16395,37 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return () => window.removeEventListener("custom_images_updated", handleUpdate);
       }, [settings]);
       const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
+      const fallbackMenuItems = [
+        { id: "nav-home", label: "Home", href: "/", target: "_self" },
+        {
+          id: "nav-services",
+          label: "Services",
+          href: "/services",
+          target: "_self",
+          children: [
+            { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
+            { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
+            { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
+            { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+            { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+          ]
+        },
+        {
+          id: "nav-service-areas",
+          label: "Service Areas",
+          href: "/service-areas",
+          target: "_self",
+          children: [
+            { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+            { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+            { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
+            { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+            { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+          ]
+        },
+        { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+      ];
+      const activeNavItems = Array.isArray(menuItems) && menuItems.length > 0 ? menuItems : fallbackMenuItems;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: `sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']" : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-20", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center group/logo relative", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative flex items-center justify-center shrink-0 cursor-pointer", onClick: () => onScrollTo("hero"), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -16341,7 +16444,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               }
             }
           ) }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "hidden md:flex items-center space-x-7 text-sm font-bold", children: menuItems.map((item) => {
+          /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "hidden md:flex items-center space-x-7 text-sm font-bold", children: activeNavItems.map((item) => {
             var _a, _b, _c, _d;
             const hasChildren = Array.isArray(item.children) && item.children.length > 0;
             const isAnchor = ((_a = item.href) == null ? void 0 : _a.startsWith("/#")) || ((_b = item.href) == null ? void 0 : _b.startsWith("#"));
@@ -16463,7 +16566,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           ) })
         ] }) }),
-        isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `md:hidden border-t py-4 px-6 shadow-lg ${isRenax ? "bg-[#12141c] border-slate-800 text-white font-['Outfit']" : "bg-white border-slate-150 text-slate-800"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col space-y-3", children: menuItems.map((item) => {
+        isOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `md:hidden border-t py-4 px-6 shadow-lg ${isRenax ? "bg-[#12141c] border-slate-800 text-white font-['Outfit']" : "bg-white border-slate-150 text-slate-800"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col space-y-3", children: activeNavItems.map((item) => {
           var _a, _b, _c, _d;
           const hasChildren = Array.isArray(item.children) && item.children.length > 0;
           const isAnchor = ((_a = item.href) == null ? void 0 : _a.startsWith("/#")) || ((_b = item.href) == null ? void 0 : _b.startsWith("#"));

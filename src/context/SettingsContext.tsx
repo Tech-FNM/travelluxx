@@ -44,10 +44,41 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [menuItems, setMenuItems] = useState<any[]>(() => {
     try {
       const cached = localStorage.getItem("travelluxx_cached_menu");
-      return cached ? JSON.parse(cached) : [];
-    } catch (e) {
-      return [];
-    }
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return [
+      { id: "nav-home", label: "Home", href: "/", target: "_self" },
+      {
+        id: "nav-services",
+        label: "Services",
+        href: "/services",
+        target: "_self",
+        children: [
+          { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
+          { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
+          { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
+          { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+          { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+        ]
+      },
+      {
+        id: "nav-service-areas",
+        label: "Service Areas",
+        href: "/service-areas",
+        target: "_self",
+        children: [
+          { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+          { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+          { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
+          { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+          { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+        ]
+      },
+      { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+    ];
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -119,7 +150,49 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setServices(Array.isArray(servicesData) ? servicesData : []);
       setPosts(Array.isArray(postsData) ? postsData : []);
       setServicesPageSettings(servicesPageSettingsData);
-      setMenuItems(Array.isArray(menuItemsData) ? menuItemsData : []);
+      if (Array.isArray(menuItemsData) && menuItemsData.length > 0) {
+        setMenuItems(menuItemsData);
+        try {
+          localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
+        } catch (e) {}
+      } else {
+        // Fallback default menu items if empty
+        const defaultMenu = [
+          { id: "nav-home", label: "Home", href: "/", target: "_self" },
+          {
+            id: "nav-services",
+            label: "Services",
+            href: "/services",
+            target: "_self",
+            children: Array.isArray(servicesData) && servicesData.length > 0
+              ? servicesData.map((s: any) => ({
+                  id: `srv-${s.slug}`,
+                  label: s.title || s.name || s.slug,
+                  href: `/services/${s.slug}`,
+                  target: "_self"
+                }))
+              : [
+                  { id: "srv-airport-transfers", label: "Airport Transfers", href: "/services/airport-transfers", target: "_self" },
+                  { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+                  { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+                ]
+          },
+          {
+            id: "nav-service-areas",
+            label: "Service Areas",
+            href: "/service-areas",
+            target: "_self",
+            children: [
+              { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+              { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+              { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+              { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+            ]
+          },
+          { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+        ];
+        setMenuItems(defaultMenu);
+      }
     } catch (err) {
       console.error("Failed to load global data:", err);
     } finally {

@@ -472,7 +472,9 @@ async function syncSettingsFromDb() {
       if (dbMollie && dbMollie.value) cachedMollieApiKey = dbMollie.value;
 
       const dbMenu = await SettingModel.findOne({ key: "menu" });
-      if (dbMenu && dbMenu.value) cachedMenu = dbMenu.value;
+      if (dbMenu && Array.isArray(dbMenu.value) && dbMenu.value.length > 0) {
+        cachedMenu = dbMenu.value;
+      }
 
       console.log("🔄 Loaded settings cache from MongoDB!");
     }
@@ -2194,18 +2196,45 @@ app.post("/api/admin/services-page-settings", async (req, res) => {
 const MENU_PATH = path.join(process.cwd(), "menu.json");
 
 function readMenu(): any[] {
-  if (cachedMenu) return cachedMenu;
+  if (Array.isArray(cachedMenu) && cachedMenu.length > 0) return cachedMenu;
   try {
     if (fs.existsSync(MENU_PATH)) {
-      cachedMenu = JSON.parse(fs.readFileSync(MENU_PATH, "utf8"));
-      return cachedMenu;
+      const parsed = JSON.parse(fs.readFileSync(MENU_PATH, "utf8"));
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        cachedMenu = parsed;
+        return cachedMenu;
+      }
     }
   } catch (e) {}
   cachedMenu = [
-    { id: "1", label: "Book Now", href: "/#calculator", target: "_self" },
-    { id: "2", label: "Services", href: "/services", target: "_self" },
-    { id: "3", label: "Blog", href: "/blog", target: "_self" },
-    { id: "4", label: "Contact", href: "/#contact", target: "_self" }
+    { id: "nav-home", label: "Home", href: "/", target: "_self" },
+    {
+      id: "nav-services",
+      label: "Services",
+      href: "/services",
+      target: "_self",
+      children: [
+        { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
+        { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
+        { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
+        { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+        { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+      ]
+    },
+    {
+      id: "nav-service-areas",
+      label: "Service Areas",
+      href: "/service-areas",
+      target: "_self",
+      children: [
+        { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+        { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+        { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
+        { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+        { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+      ]
+    },
+    { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
   ];
   return cachedMenu;
 }

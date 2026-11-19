@@ -40,6 +40,39 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
   const isRenax = settings?.active_theme === "renax";
 
+  const fallbackMenuItems = [
+    { id: "nav-home", label: "Home", href: "/", target: "_self" },
+    {
+      id: "nav-services",
+      label: "Services",
+      href: "/services",
+      target: "_self",
+      children: [
+        { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
+        { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
+        { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
+        { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+        { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+      ]
+    },
+    {
+      id: "nav-service-areas",
+      label: "Service Areas",
+      href: "/service-areas",
+      target: "_self",
+      children: [
+        { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+        { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+        { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
+        { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+        { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+      ]
+    },
+    { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+  ];
+
+  const activeNavItems = (Array.isArray(menuItems) && menuItems.length > 0) ? menuItems : fallbackMenuItems;
+
   return (
     <header className={`sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax
         ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']"
@@ -70,7 +103,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-7 text-sm font-bold">
-            {menuItems.map((item) => {
+            {activeNavItems.map((item) => {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0;
               const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
               const sectionId = isAnchor ? item.href.split("#")[1] : "";
@@ -229,7 +262,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
         <div className={`md:hidden border-t py-4 px-6 shadow-lg ${isRenax ? "bg-[#12141c] border-slate-800 text-white font-['Outfit']" : "bg-white border-slate-150 text-slate-800"
           }`}>
           <div className="flex flex-col space-y-3">
-            {menuItems.map((item) => {
+            {activeNavItems.map((item) => {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0;
               const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
               const sectionId = isAnchor ? item.href.split("#")[1] : "";

@@ -5480,20 +5480,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
       height: calc(var(--spacing) * 14);
     }
 
-    .sm\:h-\[96px\] {
-      height: 96px;
-    }
-
     .sm\:h-\[420px\] {
       height: 420px;
     }
 
     .sm\:w-64 {
       width: calc(var(--spacing) * 64);
-    }
-
-    .sm\:w-\[170px\] {
-      width: 170px;
     }
 
     .sm\:w-auto {
@@ -5564,12 +5556,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       --tw-space-x-reverse: 0;
       margin-inline-start: calc(calc(var(--spacing) * 2) * var(--tw-space-x-reverse));
       margin-inline-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-x-reverse)));
-    }
-
-    :where(.sm\:space-x-2\.5 > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-      margin-inline-start: calc(calc(var(--spacing) * 2.5) * var(--tw-space-x-reverse));
-      margin-inline-end: calc(calc(var(--spacing) * 2.5) * calc(1 - var(--tw-space-x-reverse)));
     }
 
     .sm\:rounded-2xl {
@@ -5692,14 +5678,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .sm\:text-sm {
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
-    }
-
-    .sm\:text-\[12px\] {
-      font-size: 12px;
-    }
-
-    .sm\:text-\[28px\] {
-      font-size: 28px;
     }
 
     .sm\:shadow-sm {
