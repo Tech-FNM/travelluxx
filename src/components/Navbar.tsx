@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Compass, Shield, Menu, X, ChevronDown } from "lucide-react";
-import travelluxxLogo from "../assets/images/travelluxx_logo_1786403432815.jpg";
+import { travelluxxLogoBase64 } from "../assets/travelluxx_logo_datauri";
 import { trackClick } from "../utils/analytics";
 import { getCustomImage } from "../utils/customImages";
 import { useSettings } from "../context/SettingsContext";
@@ -20,7 +20,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
   const getInitialLogo = () => {
     const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
-    const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : travelluxxLogo;
+    const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : travelluxxLogoBase64;
     return getCustomImage("logo", defaultImg);
   };
 
@@ -29,7 +29,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
   useEffect(() => {
     const handleUpdate = () => {
       const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
-      const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : travelluxxLogo;
+      const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : travelluxxLogoBase64;
       setBrandLogo(getCustomImage("logo", defaultImg));
     };
 
@@ -38,16 +38,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
     return () => window.removeEventListener("custom_images_updated", handleUpdate);
   }, [settings]);
 
-  // Removed local menuItems state and fetch, using context instead
-
   const isRenax = settings?.active_theme === "renax";
-
-  // Check if a custom logo was uploaded (not the default bundled logo)
-  const hasCustomLogo = (() => {
-    const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
-    if (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") return true;
-    return false;
-  })();
 
   return (
     <header className={`sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax
@@ -56,40 +47,25 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
       }`}>
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-24">
+        <div className="flex items-center justify-between h-20">
 
           {/* Logo Section */}
-          <div className="flex items-center space-x-2 sm:space-x-2.5 group/logo relative">
+          <div className="flex items-center group/logo relative">
             <div className="relative flex items-center justify-center shrink-0 cursor-pointer" onClick={() => onScrollTo("hero")}>
               <img
-                src={brandLogo}
+                src={brandLogo || travelluxxLogoBase64}
                 alt={`${brandName} Logo`}
-                width={200}
-                height={96}
+                width={210}
+                height={60}
                 decoding="async"
-                className="w-20 h-20 sm:w-[170px] sm:h-[96px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
-                referrerPolicy="no-referrer"
+                className="h-12 sm:h-14 w-auto max-w-[180px] sm:max-w-[220px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
                 onError={() => {
-                  if (brandLogo !== travelluxxLogo) {
-                    setBrandLogo(travelluxxLogo);
+                  if (brandLogo !== travelluxxLogoBase64) {
+                    setBrandLogo(travelluxxLogoBase64);
                   }
                 }}
               />
             </div>
-
-            {/* Only show brand name text if no custom logo is uploaded */}
-            {!hasCustomLogo && (
-              <div className="flex flex-col justify-center select-none cursor-pointer" onClick={() => onScrollTo("hero")}>
-                <span className={`font-extrabold text-2xl sm:text-[28px] tracking-tight block leading-tight ${isRenax ? "text-white font-bold" : "text-slate-900 font-sans"
-                  }`}>
-                  {brandName}
-                </span>
-                <span className={`text-[11px] sm:text-[12px] tracking-[0.18em] block font-bold uppercase mt-0.5 leading-none ${isRenax ? "text-emerald-400" : "text-emerald-600 font-sans"
-                  }`}>
-                  - PRIVATE HIRE -
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Desktop Navigation */}

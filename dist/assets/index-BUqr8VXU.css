@@ -5476,8 +5476,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       display: inline-flex;
     }
 
-    .sm\:h-16 {
-      height: calc(var(--spacing) * 16);
+    .sm\:h-14 {
+      height: calc(var(--spacing) * 14);
     }
 
     .sm\:h-\[96px\] {
@@ -5500,8 +5500,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       width: auto;
     }
 
-    .sm\:max-w-\[240px\] {
-      max-width: 240px;
+    .sm\:max-w-\[220px\] {
+      max-width: 220px;
     }
 
     .sm\:max-w-none {
