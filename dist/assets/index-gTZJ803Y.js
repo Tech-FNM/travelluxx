@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-BmWKUq3T.js"(exports, module) {
+  "assets/index-gTZJ803Y.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -52422,18 +52422,15 @@ ${escapeText(this.code(index, length))}
     }
     function GoogleReviewsSection({ isRenax = false }) {
       const { settings } = useSettings();
-      const [reviewsData, setReviewsData] = reactExports.useState(null);
-      const [loading, setLoading] = reactExports.useState(true);
+      const [apiReviewsData, setApiReviewsData] = reactExports.useState(null);
       reactExports.useEffect(() => {
         let active = true;
-        fetch("/api/google-reviews").then((res) => res.json()).then((data) => {
+        fetch(`/api/google-reviews?t=${Date.now()}`).then((res) => res.json()).then((data) => {
           if (active && data && Array.isArray(data.reviews)) {
-            setReviewsData(data);
+            setApiReviewsData(data);
           }
         }).catch((err) => {
-          console.warn("Could not load Google reviews:", err);
-        }).finally(() => {
-          if (active) setLoading(false);
+          console.warn("Could not load Google reviews from backend:", err);
         });
         return () => {
           active = false;
@@ -52442,12 +52439,13 @@ ${escapeText(this.code(index, length))}
       if ((settings == null ? void 0 : settings.homepage_reviews_enabled) === false) {
         return null;
       }
-      const customSettingsReviews = Array.isArray(settings == null ? void 0 : settings.google_reviews_list) && settings.google_reviews_list.length > 0 ? settings.google_reviews_list : null;
-      const reviews = customSettingsReviews || (reviewsData == null ? void 0 : reviewsData.reviews) || [];
-      if (reviews.length === 0) return null;
-      const rating = Number(settings == null ? void 0 : settings.google_reviews_rating) || (reviewsData == null ? void 0 : reviewsData.overallRating) || 5;
-      const totalCount = Number(settings == null ? void 0 : settings.google_reviews_count) || (reviewsData == null ? void 0 : reviewsData.totalReviews) || 48;
-      const mapsUrl = (settings == null ? void 0 : settings.google_business_profile_url) || (reviewsData == null ? void 0 : reviewsData.googleMapsUrl) || "https://maps.google.com";
+      const dashboardReviews = Array.isArray(settings == null ? void 0 : settings.google_reviews_list) && settings.google_reviews_list.length > 0 ? settings.google_reviews_list : (apiReviewsData == null ? void 0 : apiReviewsData.reviews) || [];
+      if (dashboardReviews.length === 0) {
+        return null;
+      }
+      const rating = Number(settings == null ? void 0 : settings.google_reviews_rating) || (apiReviewsData == null ? void 0 : apiReviewsData.overallRating) || 5;
+      const totalCount = (settings == null ? void 0 : settings.google_reviews_count) || (apiReviewsData == null ? void 0 : apiReviewsData.totalReviews) || 48;
+      const mapsUrl = (settings == null ? void 0 : settings.google_business_profile_url) || (apiReviewsData == null ? void 0 : apiReviewsData.googleMapsUrl) || "https://maps.google.com";
       const badgeText = (settings == null ? void 0 : settings.homepage_reviews_badge) || "Verified Client Testimonials";
       const mainTitle = (settings == null ? void 0 : settings.homepage_reviews_title) || "Trusted by Discerning Travelers";
       const subtitle = (settings == null ? void 0 : settings.homepage_reviews_subtitle) || "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel.";
@@ -52522,13 +52520,13 @@ ${escapeText(this.code(index, length))}
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: reviews.map((review, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: dashboardReviews.map((review, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
             className: `p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${isRenax ? "bg-[#0f1118]/90 border-slate-800/80 hover:border-emerald-500/40" : "bg-white border-slate-200/90 shadow-sm hover:border-slate-300"}`,
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 text-amber-400 mb-4", children: [...Array(review.rating || 5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-1 text-amber-400 mb-4", children: [...Array(Number(review.rating) || 5)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 fill-amber-400 text-amber-400" }, i)) }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: `text-sm leading-relaxed mb-6 font-normal ${isRenax ? "text-slate-300" : "text-slate-700"}`, children: [
                   '"',
                   review.text,
@@ -52546,7 +52544,7 @@ ${escapeText(this.code(index, length))}
                     }
                   ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-500 font-bold flex items-center justify-center text-sm border border-emerald-500/30", children: review.author_name ? review.author_name.charAt(0) : "G" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: `text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`, children: review.author_name }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: `text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`, children: review.author_name || "Customer" }),
                     review.relative_time_description && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[11px] ${isRenax ? "text-slate-500" : "text-slate-400"}`, children: review.relative_time_description })
                   ] })
                 ] }),

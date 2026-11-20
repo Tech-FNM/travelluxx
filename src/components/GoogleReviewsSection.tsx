@@ -17,29 +17,26 @@ interface GoogleReviewsSectionProps {
 
 export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsSectionProps) {
   const { settings } = useSettings();
-  const [reviewsData, setReviewsData] = useState<{
+  const [apiReviewsData, setApiReviewsData] = useState<{
     businessName: string;
     overallRating: number;
     totalReviews: number;
     googleMapsUrl?: string;
     reviews: GoogleReviewItem[];
   } | null>(null);
-  const [loading, setLoading] = useState(true);
 
+  // Directly fetch from /api/google-reviews (which always returns current dashboard reviews)
   useEffect(() => {
     let active = true;
-    fetch("/api/google-reviews")
+    fetch(`/api/google-reviews?t=${Date.now()}`)
       .then(res => res.json())
       .then(data => {
         if (active && data && Array.isArray(data.reviews)) {
-          setReviewsData(data);
+          setApiReviewsData(data);
         }
       })
       .catch(err => {
-        console.warn("Could not load Google reviews:", err);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
+        console.warn("Could not load Google reviews from backend:", err);
       });
 
     return () => {
@@ -47,22 +44,28 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
     };
   }, []);
 
+  // Section visibility check
   if (settings?.homepage_reviews_enabled === false) {
     return null;
   }
 
-  // If dashboard has custom reviews configured in settings, use them directly with instant sync
-  const customSettingsReviews = Array.isArray(settings?.google_reviews_list) && settings.google_reviews_list.length > 0
-    ? settings.google_reviews_list
-    : null;
+  // Dashboard reviews: first priority is settings.google_reviews_list from SettingsContext, fallback is /api/google-reviews
+  const dashboardReviews: GoogleReviewItem[] = (
+    Array.isArray(settings?.google_reviews_list) && settings.google_reviews_list.length > 0
+      ? settings.google_reviews_list
+      : (apiReviewsData?.reviews || [])
+  );
 
-  const reviews = customSettingsReviews || reviewsData?.reviews || [];
-  if (reviews.length === 0) return null;
+  if (dashboardReviews.length === 0) {
+    return null;
+  }
 
-  const rating = Number(settings?.google_reviews_rating) || reviewsData?.overallRating || 5.0;
-  const totalCount = Number(settings?.google_reviews_count) || reviewsData?.totalReviews || 48;
-  const mapsUrl = settings?.google_business_profile_url || reviewsData?.googleMapsUrl || "https://maps.google.com";
+  // Live rating, total count and maps link from dashboard settings
+  const rating = Number(settings?.google_reviews_rating) || apiReviewsData?.overallRating || 5.0;
+  const totalCount = settings?.google_reviews_count || apiReviewsData?.totalReviews || 48;
+  const mapsUrl = settings?.google_business_profile_url || apiReviewsData?.googleMapsUrl || "https://maps.google.com";
 
+  // Live custom section headers from dashboard settings
   const badgeText = settings?.homepage_reviews_badge || "Verified Client Testimonials";
   const mainTitle = settings?.homepage_reviews_title || "Trusted by Discerning Travelers";
   const subtitle = settings?.homepage_reviews_subtitle || "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel.";
@@ -143,7 +146,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
 
         {/* Reviews Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reviews.map((review, idx) => (
+          {dashboardReviews.map((review, idx) => (
             <div
               key={idx}
               className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${
@@ -153,9 +156,9 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
               }`}
             >
               <div>
-                {/* 5 Stars */}
+                {/* Star Rating */}
                 <div className="flex items-center gap-1 text-amber-400 mb-4">
-                  {[...Array(review.rating || 5)].map((_, i) => (
+                  {[...Array(Number(review.rating) || 5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
@@ -186,7 +189,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
                   )}
                   <div>
                     <h4 className={`text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`}>
-                      {review.author_name}
+                      {review.author_name || "Customer"}
                     </h4>
                     {review.relative_time_description && (
                       <span className={`text-[11px] ${isRenax ? "text-slate-500" : "text-slate-400"}`}>
