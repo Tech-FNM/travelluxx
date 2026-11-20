@@ -143,7 +143,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
 
         {/* Reviews Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reviews.slice(0, 4).map((review, idx) => (
+          {reviews.map((review, idx) => (
             <div
               key={idx}
               className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${

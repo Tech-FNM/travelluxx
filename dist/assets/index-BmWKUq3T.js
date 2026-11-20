@@ -6,7 +6,7 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var require_index_001 = __commonJS({
-  "assets/index-yb9ENzj4.js"(exports, module) {
+  "assets/index-BmWKUq3T.js"(exports, module) {
     (function polyfill() {
       const relList = document.createElement("link").relList;
       if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -44860,6 +44860,207 @@ ${escapeText(this.code(index, length))}
                             }
                           )
                         ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-200", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Display Rating (e.g. 5.0)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "number",
+                              step: "0.1",
+                              min: "1",
+                              max: "5",
+                              value: settings.google_reviews_rating || 5,
+                              onChange: (e) => setSettings({ ...settings, google_reviews_rating: parseFloat(e.target.value) }),
+                              className: "w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            }
+                          )
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-xs font-semibold text-[#1d2327] mb-1", children: "Total Verified Reviews Count (e.g. 48)" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              type: "text",
+                              value: settings.google_reviews_count !== void 0 ? settings.google_reviews_count : "48",
+                              onChange: (e) => setSettings({ ...settings, google_reviews_count: e.target.value }),
+                              placeholder: "e.g. 48",
+                              className: "w-full border border-[#8c8f94] rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black"
+                            }
+                          )
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pt-3 border-t border-slate-200 space-y-3", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-3.5 h-3.5 text-amber-500 fill-amber-500" }),
+                            "Custom Customer Reviews List (",
+                            Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list.length : 0,
+                            ")"
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const defaultVerified = [
+                                    {
+                                      author_name: "James Thornton",
+                                      rating: 5,
+                                      relative_time_description: "a week ago",
+                                      text: "Outstanding service from Solihull to Heathrow Terminal 5. Driver was punctual, pristine Mercedes S-Class, and the journey was completely stress-free. TravelLuxx is now our company's go-to executive travel partner.",
+                                      profile_photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                                    },
+                                    {
+                                      author_name: "Sarah Jenkins",
+                                      rating: 5,
+                                      relative_time_description: "2 weeks ago",
+                                      text: "Booked an airport transfer from Birmingham Airport. Flight landed 30 minutes early, yet the chauffeur was already waiting at arrivals with a name board. Impeccable vehicle and polite chauffeur. 10/10!",
+                                      profile_photo_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
+                                    },
+                                    {
+                                      author_name: "Marcus Vance",
+                                      rating: 5,
+                                      relative_time_description: "a month ago",
+                                      text: "Booked the Mercedes V-Class for our family trip to London. Plenty of luggage space, smooth drive, and the kids were comfortable throughout. Booking process online was seamless and transparent.",
+                                      profile_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
+                                    },
+                                    {
+                                      author_name: "Dr. Alistair Ross",
+                                      rating: 5,
+                                      relative_time_description: "2 months ago",
+                                      text: "Consistently professional and immaculate vehicles. Used them for multiple client meetings across Warwick and Birmingham. Never once been let down. Highest recommendation.",
+                                      profile_photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80"
+                                    }
+                                  ];
+                                  setSettings({ ...settings, google_reviews_list: defaultVerified });
+                                  showToast("Verified customer reviews loaded into editor! Click 'Save Content' to apply.");
+                                },
+                                className: "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 transition",
+                                title: "Load initial verified 5-star customer reviews into list",
+                                children: "Load Initial Reviews"
+                              }
+                            ),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const current = Array.isArray(settings.google_reviews_list) ? [...settings.google_reviews_list] : [];
+                                  current.unshift({
+                                    author_name: "",
+                                    rating: 5,
+                                    relative_time_description: "recent",
+                                    text: "",
+                                    profile_photo_url: ""
+                                  });
+                                  setSettings({ ...settings, google_reviews_list: current });
+                                },
+                                className: "bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1 rounded text-xs font-semibold flex items-center gap-1 transition",
+                                children: [
+                                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3 h-3" }),
+                                  "Add Review"
+                                ]
+                              }
+                            )
+                          ] })
+                        ] }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-[#646970]", children: "Manage customer reviews that appear in the homepage reviews section. You can add new reviews, edit text/ratings, or remove any review." }),
+                        Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3 pt-1", children: settings.google_reviews_list.map((rev, rIdx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-slate-200 rounded p-3 space-y-2", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs font-bold text-slate-700", children: [
+                              "Reviewer #",
+                              rIdx + 1
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => {
+                                  const list = settings.google_reviews_list.filter((_, idx) => idx !== rIdx);
+                                  setSettings({ ...settings, google_reviews_list: list });
+                                },
+                                className: "text-red-500 hover:text-red-700 p-1",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3.5 h-3.5" })
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-2", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Author Name" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: rev.author_name || "",
+                                  onChange: (e) => {
+                                    const list = [...settings.google_reviews_list];
+                                    list[rIdx] = { ...list[rIdx], author_name: e.target.value };
+                                    setSettings({ ...settings, google_reviews_list: list });
+                                  },
+                                  placeholder: "e.g. John Doe",
+                                  className: "w-full border border-slate-300 rounded px-2 py-1 text-xs"
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Star Rating" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                                "select",
+                                {
+                                  value: rev.rating || 5,
+                                  onChange: (e) => {
+                                    const list = [...settings.google_reviews_list];
+                                    list[rIdx] = { ...list[rIdx], rating: parseInt(e.target.value) };
+                                    setSettings({ ...settings, google_reviews_list: list });
+                                  },
+                                  className: "w-full border border-slate-300 rounded px-2 py-1 text-xs bg-white",
+                                  children: [
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 5, children: "⭐⭐⭐⭐⭐ (5 Stars)" }),
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 4, children: "⭐⭐⭐⭐ (4 Stars)" }),
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: 3, children: "⭐⭐⭐ (3 Stars)" })
+                                  ]
+                                }
+                              )
+                            ] }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Date / Relative Time" }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                                "input",
+                                {
+                                  type: "text",
+                                  value: rev.relative_time_description || "",
+                                  onChange: (e) => {
+                                    const list = [...settings.google_reviews_list];
+                                    list[rIdx] = { ...list[rIdx], relative_time_description: e.target.value };
+                                    setSettings({ ...settings, google_reviews_list: list });
+                                  },
+                                  placeholder: "e.g. 2 weeks ago",
+                                  className: "w-full border border-slate-300 rounded px-2 py-1 text-xs"
+                                }
+                              )
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-[10px] font-semibold text-slate-600 mb-0.5", children: "Review Text" }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx(
+                              "textarea",
+                              {
+                                rows: 2,
+                                value: rev.text || "",
+                                onChange: (e) => {
+                                  const list = [...settings.google_reviews_list];
+                                  list[rIdx] = { ...list[rIdx], text: e.target.value };
+                                  setSettings({ ...settings, google_reviews_list: list });
+                                },
+                                placeholder: "Customer review comment...",
+                                className: "w-full border border-slate-300 rounded px-2 py-1 text-xs"
+                              }
+                            )
+                          ] })
+                        ] }, rIdx)) })
                       ] })
                     ] }),
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-[#c3c4c7] rounded-sm p-5 space-y-4 shadow-sm", children: [
@@ -52321,7 +52522,7 @@ ${escapeText(this.code(index, length))}
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: reviews.slice(0, 4).map((review, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: reviews.map((review, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
             className: `p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${isRenax ? "bg-[#0f1118]/90 border-slate-800/80 hover:border-emerald-500/40" : "bg-white border-slate-200/90 shadow-sm hover:border-slate-300"}`,

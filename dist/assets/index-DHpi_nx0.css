@@ -1692,10 +1692,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     height: calc(var(--spacing) * 96);
   }
 
-  .h-\[34px\] {
-    height: 34px;
-  }
-
   .h-\[360px\] {
     height: 360px;
   }
@@ -2391,16 +2387,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-top-right-radius: var(--radius-sm);
   }
 
-  .rounded-l {
-    border-top-left-radius: .25rem;
-    border-bottom-left-radius: .25rem;
-  }
-
-  .rounded-r {
-    border-top-right-radius: .25rem;
-    border-bottom-right-radius: .25rem;
-  }
-
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -2436,11 +2422,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     border-right-width: 1px;
   }
 
-  .border-r-0 {
-    border-right-style: var(--tw-border-style);
-    border-right-width: 0;
-  }
-
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
@@ -2454,11 +2435,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .border-l {
     border-left-style: var(--tw-border-style);
     border-left-width: 1px;
-  }
-
-  .border-l-0 {
-    border-left-style: var(--tw-border-style);
-    border-left-width: 0;
   }
 
   .border-l-2 {
