@@ -56,17 +56,6 @@ export default function Home() {
     handleScrollTo("calculator-section");
   };
 
-  if (isLoading || !settings) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center font-sans">
-        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-[#047857] text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse">
-          Loading Travelluxx...
-        </p>
-      </div>
-    );
-  }
-
   // 1. STATIC HOMEPAGE VIEW
   if (settings.homepage_displays === "page") {
     return (

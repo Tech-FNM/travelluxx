@@ -102,7 +102,7 @@ export default function DynamicPage() {
 
   const isRenax = settings?.active_theme === "renax";
 
-  if (fetching || (globalLoading && !page)) {
+  if (fetching && !page) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`}>
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />

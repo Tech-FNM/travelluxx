@@ -95,7 +95,7 @@ export default function ServiceDetail() {
     customSchemaJson: service?.customSchema || ""
   });
 
-  if (isLoading) {
+  if (isLoading && !service) {
     return (
       <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white">
         <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
