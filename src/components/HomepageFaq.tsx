@@ -68,6 +68,8 @@ export default function HomepageFaq({
         <div className="space-y-3.5">
           {displayFaqs.map((faq, index) => {
             const isOpen = openIndex === index;
+            const questionId = `homepage-faq-q-${index}`;
+            const answerId = `homepage-faq-a-${index}`;
             return (
               <div
                 key={faq.question || index}
@@ -81,34 +83,41 @@ export default function HomepageFaq({
                     : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
                 }`}
               >
-                <button
-                  type="button"
-                  aria-expanded={isOpen}
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className={`w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${
-                    isRenax ? (isOpen ? "text-emerald-400" : "text-white hover:text-slate-200") : (isOpen ? "text-emerald-800" : "text-slate-900 hover:text-slate-700")
-                  }`}
-                >
-                  <span className="text-base sm:text-lg leading-snug">{faq.question}</span>
-                  <div
-                    className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
-                      isOpen
-                        ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                        : isRenax
-                        ? "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
+                  <button
+                    type="button"
+                    id={questionId}
+                    aria-expanded={isOpen}
+                    aria-controls={answerId}
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className={`w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${
+                      isRenax ? (isOpen ? "text-emerald-400" : "text-white hover:text-slate-200") : (isOpen ? "text-emerald-800" : "text-slate-900 hover:text-slate-700")
                     }`}
                   >
-                    <ChevronDown className="h-4 w-4" />
-                  </div>
-                </button>
-                {isOpen && (
-                  <div className={`px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t ${
+                    <span className="text-base sm:text-lg leading-snug">{faq.question}</span>
+                    <div
+                      className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                        isOpen
+                          ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                          : isRenax
+                          ? "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </div>
+                  </button>
+                </h3>
+                <div
+                  id={answerId}
+                  role="region"
+                  aria-labelledby={questionId}
+                  className={`px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t transition-all ${
                     isRenax ? "border-slate-800/60 text-slate-300" : "border-slate-100 text-slate-600"
-                  }`}>
-                    <p className="whitespace-pre-line">{faq.answer}</p>
-                  </div>
-                )}
+                  } ${isOpen ? "block" : "hidden"}`}
+                >
+                  <p className="whitespace-pre-line">{faq.answer}</p>
+                </div>
               </div>
             );
           })}

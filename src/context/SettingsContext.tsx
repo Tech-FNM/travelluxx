@@ -12,41 +12,91 @@ interface SettingsContextType {
   updateSettingsLocally: (newSettings: any) => void;
 }
 
+const DEFAULT_FALLBACK_SETTINGS = {
+  business_name: "Travelluxx",
+  business_email: "info@travelluxx.co.uk",
+  whatsapp_number: "441217140876",
+  office_address: "Shirley B90 Shirley, Solihull, West Midlands, UK",
+  hero_image: "",
+  footer_info: "© 2026 Travelluxx. All rights reserved.",
+  homepage_hero_badge: "TravelLuxx Private Hire",
+  homepage_hero_title: "Private Hire Birmingham – Nationwide Airport Transfers",
+  homepage_hero_subtitle: "Experience premium private travel in beautifully presented Mercedes-Benz and Audi vehicles. Every journey comes with a fixed rate and absolutely no surge pricing.",
+  homepage_indicator1: "Licensed Professional Operators",
+  homepage_indicator2: "Guaranteed Nationwide Coverage",
+  homepage_hero_btn_text: "Calculate & Get Quote",
+  homepage_hero_phone_text: "+44 1217 140876",
+  homepage_fleet_title: "Travel in Premium Comfort",
+  homepage_fleet_description: "Our curated Mercedes-Benz and Audi fleet is maintained to the highest safety and cosmetic standards.",
+  homepage_airports_title: "Airport Transfers from Birmingham and Across the UK",
+  airport_name_1: "Birmingham (BHX)",
+  airport_code_1: "BHX",
+  airport_name_2: "Heathrow",
+  airport_code_2: "LHR",
+  airport_name_3: "Gatwick",
+  airport_code_3: "LGW",
+  airport_name_4: "Luton",
+  airport_code_4: "LTN",
+  airport_name_5: "Stansted",
+  airport_code_5: "STN",
+  airport_name_6: "London City",
+  airport_code_6: "LCY",
+  service_title_1: "Airport Transfers",
+  service_desc_1: "Reliable fixed-price transfers to Birmingham, Heathrow, Gatwick and all major UK airports.",
+  service_title_2: "Port Transfers",
+  service_desc_2: "Dependable transfers to and from Southampton, Dover and other UK cruise terminals.",
+  service_title_3: "Station Transfers",
+  service_desc_3: "Seamless private hire Birmingham pickups for rail stations, including New Street, and onward journeys to London and across the UK.",
+  service_title_4: "Popular Cities",
+  service_desc_4: "Travel to Solihull, Worcester, Cheltenham, Warwick, Leamington Spa, Coventry and cities across the UK in comfort and style.",
+  service_title_5: "Business Travel",
+  service_desc_5: "Our chauffeur service Birmingham gives executives and corporate teams punctual, professional and discreet travel.",
+  active_theme: "default",
+  homepage_displays: "default",
+  seo_title: "Private Hire Birmingham | Airport Transfers & Chauffeurs | TravelLuxx",
+  seo_description: "Book premium private hire Birmingham with fixed fares, no surge pricing and Mercedes-Benz and Audi vehicles. Airport, station and business transfers nationwide."
+};
+
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<any>(() => {
     try {
-      const cached = localStorage.getItem("travelluxx_cached_settings");
-      return cached ? JSON.parse(cached) : null;
-    } catch (e) {
-      return null;
-    }
+      if (typeof window !== "undefined") {
+        const cached = localStorage.getItem("travelluxx_cached_settings");
+        if (cached) return JSON.parse(cached);
+      }
+    } catch (e) {}
+    return DEFAULT_FALLBACK_SETTINGS;
   });
   const [pages, setPages] = useState<any[]>(() => {
     try {
-      const cached = localStorage.getItem("travelluxx_cached_pages");
-      return cached ? JSON.parse(cached) : [];
-    } catch (e) {
-      return [];
-    }
+      if (typeof window !== "undefined") {
+        const cached = localStorage.getItem("travelluxx_cached_pages");
+        if (cached) return JSON.parse(cached);
+      }
+    } catch (e) {}
+    return [];
   });
   const [services, setServices] = useState<any[]>(() => {
     try {
-      const cached = localStorage.getItem("travelluxx_cached_services");
-      return cached ? JSON.parse(cached) : [];
-    } catch (e) {
-      return [];
-    }
+      if (typeof window !== "undefined") {
+        const cached = localStorage.getItem("travelluxx_cached_services");
+        if (cached) return JSON.parse(cached);
+      }
+    } catch (e) {}
+    return [];
   });
   const [posts, setPosts] = useState<any[]>([]);
   const [servicesPageSettings, setServicesPageSettings] = useState<any>(null);
   const [menuItems, setMenuItems] = useState<any[]>(() => {
     try {
-      const cached = localStorage.getItem("travelluxx_cached_menu");
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (typeof window !== "undefined") {
+        const cached = localStorage.getItem("travelluxx_cached_menu");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
       }
     } catch (e) {}
     return [
@@ -80,7 +130,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
     ];
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSettings = async () => {
     setIsLoading(true);

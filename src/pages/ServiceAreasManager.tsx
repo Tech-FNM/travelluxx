@@ -21,8 +21,8 @@ import {
   CalendarDays,
   FileText
 } from "lucide-react";
-import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 type ServiceAreaFaq = { question: string; answer: string };
 type ServiceArea = {

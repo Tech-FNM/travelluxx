@@ -5,14 +5,20 @@ export interface Booking {
   pickupCoords?: { lat: number; lng: number };
   dropoffCoords?: { lat: number; lng: number };
   distance: number;
+  distanceMiles?: number;
+  distanceKm?: number;
   duration: number;
   date: string;
   time: string;
   vehicle: "Economy" | "Luxury" | "Family";
   price: number;
+  originalPrice?: number;
+  promoCode?: string;
+  discountAmount?: number;
   passengerName: string;
   passengerEmail: string;
   passengerPhone: string;
+  passengerAlternatePhone?: string;
   flightNumber: string;
   passengers: number;
   luggage: number;
@@ -36,6 +42,11 @@ export interface Inquiry {
 
 export interface DistanceResult {
   distanceMiles: number;
+  distanceKm?: number;
+  distance?: number;
+  duration?: number;
+  durationText?: string;
+  distanceText?: string;
   timeMinutes: number;
   pickupLat: number;
   pickupLng: number;
@@ -50,5 +61,8 @@ export interface DistanceResult {
     Luxury: number;
     Family: number;
   };
+  waitingTime?: number;
+  waitingChargeAmount?: number;
+  billableDistance?: number;
   source?: string;
 }

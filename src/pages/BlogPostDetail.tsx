@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
@@ -169,7 +169,13 @@ export default function BlogPostDetail() {
             {post.image && (
               <div className="max-w-4xl mx-auto px-4 md:px-6 mb-10 md:mb-14">
                 <div className="aspect-[21/9] w-full overflow-hidden rounded shadow-sm bg-slate-100">
-                  <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
+                  <img
+                    src={post.image}
+                    alt={post.imageAlt || `${post.title} - Travelluxx Executive Chauffeur Blog`}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             )}
@@ -198,14 +204,14 @@ export default function BlogPostDetail() {
               {/* FAQs Section */}
               {post.faqs && post.faqs.length > 0 && (
                 <div className="mt-12 pt-8 border-t border-slate-200">
-                  <h3 className="font-serif text-2xl font-semibold mb-6 text-slate-900">Frequently Asked Questions</h3>
+                  <h2 className="font-serif text-2xl font-semibold mb-6 text-slate-900">Frequently Asked Questions</h2>
                   <div className="space-y-4">
                     {post.faqs.map((faq: any, idx: number) => (
                       <div 
                         key={idx} 
                         className="bg-white border border-slate-200/60 hover:border-emerald-200 p-5 rounded-xl transition duration-300 hover:shadow-md hover:shadow-emerald-600/5 group"
                       >
-                        <h4 className="font-sans text-base font-semibold text-slate-800 group-hover:text-emerald-700 transition duration-300 mb-2">{faq.question}</h4>
+                        <h3 className="font-sans text-base font-semibold text-slate-800 group-hover:text-emerald-700 transition duration-300 mb-2">{faq.question}</h3>
                         <p className="font-serif text-slate-600 text-sm md:text-base leading-relaxed">{faq.answer}</p>
                       </div>
                     ))}

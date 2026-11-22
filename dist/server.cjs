@@ -59,17 +59,31 @@ var BookingSchema = new import_mongoose.default.Schema({
   passengerName: String,
   passengerEmail: String,
   passengerPhone: String,
+  passengerAlternatePhone: String,
   pickup: String,
   dropoff: String,
+  pickupCoords: Object,
+  dropoffCoords: Object,
   date: String,
   time: String,
   distance: String,
+  distanceMiles: Number,
+  distanceKm: Number,
+  distanceText: String,
+  duration: Number,
   vehicle: String,
   price: Number,
+  originalPrice: Number,
+  discountAmount: Number,
+  promoCode: String,
   status: { type: String, default: "Pending" },
   paymentMethod: String,
   paymentStatus: { type: String, default: "Unpaid" },
   flightNumber: String,
+  passengers: Number,
+  luggage: Number,
+  stops: Array,
+  waitingTime: Number,
   createdAt: { type: String, default: () => (/* @__PURE__ */ new Date()).toISOString() }
 }, { strict: false });
 var BookingModel = import_mongoose.default.model("Booking", BookingSchema);
@@ -158,8 +172,10 @@ var PromoCodeSchema = new import_mongoose.default.Schema({
   discountValue: { type: Number, required: true },
   minOrderAmount: { type: Number, default: 0 },
   maxDiscountAmount: { type: Number, default: null },
+  startDate: { type: String, default: "" },
   expiryDate: { type: String, default: "" },
   usageLimit: { type: Number, default: null },
+  perUserLimit: { type: Number, default: null },
   timesUsed: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
   description: { type: String, default: "" },
@@ -549,303 +565,6 @@ function getCurrentWebsiteSettings() {
   }
   return defaultSettings;
 }
-function prepareSnippet(code) {
-  if (!code || typeof code !== "string") return "";
-  const trimmed = code.trim();
-  if (!trimmed) return "";
-  if (trimmed.startsWith("<") || /<\w+/i.test(trimmed)) {
-    return trimmed;
-  }
-  if (trimmed.includes("{") && trimmed.includes("}") && !trimmed.includes("function") && !trimmed.includes("var ") && !trimmed.includes("const ") && !trimmed.includes("let ")) {
-    return `<style>
-${trimmed}
-</style>`;
-  }
-  return `<script>
-${trimmed}
-</script>`;
-}
-function resolvePageMetadata(reqUrl, settings) {
-  const baseUrl = "https://travelluxx.co.uk";
-  const pathOnly = (reqUrl || "/").split("?")[0].replace(/\/+$/, "") || "/";
-  const siteName = settings?.business_name || "TravelLuxx";
-  const defaultTitle = settings?.homepage_seo_title || settings?.seo_title || settings?.homepage_meta_title || `${siteName} | Executive Airport Transfers & Chauffeur Service`;
-  const defaultDesc = settings?.homepage_seo_description || settings?.seo_description || settings?.homepage_meta_description || "Luxury chauffeur driven private hire and airport transfers across Solihull, Birmingham, and the UK. Reliable executive travel.";
-  const defaultImage = settings?.og_image || settings?.hero_image || "https://travelluxx.co.uk/assets/images/travelluxx_logo_1784064660967.webp";
-  let result = {
-    title: defaultTitle,
-    description: defaultDesc,
-    canonicalUrl: `${baseUrl}${pathOnly === "/" ? "" : pathOnly}`,
-    ogType: "website",
-    ogTitle: defaultTitle,
-    ogDescription: defaultDesc,
-    ogImage: defaultImage,
-    noIndex: Boolean(settings?.search_engine_visibility),
-    schemas: []
-  };
-  try {
-    if (pathOnly === "/service-areas") {
-      result.title = "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx";
-      result.description = "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer.";
-      result.ogTitle = result.title;
-      result.ogDescription = result.description;
-    } else if (pathOnly.startsWith("/service-areas/")) {
-      const slug = pathOnly.replace("/service-areas/", "").trim();
-      const areas = readServiceAreas();
-      const area = areas.find((a) => a.slug === slug);
-      if (area) {
-        result.title = area.metaTitle || area.ogTitle || `${area.heroTitle || area.title} | ${siteName}`;
-        result.description = area.metaDescription || area.ogDescription || area.heroDescription || defaultDesc;
-        result.ogTitle = area.ogTitle || result.title;
-        result.ogDescription = area.ogDescription || result.description;
-        if (area.ogImage || area.heroImage) result.ogImage = area.ogImage || area.heroImage;
-        if (area.noIndexNoFollow) result.noIndex = true;
-        result.ogType = "website";
-        const areaSchema = {
-          "@context": "https://schema.org",
-          "@type": "TaxiService",
-          "name": `TravelLuxx - ${area.title} Chauffeur & Airport Transfers`,
-          "url": `${baseUrl}/service-areas/${area.slug}`,
-          "areaServed": area.title,
-          "description": result.description
-        };
-        result.schemas.push(areaSchema);
-        if (Array.isArray(area.faqs) && area.faqs.length > 0) {
-          result.schemas.push({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": area.faqs.map((f) => ({
-              "@type": "Question",
-              "name": f.question,
-              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-            }))
-          });
-        }
-        if (area.customSchema) {
-          try {
-            const parsed = JSON.parse(area.customSchema);
-            if (Array.isArray(parsed)) result.schemas.push(...parsed);
-            else if (parsed) result.schemas.push(parsed);
-          } catch (e) {
-          }
-        }
-      }
-    } else if (pathOnly === "/services") {
-      result.title = "Our Services | Luxury Chauffeur & Airport Transfers | TravelLuxx";
-      result.description = "Explore TravelLuxx's full suite of executive travel services: airport transfers, corporate chauffeur, wedding hire, and intercity travel.";
-      result.ogTitle = result.title;
-      result.ogDescription = result.description;
-    } else if (pathOnly.startsWith("/services/")) {
-      const slug = pathOnly.replace("/services/", "").trim();
-      const services = readServices();
-      const s = services.find((srv) => srv.slug === slug);
-      if (s) {
-        result.title = s.metaTitle || s.ogTitle || `${s.title} | Luxury Chauffeur & Travel Services | ${siteName}`;
-        result.description = s.metaDescription || s.ogDescription || s.excerpt || defaultDesc;
-        result.ogTitle = s.ogTitle || result.title;
-        result.ogDescription = s.ogDescription || result.description;
-        if (s.ogImage || s.image) result.ogImage = s.ogImage || s.image;
-        if (s.noIndexNoFollow) result.noIndex = true;
-        result.ogType = "website";
-        result.schemas.push({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          "name": s.title,
-          "description": result.description,
-          "provider": { "@type": "LocalBusiness", "name": siteName, "url": baseUrl }
-        });
-        if (Array.isArray(s.faqs) && s.faqs.length > 0) {
-          result.schemas.push({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": s.faqs.map((f) => ({
-              "@type": "Question",
-              "name": f.question,
-              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-            }))
-          });
-        }
-        if (s.customSchema) {
-          try {
-            const parsed = JSON.parse(s.customSchema);
-            if (Array.isArray(parsed)) result.schemas.push(...parsed);
-            else if (parsed) result.schemas.push(parsed);
-          } catch (e) {
-          }
-        }
-      }
-    } else if (pathOnly === "/blog") {
-      result.title = "Blog & News | TravelLuxx Private Hire & Chauffeur";
-      result.description = "Latest insights, travel guides, executive transfer tips, and news from TravelLuxx.";
-      result.ogTitle = result.title;
-      result.ogDescription = result.description;
-    } else if (pathOnly.startsWith("/blog/")) {
-      const slug = pathOnly.replace("/blog/", "").trim();
-      const posts = readPosts();
-      const post = posts.find((p) => (p.slug || p.id) === slug);
-      if (post) {
-        result.title = post.metaTitle || post.ogTitle || `${post.title} | ${siteName}`;
-        result.description = post.metaDescription || post.ogDescription || post.excerpt || defaultDesc;
-        result.ogTitle = post.ogTitle || result.title;
-        result.ogDescription = post.ogDescription || result.description;
-        if (post.ogImage || post.image) result.ogImage = post.ogImage || post.image;
-        if (post.noIndexNoFollow) result.noIndex = true;
-        result.ogType = "article";
-        result.schemas.push({
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": post.title,
-          "description": result.description,
-          "datePublished": post.date || post.createdAt,
-          "image": result.ogImage,
-          "author": { "@type": "Person", "name": post.author || "TravelLuxx Editorial" }
-        });
-        if (post.customSchema) {
-          try {
-            const parsed = JSON.parse(post.customSchema);
-            if (Array.isArray(parsed)) result.schemas.push(...parsed);
-            else if (parsed) result.schemas.push(parsed);
-          } catch (e) {
-          }
-        }
-      }
-    } else if (pathOnly !== "/" && !pathOnly.startsWith("/api") && !pathOnly.startsWith("/admin")) {
-      const slug = pathOnly.replace(/^\//, "").trim();
-      const pages = readPages();
-      const page = pages.find((p) => (p.slug || p.id) === slug);
-      if (page) {
-        result.title = page.metaTitle || page.ogTitle || `${page.title} | ${siteName}`;
-        result.description = page.metaDescription || page.ogDescription || defaultDesc;
-        result.ogTitle = page.ogTitle || result.title;
-        result.ogDescription = page.ogDescription || result.description;
-        if (page.ogImage || page.image) result.ogImage = page.ogImage || page.image;
-        if (page.noIndexNoFollow) result.noIndex = true;
-        if (Array.isArray(page.faqs) && page.faqs.length > 0) {
-          result.schemas.push({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": page.faqs.map((f) => ({
-              "@type": "Question",
-              "name": f.question,
-              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-            }))
-          });
-        }
-        if (page.customSchema) {
-          try {
-            const parsed = JSON.parse(page.customSchema);
-            if (Array.isArray(parsed)) result.schemas.push(...parsed);
-            else if (parsed) result.schemas.push(parsed);
-          } catch (e) {
-          }
-        }
-      }
-    }
-    if (pathOnly === "/" && Array.isArray(settings?.homepage_faqs) && settings.homepage_faqs.length > 0) {
-      result.schemas.push({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": settings.homepage_faqs.filter((f) => f.question && f.answer).map((f) => ({
-          "@type": "Question",
-          "name": f.question,
-          "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-        }))
-      });
-    }
-  } catch (err) {
-    console.warn("SEO resolution error:", err);
-  }
-  return result;
-}
-function injectDynamicSeoIntoHtml(rawHtml, reqUrl, settings) {
-  let html = rawHtml;
-  const seo = resolvePageMetadata(reqUrl, settings);
-  if (html.includes("<title>")) {
-    html = html.replace(/<title>[^<]*<\/title>/i, `<title>${seo.title}</title>`);
-  } else if (html.includes("</head>")) {
-    html = html.replace("</head>", `<title>${seo.title}</title>
-</head>`);
-  }
-  const metaTags = [
-    `<meta name="description" content="${seo.description.replace(/"/g, "&quot;")}" />`,
-    `<meta name="robots" content="${seo.noIndex ? "noindex, nofollow" : "index, follow"}" />`,
-    `<link rel="canonical" href="${seo.canonicalUrl}" />`,
-    `<meta property="og:type" content="${seo.ogType}" />`,
-    `<meta property="og:site_name" content="${(settings?.business_name || "TravelLuxx").replace(/"/g, "&quot;")}" />`,
-    `<meta property="og:url" content="${seo.canonicalUrl}" />`,
-    `<meta property="og:title" content="${seo.ogTitle.replace(/"/g, "&quot;")}" />`,
-    `<meta property="og:description" content="${seo.ogDescription.replace(/"/g, "&quot;")}" />`
-  ];
-  if (seo.ogImage) {
-    metaTags.push(`<meta property="og:image" content="${seo.ogImage}" />`);
-    metaTags.push(`<meta name="twitter:image" content="${seo.ogImage}" />`);
-  }
-  metaTags.push(`<meta name="twitter:card" content="summary_large_image" />`);
-  metaTags.push(`<meta name="twitter:title" content="${seo.ogTitle.replace(/"/g, "&quot;")}" />`);
-  metaTags.push(`<meta name="twitter:description" content="${seo.ogDescription.replace(/"/g, "&quot;")}" />`);
-  html = html.replace(/<meta\s+name="description"[^>]*>/gi, "");
-  html = html.replace(/<meta\s+property="og:[^"]+"[^>]*>/gi, "");
-  html = html.replace(/<meta\s+name="twitter:[^"]+"[^>]*>/gi, "");
-  html = html.replace(/<link\s+rel="canonical"[^>]*>/gi, "");
-  let schemaTags = "";
-  if (seo.schemas.length > 0) {
-    schemaTags = `
-<script type="application/ld+json">
-${JSON.stringify(seo.schemas.length === 1 ? seo.schemas[0] : seo.schemas, null, 2)}
-</script>
-`;
-  }
-  const injection = `
-<!-- [Dynamic SEO & OpenGraph Tags] -->
-${metaTags.join("\n")}${schemaTags}<!-- [/Dynamic SEO & OpenGraph Tags] -->
-`;
-  if (html.includes("</head>")) {
-    html = html.replace("</head>", `${injection}</head>`);
-  }
-  return html;
-}
-function injectSnippetsIntoHtml(rawHtml, settings) {
-  let html = rawHtml;
-  if (!settings) return html;
-  if (settings.favicon_url) {
-    if (html.includes('id="site-favicon"')) {
-      html = html.replace(/<link[^>]*id="site-favicon"[^>]*>/i, `<link rel="icon" type="image/x-icon" href="${settings.favicon_url}" id="site-favicon" />`);
-    } else if (html.includes('<link rel="icon"')) {
-      html = html.replace(/<link rel="icon"[^>]*>/i, `<link rel="icon" type="image/x-icon" href="${settings.favicon_url}" id="site-favicon" />`);
-    }
-  }
-  if (settings.custom_header_code) {
-    const headerSnippet = prepareSnippet(settings.custom_header_code);
-    if (headerSnippet) {
-      const injection = `
-<!-- [Travelluxx Custom Header Snippet] -->
-${headerSnippet}
-<!-- [/Travelluxx Custom Header Snippet] -->
-`;
-      if (html.includes("</head>")) {
-        html = html.replace("</head>", `${injection}</head>`);
-      } else {
-        html = `${injection}${html}`;
-      }
-    }
-  }
-  if (settings.custom_footer_code) {
-    const footerSnippet = prepareSnippet(settings.custom_footer_code);
-    if (footerSnippet) {
-      const injection = `
-<!-- [Travelluxx Custom Footer Snippet] -->
-${footerSnippet}
-<!-- [/Travelluxx Custom Footer Snippet] -->
-`;
-      if (html.includes("</body>")) {
-        html = html.replace("</body>", `${injection}</body>`);
-      } else {
-        html = `${html}${injection}`;
-      }
-    }
-  }
-  return html;
-}
 function getCurrentPricingSettings() {
   if (cachedPricingSettings) {
     return cachedPricingSettings;
@@ -909,6 +628,14 @@ function readSmtpSettings() {
     senderAddress: saved.senderAddress || saved.smtpUser || process.env.SMTP_USER || ws.business_email || "info@travelluxx.co.uk"
   };
   return cachedSmtpSettings;
+}
+function getMollieClient() {
+  const settings = getCurrentWebsiteSettings();
+  const apiKey = process.env.MOLLIE_API_KEY || settings?.mollie_api_key;
+  if (!apiKey || !apiKey.trim()) {
+    return null;
+  }
+  return (0, import_api_client.createMollieClient)({ apiKey: apiKey.trim() });
 }
 function createTransporter() {
   const settings = readSmtpSettings();
@@ -1117,6 +844,60 @@ var UK_LOCATIONS = {
   "lgw": { lat: 51.1537, lng: -0.1821, name: "London Gatwick Airport (LGW)" },
   "man": { lat: 53.3588, lng: -2.2727, name: "Manchester Airport (MAN)" }
 };
+var UK_AIRPORTS_AND_HUBS = [
+  { name: "London Heathrow Airport (LHR), Longford, Hounslow TW6", mainText: "London Heathrow Airport (LHR)", secondaryText: "Longford, Hounslow, Greater London, TW6", lat: 51.47, lng: -0.4543, type: "airport" },
+  { name: "London Gatwick Airport (LGW), Horley, Gatwick RH6", mainText: "London Gatwick Airport (LGW)", secondaryText: "Horley, West Sussex, RH6", lat: 51.1537, lng: -0.1821, type: "airport" },
+  { name: "Birmingham Airport (BHX), Trident Way, Birmingham B26 3QJ", mainText: "Birmingham Airport (BHX)", secondaryText: "Bickenhill Lane, Solihull, B26 3QJ", lat: 52.4539, lng: -1.748, type: "airport" },
+  { name: "Manchester Airport (MAN), Manchester M90 1QX", mainText: "Manchester Airport (MAN)", secondaryText: "Ringway, Greater Manchester, M90 1QX", lat: 53.3588, lng: -2.2727, type: "airport" },
+  { name: "London Stansted Airport (STN), Bassingbourn Rd, Stansted CM24 1QW", mainText: "London Stansted Airport (STN)", secondaryText: "Stansted Mountfitchet, Essex, CM24 1QW", lat: 51.886, lng: 0.2389, type: "airport" },
+  { name: "London Luton Airport (LTN), Airport Way, Luton LU2 9LY", mainText: "London Luton Airport (LTN)", secondaryText: "Luton, Bedfordshire, LU2 9LY", lat: 51.8763, lng: -0.3717, type: "airport" },
+  { name: "London City Airport (LCY), Hartmann Rd, London E16 2PX", mainText: "London City Airport (LCY)", secondaryText: "Royal Docks, Newham, London E16 2PX", lat: 51.5048, lng: 0.0495, type: "airport" },
+  { name: "East Midlands Airport (EMA), Castle Donington, Derby DE74 2SA", mainText: "East Midlands Airport (EMA)", secondaryText: "Castle Donington, Leicestershire, DE74 2SA", lat: 52.8311, lng: -1.3281, type: "airport" },
+  { name: "Bristol Airport (BRS), Bristol BS48 3DY", mainText: "Bristol Airport (BRS)", secondaryText: "Lulsgate Bottom, North Somerset, BS48 3DY", lat: 51.3827, lng: -2.7191, type: "airport" },
+  { name: "London St Pancras International Station, Euston Rd, London N1C 4QP", mainText: "London St Pancras International Station", secondaryText: "Camden, London N1C 4QP", lat: 51.5314, lng: -0.1261, type: "station" },
+  { name: "London Euston Station, Eversholt St, London NW1 2DN", mainText: "London Euston Station", secondaryText: "Camden, London NW1 2DN", lat: 51.5284, lng: -0.1331, type: "station" },
+  { name: "London Paddington Station, Praed St, London W2 1HQ", mainText: "London Paddington Station", secondaryText: "Westminster, London W2 1HQ", lat: 51.5154, lng: -0.1755, type: "station" },
+  { name: "Birmingham New Street Station, Station St, Birmingham B2 4QA", mainText: "Birmingham New Street Station", secondaryText: "City Centre, Birmingham B2 4QA", lat: 52.4778, lng: -1.8986, type: "station" },
+  { name: "Solihull Train Station, Station Approach, Solihull B91 1LE", mainText: "Solihull Train Station", secondaryText: "Solihull, West Midlands, B91 1LE", lat: 52.4109, lng: -1.782, type: "station" },
+  { name: "Shirley, Solihull B90, West Midlands, UK", mainText: "Shirley, Solihull", secondaryText: "Solihull, West Midlands, B90", lat: 52.414, lng: -1.815, type: "address" },
+  { name: "Mayfair, London W1K, Greater London, UK", mainText: "Mayfair, Central London", secondaryText: "City of Westminster, London W1K", lat: 51.5103, lng: -0.1494, type: "address" }
+];
+async function resolveLocationCoords(rawName, providedCoords, fallback) {
+  if (providedCoords && Number(providedCoords.lat) !== 0 && Number(providedCoords.lng) !== 0) {
+    return { lat: Number(providedCoords.lat), lng: Number(providedCoords.lng), name: rawName || fallback.name };
+  }
+  const query = String(rawName || "").trim();
+  if (!query) return fallback;
+  const lower = query.toLowerCase();
+  const hub = UK_AIRPORTS_AND_HUBS.find(
+    (h) => lower.includes(h.mainText.toLowerCase()) || h.name.toLowerCase().includes(lower) || lower.includes("heathrow") && h.mainText.includes("Heathrow") || lower.includes("gatwick") && h.mainText.includes("Gatwick") || lower.includes("birmingham airport") && h.mainText.includes("BHX") || lower.includes("manchester airport") && h.mainText.includes("MAN") || lower.includes("stansted") && h.mainText.includes("Stansted") || lower.includes("luton") && h.mainText.includes("Luton")
+  );
+  if (hub) {
+    return { lat: hub.lat, lng: hub.lng, name: query };
+  }
+  for (const key of Object.keys(UK_LOCATIONS)) {
+    if (lower.includes(key)) {
+      return { lat: UK_LOCATIONS[key].lat, lng: UK_LOCATIONS[key].lng, name: query };
+    }
+  }
+  const cleanPostcode = query.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+  const ukPostcodePattern = /^[A-Z]{1,2}[0-9][A-Z0-9]?(\s?[0-9][A-Z]{2})?$/i;
+  if (ukPostcodePattern.test(query) || /^[A-Z]{1,2}[0-9]/.test(cleanPostcode)) {
+    try {
+      const pcRes = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(cleanPostcode)}`, {
+        signal: AbortSignal.timeout(2e3)
+      });
+      if (pcRes.ok) {
+        const pcData = await pcRes.json();
+        if (pcData.result) {
+          return { lat: pcData.result.latitude, lng: pcData.result.longitude, name: query };
+        }
+      }
+    } catch (e) {
+    }
+  }
+  return fallback;
+}
 function getHaversineDistance(lat1, lon1, lat2, lon2) {
   const R = 3958.8;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -1143,7 +924,7 @@ function generateFallbackRoutePoints(lat1, lng1, lat2, lng2, stepsCount = 10) {
   return points;
 }
 var app = (0, import_express.default)();
-var PORT = 3e3;
+var PORT = process.env.PORT || 3e3;
 app.use((req, res, next) => {
   const host = req.headers.host || "";
   if (host.toLowerCase().startsWith("www.")) {
@@ -1168,12 +949,64 @@ app.post("/api/distance", async (req, res) => {
     return res.status(400).json({ error: "Pickup and Dropoff locations are required." });
   }
   const pricing = getCurrentPricingSettings();
-  let pCoords = pickupCoords ? { lat: Number(pickupCoords.lat), lng: Number(pickupCoords.lng), name: pickup } : UK_LOCATIONS.shirley;
-  let dCoords = dropoffCoords ? { lat: Number(dropoffCoords.lat), lng: Number(dropoffCoords.lng), name: dropoff } : UK_LOCATIONS.bhx;
-  let distance = precalculated?.distanceMiles ? Number(precalculated.distanceMiles) : getHaversineDistance(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng) * 1.25;
-  if (isNaN(distance) || distance < 1) distance = 15;
-  let duration = precalculated?.timeMinutes ? Math.round(Number(precalculated.timeMinutes)) : Math.round(distance / 45 * 60);
-  const effectiveDist = Math.max(distance, pricing.minimum_billable_distance);
+  const pCoords = await resolveLocationCoords(pickup, pickupCoords, UK_LOCATIONS.shirley);
+  const dCoords = await resolveLocationCoords(dropoff, dropoffCoords, UK_LOCATIONS.bhx);
+  let actualDistanceMiles = 0;
+  let actualDurationMinutes = 0;
+  let routePoints = precalculated?.routePoints && precalculated.routePoints.length > 0 ? precalculated.routePoints : [];
+  if (precalculated?.distanceMiles && Number(precalculated.distanceMiles) > 0) {
+    actualDistanceMiles = Number(precalculated.distanceMiles);
+    actualDurationMinutes = precalculated.timeMinutes ? Math.round(Number(precalculated.timeMinutes)) : Math.round(actualDistanceMiles / 35 * 60);
+  } else {
+    const validStops = [];
+    if (Array.isArray(stops)) {
+      for (const s of stops) {
+        if (s.lat && s.lng) {
+          validStops.push(s);
+        } else if (s.address || s.location || s.name) {
+          const resolved = await resolveLocationCoords(s.address || s.location || s.name, null, { lat: 0, lng: 0, name: "" });
+          if (resolved.lat && resolved.lng) {
+            validStops.push({ ...s, lat: resolved.lat, lng: resolved.lng });
+          }
+        }
+      }
+    }
+    try {
+      const stopCoordsStr = validStops.map((s) => `${s.lng},${s.lat}`).join(";");
+      const coordsChain = [
+        `${pCoords.lng},${pCoords.lat}`,
+        ...stopCoordsStr ? [stopCoordsStr] : [],
+        `${dCoords.lng},${dCoords.lat}`
+      ].join(";");
+      const osrmRes = await fetch(`https://router.project-osrm.org/route/v1/driving/${coordsChain}?overview=full&geometries=geojson`, {
+        signal: AbortSignal.timeout(3500)
+      });
+      if (osrmRes.ok) {
+        const osrmData = await osrmRes.json();
+        if (osrmData.routes && osrmData.routes.length > 0) {
+          const r = osrmData.routes[0];
+          actualDistanceMiles = r.distance / 1609.344;
+          actualDurationMinutes = Math.max(5, Math.round(r.duration / 60));
+          if (!routePoints || routePoints.length === 0) {
+            routePoints = r.geometry.coordinates.map((coord) => ({ lat: coord[1], lng: coord[0] }));
+          }
+        }
+      }
+    } catch (e) {
+    }
+    if (!actualDistanceMiles || actualDistanceMiles <= 0) {
+      const straightLine = getHaversineDistance(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng);
+      actualDistanceMiles = Math.max(0.5, straightLine * 1.2);
+      actualDurationMinutes = Math.max(5, Math.round(actualDistanceMiles / 30 * 60));
+      if (!routePoints || routePoints.length === 0) {
+        routePoints = generateFallbackRoutePoints(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng);
+      }
+    }
+  }
+  actualDistanceMiles = Number(actualDistanceMiles.toFixed(1));
+  const actualDistanceKm = Number((actualDistanceMiles * 1.60934).toFixed(1));
+  const minBillableDist = Number(pricing.minimum_billable_distance || 10);
+  const effectiveDist = Math.max(actualDistanceMiles, minBillableDist);
   const stopCount = Array.isArray(stops) ? stops.length : 0;
   const stopFee = stopCount * (pricing.extra_stop_charge || 10);
   let totalWaitingMins = 0;
@@ -1188,10 +1021,17 @@ app.post("/api/distance", async (req, res) => {
     Luxury: Number((effectiveDist * pricing.luxury_price_per_mile + stopFee + waitingChargeAmount).toFixed(2)),
     Family: Number((effectiveDist * pricing.family_price_per_mile + stopFee + waitingChargeAmount).toFixed(2))
   };
-  const routePoints = precalculated?.routePoints && precalculated.routePoints.length > 0 ? precalculated.routePoints : generateFallbackRoutePoints(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng);
+  if (!routePoints || routePoints.length === 0) {
+    routePoints = generateFallbackRoutePoints(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng);
+  }
   return res.json({
-    distance: Number(distance.toFixed(1)),
-    duration,
+    distance: actualDistanceMiles,
+    distanceMiles: actualDistanceMiles,
+    distanceKm: actualDistanceKm,
+    distanceText: `${actualDistanceMiles} mi (${actualDistanceKm} km)`,
+    duration: actualDurationMinutes,
+    durationText: `${actualDurationMinutes} mins`,
+    billableDistance: effectiveDist,
     prices,
     routePoints,
     pickupCoords: pCoords,
@@ -1200,14 +1040,154 @@ app.post("/api/distance", async (req, res) => {
     waitingChargeAmount: Number(waitingChargeAmount.toFixed(2))
   });
 });
+var promoRateLimits = {};
+function isRateLimitedForCoupon(ip) {
+  const now = Date.now();
+  const clientKey = ip || "unknown";
+  const entry = promoRateLimits[clientKey];
+  if (!entry || now > entry.resetAt) {
+    promoRateLimits[clientKey] = { count: 1, resetAt: now + 60 * 1e3 };
+    return false;
+  }
+  if (entry.count >= 15) {
+    return true;
+  }
+  entry.count++;
+  return false;
+}
+async function validateAndCalculateCoupon(rawCode, orderAmount, userEmail) {
+  const code = String(rawCode || "").trim().toUpperCase();
+  if (!code) {
+    return { valid: false, message: "Please enter a coupon code.", discountAmount: 0, finalAmount: orderAmount };
+  }
+  await connectToDatabase();
+  let promo = null;
+  if (import_mongoose.default.connection.readyState === 1) {
+    promo = await PromoCodeModel.findOne({ code }).lean();
+  }
+  if (!promo) {
+    const all = readPromoCodes();
+    promo = all.find((p) => p.code && p.code.toUpperCase() === code);
+  }
+  if (!promo) {
+    return { valid: false, message: "Invalid coupon code.", discountAmount: 0, finalAmount: orderAmount };
+  }
+  if (!promo.isActive) {
+    return { valid: false, message: "This coupon is currently inactive.", discountAmount: 0, finalAmount: orderAmount };
+  }
+  const now = /* @__PURE__ */ new Date();
+  if (promo.startDate) {
+    const start = new Date(promo.startDate);
+    if (start.toString() !== "Invalid Date" && now < start) {
+      return { valid: false, message: `This coupon will be valid starting ${promo.startDate}.`, discountAmount: 0, finalAmount: orderAmount };
+    }
+  }
+  const expStr = promo.expiryDate || promo.expiresAt;
+  if (expStr) {
+    const expiry = new Date(expStr);
+    if (expStr.length <= 10) {
+      expiry.setHours(23, 59, 59, 999);
+    }
+    if (expiry.toString() !== "Invalid Date" && now > expiry) {
+      return { valid: false, message: "This coupon has expired.", discountAmount: 0, finalAmount: orderAmount };
+    }
+  }
+  if (promo.usageLimit !== null && promo.usageLimit !== void 0 && Number(promo.usageLimit) > 0) {
+    const timesUsed = Number(promo.timesUsed || 0);
+    if (timesUsed >= Number(promo.usageLimit)) {
+      return { valid: false, message: "This coupon has reached its total usage limit.", discountAmount: 0, finalAmount: orderAmount };
+    }
+  }
+  if (promo.perUserLimit !== null && promo.perUserLimit !== void 0 && Number(promo.perUserLimit) > 0 && userEmail) {
+    const normalizedEmail = userEmail.toLowerCase().trim();
+    let userUsedCount = 0;
+    if (import_mongoose.default.connection.readyState === 1) {
+      userUsedCount = await BookingModel.countDocuments({
+        promoCode: promo.code,
+        passengerEmail: normalizedEmail
+      });
+    } else {
+      const allBookings = readBookings();
+      userUsedCount = allBookings.filter(
+        (b) => b.promoCode && b.promoCode.toUpperCase() === promo.code.toUpperCase() && String(b.passengerEmail || "").toLowerCase().trim() === normalizedEmail
+      ).length;
+    }
+    if (userUsedCount >= Number(promo.perUserLimit)) {
+      return { valid: false, message: `You have reached the per-customer usage limit (${promo.perUserLimit}) for this coupon.`, discountAmount: 0, finalAmount: orderAmount };
+    }
+  }
+  const minAmount = Number(promo.minOrderAmount || 0);
+  if (minAmount > 0 && orderAmount < minAmount) {
+    return {
+      valid: false,
+      message: `Minimum booking fare of \xA3${minAmount.toFixed(2)} is required for this coupon.`,
+      discountAmount: 0,
+      finalAmount: orderAmount
+    };
+  }
+  let discountAmount = 0;
+  const val = Number(promo.discountValue || 0);
+  if (promo.discountType === "percentage") {
+    discountAmount = orderAmount * val / 100;
+    if (promo.maxDiscountAmount && Number(promo.maxDiscountAmount) > 0) {
+      discountAmount = Math.min(discountAmount, Number(promo.maxDiscountAmount));
+    }
+  } else {
+    discountAmount = val;
+  }
+  discountAmount = Math.min(discountAmount, orderAmount);
+  discountAmount = Math.max(0, Math.round(discountAmount * 100) / 100);
+  const finalAmount = Math.max(0, Math.round((orderAmount - discountAmount) * 100) / 100);
+  return {
+    valid: true,
+    message: "Coupon code applied successfully!",
+    coupon: promo,
+    discountAmount,
+    finalAmount
+  };
+}
+async function recordCouponUsage(promoCodeStr) {
+  try {
+    const code = String(promoCodeStr || "").trim().toUpperCase();
+    if (!code) return;
+    if (import_mongoose.default.connection.readyState === 1) {
+      await PromoCodeModel.updateOne({ code }, { $inc: { timesUsed: 1 } });
+    }
+    const all = readPromoCodes();
+    const target = all.find((p) => p.code && p.code.toUpperCase() === code);
+    if (target) {
+      target.timesUsed = Number(target.timesUsed || 0) + 1;
+      writePromoCodes(all);
+    }
+  } catch (err) {
+    console.error("Error incrementing coupon usage:", err);
+  }
+}
 app.post("/api/bookings", async (req, res) => {
   try {
     await connectToDatabase();
     const data = req.body;
     const bookingId = `WLC-2026-${Math.floor(1e3 + Math.random() * 9e3)}`;
+    let originalPrice = Number(data.originalPrice || data.price || 0);
+    let discountAmount = 0;
+    let finalPrice = originalPrice;
+    let verifiedPromo = null;
+    if (data.promoCode) {
+      const result = await validateAndCalculateCoupon(data.promoCode, originalPrice, data.passengerEmail);
+      if (result.valid) {
+        discountAmount = result.discountAmount;
+        finalPrice = result.finalAmount;
+        verifiedPromo = result.coupon;
+      }
+    }
+    finalPrice = Math.max(0, Math.round(finalPrice * 100) / 100);
     const newBooking = {
       id: bookingId,
       ...data,
+      price: finalPrice,
+      originalPrice,
+      discountAmount,
+      promoCode: verifiedPromo ? verifiedPromo.code : void 0,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     const bookings = readBookings();
@@ -1224,6 +1204,9 @@ app.post("/api/bookings", async (req, res) => {
       await dbBooking.save();
       console.log("\u{1F4BE} Saved booking to MongoDB after reconnect!");
     }
+    if (verifiedPromo) {
+      await recordCouponUsage(verifiedPromo.code);
+    }
     await sendBookingEmails(newBooking).catch((err) => console.error("Booking email error:", err));
     sendWhatsAppNotification(newBooking).catch((err) => console.error("WhatsApp notification error:", err));
     return res.json({ success: true, booking: newBooking });
@@ -1232,6 +1215,164 @@ app.post("/api/bookings", async (req, res) => {
     return res.status(500).json({ error: err.message || "Failed to create booking" });
   }
 });
+app.post("/api/mollie/create-payment", async (req, res) => {
+  try {
+    await connectToDatabase();
+    const data = req.body;
+    const bookingId = `WLC-2026-${Math.floor(1e3 + Math.random() * 9e3)}`;
+    let originalPrice = Number(data.originalPrice || data.price || 0);
+    let discountAmount = 0;
+    let finalPrice = originalPrice;
+    let verifiedPromo = null;
+    if (data.promoCode) {
+      const result = await validateAndCalculateCoupon(data.promoCode, originalPrice, data.passengerEmail);
+      if (result.valid) {
+        discountAmount = result.discountAmount;
+        finalPrice = result.finalAmount;
+        verifiedPromo = result.coupon;
+      }
+    }
+    finalPrice = Math.max(0, Math.round(finalPrice * 100) / 100);
+    const newBooking = {
+      id: bookingId,
+      ...data,
+      price: finalPrice,
+      originalPrice,
+      discountAmount,
+      promoCode: verifiedPromo ? verifiedPromo.code : void 0,
+      paymentMethod: "Mollie",
+      paymentStatus: "Pending",
+      status: "Pending",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    const bookings = readBookings();
+    bookings.unshift(newBooking);
+    writeBookings(bookings);
+    if (import_mongoose.default.connection.readyState === 1) {
+      const dbBooking = new BookingModel(newBooking);
+      await dbBooking.save();
+    }
+    const mollieClient = getMollieClient();
+    const reqHost = req.get("host") || "travelluxx.co.uk";
+    const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
+    const origin = `${protocol}://${reqHost}`;
+    if (mollieClient && finalPrice > 0) {
+      try {
+        const payment = await mollieClient.payments.create({
+          amount: {
+            value: finalPrice.toFixed(2),
+            currency: "GBP"
+          },
+          description: `Travel Luxx Transfer ${bookingId} - ${data.passengerName || "Passenger"}`,
+          redirectUrl: `${origin}/?bookingStatus=success&bookingId=${bookingId}`,
+          webhookUrl: `${origin}/api/mollie/webhook`,
+          metadata: {
+            bookingId,
+            promoCode: verifiedPromo ? verifiedPromo.code : void 0
+          }
+        });
+        if (payment && payment.getCheckoutUrl()) {
+          return res.json({ success: true, checkoutUrl: payment.getCheckoutUrl(), bookingId });
+        }
+      } catch (mollieErr) {
+        console.warn("Mollie API charge fallback:", mollieErr?.message);
+      }
+    }
+    return res.json({
+      success: true,
+      checkoutUrl: `${origin}/?bookingStatus=success&bookingId=${bookingId}`,
+      bookingId
+    });
+  } catch (err) {
+    console.error("Failed to create Mollie payment:", err);
+    return res.status(500).json({ error: err.message || "Failed to create Mollie checkout" });
+  }
+});
+app.get("/api/mollie/status/:bookingId", async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    await connectToDatabase();
+    let booking = null;
+    if (import_mongoose.default.connection.readyState === 1) {
+      booking = await BookingModel.findOne({ id: bookingId });
+    }
+    const bookings = readBookings();
+    const idx = bookings.findIndex((b) => b.id === bookingId);
+    if (!booking && idx === -1) {
+      return res.status(404).json({ success: false, message: "Booking not found" });
+    }
+    const currentBooking = booking ? booking.toObject ? booking.toObject() : booking : bookings[idx];
+    if (currentBooking.paymentStatus !== "Paid") {
+      if (booking) {
+        booking.paymentStatus = "Paid";
+        booking.status = "Confirmed";
+        await booking.save();
+      }
+      if (idx !== -1) {
+        bookings[idx].paymentStatus = "Paid";
+        bookings[idx].status = "Confirmed";
+        writeBookings(bookings);
+      }
+      if (currentBooking.promoCode) {
+        await recordCouponUsage(currentBooking.promoCode);
+      }
+      await sendBookingEmails(currentBooking).catch((err) => console.error("Email error:", err));
+      sendWhatsAppNotification(currentBooking).catch((err) => console.error("WhatsApp error:", err));
+    }
+    return res.json({
+      success: true,
+      booking: currentBooking,
+      paymentStatus: "Paid",
+      status: "Confirmed"
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+app.post("/api/bookings/payment-simulate", async (req, res) => {
+  try {
+    const { bookingId, paymentMethod, transactionId } = req.body;
+    await connectToDatabase();
+    let booking = null;
+    if (import_mongoose.default.connection.readyState === 1) {
+      booking = await BookingModel.findOne({ id: bookingId });
+    }
+    const bookings = readBookings();
+    const idx = bookings.findIndex((b) => b.id === bookingId);
+    if (!booking && idx === -1) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+    const updates = {
+      paymentStatus: paymentMethod === "Pay Later" ? "Unpaid" : "Paid",
+      status: "Pending",
+      transactionId: transactionId || `SIM-${Date.now()}`
+    };
+    if (booking) {
+      Object.assign(booking, updates);
+      await booking.save();
+    }
+    if (idx !== -1) {
+      Object.assign(bookings[idx], updates);
+      writeBookings(bookings);
+    }
+    const promoToCount = booking && booking.promoCode || idx !== -1 && bookings[idx]?.promoCode;
+    if (promoToCount) {
+      recordCouponUsage(promoToCount).catch((e) => console.error("Error recording coupon usage:", e));
+    }
+    return res.json({ success: true, bookingId });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+var ADMIN_AUTH_TOKEN = "admin-auth-token-travelluxx-2026";
+function requireAdminAuth(req, res, next) {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : req.headers["x-admin-token"] || req.query.token;
+  if (token === ADMIN_AUTH_TOKEN) {
+    return next();
+  }
+  return res.status(401).json({ error: "Unauthorized: Admin authentication token required" });
+}
 app.post("/api/admin/login", async (req, res) => {
   const { username, password } = req.body;
   const envEmail = (process.env.ADMIN_EMAIL || "info@travelluxx.co.uk").toLowerCase().trim();
@@ -2106,83 +2247,254 @@ app.get("/uploads/:filename", async (req, res, next) => {
   next();
 });
 app.use("/uploads", import_express.default.static(import_path.default.join(process.cwd(), "public", "uploads")));
-app.post("/api/promocodes/validate", async (req, res) => {
+var placesCache = /* @__PURE__ */ new Map();
+var PLACES_CACHE_TTL = 1e3 * 60 * 60;
+app.get("/api/places/autocomplete", async (req, res) => {
   try {
-    const rawCode = String(req.body.code || "").trim().toUpperCase();
-    const orderAmount = Number(req.body.amount || req.body.orderAmount || 0);
-    if (!rawCode) {
-      return res.status(400).json({ valid: false, message: "Please enter a promo code." });
+    const rawQuery = String(req.query.q || req.query.input || req.query.query || "").trim();
+    if (!rawQuery || rawQuery.length < 2) {
+      return res.json([]);
     }
-    await connectToDatabase();
-    let promo = null;
-    if (import_mongoose.default.connection.readyState === 1) {
-      promo = await PromoCodeModel.findOne({ code: rawCode }).lean();
+    const cacheKey = `ac_${rawQuery.toLowerCase()}`;
+    const cached = placesCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < PLACES_CACHE_TTL) {
+      return res.json(cached.data);
     }
-    if (!promo) {
-      const all = readPromoCodes();
-      promo = all.find((p) => p.code && p.code.toUpperCase() === rawCode);
-    }
-    if (!promo) {
-      return res.status(404).json({ valid: false, message: "Invalid promo code." });
-    }
-    if (!promo.isActive) {
-      return res.status(400).json({ valid: false, message: "This promo code is currently inactive." });
-    }
-    if (promo.expiryDate) {
-      const expiry = new Date(promo.expiryDate);
-      if (promo.expiryDate.length <= 10) {
-        expiry.setHours(23, 59, 59, 999);
+    const queryLower = rawQuery.toLowerCase();
+    const cleanQuery = rawQuery.replace(/[^a-zA-Z0-9\s,.-]/g, "").trim();
+    const hubMatches = UK_AIRPORTS_AND_HUBS.filter(
+      (h) => h.name.toLowerCase().includes(queryLower) || h.mainText.toLowerCase().includes(queryLower) || h.secondaryText.toLowerCase().includes(queryLower)
+    );
+    const results = [...hubMatches];
+    const ukPostcodePattern = /^[A-Z]{1,2}[0-9][A-Z0-9]?(\s?[0-9][A-Z]{2})?$/i;
+    const isPostcodeQuery = ukPostcodePattern.test(cleanQuery) || /^[A-Z]{1,2}[0-9]/i.test(cleanQuery);
+    if (isPostcodeQuery && cleanQuery.length >= 2) {
+      try {
+        const pcRes = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(cleanQuery.replace(/\s+/g, ""))}`, {
+          signal: AbortSignal.timeout(2e3)
+        });
+        if (pcRes.ok) {
+          const pcData = await pcRes.json();
+          if (pcData.result) {
+            const r = pcData.result;
+            const fullLabel = `${r.postcode}, ${[r.admin_ward, r.admin_district, r.region || r.european_electoral_region, "UK"].filter(Boolean).join(", ")}`;
+            results.push({
+              name: fullLabel,
+              mainText: r.postcode,
+              secondaryText: [r.admin_ward, r.admin_district, r.country || "UK"].filter(Boolean).join(", "),
+              lat: r.latitude,
+              lng: r.longitude,
+              type: "postcode"
+            });
+          }
+        } else {
+          const autoRes = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(cleanQuery.replace(/\s+/g, ""))}/autocomplete`, {
+            signal: AbortSignal.timeout(2e3)
+          });
+          if (autoRes.ok) {
+            const autoData = await autoRes.json();
+            if (Array.isArray(autoData.result) && autoData.result.length > 0) {
+              const topCodes = autoData.result.slice(0, 4);
+              for (const code of topCodes) {
+                const subRes = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(code)}`, {
+                  signal: AbortSignal.timeout(1500)
+                }).catch(() => null);
+                if (subRes && subRes.ok) {
+                  const sData = await subRes.json();
+                  if (sData.result) {
+                    const sr = sData.result;
+                    results.push({
+                      name: `${sr.postcode}, ${[sr.admin_district, sr.region || "UK"].filter(Boolean).join(", ")}`,
+                      mainText: sr.postcode,
+                      secondaryText: [sr.admin_district, "UK"].filter(Boolean).join(", "),
+                      lat: sr.latitude,
+                      lng: sr.longitude,
+                      type: "postcode"
+                    });
+                  }
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {
       }
-      if (/* @__PURE__ */ new Date() > expiry) {
-        return res.status(400).json({ valid: false, message: "This promo code has expired." });
-      }
     }
-    if (promo.usageLimit !== null && promo.usageLimit !== void 0 && promo.usageLimit > 0) {
-      const timesUsed = Number(promo.timesUsed || 0);
-      if (timesUsed >= promo.usageLimit) {
-        return res.status(400).json({ valid: false, message: "This promo code has reached its usage limit." });
-      }
-    }
-    const minAmount = Number(promo.minOrderAmount || 0);
-    if (minAmount > 0 && orderAmount < minAmount) {
-      return res.status(400).json({
-        valid: false,
-        message: `Minimum booking amount of \xA3${minAmount.toFixed(2)} required to use this promo code.`
+    try {
+      const photonRes = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(cleanQuery)}&bbox=-8.65,49.86,1.78,60.86&limit=8`, {
+        signal: AbortSignal.timeout(2500)
       });
-    }
-    let discountAmount = 0;
-    const val = Number(promo.discountValue || 0);
-    if (promo.discountType === "percentage") {
-      discountAmount = orderAmount * val / 100;
-      if (promo.maxDiscountAmount && Number(promo.maxDiscountAmount) > 0) {
-        discountAmount = Math.min(discountAmount, Number(promo.maxDiscountAmount));
+      if (photonRes.ok) {
+        const pData = await photonRes.json();
+        if (pData && Array.isArray(pData.features)) {
+          pData.features.forEach((f) => {
+            const p = f.properties || {};
+            const country = (p.country || "").toLowerCase();
+            if (country && !country.includes("kingdom") && !country.includes("uk") && !country.includes("britain") && p.countrycode !== "GB") {
+              return;
+            }
+            const name = p.name || "";
+            const streetParts = [p.housenumber, p.street].filter(Boolean).join(" ");
+            const locParts = [streetParts, p.city || p.town || p.district, p.postcode, "UK"].filter(Boolean);
+            const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
+            const isAirport = name.toLowerCase().includes("airport") || p.osm_value && p.osm_value.includes("aerodrome");
+            const isStation = name.toLowerCase().includes("station");
+            if (f.geometry && f.geometry.coordinates) {
+              results.push({
+                name: fullLabel || name,
+                mainText: name || streetParts || locParts[0] || fullLabel,
+                secondaryText: locParts.join(", "),
+                lat: f.geometry.coordinates[1],
+                lng: f.geometry.coordinates[0],
+                type: isAirport ? "airport" : isStation ? "station" : "address"
+              });
+            }
+          });
+        }
       }
-    } else {
-      discountAmount = val;
+    } catch (e) {
     }
-    discountAmount = Math.min(discountAmount, orderAmount);
-    discountAmount = Math.max(0, Math.round(discountAmount * 100) / 100);
-    const finalAmount = Math.max(0, Math.round((orderAmount - discountAmount) * 100) / 100);
-    return res.json({
-      valid: true,
-      message: "Promo code applied successfully!",
-      promo: {
-        id: promo.id,
-        code: promo.code,
-        discountType: promo.discountType,
-        discountValue: promo.discountValue,
-        description: promo.description || ""
-      },
-      originalAmount: orderAmount,
-      discountAmount,
-      finalAmount
-    });
+    if (results.length < 5) {
+      try {
+        const nomRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&countrycodes=gb&limit=6&addressdetails=1`, {
+          headers: {
+            "User-Agent": "TravelLuxxChauffeurUK/1.0 (info@travelluxx.co.uk)",
+            "Accept-Language": "en-GB,en"
+          },
+          signal: AbortSignal.timeout(2500)
+        });
+        if (nomRes.ok) {
+          const nomData = await nomRes.json();
+          if (Array.isArray(nomData)) {
+            nomData.forEach((item) => {
+              const parts = (item.display_name || "").split(",");
+              results.push({
+                name: item.display_name,
+                mainText: parts[0]?.trim() || item.display_name,
+                secondaryText: parts.slice(1, 4).map((p) => p.trim()).join(", "),
+                lat: parseFloat(item.lat),
+                lng: parseFloat(item.lon),
+                type: "address"
+              });
+            });
+          }
+        }
+      } catch (e) {
+      }
+    }
+    const uniqueMap = /* @__PURE__ */ new Map();
+    for (const item of results) {
+      const key = `${item.name.toLowerCase()}_${item.lat.toFixed(3)}_${item.lng.toFixed(3)}`;
+      if (!uniqueMap.has(key)) {
+        uniqueMap.set(key, item);
+      }
+    }
+    const finalResults = Array.from(uniqueMap.values()).slice(0, 10);
+    placesCache.set(cacheKey, { timestamp: Date.now(), data: finalResults });
+    return res.json(finalResults);
   } catch (err) {
-    console.error("Error validating promo code:", err);
-    return res.status(500).json({ valid: false, message: "Internal server error validating promo code." });
+    console.error("Autocomplete proxy error:", err);
+    return res.json([]);
   }
 });
-app.get("/api/admin/promocodes", async (req, res) => {
+app.get("/api/places/geocode", async (req, res) => {
+  try {
+    const rawAddress = String(req.query.address || req.query.q || "").trim();
+    if (!rawAddress) {
+      return res.status(400).json({ error: "Address query is required." });
+    }
+    const cleanAddress = rawAddress.replace(/[^a-zA-Z0-9\s,.-]/g, "").trim();
+    const ukPostcodePattern = /^[A-Z]{1,2}[0-9][A-Z0-9]?(\s?[0-9][A-Z]{2})?$/i;
+    if (ukPostcodePattern.test(cleanAddress.replace(/\s+/g, ""))) {
+      try {
+        const pcRes = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(cleanAddress.replace(/\s+/g, ""))}`);
+        if (pcRes.ok) {
+          const pcData = await pcRes.json();
+          if (pcData.result) {
+            return res.json({
+              lat: pcData.result.latitude,
+              lng: pcData.result.longitude,
+              name: `${pcData.result.postcode}, ${pcData.result.admin_district || "UK"}`
+            });
+          }
+        }
+      } catch (e) {
+      }
+    }
+    try {
+      const nomRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanAddress)}&countrycodes=gb&limit=1`, {
+        headers: {
+          "User-Agent": "TravelLuxxChauffeurUK/1.0 (info@travelluxx.co.uk)",
+          "Accept-Language": "en-GB,en"
+        }
+      });
+      if (nomRes.ok) {
+        const data = await nomRes.json();
+        if (data && data[0]) {
+          return res.json({
+            lat: parseFloat(data[0].lat),
+            lng: parseFloat(data[0].lon),
+            name: data[0].display_name
+          });
+        }
+      }
+    } catch (e) {
+    }
+    return res.json({
+      lat: UK_LOCATIONS.shirley.lat,
+      lng: UK_LOCATIONS.shirley.lng,
+      name: rawAddress
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Geocoding failed" });
+  }
+});
+app.post("/api/promocodes/validate", async (req, res) => {
+  try {
+    const ip = req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "client";
+    if (isRateLimitedForCoupon(ip)) {
+      return res.status(429).json({
+        valid: false,
+        message: "Too many coupon attempts. Please wait 1 minute before trying again."
+      });
+    }
+    const rawCode = String(req.body.code || "").trim();
+    const orderAmount = Number(req.body.amount || req.body.orderAmount || req.body.bookingAmount || 0);
+    const userEmail = req.body.email ? String(req.body.email).trim() : void 0;
+    if (!rawCode) {
+      return res.status(400).json({ valid: false, message: "Please enter a coupon code." });
+    }
+    const result = await validateAndCalculateCoupon(rawCode, orderAmount, userEmail);
+    if (!result.valid) {
+      return res.status(400).json(result);
+    }
+    return res.json({
+      valid: true,
+      message: result.message,
+      coupon: {
+        id: result.coupon.id,
+        code: result.coupon.code,
+        discountType: result.coupon.discountType,
+        discountValue: result.coupon.discountValue,
+        description: result.coupon.description || ""
+      },
+      promo: {
+        id: result.coupon.id,
+        code: result.coupon.code,
+        discountType: result.coupon.discountType,
+        discountValue: result.coupon.discountValue,
+        description: result.coupon.description || ""
+      },
+      originalAmount: orderAmount,
+      discountAmount: result.discountAmount,
+      finalAmount: result.finalAmount
+    });
+  } catch (err) {
+    console.error("Error validating coupon:", err);
+    return res.status(500).json({ valid: false, message: "Internal server error validating coupon." });
+  }
+});
+app.get("/api/admin/promocodes", requireAdminAuth, async (req, res) => {
   try {
     await connectToDatabase();
     if (import_mongoose.default.connection.readyState === 1) {
@@ -2196,24 +2508,29 @@ app.get("/api/admin/promocodes", async (req, res) => {
   }
   return res.json(readPromoCodes());
 });
-app.post("/api/admin/promocodes", async (req, res) => {
+app.post("/api/admin/promocodes", requireAdminAuth, async (req, res) => {
   try {
     const rawCode = String(req.body.code || "").trim().toUpperCase();
     if (!rawCode) {
-      return res.status(400).json({ error: "Promo code name is required" });
+      return res.status(400).json({ error: "Coupon code is required" });
     }
     const val = Number(req.body.discountValue);
     if (isNaN(val) || val <= 0) {
       return res.status(400).json({ error: "A valid positive discount value is required" });
     }
+    const startDate = req.body.startDate ? String(req.body.startDate).trim() : "";
+    const expiryDate = req.body.expiryDate ? String(req.body.expiryDate).trim() : req.body.expiresAt ? String(req.body.expiresAt).trim() : "";
+    if (startDate && expiryDate && expiryDate < startDate) {
+      return res.status(400).json({ error: "Expiry date must be on or after the start date." });
+    }
     await connectToDatabase();
     const all = readPromoCodes();
     if (all.some((c) => c.code && c.code.toUpperCase() === rawCode)) {
-      return res.status(409).json({ error: "A promo code with this code already exists" });
+      return res.status(409).json({ error: "A coupon with this code already exists" });
     }
     if (import_mongoose.default.connection.readyState === 1) {
       const exists = await PromoCodeModel.exists({ code: rawCode });
-      if (exists) return res.status(409).json({ error: "A promo code with this code already exists" });
+      if (exists) return res.status(409).json({ error: "A coupon with this code already exists" });
     }
     const newCode = {
       id: `promo-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
@@ -2222,8 +2539,10 @@ app.post("/api/admin/promocodes", async (req, res) => {
       discountValue: val,
       minOrderAmount: Number(req.body.minOrderAmount || 0),
       maxDiscountAmount: req.body.maxDiscountAmount ? Number(req.body.maxDiscountAmount) : null,
-      expiryDate: req.body.expiryDate ? String(req.body.expiryDate).trim() : "",
+      startDate,
+      expiryDate,
       usageLimit: req.body.usageLimit ? Number(req.body.usageLimit) : null,
+      perUserLimit: req.body.perUserLimit ? Number(req.body.perUserLimit) : null,
       timesUsed: 0,
       isActive: req.body.isActive !== false,
       description: String(req.body.description || "").trim(),
@@ -2236,17 +2555,22 @@ app.post("/api/admin/promocodes", async (req, res) => {
       const doc = new PromoCodeModel(newCode);
       await doc.save();
     }
-    return res.json({ success: true, promoCode: newCode });
+    return res.json({ success: true, promoCode: newCode, coupon: newCode });
   } catch (err) {
-    console.error("Error creating promo code:", err);
-    return res.status(500).json({ error: err.message || "Failed to create promo code" });
+    console.error("Error creating coupon:", err);
+    return res.status(500).json({ error: err.message || "Failed to create coupon" });
   }
 });
-app.put("/api/admin/promocodes/:id", async (req, res) => {
+app.put("/api/admin/promocodes/:id", requireAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const rawCode = String(req.body.code || "").trim().toUpperCase();
-    if (!rawCode) return res.status(400).json({ error: "Promo code name is required" });
+    if (!rawCode) return res.status(400).json({ error: "Coupon code is required" });
+    const startDate = req.body.startDate ? String(req.body.startDate).trim() : "";
+    const expiryDate = req.body.expiryDate ? String(req.body.expiryDate).trim() : req.body.expiresAt ? String(req.body.expiresAt).trim() : "";
+    if (startDate && expiryDate && expiryDate < startDate) {
+      return res.status(400).json({ error: "Expiry date must be on or after the start date." });
+    }
     await connectToDatabase();
     const all = readPromoCodes();
     const idx = all.findIndex((c) => c.id === id);
@@ -2255,10 +2579,10 @@ app.put("/api/admin/promocodes/:id", async (req, res) => {
       existing = await PromoCodeModel.findOne({ id }).lean();
     }
     if (!existing) {
-      return res.status(404).json({ error: "Promo code not found" });
+      return res.status(404).json({ error: "Coupon not found" });
     }
     if (all.some((c) => c.id !== id && c.code && c.code.toUpperCase() === rawCode)) {
-      return res.status(409).json({ error: "Another promo code with this code already exists" });
+      return res.status(409).json({ error: "Another coupon with this code already exists" });
     }
     const updated = {
       ...existing,
@@ -2266,14 +2590,16 @@ app.put("/api/admin/promocodes/:id", async (req, res) => {
       id,
       code: rawCode,
       discountType: req.body.discountType === "percentage" ? "percentage" : "fixed",
-      discountValue: Number(req.body.discountValue || existing.discountValue),
-      minOrderAmount: Number(req.body.minOrderAmount || 0),
+      discountValue: Number(req.body.discountValue ?? existing.discountValue),
+      minOrderAmount: Number(req.body.minOrderAmount ?? 0),
       maxDiscountAmount: req.body.maxDiscountAmount ? Number(req.body.maxDiscountAmount) : null,
-      expiryDate: req.body.expiryDate ? String(req.body.expiryDate).trim() : "",
+      startDate: startDate || existing.startDate || "",
+      expiryDate: expiryDate || existing.expiryDate || existing.expiresAt || "",
       usageLimit: req.body.usageLimit ? Number(req.body.usageLimit) : null,
+      perUserLimit: req.body.perUserLimit ? Number(req.body.perUserLimit) : null,
       timesUsed: req.body.timesUsed !== void 0 ? Number(req.body.timesUsed) : existing.timesUsed,
       isActive: req.body.isActive !== false,
-      description: String(req.body.description || "").trim(),
+      description: String(req.body.description ?? "").trim(),
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     delete updated._id;
@@ -2284,13 +2610,13 @@ app.put("/api/admin/promocodes/:id", async (req, res) => {
     if (import_mongoose.default.connection.readyState === 1) {
       await PromoCodeModel.findOneAndUpdate({ id }, updated, { upsert: true });
     }
-    return res.json({ success: true, promoCode: updated });
+    return res.json({ success: true, promoCode: updated, coupon: updated });
   } catch (err) {
-    console.error("Error updating promo code:", err);
-    return res.status(500).json({ error: err.message || "Failed to update promo code" });
+    console.error("Error updating coupon:", err);
+    return res.status(500).json({ error: err.message || "Failed to update coupon" });
   }
 });
-app.delete("/api/admin/promocodes/:id", async (req, res) => {
+app.delete("/api/admin/promocodes/:id", requireAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
     await connectToDatabase();
@@ -2301,7 +2627,43 @@ app.delete("/api/admin/promocodes/:id", async (req, res) => {
     writePromoCodes(all);
     return res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ error: err.message || "Failed to delete promo code" });
+    return res.status(500).json({ error: err.message || "Failed to delete coupon" });
+  }
+});
+app.put("/api/admin/promocodes/bulk-deactivate", requireAdminAuth, async (req, res) => {
+  try {
+    const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
+    if (ids.length === 0) return res.status(400).json({ error: "No coupon IDs provided" });
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) {
+      await PromoCodeModel.updateMany({ id: { $in: ids } }, { $set: { isActive: false, updatedAt: (/* @__PURE__ */ new Date()).toISOString() } });
+    }
+    const all = readPromoCodes();
+    all.forEach((c) => {
+      if (ids.includes(c.id)) {
+        c.isActive = false;
+        c.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+      }
+    });
+    writePromoCodes(all);
+    return res.json({ success: true, count: ids.length });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Failed to bulk deactivate coupons" });
+  }
+});
+app.post("/api/admin/promocodes/bulk-delete", requireAdminAuth, async (req, res) => {
+  try {
+    const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
+    if (ids.length === 0) return res.status(400).json({ error: "No coupon IDs provided" });
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) {
+      await PromoCodeModel.deleteMany({ id: { $in: ids } });
+    }
+    const all = readPromoCodes().filter((c) => !ids.includes(c.id));
+    writePromoCodes(all);
+    return res.json({ success: true, count: ids.length });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Failed to bulk delete coupons" });
   }
 });
 var cachedGoogleReviews = null;
@@ -2565,6 +2927,14 @@ app.get("/api/google-reviews", async (req, res) => {
     return res.json(payload);
   }
 });
+app.get("/robots.txt", (req, res) => {
+  const robotsPath = import_path.default.join(process.cwd(), "public", "robots.txt");
+  if (import_fs.default.existsSync(robotsPath)) {
+    res.type("text/plain").sendFile(robotsPath);
+  } else {
+    res.type("text/plain").send("User-agent: *\nDisallow: /admin\nSitemap: https://travelluxx.co.uk/sitemap.xml\n");
+  }
+});
 app.get("/sitemap.xml", async (req, res) => {
   const baseUrl = "https://travelluxx.co.uk";
   const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
@@ -2690,53 +3060,29 @@ app.get("/sitemap.xml", async (req, res) => {
   return res.send(xml);
 });
 async function startServer() {
-  await connectToDatabase();
-  const distPath = import_path.default.join(process.cwd(), "dist");
-  const distIndexPath = import_path.default.join(distPath, "index.html");
-  const isProduction = process.env.NODE_ENV === "production" || import_fs.default.existsSync(distIndexPath);
-  if (!isProduction) {
-    console.log("[MODE] Development mode: starting Vite dev server middleware.");
-    const { createServer: createViteServer } = await import("vite");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "custom"
-    });
-    app.use(vite.middlewares);
-    app.use("*", async (req, res, next) => {
-      const url = req.originalUrl;
-      if (url.startsWith("/api") || import_path.default.extname(url.split("?")[0])) {
-        return next();
-      }
-      try {
-        let template = import_fs.default.readFileSync(import_path.default.resolve(process.cwd(), "index.html"), "utf-8");
-        template = await vite.transformIndexHtml(url, template);
-        const settings = getCurrentWebsiteSettings();
-        let html = injectDynamicSeoIntoHtml(template, url, settings);
-        html = injectSnippetsIntoHtml(html, settings);
-        res.status(200).set({ "Content-Type": "text/html; charset=utf-8" }).end(html);
-      } catch (e) {
-        vite.ssrFixStacktrace(e);
-        next(e);
-      }
-    });
-  } else {
-    console.log("[MODE] Production mode: serving static files from", distPath);
-    app.use(import_express.default.static(distPath, { index: false }));
-    app.get("*", (req, res) => {
-      try {
-        const rawHtml = import_fs.default.readFileSync(distIndexPath, "utf8");
-        const settings = getCurrentWebsiteSettings();
-        let html = injectDynamicSeoIntoHtml(rawHtml, req.originalUrl || req.url, settings);
-        html = injectSnippetsIntoHtml(html, settings);
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        res.send(html);
-      } catch (err) {
-        res.sendFile(distIndexPath);
-      }
-    });
+  connectToDatabase().catch((err) => {
+    console.warn("[DB] Background DB connection deferred:", err.message);
+  });
+  const dev = process.env.NODE_ENV !== "production";
+  let nextHandler = null;
+  try {
+    const nextModule = await import("next");
+    const createNext = nextModule.default || nextModule;
+    const nextApp = createNext({ dev, dir: process.cwd() });
+    await nextApp.prepare();
+    nextHandler = nextApp.getRequestHandler();
+    console.log(`[MODE] Next.js ready in ${dev ? "development" : "production"} mode.`);
+  } catch (err) {
+    console.error("[MODE] Failed to initialize Next.js engine:", err);
   }
+  app.all("*", (req, res, next) => {
+    if (nextHandler) {
+      return nextHandler(req, res);
+    }
+    next();
+  });
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT} [mode: ${isProduction ? "production" : "development"}]`);
+    console.log(`Server running on http://localhost:${PORT} [mode: ${dev ? "development" : "production"}]`);
   });
 }
 if (!process.env.VERCEL) {

@@ -5,9 +5,18 @@ import {
   HelpCircle, Sparkles, Receipt, Landmark, Activity, Car, AlertTriangle,
   Trash2, ArrowLeft, ArrowUp, ArrowDown, Plus, Navigation, Coins
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { DistanceResult } from "../types";
 import { trackClick } from "../utils/analytics";
-import GoogleBookingMap from "./GoogleBookingMap";
+
+const GoogleBookingMap = dynamic(() => import("./GoogleBookingMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[300px] bg-slate-900/60 flex items-center justify-center text-slate-400 text-xs">
+      Loading interactive map...
+    </div>
+  ),
+});
 
 interface BookingCalculatorProps {
   initialPickup?: string;
@@ -242,6 +251,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   // Input states
   const [pickupInput, setPickupInput] = useState(initialPickup);
   const [dropoffInput, setDropoffInput] = useState(initialDropoff);
+  const [pickupVerified, setPickupVerified] = useState(Boolean(initialPickup));
+  const [dropoffVerified, setDropoffVerified] = useState(Boolean(initialDropoff));
+  const pickupDebounceRef = useRef<any>(null);
+  const dropoffDebounceRef = useRef<any>(null);
   const [pickupSuggestions, setPickupSuggestions] = useState<any[]>([]);
   const [dropoffSuggestions, setDropoffSuggestions] = useState<any[]>([]);
   const [loadingRoute, setLoadingRoute] = useState(false);
@@ -485,6 +498,19 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   }
 
   const geocodeAddress = async (address: string, placeId?: string): Promise<{ lat: number; lng: number } | null> => {
+    // 1. Try our secure UK backend geocode proxy
+    try {
+      const proxyRes = await fetch(`/api/places/geocode?address=${encodeURIComponent(address)}`);
+      if (proxyRes.ok) {
+        const data = await proxyRes.json();
+        if (data && data.lat && data.lng) {
+          return { lat: Number(data.lat), lng: Number(data.lng) };
+        }
+      }
+    } catch (e) {
+      console.warn("Backend geocode error:", e);
+    }
+
     if (typeof window !== "undefined" && window.google?.maps) {
       if (placeId && placesService) {
         try {
@@ -505,31 +531,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
           console.warn("Places getDetails error:", e);
         }
       }
-
-      if (window.google.maps.Geocoder) {
-        try {
-          const geocoder = new window.google.maps.Geocoder();
-          const res = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
-            geocoder.geocode({ address }, (results: any, status: any) => {
-              if (status === window.google.maps.GeocoderStatus.OK && results && results[0]) {
-                const location = results[0].geometry.location;
-                resolve({ lat: location.lat(), lng: location.lng() });
-              } else {
-                resolve(null);
-              }
-            });
-          });
-          if (res) return res;
-        } catch (err) {
-          console.warn("Google Geocoder error:", err);
-        }
-      }
     }
 
-    // Fallback to OSM Search Geocoder
+    // Fallback to UK Nominatim Geocoder strictly bounded to GB
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`, {
-        headers: { 'Accept-Language': 'en' }
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&countrycodes=gb&limit=1`, {
+        headers: { 'Accept-Language': 'en-GB,en' }
       });
       if (res.ok) {
         const data = await res.json();
@@ -538,15 +545,15 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         }
       }
     } catch (err) {
-      console.error("OSM geocode fallback failed:", err);
+      console.error("OSM UK geocode fallback failed:", err);
     }
     return null;
   };
 
   const fetchSuggestions = async (query: string): Promise<SuggestionItem[]> => {
-    if (!query || query.length < 2) return [];
+    if (!query || query.trim().length < 2) return [];
 
-    const queryLower = query.toLowerCase();
+    const queryLower = query.toLowerCase().trim();
     const defaultMatches: SuggestionItem[] = Object.values(UK_LOCATIONS)
       .filter(loc => loc.name.toLowerCase().includes(queryLower))
       .map(loc => ({
@@ -558,120 +565,54 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         type: loc.name.includes("Airport") ? "airport" : "city"
       }));
 
-    // 1. First, check backend proxy /api/places/autocomplete or Photon directly
-    try {
-      // Direct Photon API query (fast, responsive, zero-CORS)
-      const photonRes = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=8`);
-      if (photonRes.ok) {
-        const pdata = await photonRes.json();
-        if (pdata && pdata.features && pdata.features.length > 0) {
-          const photonResults: SuggestionItem[] = pdata.features.map((f: any) => {
-            const p = f.properties || {};
-            const name = p.name || "";
-            const street = [p.housenumber, p.street].filter(Boolean).join(" ");
-            const locParts = [street, p.city || p.town || p.district, p.postcode, p.country].filter(Boolean);
-            const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
-            const isAirport = name.toLowerCase().includes("airport") || (p.osm_value && p.osm_value.includes("aerodrome"));
-            
-            return {
-              lat: f.geometry.coordinates[1],
-              lng: f.geometry.coordinates[0],
-              name: fullLabel || name,
-              mainText: name || locParts[0] || fullLabel,
-              secondaryText: locParts.join(", "),
-              type: isAirport ? "airport" : "address"
-            };
-          });
-
-          const combined = [...defaultMatches, ...photonResults];
-          return Array.from(new Map(combined.map(item => [item.name, item])).values());
-        }
-      }
-    } catch (e) {
-      console.warn("Photon search error:", e);
-    }
-
-    // 2. Try Backend Autocomplete proxy
+    // 1. Query robust backend autocomplete proxy (Postcodes.io + UK Nominatim / Photon GB + Google Places)
     try {
       const bRes = await fetch(`/api/places/autocomplete?q=${encodeURIComponent(query)}`);
       if (bRes.ok) {
         const bData = await bRes.json();
-        if (bData && bData.length > 0) {
-          const combined = [...defaultMatches, ...bData];
+        if (Array.isArray(bData) && bData.length > 0) {
+          const combined = [...bData, ...defaultMatches];
           return Array.from(new Map(combined.map(item => [item.name, item])).values());
         }
       }
     } catch (e) {
-      // ignore
+      console.warn("Backend autocomplete fetch error, checking fallbacks:", e);
     }
 
-    // 3. Try Google Places Autocomplete (with 500ms max timeout)
-    if (autocompleteService && window.google?.maps?.places) {
-      try {
-        const googlePredictions = await Promise.race([
-          new Promise<SuggestionItem[]>((resolve) => {
-            autocompleteService.getPlacePredictions(
-              {
-                input: query,
-                componentRestrictions: { country: ["gb"] },
-              },
-              (predictions: any, status: any) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
-                  resolve(
-                    predictions.map((p: any) => ({
-                      lat: 0,
-                      lng: 0,
-                      name: p.description,
-                      placeId: p.place_id,
-                      mainText: p.structured_formatting?.main_text || p.description,
-                      secondaryText: p.structured_formatting?.secondary_text || "",
-                      type: p.types?.includes("airport") ? "airport" : "address"
-                    }))
-                  );
-                } else {
-                  resolve([]);
-                }
-              }
-            );
-          }),
-          new Promise<SuggestionItem[]>((resolve) => setTimeout(() => resolve([]), 500))
-        ]);
-        if (googlePredictions.length > 0) {
-          const combined = [...defaultMatches, ...googlePredictions];
-          return Array.from(new Map(combined.map(item => [item.name, item])).values());
-        }
-      } catch (err) {
-        console.warn("Google Places autocomplete error:", err);
-      }
-    }
-
-    // 4. OpenStreetMap Nominatim fallback
+    // 2. Direct Photon bounded to UK bounding box fallback
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=6&addressdetails=1`, {
-        headers: { 'Accept-Language': 'en' }
-      });
-      const data = res.ok ? await res.json() : [];
+      const photonRes = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&bbox=-8.65,49.86,1.78,60.86&limit=8`);
+      if (photonRes.ok) {
+        const pdata = await photonRes.json();
+        if (pdata && pdata.features && pdata.features.length > 0) {
+          const photonResults: SuggestionItem[] = pdata.features
+            .filter((f: any) => {
+              const country = (f.properties?.country || "").toLowerCase();
+              return !country || country.includes("kingdom") || country.includes("uk") || country.includes("britain");
+            })
+            .map((f: any) => {
+              const p = f.properties || {};
+              const name = p.name || "";
+              const street = [p.housenumber, p.street].filter(Boolean).join(" ");
+              const locParts = [street, p.city || p.town || p.district, p.postcode, "UK"].filter(Boolean);
+              const fullLabel = [name, ...locParts].filter((v, i, a) => v && a.indexOf(v) === i).join(", ");
+              const isAirport = name.toLowerCase().includes("airport") || (p.osm_value && p.osm_value.includes("aerodrome"));
+              
+              return {
+                lat: f.geometry.coordinates[1],
+                lng: f.geometry.coordinates[0],
+                name: fullLabel || name,
+                mainText: name || locParts[0] || fullLabel,
+                secondaryText: locParts.join(", "),
+                type: isAirport ? "airport" : "address"
+              };
+            });
 
-      if (data && data.length > 0) {
-        const osmResults: SuggestionItem[] = data.map((item: any) => {
-          const parts = (item.display_name || "").split(",");
-          return {
-            lat: parseFloat(item.lat),
-            lng: parseFloat(item.lon),
-            name: item.display_name,
-            mainText: parts[0]?.trim() || item.display_name,
-            secondaryText: parts.slice(1, 3).map((p: any) => p.trim()).join(", "),
-            type: "address"
-          };
-        });
-        const combined = [...defaultMatches, ...osmResults];
-        if (combined.length > 0) {
+          const combined = [...photonResults, ...defaultMatches];
           return Array.from(new Map(combined.map(item => [item.name, item])).values());
         }
       }
-    } catch (err) {
-      // ignore
-    }
+    } catch (e) {}
 
     return defaultMatches;
   };
@@ -680,9 +621,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     if (type === 'pickup') {
       setPickupInput(loc.name);
       setPickupSuggestions([]);
+      setPickupVerified(true);
     } else {
       setDropoffInput(loc.name);
       setDropoffSuggestions([]);
+      setDropoffVerified(true);
     }
 
     let coords = { lat: loc.lat, lng: loc.lng };
@@ -700,48 +643,40 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     }
   };
 
-  const handleInput = async (val: string, type: 'pickup' | 'dropoff', resetCoords = true) => {
+  const handleInput = (val: string, type: 'pickup' | 'dropoff', resetCoords = true) => {
     if (type === 'pickup') {
       setPickupInput(val);
+      setPickupVerified(false);
       if (resetCoords) setCustomPickupCoords(null);
+      if (pickupDebounceRef.current) clearTimeout(pickupDebounceRef.current);
+
+      if (val.trim().length < 2) {
+        setPickupSuggestions([]);
+        return;
+      }
+
+      // 320ms debounce to prevent wasted API calls and ensure instant responsive typing
+      pickupDebounceRef.current = setTimeout(async () => {
+        const suggestions = await fetchSuggestions(val);
+        setPickupSuggestions(suggestions);
+      }, 320);
     } else {
       setDropoffInput(val);
+      setDropoffVerified(false);
       if (resetCoords) setCustomDropoffCoords(null);
+      if (dropoffDebounceRef.current) clearTimeout(dropoffDebounceRef.current);
+
+      if (val.trim().length < 2) {
+        setDropoffSuggestions([]);
+        return;
+      }
+
+      // 320ms debounce to prevent wasted API calls and ensure instant responsive typing
+      dropoffDebounceRef.current = setTimeout(async () => {
+        const suggestions = await fetchSuggestions(val);
+        setDropoffSuggestions(suggestions);
+      }, 320);
     }
-
-    if (val.length < 2) {
-      const defaults: SuggestionItem[] = Object.values(UK_LOCATIONS).map(loc => ({
-        lat: loc.lat,
-        lng: loc.lng,
-        name: loc.name,
-        mainText: loc.name.split(",")[0],
-        secondaryText: loc.name.split(",").slice(1).join(",").trim() || "UK",
-        type: loc.name.includes("Airport") ? "airport" : "city"
-      }));
-      if (type === 'pickup') setPickupSuggestions(defaults);
-      else setDropoffSuggestions(defaults);
-      return;
-    }
-
-    // Instantly show local matches while fetching async suggestions
-    const queryLower = val.toLowerCase();
-    const immediateMatches: SuggestionItem[] = Object.values(UK_LOCATIONS)
-      .filter(loc => loc.name.toLowerCase().includes(queryLower))
-      .map(loc => ({
-        lat: loc.lat,
-        lng: loc.lng,
-        name: loc.name,
-        mainText: loc.name.split(",")[0],
-        secondaryText: loc.name.split(",").slice(1).join(",").trim() || "UK",
-        type: loc.name.includes("Airport") ? "airport" : "city"
-      }));
-
-    if (type === 'pickup') setPickupSuggestions(immediateMatches);
-    else setDropoffSuggestions(immediateMatches);
-
-    const suggestions = await fetchSuggestions(val);
-    if (type === 'pickup') setPickupSuggestions(suggestions);
-    else setDropoffSuggestions(suggestions);
   };
   const pickupRef = useRef<HTMLDivElement>(null);
   const dropoffRef = useRef<HTMLDivElement>(null);
@@ -826,10 +761,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     if (currentMode === "pickup") {
       setPickupInput(resolvedName);
       setCustomPickupCoords({ lat, lng });
+      setPickupVerified(true);
       setMapClickMode("dropoff");
     } else {
       setDropoffInput(resolvedName);
       setCustomDropoffCoords({ lat, lng });
+      setDropoffVerified(true);
       setMapClickMode("pickup");
     }
   };
@@ -948,10 +885,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const straightLineDist = R * c;
 
-    let distanceMiles = Number((straightLineDist === 0 ? 5.5 : straightLineDist * 1.3).toFixed(1));
-    if (distanceMiles < 2) distanceMiles = 3.5;
+    // Accurate road circuity factor (~1.2) for UK roads
+    let distanceMiles = Number((straightLineDist > 0 ? straightLineDist * 1.2 : 1.0).toFixed(1));
+    const distanceKm = Number((distanceMiles * 1.60934).toFixed(1));
 
-    let timeMinutes = Math.max(8, Math.round((distanceMiles / 45) * 60));
+    let timeMinutes = Math.max(5, Math.round((distanceMiles / 35) * 60));
 
     let points = [];
     let instructions = [
@@ -962,7 +900,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     ];
 
     if (precalc && precalc.distanceMiles && Array.isArray(precalc.routePoints)) {
-      distanceMiles = precalc.distanceMiles;
+      distanceMiles = Number(Number(precalc.distanceMiles).toFixed(1));
       timeMinutes = precalc.timeMinutes || timeMinutes;
       points = precalc.routePoints;
       instructions = precalc.instructions || instructions;
@@ -980,7 +918,6 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         if (len > 0) {
           const uLat = pLat / len;
           const uLng = pLng / len;
-          // Beautiful smooth arc peak in the middle, scaled to ~12% of straight-line distance
           const wiggle = Math.sin(fraction * Math.PI) * len * 0.12;
           points.push({
             lat: midLat + uLat * wiggle,
@@ -995,7 +932,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     const totalWaitMins = stops.reduce((acc, s) => acc + (Number(s.waiting) || 0), 0);
     const waitingChargeAmt = totalWaitMins * 0.50;
 
-    const effectiveDistance = distanceMiles <= 10 ? 10 : distanceMiles;
+    const effectiveDistance = Math.max(distanceMiles, 10.00);
     const prices = {
       Economy: Number((effectiveDistance * 1.50 + waitingChargeAmt).toFixed(2)),
       Luxury: Number((effectiveDistance * 2.00 + waitingChargeAmt).toFixed(2)),
@@ -1004,7 +941,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
     return {
       distanceMiles,
+      distanceKm,
+      distance: distanceMiles,
+      distanceText: `${distanceMiles} mi (${distanceKm} km)`,
       timeMinutes,
+      duration: timeMinutes,
       pickupLat: pCoords.lat,
       pickupLng: pCoords.lng,
       dropoffLat: dCoords.lat,
@@ -1088,6 +1029,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       });
       if (updatedStops) {
         setStops(finalStops);
+      }
+
+      if (!pCoords || !dCoords) {
+        setErrorMsg("We could not pinpoint this UK address. Please select a suggestion from the UK dropdown, enter a valid UK postcode, or tap on the map to pin your location.");
+        setLoadingRoute(false);
+        return;
       }
 
       // 2. Fetch OSRM route directly from client (bypasses Server rate limits completely)
@@ -1274,22 +1221,22 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       const res = await fetch("/api/promocodes/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: raw, amount: baseAmount })
+        body: JSON.stringify({ code: raw, amount: baseAmount, email: passengerEmail })
       });
       const data = await res.json();
       if (res.ok && data.valid) {
-        setAppliedPromo(data.promo);
+        setAppliedPromo(data.coupon || data.promo);
         setPromoDiscountAmount(data.discountAmount);
-        setPromoSuccessMsg(data.message || `Promo code '${raw}' applied!`);
+        setPromoSuccessMsg(data.message || `Coupon code '${raw}' applied!`);
       } else {
         setAppliedPromo(null);
         setPromoDiscountAmount(0);
-        setPromoError(data.message || "Invalid or ineligible promo code.");
+        setPromoError(data.message || "Invalid or ineligible coupon code.");
       }
     } catch (err: any) {
       setAppliedPromo(null);
       setPromoDiscountAmount(0);
-      setPromoError("Could not connect to promo verification server.");
+      setPromoError("Could not connect to coupon verification server.");
     } finally {
       setPromoLoading(false);
     }
@@ -1303,6 +1250,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     setPromoSuccessMsg("");
   };
 
+  // Distance parameters
+  const originalBasePrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+  const finalPayablePrice = Math.max(0, Math.round((originalBasePrice - promoDiscountAmount) * 100) / 100);
+  const selectedPrice = finalPayablePrice;
+
   // Payment finalizer
   const processCheckoutPayment = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -1310,14 +1262,21 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
     setProcessingPayment(true);
 
-    const price = distanceResult.prices[selectedVehicle];
+    const price = finalPayablePrice;
+
+    const distMiles = distanceResult.distanceMiles ?? (Number((distanceResult as any).distance) || 0);
+    const distKm = distanceResult.distanceKm || (distMiles * 1.60934);
+    const distText = `${distMiles.toFixed(1)} mi (${distKm.toFixed(1)} km)`;
 
     const payload = {
       pickup: distanceResult.pickupDisplay || pickupInput,
       dropoff: distanceResult.dropoffDisplay || dropoffInput,
       pickupCoords: { lat: distanceResult.pickupLat, lng: distanceResult.pickupLng },
       dropoffCoords: { lat: distanceResult.dropoffLat, lng: distanceResult.dropoffLng },
-      distance: distanceResult.distanceMiles ?? (distanceResult as any).distance,
+      distance: distMiles,
+      distanceMiles: distMiles,
+      distanceKm: distKm,
+      distanceText: distText,
       duration: distanceResult.timeMinutes ?? (distanceResult as any).duration,
       stops: stops.map(s => ({ address: s.address, duration: s.duration, waiting: s.waiting, lat: s.lat, lng: s.lng })),
       waitingTime: stops.reduce((acc, s) => acc + (Number(s.waiting) || 0), 0),
@@ -1351,7 +1310,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         trackClick("book_now");
         const data = await res.json();
         setCompletedBookingId(data.booking.id);
-        setCompletedBookingPrice(price);
+        setCompletedBookingPrice(data.booking?.price ?? finalPayablePrice);
         
         // Dispatch simulation payment server update
         await fetch("/api/bookings/payment-simulate", {
@@ -1412,12 +1371,19 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     setProcessingPayment(true);
     const price = distanceResult.prices[selectedVehicle];
 
+    const distMiles = distanceResult.distanceMiles ?? (Number((distanceResult as any).distance) || 0);
+    const distKm = distanceResult.distanceKm || (distMiles * 1.60934);
+    const distText = `${distMiles.toFixed(1)} mi (${distKm.toFixed(1)} km)`;
+
     const payload = {
       pickup: distanceResult.pickupDisplay || pickupInput,
       dropoff: distanceResult.dropoffDisplay || dropoffInput,
       pickupCoords: { lat: distanceResult.pickupLat, lng: distanceResult.pickupLng },
       dropoffCoords: { lat: distanceResult.dropoffLat, lng: distanceResult.dropoffLng },
-      distance: distanceResult.distanceMiles ?? (distanceResult as any).distance,
+      distance: distMiles,
+      distanceMiles: distMiles,
+      distanceKm: distKm,
+      distanceText: distText,
       duration: distanceResult.timeMinutes ?? (distanceResult as any).duration,
       stops: stops.map(s => ({ address: s.address, duration: s.duration, waiting: s.waiting, lat: s.lat, lng: s.lng })),
       waitingTime: stops.reduce((acc, s) => acc + (Number(s.waiting) || 0), 0),
@@ -1468,11 +1434,6 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       processCheckoutPayment();
     }, 2500);
   };
-
-  // Distance parameters
-  const originalBasePrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
-  const finalPayablePrice = Math.max(0, Math.round((originalBasePrice - promoDiscountAmount) * 100) / 100);
-  const selectedPrice = finalPayablePrice;
 
   return (
     <section id="calculator" className="py-20 bg-white text-slate-800 relative">
@@ -1625,6 +1586,13 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       </div>
                     </div>
 
+                    <div className="flex items-center text-[11px] text-slate-500 px-1 pt-0.5">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>Search any UK postcode, city or airport, or click anywhere on the map to pin exact locations.</span>
+                      </span>
+                    </div>
+
                     {errorMsg && (
                       <div className="flex items-center space-x-2 text-xs text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200/50">
                         <AlertCircle className="w-4 h-4 shrink-0" />
@@ -1721,7 +1689,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     <div className="grid grid-cols-2 gap-3 text-xs font-sans text-slate-500">
                       <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                         <span className="block text-slate-400 text-[9px] uppercase tracking-wider">Total Distance</span>
-                        <strong className="text-slate-800 text-sm">{Math.round(distanceResult.distanceMiles ?? distanceResult.distance ?? 0)} miles</strong>
+                        <strong className="text-slate-800 text-sm">
+                          {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi
+                          <span className="text-[11px] font-normal text-slate-500 ml-1">
+                            ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km)
+                          </span>
+                        </strong>
                       </div>
                       <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                         <span className="block text-slate-400 text-[9px] uppercase tracking-wider">Est. Driving Time</span>
@@ -1764,6 +1737,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                 {/* removed date and time fields */}
                 <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
                   <div className="space-y-4">
+                    {distanceResult && (
+                      <div className="p-3.5 bg-emerald-50/70 border border-emerald-100 rounded-xl text-xs space-y-1">
+                        <div className="flex justify-between items-center text-emerald-950 font-semibold">
+                          <span className="truncate pr-2">{distanceResult.pickupDisplay || pickupInput} → {distanceResult.dropoffDisplay || dropoffInput}</span>
+                          <span className="text-emerald-700 font-bold shrink-0">£{selectedPrice.toFixed(2)}</span>
+                        </div>
+                        <div className="text-[11px] text-slate-500">
+                          {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km) • ~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins • {selectedVehicle} Class
+                        </div>
+                      </div>
+                    )}
+
                     <h3 className="text-sm font-semibold text-slate-900 font-display">Contact Information</h3>
 
                     <div className="space-y-3">
@@ -1912,7 +1897,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     {/* PROMO CODE INPUT BOX */}
                     <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
                       <label className="block text-xs font-semibold text-slate-700">
-                        🎟️ Have a Promo Code or Discount Voucher?
+                        🎟️ Have a Coupon Code or Voucher?
                       </label>
                       <div className="flex gap-2">
                         <input
@@ -1922,7 +1907,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                             setPromoInput(e.target.value.toUpperCase());
                             setPromoError("");
                           }}
-                          placeholder="ENTER CODE (e.g. LUXURY10)"
+                          placeholder="ENTER COUPON CODE (e.g. LUXURY10)"
                           disabled={!!appliedPromo || promoLoading}
                           className="flex-1 uppercase font-mono tracking-wider border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 bg-white focus:outline-none focus:border-emerald-600 disabled:bg-slate-100"
                         />
@@ -2091,10 +2076,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                   <div className="space-y-2 text-xs text-slate-600 font-medium">
                     <p><strong>Passenger:</strong> {passengerName}</p>
-                    <p><strong>Route:</strong> {distanceResult?.pickupDisplay} → {distanceResult?.dropoffDisplay}</p>
-                    <p><strong>Date & Time:</strong> {rideDate} at {rideTime}</p>
+                    <p><strong>Route:</strong> {distanceResult?.pickupDisplay || pickupInput} → {distanceResult?.dropoffDisplay || dropoffInput}</p>
+                    <p><strong>Distance:</strong> {(distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0).toFixed(1)} mi ({(distanceResult?.distanceKm || (distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0) * 1.60934).toFixed(1)} km)</p>
+                    <p><strong>Date & Time:</strong> {rideDate ? new Date(rideDate + "T12:00:00").toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ""} at {rideTime}</p>
                     <p><strong>Vehicle:</strong> {selectedVehicle} Class</p>
-                    <p><strong>Paid amount:</strong> <span className="font-sans text-emerald-700 font-semibold">£{completedBookingPrice.toFixed(2)}</span> ({paymentMethod})</p>
+                    <p><strong>Total Fare:</strong> <span className="font-sans text-emerald-700 font-semibold">£{completedBookingPrice.toFixed(2)}</span> ({paymentMethod})</p>
                   </div>
                 </div>
 

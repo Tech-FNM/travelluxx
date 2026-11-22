@@ -178,7 +178,7 @@ export default function RenaxLayout({
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
           <img
             src={bgImage}
-            alt="Luxury Banner"
+            alt="Travelluxx Executive Luxury Chauffeur Banner - Solihull & London"
             className="w-full h-full object-cover opacity-35 scale-105 transition-all duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#08090d]/80 via-[#08090d]/40 to-[#08090d]"></div>
@@ -312,7 +312,7 @@ export default function RenaxLayout({
             <div className="relative rounded-3xl overflow-hidden aspect-square lg:aspect-[4/3] border border-slate-800/40 bg-slate-950">
               <img
                 src={getCustomImage("about_showcase", transferPortImg)}
-                alt="Travelluxx Luxury Chauffeur"
+                alt="Travelluxx Luxury Chauffeur Driver Service - Solihull & London"
                 className="w-full h-full object-cover opacity-75"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
@@ -371,7 +371,7 @@ export default function RenaxLayout({
                 <img
                   key={key}
                   src={fleet[key].image}
-                  alt={fleet[key].name}
+                  alt={fleet[key]?.alt || `${fleet[key]?.name || key} - Luxury Chauffeur Car Solihull & London`}
                   loading="eager"
                   className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeFleetTab === key ? "block" : "hidden"}`}
                 />

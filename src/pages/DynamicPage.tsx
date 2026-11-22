@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "../utils/routerCompat";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -160,6 +160,8 @@ export default function DynamicPage() {
               <div className="space-y-3">
                 {pageFaqs.map((faq: any, index: number) => {
                   const isOpen = openFaqIndex === index;
+                  const questionId = `page-faq-q-${index}`;
+                  const answerId = `page-faq-a-${index}`;
                   return (
                     <div
                       key={faq.question || index}
@@ -169,26 +171,35 @@ export default function DynamicPage() {
                           : "border-slate-200 bg-white hover:border-slate-300"
                       }`}
                     >
-                      <button
-                        type="button"
-                        aria-expanded={isOpen}
-                        onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                        className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition"
+                      <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
+                        <button
+                          type="button"
+                          id={questionId}
+                          aria-expanded={isOpen}
+                          aria-controls={answerId}
+                          onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                          className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition"
+                        >
+                          <span className="text-base sm:text-lg">{faq.question}</span>
+                          <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                            isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
+                          }`}>
+                            <ChevronDown
+                              className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                            />
+                          </div>
+                        </button>
+                      </h3>
+                      <div
+                        id={answerId}
+                        role="region"
+                        aria-labelledby={questionId}
+                        className={`px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60 ${
+                          isOpen ? "block" : "hidden"
+                        }`}
                       >
-                        <span className="text-base sm:text-lg">{faq.question}</span>
-                        <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                          isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
-                        }`}>
-                          <ChevronDown
-                            className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                          />
-                        </div>
-                      </button>
-                      {isOpen && (
-                        <div className="px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60">
-                          <p>{faq.answer}</p>
-                        </div>
-                      )}
+                        <p>{faq.answer}</p>
+                      </div>
                     </div>
                   );
                 })}

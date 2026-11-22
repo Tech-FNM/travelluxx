@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getServiceIcon } from "../utils/serviceIcons";
@@ -413,9 +413,10 @@ export default function Services() {
                             svc.image ||
                             "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80"
                           }
-                          alt={svc.title}
+                          alt={svc.imageAlt || `${svc.title} - Executive Chauffeur Services UK`}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"
+                          decoding="async"
                         />
                       </Link>
 
@@ -455,6 +456,82 @@ export default function Services() {
                             Book Now
                           </a>
                         </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 4. Frequently Asked Questions (FAQ) Section */}
+        {faqEnabled && faqs.length > 0 && (
+          <section className="py-20 lg:py-24 bg-white border-t border-slate-200/80">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center space-y-3 mb-14">
+                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-emerald-500/30 bg-emerald-50 text-emerald-700">
+                  <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{faqTag}</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                  {faqTitle}
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                  {faqDescription}
+                </p>
+              </div>
+
+              <div className="space-y-3.5">
+                {faqs.map((faq: any, idx: number) => {
+                  const isOpen = openFaqIndex === idx;
+                  const questionId = `services-faq-q-${idx}`;
+                  const answerId = `services-faq-a-${idx}`;
+                  return (
+                    <div
+                      key={idx}
+                      className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                        isOpen
+                          ? "border-emerald-300 bg-emerald-50/40 shadow-md ring-1 ring-emerald-500/20"
+                          : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
+                      }`}
+                    >
+                      <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
+                        <button
+                          type="button"
+                          id={questionId}
+                          aria-expanded={isOpen}
+                          aria-controls={answerId}
+                          onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                          className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                        >
+                          <span
+                            className={`text-sm sm:text-base font-bold transition-colors ${
+                              isOpen ? "text-slate-950" : "text-slate-800"
+                            }`}
+                          >
+                            {faq.question}
+                          </span>
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                              isOpen
+                                ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                                : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            <ChevronDown className="w-4 h-4" />
+                          </div>
+                        </button>
+                      </h3>
+                      <div
+                        id={answerId}
+                        role="region"
+                        aria-labelledby={questionId}
+                        className={`px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed ${
+                          isOpen ? "block" : "hidden"
+                        }`}
+                      >
+                        <p className="whitespace-pre-line">{faq.answer}</p>
                       </div>
                     </div>
                   );

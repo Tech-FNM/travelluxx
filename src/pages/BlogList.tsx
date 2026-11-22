@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
@@ -111,7 +111,9 @@ export default function BlogList() {
                     <div className="h-48 overflow-hidden relative">
                       <img
                         src={post.image}
-                        alt={post.title}
+                        alt={post.imageAlt || `${post.title} - Travelluxx Chauffeur Blog`}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
                       <div className="absolute top-3 left-3 bg-white/90 backdrop-blur text-slate-600 text-[10px] font-mono font-bold px-2.5 py-1 rounded-md border border-slate-200 shadow-sm">

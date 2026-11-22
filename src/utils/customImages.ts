@@ -1,13 +1,18 @@
-export function getCustomImage(key: string, defaultSrc: string): string {
+export function getCustomImage(key: string, defaultSrc: any): string {
   try {
-    const saved = localStorage.getItem(`custom_img_${key}`);
-    if (saved && saved.trim() !== "") {
-      return saved;
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(`custom_img_${key}`);
+      if (saved && saved.trim() !== "") {
+        return saved;
+      }
     }
   } catch (e) {
     console.error("Failed to read custom image:", e);
   }
-  return defaultSrc;
+  if (defaultSrc && typeof defaultSrc === "object" && defaultSrc.src) {
+    return defaultSrc.src;
+  }
+  return defaultSrc || "";
 }
 
 export function saveAssetImageToServer(key: string, base64Url: string) {

@@ -74,7 +74,7 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <img
           src={bgImage}
-          alt={`${brandName} Luxury Banner`}
+          alt={settings?.hero_image_alt || `${brandName} - Executive Luxury Chauffeur Service Solihull & London UK`}
           referrerPolicy="no-referrer"
           loading="eager"
           decoding="async"

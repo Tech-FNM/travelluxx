@@ -26,7 +26,7 @@ import { trackVisit, trackClick } from "./utils/analytics";
 import { SettingsProvider, useSettings } from "./context/SettingsContext";
 
 // PUBLIC LANDING PAGE WRAPPER
-function PublicLandingPage() {
+export function PublicLandingPage() {
   // Shared state to allow prefilling the booking calculator
   const [calculatorPickup, setCalculatorPickup] = useState("");
   const [calculatorDropoff, setCalculatorDropoff] = useState("");

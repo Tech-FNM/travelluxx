@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../utils/routerCompat";
 import { Phone, Mail, MapPin, Compass, Shield, Menu, X, ChevronDown } from "lucide-react";
 import { travelluxxLogoBase64 } from "../assets/travelluxx_logo_datauri";
 import { trackClick } from "../utils/analytics";

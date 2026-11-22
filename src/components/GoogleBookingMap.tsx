@@ -157,7 +157,8 @@ export default function GoogleBookingMap({
             const distanceMeters = route.distance; // meters
             const durationSeconds = route.duration; // seconds
 
-            const distanceMiles = distanceMeters / 1609.34;
+            const distanceMiles = distanceMeters / 1609.344;
+            const distanceKm = distanceMeters / 1000;
             const timeMinutes = durationSeconds / 60;
 
             const routePoints = coordinates.map((c: [number, number]) => ({
@@ -173,18 +174,18 @@ export default function GoogleBookingMap({
 
             routePolylineRef.current = polyline;
 
-            // Centered distance badge along route path
+            // Centered distance badge along route path showing miles & km
             const midIndex = Math.floor(latLngs.length / 2);
             const midPoint = latLngs[midIndex] || latLngs[0];
             const badgeIcon = L.divIcon({
               className: "custom-distance-badge",
               html: `
-                <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
-                  ${distanceMiles.toFixed(1)} mi
+                <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
+                  ${distanceMiles.toFixed(1)} mi (${distanceKm.toFixed(1)} km)
                 </div>
               `,
-              iconSize: [60, 24],
-              iconAnchor: [30, 12],
+              iconSize: [110, 26],
+              iconAnchor: [55, 13],
             });
             distanceMarkerRef.current = L.marker(midPoint, { icon: badgeIcon, interactive: false }).addTo(map);
 
@@ -193,7 +194,7 @@ export default function GoogleBookingMap({
               timeMinutes,
               routePoints,
               instructions: [
-                `Route via OpenStreetMap (${distanceMiles.toFixed(1)} miles, ~${Math.round(timeMinutes)} mins)`
+                `Route distance: ${distanceMiles.toFixed(1)} miles (${distanceKm.toFixed(1)} km), ~${Math.round(timeMinutes)} mins`
               ],
             });
           }

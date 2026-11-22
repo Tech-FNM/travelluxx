@@ -120,7 +120,7 @@ export default function AirportsGrid({ onSelectTransfer, settings }: AirportsGri
               <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                 <img
                   src={service.image}
-                  alt={service.title}
+                  alt={`${service.title} - Luxury Airport Transfer Solihull & London UK`}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

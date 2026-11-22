@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "../utils/routerCompat";
 import { Tag, Ticket, Percent, ArrowUp, ArrowDown, Eye, EyeOff, LayoutDashboard, FileText, Newspaper, Menu, Image, Settings, BookOpen, LogOut, Plus, Trash2, Edit2, Save, X, Upload, Check, ChevronUp, ChevronDown, ExternalLink, Users, MessageSquare, Home, ChevronRight, Car, Plane, Route, Briefcase, Crown, ShieldCheck, Clock, MapPin, CalendarDays, CheckCircle2, Star, Award, Compass, Sparkles, HelpCircle, ListOrdered, Globe } from "lucide-react";
-import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 import { getServiceIcon, AVAILABLE_SERVICE_ICONS } from "../utils/serviceIcons";
 import ServiceAreasManager from "./ServiceAreasManager";
 
@@ -690,6 +690,7 @@ export default function AdminDashboard() {
     excerpt: "",
     content: "",
     image: "",
+    imageAlt: "",
     heroImage: "",
     icon: "Car",
     features: [] as string[],
@@ -858,6 +859,7 @@ export default function AdminDashboard() {
     excerpt: "",
     content: "",
     image: "",
+    imageAlt: "",
     published: true,
     metaTitle: "",
     metaDescription: "",
@@ -898,7 +900,7 @@ export default function AdminDashboard() {
   const [newMenuItem, setNewMenuItem] = useState({ label: "", href: "", target: "_self" });
   const [newSubMenuItems, setNewSubMenuItems] = useState<{ [parentId: string]: { label: string; href: string; target: string } }>({});
 
-  // Promo codes state
+  // Promo codes / Coupons state
   const [promoCodes, setPromoCodes] = useState<any[]>([]);
   const [promoCodesLoading, setPromoCodesLoading] = useState(false);
   const [promoModalOpen, setPromoModalOpen] = useState(false);
@@ -909,13 +911,51 @@ export default function AdminDashboard() {
     discountValue: 10,
     minOrderAmount: 0,
     maxDiscountAmount: 0,
+    startDate: "",
+    expiryDate: "",
     usageLimit: 0,
-    expiresAt: "",
+    perUserLimit: 0,
     isActive: true,
     description: ""
   });
   const [promoSaving, setPromoSaving] = useState(false);
-  const [promoFilter, setPromoFilter] = useState<"all" | "active" | "inactive">("all");
+  const [promoFilter, setPromoFilter] = useState<"all" | "active" | "expired" | "inactive">("all");
+  const [promoSearchQuery, setPromoSearchQuery] = useState("");
+  const [selectedPromoIds, setSelectedPromoIds] = useState<string[]>([]);
+  const [promoPage, setPromoPage] = useState(1);
+
+  // Bookings pagination & global confirmation state
+  const [bookingPage, setBookingPage] = useState(1);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    confirmLabel?: string;
+    confirmVariant?: "danger" | "primary";
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => {}
+  });
+
+  const requestConfirmation = (
+    title: string,
+    message: string,
+    onConfirm: () => void,
+    confirmLabel = "Confirm Delete",
+    confirmVariant: "danger" | "primary" = "danger"
+  ) => {
+    setConfirmModal({
+      isOpen: true,
+      title,
+      message,
+      confirmLabel,
+      confirmVariant,
+      onConfirm
+    });
+  };
 
 
   useEffect(() => {
@@ -958,6 +998,7 @@ export default function AdminDashboard() {
             excerpt: found.excerpt || "",
             content: found.content || "",
             image: found.image || "",
+            imageAlt: found.imageAlt || "",
             published: found.published !== false,
             metaTitle: found.metaTitle || "",
             metaDescription: found.metaDescription || "",
@@ -979,6 +1020,7 @@ export default function AdminDashboard() {
           excerpt: "",
           content: "",
           image: "",
+          imageAlt: "",
           published: true,
           metaTitle: "",
           metaDescription: "",
@@ -1082,6 +1124,7 @@ export default function AdminDashboard() {
             excerpt: found.excerpt || "",
             content: found.content || "",
             image: found.image || "",
+            imageAlt: found.imageAlt || "",
             heroImage: found.heroImage || "",
             icon: found.icon || "Car",
             features: Array.isArray(found.features) ? found.features : [],
@@ -1147,6 +1190,7 @@ export default function AdminDashboard() {
           excerpt: "",
           content: "",
           image: "",
+          imageAlt: "",
           heroImage: "",
           icon: "Car",
           features: [
@@ -1311,7 +1355,9 @@ export default function AdminDashboard() {
   const fetchPromoCodes = async () => {
     setPromoCodesLoading(true);
     try {
-      const res = await fetch("/api/admin/promocodes");
+      const res = await fetch("/api/admin/promocodes", {
+        headers: token ? { "Authorization": `Bearer ${token}` } : {}
+      });
       if (res.ok) {
         const data = await res.json();
         setPromoCodes(Array.isArray(data) ? data : []);
@@ -1325,34 +1371,58 @@ export default function AdminDashboard() {
 
   const handleSavePromoCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!promoForm.code.trim()) {
-      showToast("Please enter a promo code", "error");
+    const cleanCode = promoForm.code.trim().toUpperCase();
+    if (!cleanCode) {
+      showToast("Please enter a coupon code", "error");
       return;
     }
+    const val = Number(promoForm.discountValue);
+    if (isNaN(val) || val <= 0) {
+      showToast("Please enter a positive discount value", "error");
+      return;
+    }
+    if (promoForm.startDate && promoForm.expiryDate && promoForm.expiryDate < promoForm.startDate) {
+      showToast("Expiry date cannot be before start date", "error");
+      return;
+    }
+    const duplicate = promoCodes.some(p => {
+      const pId = p.id || p._id;
+      return (editingPromoId ? pId !== editingPromoId : true) && p.code && p.code.toUpperCase() === cleanCode;
+    });
+    if (duplicate) {
+      showToast(`A coupon with code "${cleanCode}" already exists`, "error");
+      return;
+    }
+
     setPromoSaving(true);
     try {
       const payload = {
         ...promoForm,
-        code: promoForm.code.trim().toUpperCase(),
-        discountValue: Number(promoForm.discountValue) || 0,
+        code: cleanCode,
+        discountValue: val,
         minOrderAmount: Number(promoForm.minOrderAmount) || 0,
         maxDiscountAmount: promoForm.maxDiscountAmount ? Number(promoForm.maxDiscountAmount) : undefined,
+        startDate: promoForm.startDate ? promoForm.startDate : undefined,
+        expiryDate: promoForm.expiryDate ? promoForm.expiryDate : undefined,
         usageLimit: Number(promoForm.usageLimit) || 0,
-        expiresAt: promoForm.expiresAt ? promoForm.expiresAt : undefined
+        perUserLimit: Number(promoForm.perUserLimit) || 0
       };
 
       const url = editingPromoId ? `/api/admin/promocodes/${editingPromoId}` : "/api/admin/promocodes";
       const method = editingPromoId ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { "Authorization": `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (!res.ok) {
-        showToast(data.message || "Failed to save promo code", "error");
+        showToast(data.error || data.message || "Failed to save coupon code", "error");
       } else {
-        showToast(editingPromoId ? "Promo code updated successfully!" : "Promo code created successfully!", "success");
+        showToast(editingPromoId ? "Coupon updated successfully!" : "Coupon created successfully!", "success");
         setPromoModalOpen(false);
         setEditingPromoId(null);
         setPromoForm({
@@ -1361,8 +1431,10 @@ export default function AdminDashboard() {
           discountValue: 10,
           minOrderAmount: 0,
           maxDiscountAmount: 0,
+          startDate: "",
+          expiryDate: "",
           usageLimit: 0,
-          expiresAt: "",
+          perUserLimit: 0,
           isActive: true,
           description: ""
         });
@@ -1379,31 +1451,94 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { "Authorization": `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ isActive: !promo.isActive })
       });
       if (res.ok) {
-        showToast(`Promo code ${promo.code} is now ${!promo.isActive ? "active" : "inactive"}`, "success");
+        showToast(`Coupon ${promo.code} is now ${!promo.isActive ? "active" : "inactive"}`, "success");
         fetchPromoCodes();
       }
     } catch (e) {
-      showToast("Failed to toggle promo code status", "error");
+      showToast("Failed to toggle coupon status", "error");
     }
   };
 
-  const handleDeletePromo = async (promo: any) => {
-    if (!window.confirm(`Are you sure you want to delete promo code "${promo.code}"?`)) return;
+  const handleDeletePromo = (promo: any) => {
+    requestConfirmation(
+      "Delete Coupon",
+      `Are you sure you want to permanently delete coupon "${promo.code}"? This cannot be undone.`,
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
+            method: "DELETE",
+            headers: token ? { "Authorization": `Bearer ${token}` } : {}
+          });
+          if (res.ok) {
+            showToast(`Coupon ${promo.code} deleted`, "success");
+            fetchPromoCodes();
+          } else {
+            showToast("Failed to delete coupon", "error");
+          }
+        } catch (e) {
+          showToast("Failed to delete coupon", "error");
+        }
+      }
+    );
+  };
+
+  const handleBulkDeactivatePromos = async () => {
+    if (selectedPromoIds.length === 0) return;
     try {
-      const res = await fetch(`/api/admin/promocodes/${promo.id || promo._id}`, {
-        method: "DELETE"
+      const res = await fetch("/api/admin/promocodes/bulk-deactivate", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { "Authorization": `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ ids: selectedPromoIds })
       });
       if (res.ok) {
-        showToast(`Promo code ${promo.code} deleted`, "success");
+        showToast(`${selectedPromoIds.length} coupons deactivated`, "success");
+        setSelectedPromoIds([]);
         fetchPromoCodes();
+      } else {
+        showToast("Failed to bulk deactivate coupons", "error");
       }
     } catch (e) {
-      showToast("Failed to delete promo code", "error");
+      showToast("Failed to bulk deactivate coupons", "error");
     }
+  };
+
+  const handleBulkDeletePromos = () => {
+    if (selectedPromoIds.length === 0) return;
+    requestConfirmation(
+      "Bulk Delete Coupons",
+      `Are you sure you want to delete all ${selectedPromoIds.length} selected coupons? This action is permanent.`,
+      async () => {
+        try {
+          const res = await fetch("/api/admin/promocodes/bulk-delete", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { "Authorization": `Bearer ${token}` } : {})
+            },
+            body: JSON.stringify({ ids: selectedPromoIds })
+          });
+          if (res.ok) {
+            showToast(`${selectedPromoIds.length} coupons deleted`, "success");
+            setSelectedPromoIds([]);
+            fetchPromoCodes();
+          } else {
+            showToast("Failed to bulk delete coupons", "error");
+          }
+        } catch (e) {
+          showToast("Failed to bulk delete coupons", "error");
+        }
+      }
+    );
   };
 
   const fetchBookings = async () => {
@@ -1533,25 +1668,43 @@ export default function AdminDashboard() {
     }
   };
 
-  const deleteBooking = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this booking?")) return;
-    const res = await fetch(`/api/admin/bookings/${id}`, { method: "DELETE" });
-    if (res.ok) {
-      setBookings(prev => prev.filter(b => b.id !== id));
-      setSelectedBooking(null);
-      showToast("Booking deleted successfully!");
-    }
+  const deleteBooking = (id: string) => {
+    requestConfirmation(
+      "Delete Booking",
+      `Are you sure you want to permanently delete reservation ${id}? This cannot be undone.`,
+      async () => {
+        const res = await fetch(`/api/admin/bookings/${id}`, {
+          method: "DELETE",
+          headers: token ? { "Authorization": `Bearer ${token}` } : {}
+        });
+        if (res.ok) {
+          setBookings(prev => prev.filter(b => b.id !== id));
+          setSelectedBooking(null);
+          showToast("Booking deleted successfully!");
+        } else {
+          showToast("Failed to delete booking", "error");
+        }
+      }
+    );
   };
 
-  const deleteSelectedBookings = async () => {
+  const deleteSelectedBookings = () => {
     if (selectedBookingIds.length === 0) return;
-    if (!confirm(`Are you sure you want to delete the ${selectedBookingIds.length} selected bookings?`)) return;
-    for (const id of selectedBookingIds) {
-      await fetch(`/api/admin/bookings/${id}`, { method: "DELETE" });
-    }
-    setBookings(prev => prev.filter(b => !selectedBookingIds.includes(b.id)));
-    setSelectedBookingIds([]);
-    showToast(`${selectedBookingIds.length} bookings deleted!`);
+    requestConfirmation(
+      "Delete Selected Bookings",
+      `Are you sure you want to permanently delete the ${selectedBookingIds.length} selected bookings?`,
+      async () => {
+        for (const id of selectedBookingIds) {
+          await fetch(`/api/admin/bookings/${id}`, {
+            method: "DELETE",
+            headers: token ? { "Authorization": `Bearer ${token}` } : {}
+          });
+        }
+        setBookings(prev => prev.filter(b => !selectedBookingIds.includes(b.id)));
+        setSelectedBookingIds([]);
+        showToast(`${selectedBookingIds.length} bookings deleted!`);
+      }
+    );
   };
 
   const filteredBookings = bookings.filter(b => {
@@ -2000,10 +2153,21 @@ export default function AdminDashboard() {
   };
 
   // ─── Stats ───────────────────────────────────────────────────────────────────
+  const pendingBookingsCount = bookings.filter(b => (b.status || "Pending") === "Pending").length;
+  const activeCouponsCount = promoCodes.filter(p => {
+    if (!p.isActive) return false;
+    const exp = p.expiryDate || p.expiresAt;
+    if (exp && new Date(exp).getTime() < Date.now()) return false;
+    if (p.usageLimit && p.timesUsed >= p.usageLimit) return false;
+    return true;
+  }).length;
+
   const stats = {
     leads: bookings.length,
     today: bookings.filter(b => b.createdAt?.startsWith(new Date().toISOString().slice(0, 10))).length,
     revenue: bookings.reduce((s, b) => s + Number(b.price || 0), 0),
+    pending: pendingBookingsCount,
+    activeCoupons: activeCouponsCount,
     inquiries: inquiries.length,
     posts: posts.length,
     pages: pages.length,
@@ -2064,15 +2228,15 @@ export default function AdminDashboard() {
   // ─── DASHBOARD LAYOUT ─────────────────────────────────────────────────────────
   const navItems: { id: Tab; icon: React.ReactNode; label: string }[] = [
     { id: "dashboard", icon: <LayoutDashboard className="w-4 h-4" />, label: "Dashboard" },
-    { id: "leads", icon: <BookOpen className="w-4 h-4" />, label: "Leads & Bookings" },
-    { id: "inquiries", icon: <MessageSquare className="w-4 h-4" />, label: "Contact Inquiries" },
+    { id: "leads", icon: <BookOpen className="w-4 h-4" />, label: "Bookings & Rides" },
+    { id: "promocodes", icon: <Tag className="w-4 h-4" />, label: "Coupons & Discounts" },
+    { id: "inquiries", icon: <MessageSquare className="w-4 h-4" />, label: "Customer Inquiries" },
     { id: "posts", icon: <Newspaper className="w-4 h-4" />, label: "Posts (Blog)" },
     { id: "pages", icon: <FileText className="w-4 h-4" />, label: "Pages" },
     { id: "services", icon: <Car className="w-4 h-4" />, label: "Services" },
     { id: "service-areas", icon: <MapPin className="w-4 h-4" />, label: "Service Areas" },
-    { id: "media", icon: <Image className="w-4 h-4" />, label: "Media" },
+    { id: "media", icon: <Image className="w-4 h-4" />, label: "Media Library" },
     { id: "menus", icon: <Menu className="w-4 h-4" />, label: "Menus" },
-    { id: "promocodes", icon: <Tag className="w-4 h-4" />, label: "Promo Codes" },
     { id: "settings", icon: <Settings className="w-4 h-4" />, label: "Settings" },
   ];
 
@@ -2233,11 +2397,11 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
                 {[
-                  { label: "Total Leads", value: stats.leads, color: "#2271b1" },
                   { label: "Today's Bookings", value: stats.today, color: "#00a32a" },
-                  { label: "Total Revenue", value: `£${stats.revenue.toFixed(2)}`, color: "#d63638" },
-                  { label: "Contact Inquiries", value: stats.inquiries, color: "#0284c7" },
-                  { label: "Blog Posts", value: stats.posts, color: "#9c27b0" },
+                  { label: "Total Revenue", value: `£${stats.revenue.toFixed(2)}`, color: "#1d2327" },
+                  { label: "Pending Bookings", value: stats.pending, color: "#d97706" },
+                  { label: "Active Coupons", value: stats.activeCoupons, color: "#2271b1" },
+                  { label: "Total Bookings", value: stats.leads, color: "#7c3aed" },
                 ].map(s => (
                   <div key={s.label} className="bg-white border border-[#c3c4c7] rounded shadow-sm p-4 sm:p-5">
                     <div className="text-2xl sm:text-3xl font-black" style={{ color: s.color }}>{s.value}</div>
@@ -2248,18 +2412,26 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white border border-[#c3c4c7] rounded shadow-sm p-5">
-                  <h3 className="font-semibold text-[#1d2327] mb-3 pb-2 border-b border-[#f0f0f1]">Recent Leads</h3>
+                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#f0f0f1]">
+                    <h3 className="font-semibold text-[#1d2327]">Recent Bookings &amp; Rides</h3>
+                    <button type="button" onClick={() => handleTabClick("leads")} className="text-[#2271b1] text-xs font-semibold hover:underline">View all</button>
+                  </div>
                   <div className="space-y-2">
                     {bookings.slice(0, 5).map(b => (
                       <div key={b.id} className="flex items-center justify-between text-xs py-1.5 border-b border-[#f0f0f1] last:border-0">
-                        <div>
+                        <div className="truncate pr-1">
                           <span className="font-mono text-[#2271b1] font-bold">{b.id}</span>
-                          <span className="text-[#646970] ml-2">{b.passengerName}</span>
+                          <span className="text-[#646970] ml-2 font-medium">{b.passengerName}</span>
+                          <span className={`ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                            b.status === "Confirmed" ? "bg-green-100 text-green-800" :
+                            b.status === "Completed" ? "bg-blue-100 text-blue-800" :
+                            b.status === "Cancelled" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"
+                          }`}>{b.status || "Pending"}</span>
                         </div>
-                        <span className="font-bold text-[#1d2327]">£{Number(b.price || 0).toFixed(2)}</span>
+                        <span className="font-bold text-[#1d2327] shrink-0">£{Number(b.price || 0).toFixed(2)}</span>
                       </div>
                     ))}
-                    {bookings.length === 0 && <p className="text-[#646970] text-xs">No leads yet.</p>}
+                    {bookings.length === 0 && <p className="text-[#646970] text-xs">No bookings yet.</p>}
                   </div>
                 </div>
 
@@ -2272,7 +2444,7 @@ export default function AdminDashboard() {
                           <span className="font-semibold text-[#1d2327]">{i.name}</span>
                           <span className="text-[#646970] text-[10px] ml-2 block truncate">{i.message}</span>
                         </div>
-                        <span className="text-[#646970] text-[10px] whitespace-nowrap">{i.createdAt ? new Date(i.createdAt).toLocaleDateString() : ""}</span>
+                        <span className="text-[#646970] text-[10px] whitespace-nowrap">{i.createdAt ? new Date(i.createdAt).toLocaleDateString("en-GB") : ""}</span>
                       </div>
                     ))}
                     {inquiries.length === 0 && <p className="text-[#646970] text-xs">No inquiries yet.</p>}
@@ -2311,10 +2483,18 @@ export default function AdminDashboard() {
 
               <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-3">
                 <input type="text" placeholder="Search by name, ref, location..." value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-full sm:w-64 focus:outline-none focus:border-[#2271b1]" />
-                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-sm w-full sm:w-auto focus:outline-none focus:border-[#2271b1]">
+                  onChange={e => {
+                    setSearchQuery(e.target.value);
+                    setBookingPage(1);
+                  }}
+                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-xs w-full sm:w-64 focus:outline-none focus:border-[#2271b1] bg-white" />
+                <select
+                  value={statusFilter}
+                  onChange={e => {
+                    setStatusFilter(e.target.value);
+                    setBookingPage(1);
+                  }}
+                  className="border border-[#8c8f94] rounded px-3 py-1.5 text-xs w-full sm:w-auto focus:outline-none focus:border-[#2271b1] bg-white">
                   <option value="All">All Statuses</option>
                   {["Pending", "Confirmed", "Completed", "Cancelled"].map(s => <option key={s}>{s}</option>)}
                 </select>
@@ -2322,106 +2502,158 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     onClick={deleteSelectedBookings}
-                    className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-3 py-1.5 rounded text-xs font-semibold transition text-center"
+                    className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-3 py-1.5 rounded text-xs font-semibold transition text-center cursor-pointer"
                   >
                     Delete Selected ({selectedBookingIds.length})
                   </button>
                 )}
               </div>
 
-              <div className="bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden">
-                <div className="overflow-x-auto w-full">
-                  <table className="w-full text-xs min-w-[750px]">
-                  <thead className="bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]">
-                    <tr>
-                      <th className="py-3 px-4 text-left w-10">
-                        <input
-                          type="checkbox"
-                          checked={filteredBookings.length > 0 && selectedBookingIds.length === filteredBookings.length}
-                          onChange={e => {
-                            if (e.target.checked) {
-                              setSelectedBookingIds(filteredBookings.map(b => b.id));
-                            } else {
-                              setSelectedBookingIds([]);
-                            }
-                          }}
-                          className="rounded-sm border-[#c3c4c7]"
-                        />
-                      </th>
-                      <th className="py-3 px-4 text-left">Ref #</th>
-                      <th className="py-3 px-4 text-left">Passenger</th>
-                      <th className="py-3 px-4 text-left">Date / Time</th>
-                      <th className="py-3 px-4 text-left">Route</th>
-                      <th className="py-3 px-4 text-left">Vehicle</th>
-                      <th className="py-3 px-4 text-left">Fare</th>
-                      <th className="py-3 px-4 text-left">Status</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#f0f0f1]">
-                    {bookingsLoading ? (
-                      <tr><td colSpan={10} className="text-center py-10 text-[#646970] font-semibold">⚙ Loading Bookings...</td></tr>
-                    ) : filteredBookings.length === 0 ? (
-                      <tr><td colSpan={10} className="text-center py-10 text-[#646970]">No leads found.</td></tr>
-                    ) : filteredBookings.map(b => (
-                      <tr key={b.id} className={`hover:bg-[#f9f9f9] transition ${selectedBookingIds.includes(b.id) ? "bg-[#f4f8fa]" : ""}`}>
-                        <td className="py-3 px-4 text-left">
-                          <input
-                            type="checkbox"
-                            checked={selectedBookingIds.includes(b.id)}
-                            onChange={e => {
-                              if (e.target.checked) {
-                                setSelectedBookingIds([...selectedBookingIds, b.id]);
-                              } else {
-                                setSelectedBookingIds(selectedBookingIds.filter(id => id !== b.id));
-                              }
-                            }}
-                            className="rounded-sm border-[#8c8f94]"
-                          />
-                        </td>
-                        <td className="py-3 px-4 font-mono font-bold text-[#2271b1]">{b.id}</td>
-                        <td className="py-3 px-4">
-                          <div className="font-semibold text-[#1d2327]">{b.passengerName}</div>
-                          <div className="text-[#646970]">{b.passengerPhone}</div>
-                        </td>
-                        <td className="py-3 px-4 whitespace-nowrap text-[#646970]">{b.date}<br />{b.time}</td>
-                        <td className="py-3 px-4 max-w-[180px]">
-                          <div className="truncate"><span className="text-emerald-600 font-bold">↑</span> {b.pickup}</div>
-                          <div className="truncate text-[#646970]"><span className="text-red-500 font-bold">↓</span> {b.dropoff}</div>
-                        </td>
-                        <td className="py-3 px-4 text-[#646970]">{b.vehicle}</td>
-                        <td className="py-3 px-4 font-bold text-[#1d2327]">£{Number(b.price || 0).toFixed(2)}</td>
-                        <td className="py-3 px-4">
-                          <select value={b.status || "Pending"} onChange={e => updateBookingStatus(b.id, e.target.value)}
-                            className={`text-[10px] font-bold px-2 py-1 rounded border focus:outline-none ${
-                              (b.status || "") === "Confirmed" ? "border-green-300 bg-green-50 text-green-700"
-                              : (b.status || "") === "Completed" ? "border-blue-300 bg-blue-50 text-blue-700"
-                              : (b.status || "") === "Cancelled" ? "border-red-300 bg-red-50 text-red-700"
-                              : "border-yellow-300 bg-yellow-50 text-yellow-700"
-                            }`}>
-                            {["Pending", "Confirmed", "Completed", "Cancelled"].map(s => (
-                              <option 
-                                key={s} 
-                                className="bg-white text-[#1d2327]"
-                                disabled={!isStatusTransitionAllowed(b.status, s)}
-                              >
-                                {s}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                        <td className="py-3 px-4 text-right space-x-1.5">
-                          <button onClick={() => setSelectedBooking(b)}
-                            className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded text-[10px] font-semibold transition">View</button>
-                          <button onClick={() => deleteBooking(b.id)}
-                            className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-2.5 py-1 rounded text-[10px] font-semibold transition">Delete</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                </div>
-              </div>
+              {(() => {
+                const bookingsPerPage = 10;
+                const totalBookingPages = Math.max(1, Math.ceil(filteredBookings.length / bookingsPerPage));
+                const paginatedBookings = filteredBookings.slice((bookingPage - 1) * bookingsPerPage, bookingPage * bookingsPerPage);
+
+                return (
+                  <div className="bg-white border border-[#c3c4c7] rounded shadow-sm overflow-hidden">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-xs min-w-[750px]">
+                      <thead className="bg-[#f0f0f1] text-[#646970] font-semibold uppercase text-[10px] tracking-wide border-b border-[#c3c4c7]">
+                        <tr>
+                          <th className="py-3 px-4 text-left w-10">
+                            <input
+                              type="checkbox"
+                              checked={paginatedBookings.length > 0 && paginatedBookings.every(b => selectedBookingIds.includes(b.id))}
+                              onChange={e => {
+                                if (e.target.checked) {
+                                  const ids = Array.from(new Set([...selectedBookingIds, ...paginatedBookings.map(b => b.id)]));
+                                  setSelectedBookingIds(ids);
+                                } else {
+                                  const pageIds = paginatedBookings.map(b => b.id);
+                                  setSelectedBookingIds(selectedBookingIds.filter(id => !pageIds.includes(id)));
+                                }
+                              }}
+                              className="rounded-sm border-[#c3c4c7]"
+                            />
+                          </th>
+                          <th className="py-3 px-4 text-left">Ref #</th>
+                          <th className="py-3 px-4 text-left">Passenger</th>
+                          <th className="py-3 px-4 text-left">Date / Time</th>
+                          <th className="py-3 px-4 text-left">Route &amp; Distance</th>
+                          <th className="py-3 px-4 text-left">Vehicle</th>
+                          <th className="py-3 px-4 text-left">Fare &amp; Coupon</th>
+                          <th className="py-3 px-4 text-left">Status</th>
+                          <th className="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#f0f0f1]">
+                        {bookingsLoading ? (
+                          <tr><td colSpan={10} className="text-center py-10 text-[#646970] font-semibold">⚙ Loading Bookings...</td></tr>
+                        ) : filteredBookings.length === 0 ? (
+                          <tr><td colSpan={10} className="text-center py-10 text-[#646970]">No bookings found matching your search.</td></tr>
+                        ) : paginatedBookings.map(b => (
+                          <tr key={b.id} className={`hover:bg-[#f9f9f9] transition ${selectedBookingIds.includes(b.id) ? "bg-[#f4f8fa]" : ""}`}>
+                            <td className="py-3 px-4 text-left">
+                              <input
+                                type="checkbox"
+                                checked={selectedBookingIds.includes(b.id)}
+                                onChange={e => {
+                                  if (e.target.checked) {
+                                    setSelectedBookingIds([...selectedBookingIds, b.id]);
+                                  } else {
+                                    setSelectedBookingIds(selectedBookingIds.filter(id => id !== b.id));
+                                  }
+                                }}
+                                className="rounded-sm border-[#8c8f94]"
+                              />
+                            </td>
+                            <td className="py-3 px-4 font-mono font-bold text-[#2271b1]">{b.id}</td>
+                            <td className="py-3 px-4">
+                              <div className="font-semibold text-[#1d2327]">{b.passengerName}</div>
+                              <div className="text-[#646970]">{b.passengerPhone}</div>
+                              {b.passengerEmail && <div className="text-[#646970] text-[10px]">{b.passengerEmail}</div>}
+                            </td>
+                            <td className="py-3 px-4 whitespace-nowrap text-[#646970]">{b.date}<br />{b.time}</td>
+                            <td className="py-3 px-4 max-w-[200px]">
+                              <div className="truncate"><span className="text-emerald-600 font-bold">↑</span> {b.pickup}</div>
+                              <div className="truncate text-[#646970]"><span className="text-red-500 font-bold">↓</span> {b.dropoff}</div>
+                              {b.distanceMiles ? (
+                                <span className="block text-[10px] text-slate-500 font-mono mt-0.5">
+                                  {Number(b.distanceMiles).toFixed(1)} mi ({(b.distanceKm || Number(b.distanceMiles) * 1.60934).toFixed(1)} km)
+                                </span>
+                              ) : (b.distance ? (
+                                <span className="block text-[10px] text-slate-500 font-mono mt-0.5">{b.distance} mi</span>
+                              ) : null)}
+                            </td>
+                            <td className="py-3 px-4 text-[#646970]">{b.vehicle}</td>
+                            <td className="py-3 px-4">
+                              <span className="font-bold text-[#1d2327]">£{Number(b.price || 0).toFixed(2)}</span>
+                              {b.promoCode && (
+                                <span className="block text-[10px] text-emerald-700 font-semibold mt-0.5">
+                                  🎟️ {b.promoCode} (-£{Number(b.discountAmount || 0).toFixed(2)})
+                                </span>
+                              )}
+                              <span className="block text-[9px] text-slate-400 mt-0.5">{b.paymentMethod || "Pay Later"} ({b.paymentStatus || "Unpaid"})</span>
+                            </td>
+                            <td className="py-3 px-4">
+                              <select value={b.status || "Pending"} onChange={e => updateBookingStatus(b.id, e.target.value)}
+                                className={`text-[10px] font-bold px-2 py-1 rounded border focus:outline-none ${
+                                  (b.status || "") === "Confirmed" ? "border-green-300 bg-green-50 text-green-700"
+                                  : (b.status || "") === "Completed" ? "border-blue-300 bg-blue-50 text-blue-700"
+                                  : (b.status || "") === "Cancelled" ? "border-red-300 bg-red-50 text-red-700"
+                                  : "border-yellow-300 bg-yellow-50 text-yellow-700"
+                                }`}>
+                                {["Pending", "Confirmed", "Completed", "Cancelled"].map(s => (
+                                  <option 
+                                    key={s} 
+                                    className="bg-white text-[#1d2327]"
+                                    disabled={!isStatusTransitionAllowed(b.status, s)}
+                                  >
+                                    {s}
+                                  </option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="py-3 px-4 text-right space-x-1.5 whitespace-nowrap">
+                              <button onClick={() => setSelectedBooking(b)}
+                                className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded text-[10px] font-semibold transition cursor-pointer">View</button>
+                              <button onClick={() => deleteBooking(b.id)}
+                                className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-2.5 py-1 rounded text-[10px] font-semibold transition cursor-pointer">Delete</button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    </div>
+
+                    {/* Bookings Pagination Bar */}
+                    {totalBookingPages > 1 && (
+                      <div className="flex items-center justify-between p-3 border-t border-[#c3c4c7] bg-[#f6f7f7] text-xs text-[#50575e]">
+                        <span>Showing {((bookingPage - 1) * bookingsPerPage) + 1} to {Math.min(bookingPage * bookingsPerPage, filteredBookings.length)} of {filteredBookings.length} bookings</span>
+                        <div className="flex gap-1">
+                          <button
+                            type="button"
+                            disabled={bookingPage <= 1}
+                            onClick={() => setBookingPage(p => Math.max(1, p - 1))}
+                            className="px-2.5 py-1 border border-[#c3c4c7] rounded bg-white hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
+                          >
+                            Previous
+                          </button>
+                          <span className="px-2 py-1 font-semibold">{bookingPage} / {totalBookingPages}</span>
+                          <button
+                            type="button"
+                            disabled={bookingPage >= totalBookingPages}
+                            onClick={() => setBookingPage(p => Math.min(totalBookingPages, p + 1))}
+                            className="px-2.5 py-1 border border-[#c3c4c7] rounded bg-white hover:bg-slate-50 disabled:opacity-40 cursor-pointer"
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           )}
 
@@ -2670,12 +2902,24 @@ export default function AdminDashboard() {
                             <div>
                               <span className="block font-semibold text-[#2c3338] mb-2">Featured image</span>
                               {postForm.image ? (
-                                <div className="relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
-                                  <img src={postForm.image} alt="preview" className="max-w-full max-h-full object-cover" />
-                                  <button type="button" onClick={() => setPostForm({ ...postForm, image: "" })}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700">
-                                    <X className="w-3 h-3" />
-                                  </button>
+                                <div className="space-y-2">
+                                  <div className="relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                    <img src={postForm.image} alt={postForm.imageAlt || "preview"} className="max-w-full max-h-full object-cover" />
+                                    <button type="button" onClick={() => setPostForm({ ...postForm, image: "" })}
+                                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700">
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <label className="block text-[11px] font-semibold text-[#1d2327] mb-1">Image Alt Text (SEO)</label>
+                                    <input
+                                      type="text"
+                                      value={postForm.imageAlt || ""}
+                                      onChange={e => setPostForm({ ...postForm, imageAlt: e.target.value })}
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1]"
+                                      placeholder="e.g. Heathrow Airport executive chauffeur transfer"
+                                    />
+                                  </div>
                                 </div>
                               ) : (
                                 <button
@@ -3141,12 +3385,24 @@ export default function AdminDashboard() {
                           <div>
                             <span className="block text-xs font-semibold text-[#1d2327] mb-2 uppercase tracking-wide">Hero Background Image</span>
                             {settings.hero_image ? (
-                              <div className="relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center max-w-md">
-                                <img src={settings.hero_image} alt="preview" className="max-w-full max-h-full object-cover" />
-                                <button type="button" onClick={() => setSettings({ ...settings, hero_image: "" })}
-                                  className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700">
-                                  <X className="w-3 h-3" />
-                                </button>
+                              <div className="space-y-2 max-w-md">
+                                <div className="relative group aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                  <img src={settings.hero_image} alt="preview" className="max-w-full max-h-full object-cover" />
+                                  <button type="button" onClick={() => setSettings({ ...settings, hero_image: "" })}
+                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-700">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                                <div>
+                                  <label className="block text-[11px] font-semibold text-[#1d2327] mb-1">Image Alt Text (SEO)</label>
+                                  <input
+                                    type="text"
+                                    value={settings.hero_image_alt || ""}
+                                    onChange={e => setSettings({ ...settings, hero_image_alt: e.target.value })}
+                                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1]"
+                                    placeholder="e.g. Travelluxx Executive Chauffeur Service Solihull & London"
+                                  />
+                                </div>
                               </div>
                             ) : (
                               <button
@@ -3281,12 +3537,24 @@ export default function AdminDashboard() {
                             <div className="mt-3">
                               <span className="block text-xs font-semibold text-[#1d2327] mb-1.5">Vehicle Image</span>
                               {settings.fleet_economy_image ? (
-                                <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
-                                  <img src={settings.fleet_economy_image} alt="Economy" className="max-w-full max-h-full object-contain" />
-                                  <button type="button" onClick={() => setSettings({ ...settings, fleet_economy_image: "" })}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
-                                    <X className="w-3 h-3" />
-                                  </button>
+                                <div className="space-y-2">
+                                  <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                    <img src={settings.fleet_economy_image} alt="Economy" className="max-w-full max-h-full object-contain" />
+                                    <button type="button" onClick={() => setSettings({ ...settings, fleet_economy_image: "" })}
+                                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <label className="block text-[11px] font-semibold text-[#1d2327] mb-1">Image Alt Text (SEO)</label>
+                                    <input
+                                      type="text"
+                                      value={settings.fleet_economy_alt || ""}
+                                      onChange={e => setSettings({ ...settings, fleet_economy_alt: e.target.value })}
+                                      className="w-full max-w-sm border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1]"
+                                      placeholder="e.g. Business Economy Class - Executive Chauffeur Car"
+                                    />
+                                  </div>
                                 </div>
                               ) : (
                                 <button
@@ -3348,12 +3616,24 @@ export default function AdminDashboard() {
                             <div className="mt-3">
                               <span className="block text-xs font-semibold text-[#1d2327] mb-1.5">Vehicle Image</span>
                               {settings.fleet_luxury_image ? (
-                                <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
-                                  <img src={settings.fleet_luxury_image} alt="Luxury" className="max-w-full max-h-full object-contain" />
-                                  <button type="button" onClick={() => setSettings({ ...settings, fleet_luxury_image: "" })}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
-                                    <X className="w-3 h-3" />
-                                  </button>
+                                <div className="space-y-2">
+                                  <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                    <img src={settings.fleet_luxury_image} alt="Luxury" className="max-w-full max-h-full object-contain" />
+                                    <button type="button" onClick={() => setSettings({ ...settings, fleet_luxury_image: "" })}
+                                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <label className="block text-[11px] font-semibold text-[#1d2327] mb-1">Image Alt Text (SEO)</label>
+                                    <input
+                                      type="text"
+                                      value={settings.fleet_luxury_alt || ""}
+                                      onChange={e => setSettings({ ...settings, fleet_luxury_alt: e.target.value })}
+                                      className="w-full max-w-sm border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1]"
+                                      placeholder="e.g. Mercedes-Benz S-Class First Class Luxury Chauffeur"
+                                    />
+                                  </div>
                                 </div>
                               ) : (
                                 <button
@@ -3388,7 +3668,7 @@ export default function AdminDashboard() {
                                 <input
                                   type="text"
                                   value={settings.fleet_family_tagline || ""}
-                                  onChange={e => setSettings({ ...settings, fleet_family_family: e.target.value })}
+                                  onChange={e => setSettings({ ...settings, fleet_family_tagline: e.target.value })}
                                   className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
                                 />
                               </div>
@@ -3415,12 +3695,24 @@ export default function AdminDashboard() {
                             <div className="mt-3">
                               <span className="block text-xs font-semibold text-[#1d2327] mb-1.5">Vehicle Image</span>
                               {settings.fleet_family_image ? (
-                                <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
-                                  <img src={settings.fleet_family_image} alt="Family" className="max-w-full max-h-full object-contain" />
-                                  <button type="button" onClick={() => setSettings({ ...settings, fleet_family_image: "" })}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
-                                    <X className="w-3 h-3" />
-                                  </button>
+                                <div className="space-y-2">
+                                  <div className="relative group w-36 h-24 rounded border border-[#c3c4c7] overflow-hidden bg-slate-50 flex items-center justify-center">
+                                    <img src={settings.fleet_family_image} alt="Family" className="max-w-full max-h-full object-contain" />
+                                    <button type="button" onClick={() => setSettings({ ...settings, fleet_family_image: "" })}
+                                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 hover:bg-red-700">
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <label className="block text-[11px] font-semibold text-[#1d2327] mb-1">Image Alt Text (SEO)</label>
+                                    <input
+                                      type="text"
+                                      value={settings.fleet_family_alt || ""}
+                                      onChange={e => setSettings({ ...settings, fleet_family_alt: e.target.value })}
+                                      className="w-full max-w-sm border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1]"
+                                      placeholder="e.g. Mercedes-Benz V-Class MPV Luxury Chauffeur"
+                                    />
+                                  </div>
                                 </div>
                               ) : (
                                 <button
@@ -7112,7 +7404,17 @@ export default function AdminDashboard() {
                         {serviceForm.image ? (
                           <div className="space-y-2">
                             <div className="relative aspect-video rounded border border-[#c3c4c7] overflow-hidden bg-slate-100">
-                              <img src={serviceForm.image} alt="Featured" className="w-full h-full object-cover" />
+                              <img src={serviceForm.image} alt={serviceForm.imageAlt || "Featured"} className="w-full h-full object-cover" />
+                            </div>
+                            <div>
+                              <label className="block text-[11px] font-semibold text-[#1d2327] mb-1">Image Alt Text (SEO)</label>
+                              <input
+                                type="text"
+                                value={serviceForm.imageAlt || ""}
+                                onChange={e => setServiceForm({ ...serviceForm, imageAlt: e.target.value })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1 text-xs focus:outline-none focus:border-[#2271b1]"
+                                placeholder="e.g. Mercedes S-Class executive airport transfer London"
+                              />
                             </div>
                             <div className="flex gap-2">
                               <button
@@ -7458,7 +7760,7 @@ export default function AdminDashboard() {
                           <span className="text-[#2271b1] font-semibold">{i.type || "General Inquiry"}</span>
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap text-[#646970]">
-                          {i.createdAt ? new Date(i.createdAt).toLocaleDateString() : "N/A"}<br />
+                          {i.createdAt ? new Date(i.createdAt).toLocaleDateString("en-GB") : "N/A"}<br />
                           {i.createdAt ? new Date(i.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
                         </td>
                         <td className="py-3 px-4 text-right space-x-1.5">
@@ -7853,101 +8155,184 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* ─── PROMO CODES TAB ──────────────────────────────────── */}
-          {activeTab === "promocodes" && (
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div>
-                  <h1 className="text-2xl font-bold text-[#1d2327] flex items-center gap-2">
-                    <Tag className="w-6 h-6 text-[#2271b1]" />
-                    Promo Codes &amp; Discounts
-                  </h1>
-                  <p className="text-xs text-[#646970] mt-0.5">
-                    Create, manage, and monitor coupon codes applied by customers on the booking calculator.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingPromoId(null);
-                    setPromoForm({
-                      code: "",
-                      discountType: "percentage",
-                      discountValue: 10,
-                      minOrderAmount: 0,
-                      maxDiscountAmount: 0,
-                      usageLimit: 0,
-                      expiresAt: "",
-                      isActive: true,
-                      description: ""
-                    });
-                    setPromoModalOpen(true);
-                  }}
-                  className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-2 rounded-sm text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add New Promo Code
-                </button>
-              </div>
+          {/* ─── PROMO CODES / COUPONS TAB ───────────────────────── */}
+          {activeTab === "promocodes" && (() => {
+            const now = Date.now();
+            const filteredPromos = promoCodes.filter(p => {
+              const q = promoSearchQuery.toLowerCase().trim();
+              const matchQuery = !q || (p.code && p.code.toLowerCase().includes(q)) || (p.description && p.description.toLowerCase().includes(q));
+              if (!matchQuery) return false;
 
-              {/* Status Filters */}
-              <div className="flex items-center gap-2 text-xs">
-                {[
-                  { id: "all", label: "All Codes" },
-                  { id: "active", label: "Active" },
-                  { id: "inactive", label: "Inactive / Expired" }
-                ].map(f => (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setPromoFilter(f.id as any)}
-                    className={`px-3 py-1.5 rounded-sm font-semibold transition ${
-                      promoFilter === f.id
-                        ? "bg-[#2271b1] text-white"
-                        : "bg-white text-slate-700 border border-[#c3c4c7] hover:bg-slate-50"
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-              </div>
+              const exp = p.expiryDate || p.expiresAt;
+              const isExpired = exp && new Date(exp).getTime() < now;
 
-              {/* Promo codes table */}
-              <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-x-auto">
-                {promoCodesLoading ? (
-                  <div className="p-12 text-center text-slate-500 text-xs">Loading promo codes...</div>
-                ) : promoCodes.length === 0 ? (
-                  <div className="p-12 text-center text-slate-500 text-xs space-y-3">
-                    <Ticket className="w-10 h-10 text-slate-300 mx-auto" />
-                    <p className="font-semibold text-slate-700">No promo codes found.</p>
-                    <p>Click "Add New Promo Code" above to create discount vouchers for your customers.</p>
+              if (promoFilter === "active") return p.isActive && !isExpired;
+              if (promoFilter === "expired") return isExpired;
+              if (promoFilter === "inactive") return !p.isActive;
+              return true;
+            });
+
+            const promoPerPage = 10;
+            const totalPromoPages = Math.max(1, Math.ceil(filteredPromos.length / promoPerPage));
+            const paginatedPromos = filteredPromos.slice((promoPage - 1) * promoPerPage, promoPage * promoPerPage);
+
+            return (
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <h1 className="text-2xl font-bold text-[#1d2327] flex items-center gap-2">
+                      <Tag className="w-6 h-6 text-[#2271b1]" />
+                      Coupons &amp; Promotional Discounts
+                    </h1>
+                    <p className="text-xs text-[#646970] mt-0.5">
+                      Create, monitor, and manage discount vouchers applied by customers in the booking calculator.
+                    </p>
                   </div>
-                ) : (
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead>
-                      <tr className="bg-[#f6f7f7] border-b border-[#c3c4c7] text-[#646970] font-semibold uppercase text-[11px]">
-                        <th className="py-2.5 px-4">Code</th>
-                        <th className="py-2.5 px-4">Discount</th>
-                        <th className="py-2.5 px-4">Min. Booking</th>
-                        <th className="py-2.5 px-4">Usage</th>
-                        <th className="py-2.5 px-4">Expiry</th>
-                        <th className="py-2.5 px-4">Status</th>
-                        <th className="py-2.5 px-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#f0f0f1]">
-                      {promoCodes
-                        .filter(p => {
-                          const isExpired = p.expiresAt && new Date(p.expiresAt).getTime() < Date.now();
-                          if (promoFilter === "active") return p.isActive && !isExpired;
-                          if (promoFilter === "inactive") return !p.isActive || isExpired;
-                          return true;
-                        })
-                        .map((promo: any) => {
-                          const isExpired = promo.expiresAt && new Date(promo.expiresAt).getTime() < Date.now();
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingPromoId(null);
+                      setPromoForm({
+                        code: "",
+                        discountType: "percentage",
+                        discountValue: 10,
+                        minOrderAmount: 0,
+                        maxDiscountAmount: 0,
+                        startDate: new Date().toISOString().slice(0, 10),
+                        expiryDate: "",
+                        usageLimit: 0,
+                        perUserLimit: 0,
+                        isActive: true,
+                        description: ""
+                      });
+                      setPromoModalOpen(true);
+                    }}
+                    className="bg-[#2271b1] hover:bg-[#135e96] text-white px-4 py-2 rounded-sm text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Create New Coupon
+                  </button>
+                </div>
+
+                {/* Search, Filter & Bulk Actions Bar */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 border border-[#c3c4c7] rounded-sm shadow-sm">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Search coupon code or notes..."
+                      value={promoSearchQuery}
+                      onChange={e => {
+                        setPromoSearchQuery(e.target.value);
+                        setPromoPage(1);
+                      }}
+                      className="border border-[#8c8f94] bg-white rounded px-2.5 py-1 text-xs text-[#2c3338] w-48 sm:w-60 focus:outline-none focus:border-[#2271b1]"
+                    />
+                    <div className="flex items-center gap-1">
+                      {[
+                        { id: "all", label: `All (${promoCodes.length})` },
+                        { id: "active", label: "Active" },
+                        { id: "expired", label: "Expired" },
+                        { id: "inactive", label: "Disabled" }
+                      ].map(f => (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => {
+                            setPromoFilter(f.id as any);
+                            setPromoPage(1);
+                          }}
+                          className={`px-2.5 py-1 rounded text-xs font-semibold transition ${
+                            promoFilter === f.id
+                              ? "bg-[#2271b1] text-white"
+                              : "bg-[#f6f7f7] text-[#50575e] hover:bg-slate-200 border border-[#c3c4c7]"
+                          }`}
+                        >
+                          {f.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {selectedPromoIds.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-slate-700">{selectedPromoIds.length} selected:</span>
+                      <button
+                        type="button"
+                        onClick={handleBulkDeactivatePromos}
+                        className="bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1 rounded text-xs font-semibold transition"
+                      >
+                        Deactivate Selected
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleBulkDeletePromos}
+                        className="bg-[#d63638] hover:bg-[#b32d2e] text-white px-2.5 py-1 rounded text-xs font-semibold transition"
+                      >
+                        Delete Selected
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Coupons table */}
+                <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm overflow-x-auto">
+                  {promoCodesLoading ? (
+                    <div className="p-12 text-center text-slate-500 text-xs">Loading coupons...</div>
+                  ) : filteredPromos.length === 0 ? (
+                    <div className="p-12 text-center text-slate-500 text-xs space-y-3">
+                      <Ticket className="w-10 h-10 text-slate-300 mx-auto" />
+                      <p className="font-semibold text-slate-700">No coupons found.</p>
+                      <p>Click "Create New Coupon" to offer special promotions for your chauffeur services.</p>
+                    </div>
+                  ) : (
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="bg-[#f6f7f7] border-b border-[#c3c4c7] text-[#646970] font-semibold uppercase text-[11px]">
+                          <th className="py-2.5 px-3 w-8">
+                            <input
+                              type="checkbox"
+                              checked={paginatedPromos.length > 0 && paginatedPromos.every(p => selectedPromoIds.includes(p.id || p._id))}
+                              onChange={e => {
+                                if (e.target.checked) {
+                                  const ids = Array.from(new Set([...selectedPromoIds, ...paginatedPromos.map(p => p.id || p._id)]));
+                                  setSelectedPromoIds(ids);
+                                } else {
+                                  const pageIds = paginatedPromos.map(p => p.id || p._id);
+                                  setSelectedPromoIds(selectedPromoIds.filter(id => !pageIds.includes(id)));
+                                }
+                              }}
+                              className="rounded border-[#8c8f94]"
+                            />
+                          </th>
+                          <th className="py-2.5 px-4">Coupon Code</th>
+                          <th className="py-2.5 px-4">Discount</th>
+                          <th className="py-2.5 px-4">Min. Booking</th>
+                          <th className="py-2.5 px-4">Usage Stats</th>
+                          <th className="py-2.5 px-4">Validity Dates</th>
+                          <th className="py-2.5 px-4">Status</th>
+                          <th className="py-2.5 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#f0f0f1]">
+                        {paginatedPromos.map((promo: any) => {
+                          const exp = promo.expiryDate || promo.expiresAt;
+                          const isExpired = exp && new Date(exp).getTime() < now;
                           const promoId = promo.id || promo._id;
+                          const isSelected = selectedPromoIds.includes(promoId);
+
                           return (
-                            <tr key={promoId} className="hover:bg-slate-50/70 transition">
+                            <tr key={promoId} className={`hover:bg-slate-50/70 transition ${isSelected ? "bg-[#f4f8fa]" : ""}`}>
+                              <td className="py-3 px-3">
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={e => {
+                                    if (e.target.checked) setSelectedPromoIds([...selectedPromoIds, promoId]);
+                                    else setSelectedPromoIds(selectedPromoIds.filter(id => id !== promoId));
+                                  }}
+                                  className="rounded border-[#8c8f94]"
+                                />
+                              </td>
                               <td className="py-3 px-4 font-mono font-bold text-slate-900">
                                 <div className="flex items-center gap-1.5">
                                   <Tag className="w-3.5 h-3.5 text-[#2271b1]" />
@@ -7961,26 +8346,37 @@ export default function AdminDashboard() {
                               </td>
                               <td className="py-3 px-4 font-semibold text-emerald-700">
                                 {promo.discountType === "percentage" ? (
-                                  <span>{promo.discountValue}% OFF {promo.maxDiscountAmount ? `(up to £${promo.maxDiscountAmount})` : ""}</span>
-                                ) : (
-                                  <span>£{promo.discountValue} OFF</span>
-                                )}
-                              </td>
-                              <td className="py-3 px-4 text-slate-600">
-                                {promo.minOrderAmount ? `£${promo.minOrderAmount}` : "None (£0)"}
-                              </td>
-                              <td className="py-3 px-4 text-slate-600">
-                                <span>{promo.timesUsed || 0}</span>
-                                <span className="text-slate-400"> / {promo.usageLimit > 0 ? promo.usageLimit : "∞"}</span>
-                              </td>
-                              <td className="py-3 px-4 text-slate-600">
-                                {promo.expiresAt ? (
-                                  <span className={isExpired ? "text-red-600 font-bold" : ""}>
-                                    {new Date(promo.expiresAt).toLocaleDateString("en-GB")}
+                                  <span>
+                                    {promo.discountValue}% OFF
+                                    {promo.maxDiscountAmount ? ` (max £${promo.maxDiscountAmount})` : ""}
                                   </span>
                                 ) : (
-                                  <span className="text-slate-400">Never</span>
+                                  <span>£{Number(promo.discountValue || 0).toFixed(2)} OFF</span>
                                 )}
+                              </td>
+                              <td className="py-3 px-4 text-slate-600">
+                                {promo.minOrderAmount ? `£${Number(promo.minOrderAmount).toFixed(2)}` : "None (£0)"}
+                              </td>
+                              <td className="py-3 px-4 text-slate-600">
+                                <div>
+                                  <strong className="text-slate-900">{promo.timesUsed || 0}</strong>
+                                  <span className="text-slate-400"> / {promo.usageLimit > 0 ? promo.usageLimit : "∞"}</span>
+                                </div>
+                                {promo.perUserLimit > 0 && (
+                                  <span className="block text-[10px] text-slate-400">Limit: {promo.perUserLimit}/customer</span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 text-slate-600">
+                                <div className="text-[11px]">
+                                  {promo.startDate && <span className="block">Start: {new Date(promo.startDate).toLocaleDateString("en-GB")}</span>}
+                                  {exp ? (
+                                    <span className={isExpired ? "text-red-600 font-bold block" : "block"}>
+                                      Exp: {new Date(exp).toLocaleDateString("en-GB")}
+                                    </span>
+                                  ) : (
+                                    <span className="text-slate-400 block">No expiration</span>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3 px-4">
                                 {isExpired ? (
@@ -7993,17 +8389,17 @@ export default function AdminDashboard() {
                                   </span>
                                 ) : (
                                   <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">
-                                    Inactive
+                                    Disabled
                                   </span>
                                 )}
                               </td>
                               <td className="py-3 px-4 text-right">
-                                <div className="flex items-center justify-end gap-2">
+                                <div className="flex items-center justify-end gap-1.5">
                                   <button
                                     type="button"
                                     onClick={() => handleTogglePromoActive(promo)}
-                                    className="p-1 text-slate-600 hover:text-slate-900 border border-[#c3c4c7] rounded hover:bg-slate-100"
-                                    title={promo.isActive ? "Deactivate Code" : "Activate Code"}
+                                    className="p-1.5 text-slate-600 hover:text-slate-900 border border-[#c3c4c7] rounded hover:bg-slate-100"
+                                    title={promo.isActive ? "Deactivate Coupon" : "Activate Coupon"}
                                   >
                                     {promo.isActive ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
                                   </button>
@@ -8017,23 +8413,25 @@ export default function AdminDashboard() {
                                         discountValue: promo.discountValue,
                                         minOrderAmount: promo.minOrderAmount || 0,
                                         maxDiscountAmount: promo.maxDiscountAmount || 0,
+                                        startDate: promo.startDate ? promo.startDate.split("T")[0] : "",
+                                        expiryDate: (promo.expiryDate || promo.expiresAt) ? (promo.expiryDate || promo.expiresAt).split("T")[0] : "",
                                         usageLimit: promo.usageLimit || 0,
-                                        expiresAt: promo.expiresAt ? promo.expiresAt.split("T")[0] : "",
+                                        perUserLimit: promo.perUserLimit || 0,
                                         isActive: promo.isActive !== false,
                                         description: promo.description || ""
                                       });
                                       setPromoModalOpen(true);
                                     }}
-                                    className="p-1 text-[#2271b1] hover:text-[#135e96] border border-[#c3c4c7] rounded hover:bg-slate-100"
-                                    title="Edit Code"
+                                    className="p-1.5 text-[#2271b1] hover:text-[#135e96] border border-[#c3c4c7] rounded hover:bg-slate-100"
+                                    title="Edit Coupon"
                                   >
                                     <Edit2 className="w-3.5 h-3.5" />
                                   </button>
                                   <button
                                     type="button"
                                     onClick={() => handleDeletePromo(promo)}
-                                    className="p-1 text-red-600 hover:text-red-800 border border-[#c3c4c7] rounded hover:bg-slate-100"
-                                    title="Delete Code"
+                                    className="p-1.5 text-red-600 hover:text-red-800 border border-[#c3c4c7] rounded hover:bg-slate-100"
+                                    title="Delete Coupon"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </button>
@@ -8042,185 +8440,245 @@ export default function AdminDashboard() {
                             </tr>
                           );
                         })}
-                    </tbody>
-                  </table>
-                )}
-              </div>
+                      </tbody>
+                    </table>
+                  )}
 
-              {/* Promo Code Create / Edit Modal */}
-              {promoModalOpen && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4">
-                  <div className="bg-white rounded shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-[#c3c4c7]">
-                    <div className="flex items-center justify-between p-4 border-b border-[#f0f0f1] bg-[#f6f7f7]">
-                      <h3 className="font-bold text-[#1d2327] text-sm flex items-center gap-2">
-                        <Tag className="w-4 h-4 text-[#2271b1]" />
-                        {editingPromoId ? "Edit Promo Code" : "Create New Promo Code"}
-                      </h3>
-                      <button onClick={() => setPromoModalOpen(false)} className="text-[#646970] hover:text-[#1d2327]">
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    <form onSubmit={handleSavePromoCode} className="p-5 space-y-4 text-xs">
-                      <div>
-                        <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                          Promo Code *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={promoForm.code}
-                          onChange={e => setPromoForm({ ...promoForm, code: e.target.value.toUpperCase() })}
-                          placeholder="e.g. SUMMER10, WELCOME20"
-                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-2 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#2271b1]"
-                        />
-                        <span className="text-[10px] text-slate-500 mt-0.5 block">Customer will type this code during booking.</span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Discount Type
-                          </label>
-                          <select
-                            value={promoForm.discountType}
-                            onChange={e => setPromoForm({ ...promoForm, discountType: e.target.value as any })}
-                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                          >
-                            <option value="percentage">Percentage Discount (%)</option>
-                            <option value="fixed">Fixed Amount (£)</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Discount Value *
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="number"
-                              required
-                              min="1"
-                              step="any"
-                              value={promoForm.discountValue}
-                              onChange={e => setPromoForm({ ...promoForm, discountValue: Number(e.target.value) })}
-                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                            />
-                            <span className="absolute right-3 top-1.5 text-slate-500 font-bold">
-                              {promoForm.discountType === "percentage" ? "%" : "£"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {promoForm.discountType === "percentage" && (
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Max Discount Limit (£)
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="any"
-                            value={promoForm.maxDiscountAmount || ""}
-                            onChange={e => setPromoForm({ ...promoForm, maxDiscountAmount: Number(e.target.value) })}
-                            placeholder="Optional cap (e.g. £50 max discount)"
-                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                          />
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Minimum Order Value (£)
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="any"
-                            value={promoForm.minOrderAmount || ""}
-                            onChange={e => setPromoForm({ ...promoForm, minOrderAmount: Number(e.target.value) })}
-                            placeholder="0 (no minimum required)"
-                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Total Usage Limit
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            value={promoForm.usageLimit || ""}
-                            onChange={e => setPromoForm({ ...promoForm, usageLimit: Number(e.target.value) })}
-                            placeholder="0 (unlimited usage)"
-                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Expiry Date
-                          </label>
-                          <input
-                            type="date"
-                            value={promoForm.expiresAt}
-                            onChange={e => setPromoForm({ ...promoForm, expiresAt: e.target.value })}
-                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                            Status
-                          </label>
-                          <select
-                            value={promoForm.isActive ? "true" : "false"}
-                            onChange={e => setPromoForm({ ...promoForm, isActive: e.target.value === "true" })}
-                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                          >
-                            <option value="true">Active &amp; Ready to Use</option>
-                            <option value="false">Disabled / Inactive</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
-                          Internal Notes / Description
-                        </label>
-                        <input
-                          type="text"
-                          value={promoForm.description}
-                          onChange={e => setPromoForm({ ...promoForm, description: e.target.value })}
-                          placeholder="e.g. 10% off for first-time website bookings"
-                          className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
-                        />
-                      </div>
-
-                      <div className="flex justify-end gap-2 pt-3 border-t border-[#f0f0f1]">
+                  {/* Pagination bar */}
+                  {totalPromoPages > 1 && (
+                    <div className="flex items-center justify-between p-3 border-t border-[#c3c4c7] bg-[#f6f7f7] text-xs text-[#50575e]">
+                      <span>Showing {((promoPage - 1) * promoPerPage) + 1} to {Math.min(promoPage * promoPerPage, filteredPromos.length)} of {filteredPromos.length} coupons</span>
+                      <div className="flex gap-1">
                         <button
                           type="button"
-                          onClick={() => setPromoModalOpen(false)}
-                          className="px-4 py-2 border border-[#c3c4c7] hover:bg-slate-50 text-slate-700 rounded-sm font-semibold transition"
+                          disabled={promoPage <= 1}
+                          onClick={() => setPromoPage(p => Math.max(1, p - 1))}
+                          className="px-2.5 py-1 border border-[#c3c4c7] rounded bg-white hover:bg-slate-50 disabled:opacity-40"
                         >
-                          Cancel
+                          Previous
                         </button>
+                        <span className="px-2 py-1 font-semibold">{promoPage} / {totalPromoPages}</span>
                         <button
-                          type="submit"
-                          disabled={promoSaving}
-                          className="bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-2 rounded-sm font-semibold transition flex items-center gap-1.5 disabled:opacity-50"
+                          type="button"
+                          disabled={promoPage >= totalPromoPages}
+                          onClick={() => setPromoPage(p => Math.min(totalPromoPages, p + 1))}
+                          className="px-2.5 py-1 border border-[#c3c4c7] rounded bg-white hover:bg-slate-50 disabled:opacity-40"
                         >
-                          {promoSaving ? "Saving..." : (editingPromoId ? "Update Code" : "Create Code")}
+                          Next
                         </button>
                       </div>
-                    </form>
-                  </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          )}
+
+                {/* Coupon Create / Edit Modal */}
+                {promoModalOpen && (
+                  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+                    <div className="bg-white rounded shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-[#c3c4c7]">
+                      <div className="flex items-center justify-between p-4 border-b border-[#f0f0f1] bg-[#f6f7f7]">
+                        <h3 className="font-bold text-[#1d2327] text-sm flex items-center gap-2">
+                          <Tag className="w-4 h-4 text-[#2271b1]" />
+                          {editingPromoId ? "Edit Coupon" : "Create New Coupon"}
+                        </h3>
+                        <button onClick={() => setPromoModalOpen(false)} className="text-[#646970] hover:text-[#1d2327]">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <form onSubmit={handleSavePromoCode} className="p-5 space-y-4 text-xs">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Coupon Code *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={promoForm.code}
+                            onChange={e => setPromoForm({ ...promoForm, code: e.target.value.toUpperCase() })}
+                            placeholder="e.g. VIP2026, LUXURY15"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-2 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#2271b1]"
+                          />
+                          <span className="text-[10px] text-slate-500 mt-0.5 block">Customer will enter this code at the payment step. Case-insensitive.</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Discount Type
+                            </label>
+                            <select
+                              value={promoForm.discountType}
+                              onChange={e => setPromoForm({ ...promoForm, discountType: e.target.value as any })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            >
+                              <option value="percentage">Percentage Discount (%)</option>
+                              <option value="fixed">Fixed Amount (£)</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Discount Value *
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                required
+                                min="1"
+                                step="any"
+                                value={promoForm.discountValue}
+                                onChange={e => setPromoForm({ ...promoForm, discountValue: Number(e.target.value) })}
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                              />
+                              <span className="absolute right-3 top-1.5 text-slate-500 font-bold">
+                                {promoForm.discountType === "percentage" ? "%" : "£"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {promoForm.discountType === "percentage" && (
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Maximum Discount Cap (£)
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              value={promoForm.maxDiscountAmount || ""}
+                              onChange={e => setPromoForm({ ...promoForm, maxDiscountAmount: Number(e.target.value) })}
+                              placeholder="0 (leave empty for no cap)"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="text-[10px] text-slate-500 mt-0.5 block">Optional ceiling to prevent overly large percentage discounts on long journeys.</span>
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Minimum Booking Fare (£)
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              value={promoForm.minOrderAmount || ""}
+                              onChange={e => setPromoForm({ ...promoForm, minOrderAmount: Number(e.target.value) })}
+                              placeholder="0 (no minimum required)"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="text-[10px] text-slate-500 mt-0.5 block">Minimum ride amount required to apply this coupon.</span>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Total Usage Limit
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              value={promoForm.usageLimit || ""}
+                              onChange={e => setPromoForm({ ...promoForm, usageLimit: Number(e.target.value) })}
+                              placeholder="0 (unlimited usage)"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="text-[10px] text-slate-500 mt-0.5 block">Maximum total bookings across all customers (0 = unlimited).</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Start Date
+                            </label>
+                            <input
+                              type="date"
+                              value={promoForm.startDate}
+                              onChange={e => setPromoForm({ ...promoForm, startDate: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="text-[10px] text-slate-500 mt-0.5 block">Coupon becomes active from this date.</span>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Expiry Date
+                            </label>
+                            <input
+                              type="date"
+                              value={promoForm.expiryDate}
+                              onChange={e => setPromoForm({ ...promoForm, expiryDate: e.target.value })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="text-[10px] text-slate-500 mt-0.5 block">Coupon expires after this date (leave blank for never).</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Per-Customer Usage Limit
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              value={promoForm.perUserLimit || ""}
+                              onChange={e => setPromoForm({ ...promoForm, perUserLimit: Number(e.target.value) })}
+                              placeholder="0 (no per-user limit)"
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            />
+                            <span className="text-[10px] text-slate-500 mt-0.5 block">Max times a single customer email can use this code.</span>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                              Status
+                            </label>
+                            <select
+                              value={promoForm.isActive ? "true" : "false"}
+                              onChange={e => setPromoForm({ ...promoForm, isActive: e.target.value === "true" })}
+                              className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                            >
+                              <option value="true">Active &amp; Ready to Use</option>
+                              <option value="false">Disabled / Inactive</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#1d2327] uppercase tracking-wide mb-1">
+                            Internal Description / Campaign Notes
+                          </label>
+                          <input
+                            type="text"
+                            value={promoForm.description}
+                            onChange={e => setPromoForm({ ...promoForm, description: e.target.value })}
+                            placeholder="e.g. 10% off for Spring Solihull & Heathrow airport runs"
+                            className="w-full border border-[#8c8f94] bg-white rounded-sm px-3 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
+                          />
+                        </div>
+
+                        <div className="flex justify-end gap-2 pt-3 border-t border-[#f0f0f1]">
+                          <button
+                            type="button"
+                            onClick={() => setPromoModalOpen(false)}
+                            className="px-4 py-2 border border-[#c3c4c7] hover:bg-slate-50 text-slate-700 rounded-sm font-semibold transition"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={promoSaving}
+                            className="bg-[#2271b1] hover:bg-[#135e96] text-white px-5 py-2 rounded-sm font-semibold transition flex items-center gap-1.5 disabled:opacity-50"
+                          >
+                            {promoSaving ? "Saving..." : (editingPromoId ? "Update Coupon" : "Create Coupon")}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ─── SETTINGS ─────────────────────────────────────────── */}
           {activeTab === "settings" && (
@@ -8976,7 +9434,7 @@ export default function AdminDashboard() {
 
                 {/* Upload Meta */}
                 <div className="text-[11px] text-[#646970] space-y-1">
-                  <div>Uploaded on: {new Date().toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+                  <div>Uploaded on: {new Date().toLocaleDateString("en-GB", { month: 'long', day: 'numeric', year: 'numeric' })}</div>
                   <div>Uploaded by: <span className="text-[#2271b1]">admin</span></div>
                   <div>File name: {selectedMedia.split("/").pop()}</div>
                   <div>File type: image/webp</div>
@@ -9269,6 +9727,41 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Global Safe Confirmation Modal */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-lg shadow-2xl max-w-md w-full border border-[#c3c4c7] overflow-hidden">
+            <div className="p-5">
+              <h3 className="font-bold text-slate-900 text-base mb-2">{confirmModal.title}</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">{confirmModal.message}</p>
+            </div>
+            <div className="flex justify-end gap-2 px-5 py-3 bg-[#f6f7f7] border-t border-[#f0f0f1]">
+              <button
+                type="button"
+                onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+                className="px-4 py-1.5 border border-[#c3c4c7] hover:bg-slate-100 text-slate-700 rounded text-xs font-semibold transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  confirmModal.onConfirm();
+                  setConfirmModal(prev => ({ ...prev, isOpen: false }));
+                }}
+                className={`px-4 py-1.5 text-white rounded text-xs font-semibold transition shadow-sm cursor-pointer ${
+                  confirmModal.confirmVariant === "primary"
+                    ? "bg-[#2271b1] hover:bg-[#135e96]"
+                    : "bg-[#d63638] hover:bg-[#b32d2e]"
+                }`}
+              >
+                {confirmModal.confirmLabel || "Confirm"}
+              </button>
             </div>
           </div>
         </div>

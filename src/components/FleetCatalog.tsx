@@ -52,6 +52,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
   const fleet = {
     Economy: {
       name: settings?.fleet_economy_name || "Business Economy Class",
+      alt: settings?.fleet_economy_alt || `${settings?.fleet_economy_name || "Business Economy Class"} - Executive Chauffeur Car Solihull & London`,
       tagline: settings?.fleet_economy_tagline || "Elegant, clean, and highly efficient travel.",
       image: settings?.fleet_economy_image || getCustomImage("fleet_Economy", mercedesEconomyImg),
       rate: pricing?.Economy?.perMile !== undefined ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
@@ -61,6 +62,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
     },
     Luxury: {
       name: settings?.fleet_luxury_name || "First Class Luxury Chauffeur",
+      alt: settings?.fleet_luxury_alt || `${settings?.fleet_luxury_name || "First Class Luxury Chauffeur"} - Executive Mercedes-Benz S-Class Solihull & London`,
       tagline: settings?.fleet_luxury_tagline || "The pinnacle of executive comfort and style.",
       image: settings?.fleet_luxury_image || getCustomImage("fleet_Luxury", mercedesLuxuryImg),
       rate: pricing?.Luxury?.perMile !== undefined ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
@@ -70,6 +72,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
     },
     Family: {
       name: settings?.fleet_family_name || "Family & Executive MPV",
+      alt: settings?.fleet_family_alt || `${settings?.fleet_family_name || "Family & Executive MPV"} - Mercedes-Benz V-Class Chauffeur Solihull & London`,
       tagline: settings?.fleet_family_tagline || "Generous space for luggage and loved ones.",
       image: settings?.fleet_family_image || getCustomImage("fleet_Family", mercedesFamilyImg),
       rate: pricing?.Family?.perMile !== undefined ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
@@ -143,7 +146,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
               <img
                 key={key}
                 src={fleet[key].image}
-                alt={fleet[key].name}
+                alt={fleet[key].alt || `${fleet[key].name} - Executive Chauffeur Car`}
                 loading="eager"
                 decoding="async"
                 className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeTab === key ? "block" : "hidden"}`}

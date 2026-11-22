@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getServiceIcon } from "../utils/serviceIcons";
@@ -323,7 +323,9 @@ export default function ServiceDetail() {
                   <div className="rounded-2xl overflow-hidden shadow-xl border border-slate-200/80 max-h-[460px] bg-slate-100">
                     <img
                       src={service.image}
-                      alt={service.title}
+                      alt={service.imageAlt || `${service.title} - Executive Chauffeur Services UK`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -600,6 +602,8 @@ export default function ServiceDetail() {
               <div className="space-y-3.5">
                 {faqsList.map((faq: any, idx: number) => {
                   const isOpen = openFaqIndex === idx;
+                  const questionId = `service-detail-faq-q-${idx}`;
+                  const answerId = `service-detail-faq-a-${idx}`;
                   return (
                     <div
                       key={idx}
@@ -609,34 +613,43 @@ export default function ServiceDetail() {
                           : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
                       }`}
                     >
-                      <button
-                        type="button"
-                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
-                        aria-expanded={isOpen}
+                      <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
+                        <button
+                          type="button"
+                          id={questionId}
+                          aria-expanded={isOpen}
+                          aria-controls={answerId}
+                          onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                          className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                        >
+                          <span
+                            className={`text-sm sm:text-base font-bold transition-colors ${
+                              isOpen ? "text-slate-950" : "text-slate-800"
+                            }`}
+                          >
+                            {faq.question}
+                          </span>
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                              isOpen
+                                ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                                : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            <ChevronDown className="w-4 h-4" />
+                          </div>
+                        </button>
+                      </h3>
+                      <div
+                        id={answerId}
+                        role="region"
+                        aria-labelledby={questionId}
+                        className={`px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed ${
+                          isOpen ? "block" : "hidden"
+                        }`}
                       >
-                        <span
-                          className={`text-sm sm:text-base font-bold transition-colors ${
-                            isOpen ? "text-slate-950" : "text-slate-800"
-                          }`}
-                        >
-                          {faq.question}
-                        </span>
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                            isOpen
-                              ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                              : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
-                      </button>
-                      {isOpen && (
-                        <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed">
-                          <p>{faq.answer}</p>
-                        </div>
-                      )}
+                        <p className="whitespace-pre-line">{faq.answer}</p>
+                      </div>
                     </div>
                   );
                 })}
