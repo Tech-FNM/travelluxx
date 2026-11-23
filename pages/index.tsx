@@ -1,9 +1,8 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import Home from "../src/pages/Home";
+import { getWebsiteSettings } from "../lib/mongodb";
 
 const defaultFaqs = [
   {
@@ -82,14 +81,10 @@ export default function HomePage({ settings }: { settings: any }) {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-    let settings: any = {};
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
+    const settings = await getWebsiteSettings();
     return {
       props: {
-        settings,
+        settings: settings || {},
       },
       revalidate: 60,
     };

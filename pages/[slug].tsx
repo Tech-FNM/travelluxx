@@ -1,9 +1,8 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import DynamicPage from "../src/pages/DynamicPage";
+import { getPages, getPageBySlug, getWebsiteSettings } from "../lib/mongodb";
 
 interface GenericCmsPageProps {
   page: any;
@@ -66,54 +65,40 @@ export default function GenericCmsPage({ page, settings }: GenericCmsPageProps) 
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const pagesFilePath = path.join(process.cwd(), "pages.json");
-    if (fs.existsSync(pagesFilePath)) {
-      const pages = JSON.parse(fs.readFileSync(pagesFilePath, "utf8"));
-      const paths = (Array.isArray(pages) ? pages : [])
-        .filter((p: any) => p && p.slug)
-        .map((p: any) => ({
-          params: { slug: String(p.slug) },
-        }));
-      return { paths, fallback: "blocking" };
-    }
+    const pages = await getPages();
+    const paths = (Array.isArray(pages) ? pages : [])
+      .filter((p: any) => p && p.slug)
+      .map((p: any) => ({
+        params: { slug: String(p.slug) },
+      }));
+    return { paths, fallback: "blocking" };
   } catch (e) {
-    console.error("Error reading pages.json for getStaticPaths:", e);
+    console.error("Error reading pages from MongoDB for getStaticPaths:", e);
+    return { paths: [], fallback: "blocking" };
   }
-  return { paths: [], fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const pagesFilePath = path.join(process.cwd(), "pages.json");
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-
-    let pages: any[] = [];
-    let settings: any = {};
-
-    if (fs.existsSync(pagesFilePath)) {
-      pages = JSON.parse(fs.readFileSync(pagesFilePath, "utf8"));
-    }
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
-
-    const page =
-      pages.find((p: any) => p.slug === slug || p.id === slug) || null;
+    const [page, settings] = await Promise.all([
+      getPageBySlug(slug),
+      getWebsiteSettings(),
+    ]);
 
     if (!page) {
-      return { notFound: true };
+      return { notFound: true, revalidate: 60 };
     }
 
     return {
       props: {
         page,
-        settings,
+        settings: settings || {},
       },
       revalidate: 60,
     };
   } catch (e) {
     console.error("Error in getStaticProps for page:", e);
-    return { notFound: true };
+    return { notFound: true, revalidate: 60 };
   }
 };

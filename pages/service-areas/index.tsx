@@ -1,9 +1,8 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import ServiceAreas from "../../src/pages/ServiceAreas";
+import { getServiceAreas, getWebsiteSettings } from "../../lib/mongodb";
 
 interface ServiceAreasListPageProps {
   areas: any[];
@@ -73,23 +72,15 @@ export default function ServiceAreasListPage({
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const areasFilePath = path.join(process.cwd(), "service_areas.json");
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-
-    let areas: any[] = [];
-    let settings: any = {};
-
-    if (fs.existsSync(areasFilePath)) {
-      areas = JSON.parse(fs.readFileSync(areasFilePath, "utf8"));
-    }
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
+    const [areas, settings] = await Promise.all([
+      getServiceAreas(),
+      getWebsiteSettings(),
+    ]);
 
     return {
       props: {
-        areas,
-        settings,
+        areas: Array.isArray(areas) ? areas : [],
+        settings: settings || {},
       },
       revalidate: 60,
     };

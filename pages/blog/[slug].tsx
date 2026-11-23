@@ -1,9 +1,8 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import BlogPostDetail from "../../src/pages/BlogPostDetail";
+import { getPosts, getPostBySlug, getWebsiteSettings } from "../../lib/mongodb";
 
 interface BlogPostDetailPageProps {
   post: any;
@@ -76,54 +75,40 @@ export default function BlogPostDetailPage({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const postsFilePath = path.join(process.cwd(), "posts.json");
-    if (fs.existsSync(postsFilePath)) {
-      const posts = JSON.parse(fs.readFileSync(postsFilePath, "utf8"));
-      const paths = (Array.isArray(posts) ? posts : [])
-        .filter((p: any) => p && (p.slug || p.id))
-        .map((p: any) => ({
-          params: { slug: String(p.slug || p.id) },
-        }));
-      return { paths, fallback: "blocking" };
-    }
+    const posts = await getPosts();
+    const paths = (Array.isArray(posts) ? posts : [])
+      .filter((p: any) => p && (p.slug || p.id))
+      .map((p: any) => ({
+        params: { slug: String(p.slug || p.id) },
+      }));
+    return { paths, fallback: "blocking" };
   } catch (e) {
-    console.error("Error reading posts.json for getStaticPaths:", e);
+    console.error("Error reading posts from MongoDB for getStaticPaths:", e);
+    return { paths: [], fallback: "blocking" };
   }
-  return { paths: [], fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const postsFilePath = path.join(process.cwd(), "posts.json");
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-
-    let posts: any[] = [];
-    let settings: any = {};
-
-    if (fs.existsSync(postsFilePath)) {
-      posts = JSON.parse(fs.readFileSync(postsFilePath, "utf8"));
-    }
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
-
-    const post =
-      posts.find((p: any) => p.slug === slug || p.id === slug) || null;
+    const [post, settings] = await Promise.all([
+      getPostBySlug(slug),
+      getWebsiteSettings(),
+    ]);
 
     if (!post) {
-      return { notFound: true };
+      return { notFound: true, revalidate: 60 };
     }
 
     return {
       props: {
         post,
-        settings,
+        settings: settings || {},
       },
       revalidate: 60,
     };
   } catch (e) {
     console.error("Error in getStaticProps for blog post:", e);
-    return { notFound: true };
+    return { notFound: true, revalidate: 60 };
   }
 };

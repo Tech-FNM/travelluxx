@@ -1,9 +1,12 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import Services from "../../src/pages/Services";
+import {
+  getServices,
+  getServicesPageSettings,
+  getWebsiteSettings,
+} from "../../lib/mongodb";
 
 interface ServicesPageProps {
   services: any[];
@@ -66,29 +69,17 @@ export default function ServicesPage({
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const servicesFilePath = path.join(process.cwd(), "services.json");
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-    const servicesSettingsPath = path.join(process.cwd(), "services_settings.json");
-
-    let services: any[] = [];
-    let settings: any = {};
-    let pageSettings: any = {};
-
-    if (fs.existsSync(servicesFilePath)) {
-      services = JSON.parse(fs.readFileSync(servicesFilePath, "utf8"));
-    }
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
-    if (fs.existsSync(servicesSettingsPath)) {
-      pageSettings = JSON.parse(fs.readFileSync(servicesSettingsPath, "utf8"));
-    }
+    const [services, pageSettings, settings] = await Promise.all([
+      getServices(),
+      getServicesPageSettings(),
+      getWebsiteSettings(),
+    ]);
 
     return {
       props: {
-        services,
-        pageSettings,
-        settings,
+        services: Array.isArray(services) ? services : [],
+        pageSettings: pageSettings || {},
+        settings: settings || {},
       },
       revalidate: 60,
     };

@@ -1,9 +1,13 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import ServiceDetail from "../../src/pages/ServiceDetail";
+import {
+  getServices,
+  getServiceBySlug,
+  getServicesPageSettings,
+  getWebsiteSettings,
+} from "../../lib/mongodb";
 
 interface ServiceDetailPageProps {
   service: any;
@@ -86,58 +90,44 @@ export default function ServiceDetailPage({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const servicesFilePath = path.join(process.cwd(), "services.json");
-    if (fs.existsSync(servicesFilePath)) {
-      const services = JSON.parse(fs.readFileSync(servicesFilePath, "utf8"));
-      const paths = (Array.isArray(services) ? services : []).map((s: any) => ({
+    const services = await getServices();
+    const paths = (Array.isArray(services) ? services : [])
+      .filter((s: any) => s && (s.slug || s.id))
+      .map((s: any) => ({
         params: { slug: String(s.slug || s.id) },
       }));
-      return { paths, fallback: "blocking" };
-    }
+    return { paths, fallback: "blocking" };
   } catch (e) {
-    console.error("Error reading services.json for getStaticPaths:", e);
+    console.error("Error reading services from MongoDB for getStaticPaths:", e);
+    return { paths: [], fallback: "blocking" };
   }
-  return { paths: [], fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const servicesFilePath = path.join(process.cwd(), "services.json");
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-    const servicesSettingsPath = path.join(process.cwd(), "services_settings.json");
-
-    let allServices: any[] = [];
-    let settings: any = {};
-    let pageSettings: any = {};
-
-    if (fs.existsSync(servicesFilePath)) {
-      allServices = JSON.parse(fs.readFileSync(servicesFilePath, "utf8"));
-    }
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
-    if (fs.existsSync(servicesSettingsPath)) {
-      pageSettings = JSON.parse(fs.readFileSync(servicesSettingsPath, "utf8"));
-    }
-
-    const service = allServices.find((s: any) => s.slug === slug || s.id === slug) || null;
+    const [service, allServices, pageSettings, settings] = await Promise.all([
+      getServiceBySlug(slug),
+      getServices(),
+      getServicesPageSettings(),
+      getWebsiteSettings(),
+    ]);
 
     if (!service) {
-      return { notFound: true };
+      return { notFound: true, revalidate: 60 };
     }
 
     return {
       props: {
         service,
-        allServices,
-        pageSettings,
-        settings,
+        allServices: Array.isArray(allServices) ? allServices : [],
+        pageSettings: pageSettings || {},
+        settings: settings || {},
       },
       revalidate: 60,
     };
   } catch (e) {
     console.error("Error in getStaticProps for service:", e);
-    return { notFound: true };
+    return { notFound: true, revalidate: 60 };
   }
 };

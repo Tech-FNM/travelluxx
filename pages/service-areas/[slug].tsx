@@ -1,9 +1,12 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import ServiceAreaPage from "../../src/pages/ServiceAreaPage";
+import {
+  getServiceAreas,
+  getServiceAreaBySlug,
+  getWebsiteSettings,
+} from "../../lib/mongodb";
 
 interface ServiceAreaDetailPageProps {
   serviceArea: any;
@@ -100,52 +103,40 @@ export default function ServiceAreaDetailPage({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const areasFilePath = path.join(process.cwd(), "service_areas.json");
-    if (fs.existsSync(areasFilePath)) {
-      const areas = JSON.parse(fs.readFileSync(areasFilePath, "utf8"));
-      const paths = (Array.isArray(areas) ? areas : []).map((a: any) => ({
+    const areas = await getServiceAreas();
+    const paths = (Array.isArray(areas) ? areas : [])
+      .filter((a: any) => a && (a.slug || a.id))
+      .map((a: any) => ({
         params: { slug: String(a.slug || a.id) },
       }));
-      return { paths, fallback: "blocking" };
-    }
+    return { paths, fallback: "blocking" };
   } catch (e) {
-    console.error("Error reading service_areas.json for getStaticPaths:", e);
+    console.error("Error reading service areas from MongoDB for getStaticPaths:", e);
+    return { paths: [], fallback: "blocking" };
   }
-  return { paths: [], fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const areasFilePath = path.join(process.cwd(), "service_areas.json");
-    const settingsFilePath = path.join(process.cwd(), "website_settings.json");
-
-    let areas: any[] = [];
-    let settings: any = {};
-
-    if (fs.existsSync(areasFilePath)) {
-      areas = JSON.parse(fs.readFileSync(areasFilePath, "utf8"));
-    }
-    if (fs.existsSync(settingsFilePath)) {
-      settings = JSON.parse(fs.readFileSync(settingsFilePath, "utf8"));
-    }
-
-    const serviceArea =
-      areas.find((a: any) => a.slug === slug || a.id === slug) || null;
+    const [serviceArea, settings] = await Promise.all([
+      getServiceAreaBySlug(slug),
+      getWebsiteSettings(),
+    ]);
 
     if (!serviceArea) {
-      return { notFound: true };
+      return { notFound: true, revalidate: 60 };
     }
 
     return {
       props: {
         serviceArea,
-        settings,
+        settings: settings || {},
       },
       revalidate: 60,
     };
   } catch (e) {
     console.error("Error in getStaticProps for service area:", e);
-    return { notFound: true };
+    return { notFound: true, revalidate: 60 };
   }
 };
