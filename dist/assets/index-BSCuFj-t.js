@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/GoogleBookingMap-BTfQO8BI.js","assets/GoogleBookingMap-DvTUgzRd.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/GoogleBookingMap-XzKrfif_.js","assets/GoogleBookingMap-DvTUgzRd.css"])))=>i.map(i=>d[i]);
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -24471,6 +24471,31 @@ const DEFAULT_FALLBACK_SETTINGS = {
   service_desc_4: "Travel to Solihull, Worcester, Cheltenham, Warwick, Leamington Spa, Coventry and cities across the UK in comfort and style.",
   service_title_5: "Business Travel",
   service_desc_5: "Our chauffeur service Birmingham gives executives and corporate teams punctual, professional and discreet travel.",
+  homepage_faq_title: "Frequently Asked Questions",
+  homepage_faq_subtitle: "Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process.",
+  homepage_faq_badge: "FAQ & Information",
+  homepage_faqs: [
+    {
+      question: "How do I book an executive transfer with TravelLuxx?",
+      answer: "You can book easily online using our instant Fare Calculator above, select your desired vehicle class (Economy, Luxury, or Family MPV), specify your pickup time and date, and complete your reservation with instant confirmation."
+    },
+    {
+      question: "Do you provide flight monitoring for airport pickups?",
+      answer: "Yes, our team actively monitors all inbound commercial flights in real-time. Whether your flight is delayed or lands early, your chauffeur will adjust their schedule accordingly and meet you inside the terminal with a name board."
+    },
+    {
+      question: "What vehicle classes are available?",
+      answer: "We offer Mercedes-Benz E-Class & S-Class executive sedans for up to 4 passengers, and Mercedes V-Class / luxury multi-passenger vehicles (MPVs) for families and business groups carrying up to 7-8 passengers and substantial luggage."
+    },
+    {
+      question: "Can I apply a promo code or discount voucher?",
+      answer: "Yes! At Step 3 (Secure Checkout) in our Booking Calculator, you can enter your promo code in the discount field and click 'Apply' to instantly receive your calculated savings before confirming your reservation."
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer: "We accept all major credit and debit cards, Apple Pay, Google Pay, and Klarna through our secure Mollie payments integration, as well as pre-authorized Cash on Departure / Pay Later options."
+    }
+  ],
   active_theme: "default",
   homepage_displays: "default",
   seo_title: "Private Hire Birmingham | Airport Transfers & Chauffeurs | TravelLuxx",
@@ -25600,7 +25625,7 @@ function trackVisit() {
     console.error("Failed to log analytics visit:", err);
   });
 }
-const GoogleBookingMap = dynamic(() => __vitePreload(() => import("./GoogleBookingMap-BTfQO8BI.js"), true ? __vite__mapDeps([0,1]) : void 0), {
+const GoogleBookingMap = dynamic(() => __vitePreload(() => import("./GoogleBookingMap-XzKrfif_.js"), true ? __vite__mapDeps([0,1]) : void 0), {
   ssr: false,
   loading: () => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full h-full min-h-[300px] bg-slate-900/60 flex items-center justify-center text-slate-400 text-xs", children: "Loading interactive map..." })
 });
@@ -27850,7 +27875,7 @@ function getServiceIcon(iconName) {
   }
   return Car;
 }
-const ReactQuill$1 = dynamic(() => __vitePreload(() => import("./index-ClGMdVbd.js"), true ? [] : void 0), { ssr: false });
+const ReactQuill$1 = dynamic(() => __vitePreload(() => import("./index-DY-1OcVK.js"), true ? [] : void 0), { ssr: false });
 const defaultPageSettings = {
   hero_enabled: true,
   hero_tag: "SERVICE AREAS",
@@ -29289,7 +29314,7 @@ function ServiceAreasManager({ initialViewMode = "list", onBack } = {}) {
     ] }) })
   ] });
 }
-const ReactQuill = dynamic(() => __vitePreload(() => import("./index-ClGMdVbd.js"), true ? [] : void 0), { ssr: false });
+const ReactQuill = dynamic(() => __vitePreload(() => import("./index-DY-1OcVK.js"), true ? [] : void 0), { ssr: false });
 function toBase64(file) {
   return new Promise((res, rej) => {
     const r = new FileReader();
@@ -39088,8 +39113,9 @@ function AdminDashboard() {
     ] }) })
   ] });
 }
-function BlogList() {
-  const { posts, isLoading: loading } = useSettings();
+function BlogList({ initialPosts } = {}) {
+  const { posts: ctxPosts, isLoading: loading } = useSettings();
+  const posts = initialPosts && initialPosts.length > 0 ? initialPosts : ctxPosts;
   reactExports.useEffect(() => {
     const baseUrl = "https://travelluxx.co.uk";
     const blogUrl = `${baseUrl}/blog`;
@@ -39194,10 +39220,26 @@ function BlogList() {
     } })
   ] });
 }
-function BlogPostDetail() {
+const DEFAULT_BLOG_FAQS = [
+  {
+    question: "What makes executive chauffeur travel different from a standard taxi?",
+    answer: "Our executive chauffeur services feature premium Mercedes-Benz vehicles, impeccably presented DBS-checked chauffeurs, complimentary in-cabin amenities, and fixed pricing without metered rates or surge fees."
+  },
+  {
+    question: "How far in advance should I book my airport chauffeur?",
+    answer: "We recommend booking at least 12 to 24 hours in advance to guarantee vehicle allocation, though same-day urgent bookings can also be arranged."
+  }
+];
+function BlogPostDetail({
+  initialPost,
+  initialSettings
+} = {}) {
   const { slug } = useParams();
-  const { settings, posts, isLoading: loading } = useSettings();
-  const post = posts.find((p) => p.slug === slug || p.id === slug);
+  const { settings: ctxSettings, posts, isLoading: ctxLoading } = useSettings();
+  const settings = initialSettings || ctxSettings;
+  const post = initialPost || posts.find((p) => p.slug === slug || p.id === slug);
+  const loading = !initialPost && ctxLoading;
+  const postFaqs = Array.isArray(post == null ? void 0 : post.faqs) && post.faqs.length > 0 ? post.faqs : DEFAULT_BLOG_FAQS;
   reactExports.useEffect(() => {
     if (post) {
       const baseUrl = "https://travelluxx.co.uk";
@@ -39274,11 +39316,11 @@ function BlogPostDetail() {
           "description": desc
         }
       ];
-      if (post.faqs && post.faqs.length > 0) {
+      if (postFaqs && postFaqs.length > 0) {
         schemas.push({
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          "mainEntity": post.faqs.map((f) => ({
+          "mainEntity": postFaqs.map((f) => ({
             "@type": "Question",
             "name": f.question,
             "acceptedAnswer": {
@@ -39344,9 +39386,9 @@ function BlogPostDetail() {
             dangerouslySetInnerHTML: { __html: post.content }
           }
         ) }),
-        post.faqs && post.faqs.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-12 pt-8 border-t border-slate-200", children: [
+        postFaqs && postFaqs.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-12 pt-8 border-t border-slate-200", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-serif text-2xl font-semibold mb-6 text-slate-900", children: "Frequently Asked Questions" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: post.faqs.map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: postFaqs.map((faq, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "div",
             {
               className: "bg-white border border-slate-200/60 hover:border-emerald-200 p-5 rounded-xl transition duration-300 hover:shadow-md hover:shadow-emerald-600/5 group",
@@ -39539,16 +39581,25 @@ function usePageSeo(props) {
     props.customSchemaJson
   ]);
 }
-function DynamicPage() {
+function DynamicPage({
+  initialPage,
+  initialSettings
+} = {}) {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [page, setPage] = reactExports.useState(null);
-  const [fetching, setFetching] = reactExports.useState(true);
-  const { settings, isLoading: globalLoading } = useSettings();
+  const [page, setPage] = reactExports.useState(initialPage || null);
+  const [fetching, setFetching] = reactExports.useState(!initialPage);
+  const { settings: ctxSettings, isLoading: globalLoading } = useSettings();
+  const settings = initialSettings || ctxSettings;
   const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
   const cleanSlug = (slug || "").replace(/^\/+|\/+$/g, "");
   reactExports.useEffect(() => {
     window.scrollTo(0, 0);
+    if (initialPage && (initialPage.slug === cleanSlug || initialPage.id === cleanSlug)) {
+      setPage(initialPage);
+      setFetching(false);
+      return;
+    }
     setFetching(true);
     fetch(`/api/pages/${encodeURIComponent(cleanSlug)}`).then((res) => {
       if (!res.ok) throw new Error("Not found");
@@ -39560,7 +39611,7 @@ function DynamicPage() {
     }).finally(() => {
       setFetching(false);
     });
-  }, [cleanSlug]);
+  }, [cleanSlug, initialPage]);
   const baseUrl = "https://travelluxx.co.uk";
   const pageUrl = page ? `${baseUrl}/${page.slug || cleanSlug}` : "";
   const metaTitle = (page == null ? void 0 : page.metaTitle) || (page == null ? void 0 : page.ogTitle) || (page ? `${page.title} | TravelLuxx` : "Page | TravelLuxx");
@@ -39622,7 +39673,7 @@ function DynamicPage() {
     customSchemaJson: (page == null ? void 0 : page.customSchema) || ""
   });
   const isRenax = (settings == null ? void 0 : settings.active_theme) === "renax";
-  if (fetching || globalLoading && !page) {
+  if (fetching && !page) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `min-h-screen flex items-center justify-center ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) });
   }
   if (!page) {
@@ -39675,17 +39726,24 @@ function DynamicPage() {
             {
               className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-emerald-300 bg-emerald-50/30 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"}`,
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "m-0 p-0 text-inherit font-inherit leading-none", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "button",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "h3",
                   {
-                    type: "button",
                     id: questionId,
+                    role: "button",
+                    tabIndex: 0,
                     "aria-expanded": isOpen,
                     "aria-controls": answerId,
                     onClick: () => setOpenFaqIndex(isOpen ? null : index),
-                    className: "flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition",
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenFaqIndex(isOpen ? null : index);
+                      }
+                    },
+                    className: "cursor-pointer flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 text-base sm:text-lg transition select-none",
                     children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg", children: faq.question }),
+                      faq.question,
                       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                         ChevronDown,
                         {
@@ -39694,7 +39752,7 @@ function DynamicPage() {
                       ) })
                     ]
                   }
-                ) }),
+                ),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "div",
                   {
@@ -39850,10 +39908,14 @@ const DEFAULT_FAQS = [
     answer: "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports."
   }
 ];
-function Services() {
-  const { settings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
-  const services = ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES;
-  const pageSettings = ctxPageSettings;
+function Services({
+  initialServices,
+  initialPageSettings,
+  initialSettings
+} = {}) {
+  const { settings: ctxSettings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
+  const services = initialServices && initialServices.length > 0 ? initialServices : ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES;
+  const pageSettings = initialPageSettings || ctxPageSettings;
   const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
   reactExports.useEffect(() => {
     var _a, _b;
@@ -40054,23 +40116,24 @@ function Services() {
             {
               className: `rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? "border-emerald-300 bg-emerald-50/40 shadow-md ring-1 ring-emerald-500/20" : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"}`,
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "m-0 p-0 text-inherit font-inherit leading-none", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "button",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "h3",
                   {
-                    type: "button",
                     id: questionId,
+                    role: "button",
+                    tabIndex: 0,
                     "aria-expanded": isOpen,
                     "aria-controls": answerId,
                     onClick: () => setOpenFaqIndex(isOpen ? null : idx),
-                    className: "w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none",
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenFaqIndex(isOpen ? null : idx);
+                      }
+                    },
+                    className: `cursor-pointer w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-sm sm:text-base font-bold transition-colors select-none ${isOpen ? "text-slate-950" : "text-slate-800"}`,
                     children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "span",
-                        {
-                          className: `text-sm sm:text-base font-bold transition-colors ${isOpen ? "text-slate-950" : "text-slate-800"}`,
-                          children: faq.question
-                        }
-                      ),
+                      faq.question,
                       /* @__PURE__ */ jsxRuntimeExports.jsx(
                         "div",
                         {
@@ -40080,7 +40143,7 @@ function Services() {
                       )
                     ]
                   }
-                ) }),
+                ),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "div",
                   {
@@ -40102,14 +40165,47 @@ function Services() {
     } })
   ] });
 }
-function ServiceDetail() {
+const DEFAULT_SERVICE_FAQS = [
+  {
+    question: "How far in advance should I book my chauffeur service?",
+    answer: "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule. However, we also accommodate last-minute bookings subject to vehicle availability."
+  },
+  {
+    question: "What happens if my flight is delayed?",
+    answer: "We actively track all flights in real-time. Your chauffeur will automatically adjust your pickup time according to your actual flight arrival, and our airport service includes complimentary 60 minutes waiting time from touchdown."
+  },
+  {
+    question: "Are your prices fixed and all-inclusive?",
+    answer: "Yes. All our rates are 100% fixed and transparent with zero hidden fees. Fuel, taxes, standard wait time, and flight tracking are all included in your quote."
+  },
+  {
+    question: "What is your cancellation and amendment policy?",
+    answer: "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time. Cancellations made within 12 hours may be subject to a cancellation fee."
+  },
+  {
+    question: "Can I request child seats or additional luggage capacity?",
+    answer: "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge. For larger parties with excess luggage, our Mercedes V-Class luxury MPVs comfortably accommodate up to 7-8 passengers and 8 large suitcases."
+  },
+  {
+    question: "What vehicles are in the TravelLuxx fleet?",
+    answer: "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports."
+  }
+];
+function ServiceDetail({
+  initialService,
+  initialAllServices,
+  initialPageSettings,
+  initialSettings
+} = {}) {
   const { slug } = useParams();
   useNavigate();
-  const { settings, services, servicesPageSettings, isLoading } = useSettings();
+  const { settings: ctxSettings, services: ctxServices, servicesPageSettings: ctxPageSettings, isLoading: ctxLoading } = useSettings();
   const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
-  const service = services.find((s) => s.slug === slug || s.id === slug);
-  const allServices = services;
-  const pageSettings = servicesPageSettings;
+  const settings = initialSettings || ctxSettings;
+  const allServices = initialAllServices && initialAllServices.length > 0 ? initialAllServices : ctxServices;
+  const pageSettings = initialPageSettings || ctxPageSettings;
+  const service = initialService || allServices.find((s) => s.slug === slug || s.id === slug);
+  const isLoading = !initialService && ctxLoading;
   const notFound = !isLoading && !service;
   reactExports.useEffect(() => {
     window.scrollTo(0, 0);
@@ -40118,7 +40214,7 @@ function ServiceDetail() {
   const pageUrl = service ? `${baseUrl}/services/${service.slug}` : "";
   const metaTitle = (service == null ? void 0 : service.metaTitle) || (service == null ? void 0 : service.ogTitle) || (service ? `${service.title} | Luxury Chauffeur & Travel Services | TravelLuxx` : "Service | TravelLuxx");
   const metaDesc = (service == null ? void 0 : service.metaDescription) || (service == null ? void 0 : service.ogDescription) || (service == null ? void 0 : service.excerpt) || (service ? `Premium ${service.title} with TravelLuxx. Fixed rates, professional chauffeurs, and luxury vehicles across the UK.` : "");
-  const serviceFaqs = Array.isArray(service == null ? void 0 : service.faqs) && service.faqs.length > 0 ? service.faqs : (pageSettings == null ? void 0 : pageSettings.faqs) || [];
+  const serviceFaqs = Array.isArray(service == null ? void 0 : service.faqs) && service.faqs.length > 0 ? service.faqs : Array.isArray(pageSettings == null ? void 0 : pageSettings.faqs) && pageSettings.faqs.length > 0 ? pageSettings.faqs : DEFAULT_SERVICE_FAQS;
   const serviceSchemas = [];
   if (service) {
     serviceSchemas.push({
@@ -40273,7 +40369,7 @@ function ServiceDetail() {
     }
   ];
   const stepsList = Array.isArray(service.howItWorksSteps) && service.howItWorksSteps.length > 0 ? service.howItWorksSteps : defaultSteps;
-  const faqsList = Array.isArray(service.faqs) && service.faqs.length > 0 ? service.faqs : (pageSettings == null ? void 0 : pageSettings.faqs) || [];
+  const faqsList = serviceFaqs;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, { onScrollTo: () => {
     } }),
@@ -40505,23 +40601,24 @@ function ServiceDetail() {
             {
               className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-emerald-500/60 bg-emerald-50/40 shadow-sm ring-1 ring-emerald-500/20" : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"}`,
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "m-0 p-0 text-inherit font-inherit leading-none", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "button",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "h3",
                   {
-                    type: "button",
                     id: questionId,
+                    role: "button",
+                    tabIndex: 0,
                     "aria-expanded": isOpen,
                     "aria-controls": answerId,
                     onClick: () => setOpenFaqIndex(isOpen ? null : idx),
-                    className: "w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none",
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenFaqIndex(isOpen ? null : idx);
+                      }
+                    },
+                    className: `cursor-pointer w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-sm sm:text-base font-bold transition-colors select-none ${isOpen ? "text-slate-950" : "text-slate-800"}`,
                     children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "span",
-                        {
-                          className: `text-sm sm:text-base font-bold transition-colors ${isOpen ? "text-slate-950" : "text-slate-800"}`,
-                          children: faq.question
-                        }
-                      ),
+                      faq.question,
                       /* @__PURE__ */ jsxRuntimeExports.jsx(
                         "div",
                         {
@@ -40531,7 +40628,7 @@ function ServiceDetail() {
                       )
                     ]
                   }
-                ) }),
+                ),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "div",
                   {
@@ -40553,15 +40650,42 @@ function ServiceDetail() {
     } })
   ] });
 }
-function ServiceAreaPage() {
+const DEFAULT_AREA_FAQS = [
+  {
+    question: "How do I book an airport transfer in this area?",
+    answer: "You can book easily online using our instant Fare Calculator above. Enter your pickup address and desired airport, select your luxury vehicle, and receive instant confirmation."
+  },
+  {
+    question: "Do you monitor flights for airport pickups?",
+    answer: "Yes, our team monitors all inbound commercial flights in real-time. Whether your flight is early or delayed, your chauffeur will be waiting inside arrivals with a name board."
+  },
+  {
+    question: "Are your prices fixed and all-inclusive?",
+    answer: "Yes. All TravelLuxx fares are fixed upfront with zero hidden fees. Fuel, taxes, airport flight tracking, and standard waiting time are all included."
+  },
+  {
+    question: "Can I book a private chauffeur for business travel or private events?",
+    answer: "Yes, we provide flexible one-way, return, and full-day as-directed chauffeur hire for corporate meetings, private events, weddings, and long-distance UK journeys."
+  }
+];
+function ServiceAreaPage({
+  initialArea,
+  initialSettings
+} = {}) {
   const { slug } = useParams();
-  const { settings, isLoading } = useSettings();
-  const [serviceArea, setServiceArea] = reactExports.useState(null);
-  const [areaLoading, setAreaLoading] = reactExports.useState(true);
+  const { settings: ctxSettings, isLoading } = useSettings();
+  const settings = initialSettings || ctxSettings;
+  const [serviceArea, setServiceArea] = reactExports.useState(initialArea || null);
+  const [areaLoading, setAreaLoading] = reactExports.useState(!initialArea);
   const [areaError, setAreaError] = reactExports.useState("");
   const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
   reactExports.useEffect(() => {
     window.scrollTo(0, 0);
+    if (initialArea && (initialArea.slug === slug || initialArea.id === slug)) {
+      setServiceArea(initialArea);
+      setAreaLoading(false);
+      return;
+    }
     let active = true;
     setAreaLoading(true);
     setAreaError("");
@@ -40580,14 +40704,15 @@ function ServiceAreaPage() {
     return () => {
       active = false;
     };
-  }, [slug]);
+  }, [slug, initialArea]);
   const baseUrl = "https://travelluxx.co.uk";
   const pageUrl = serviceArea ? `${baseUrl}/service-areas/${serviceArea.slug}` : "";
   const title = (serviceArea == null ? void 0 : serviceArea.metaTitle) || (serviceArea == null ? void 0 : serviceArea.ogTitle) || (serviceArea ? `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx` : "Service Area | TravelLuxx");
   const description = (serviceArea == null ? void 0 : serviceArea.metaDescription) || (serviceArea == null ? void 0 : serviceArea.ogDescription) || (serviceArea == null ? void 0 : serviceArea.heroDescription) || "Private chauffeur travel and airport transfers tailored around your location and schedule.";
   const ogImage = (serviceArea == null ? void 0 : serviceArea.ogImage) || (serviceArea == null ? void 0 : serviceArea.heroImage) || "";
   const validFaqs = reactExports.useMemo(() => {
-    return (Array.isArray(serviceArea == null ? void 0 : serviceArea.faqs) ? serviceArea.faqs : []).filter((f) => f && (f.question || f.answer));
+    const list = (Array.isArray(serviceArea == null ? void 0 : serviceArea.faqs) ? serviceArea.faqs : []).filter((f) => f && (f.question || f.answer));
+    return list.length > 0 ? list : DEFAULT_AREA_FAQS;
   }, [serviceArea]);
   const pageSchemas = reactExports.useMemo(() => {
     if (!serviceArea) return [];
@@ -40639,7 +40764,7 @@ function ServiceAreaPage() {
     schemas: pageSchemas,
     customSchemaJson: (serviceArea == null ? void 0 : serviceArea.customSchema) || ""
   });
-  if (isLoading || areaLoading) {
+  if ((isLoading || areaLoading) && !serviceArea) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-slate-950 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" }) });
   }
   if (!serviceArea) {
@@ -40729,17 +40854,24 @@ function ServiceAreaPage() {
             {
               className: `rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? "border-emerald-300 bg-emerald-50/30 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"}`,
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "m-0 p-0 text-inherit font-inherit leading-none", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "button",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "h3",
                   {
-                    type: "button",
                     id: questionId,
+                    role: "button",
+                    tabIndex: 0,
                     "aria-expanded": isOpen,
                     "aria-controls": answerId,
                     onClick: () => setOpenFaqIndex(isOpen ? null : index),
-                    className: "flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition",
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenFaqIndex(isOpen ? null : index);
+                      }
+                    },
+                    className: "cursor-pointer flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 text-base sm:text-lg transition select-none",
                     children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg", children: faq.question }),
+                      faq.question,
                       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                         ChevronDown,
                         {
@@ -40748,7 +40880,7 @@ function ServiceAreaPage() {
                       ) })
                     ]
                   }
-                ) }),
+                ),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "div",
                   {
@@ -40770,11 +40902,34 @@ function ServiceAreaPage() {
     } })
   ] });
 }
-function ServiceAreas() {
-  const { settings } = useSettings();
-  const [areas, setAreas] = reactExports.useState([]);
-  const [loading, setLoading] = reactExports.useState(true);
-  const [pageSettings, setPageSettings] = reactExports.useState({
+const SERVICE_AREAS_FAQS = [
+  {
+    question: "Which areas and regions across the UK does TravelLuxx cover?",
+    answer: "TravelLuxx provides executive chauffeur hire and airport transfers across Solihull, Birmingham, Coventry, Warwickshire, and connects passengers to all UK airports and major cities nationwide."
+  },
+  {
+    question: "Can I book a transfer starting or ending outside your listed service areas?",
+    answer: "Yes, our private hire license covers nationwide pre-booked journeys. Whether you need an intercity transfer to London, Manchester, or Southampton cruise ports, we provide door-to-door service."
+  },
+  {
+    question: "Are your fares fixed regardless of the service area?",
+    answer: "Yes, every journey is calculated on a 100% fixed-rate basis at the time of booking. There are no surprise meter charges, surge pricing, or hidden fees."
+  },
+  {
+    question: "How do I book an executive transfer in my area?",
+    answer: "You can book instantly online using our instant Fare Calculator, or get in touch with our 24/7 team via WhatsApp or phone for bespoke itineraries and multi-stop journeys."
+  }
+];
+function ServiceAreas({
+  initialAreas,
+  initialPageSettings,
+  initialSettings
+} = {}) {
+  const { settings: ctxSettings } = useSettings();
+  const [areas, setAreas] = reactExports.useState(initialAreas || []);
+  const [loading, setLoading] = reactExports.useState(!initialAreas || initialAreas.length === 0);
+  const [openFaqIndex, setOpenFaqIndex] = reactExports.useState(0);
+  const [pageSettings, setPageSettings] = reactExports.useState(initialPageSettings || {
     hero_enabled: true,
     hero_tag: "SERVICE AREAS",
     hero_title: "Explore TravelLuxx Service Areas Across the UK",
@@ -40787,13 +40942,20 @@ function ServiceAreas() {
   });
   reactExports.useEffect(() => {
     window.scrollTo(0, 0);
+    if (initialAreas && initialAreas.length > 0) {
+      setAreas(initialAreas);
+      setLoading(false);
+      return;
+    }
     fetch("/api/service-areas").then((res) => res.json()).then((data) => {
       if (Array.isArray(data)) setAreas(data);
     }).catch((err) => console.error("Error loading service areas:", err)).finally(() => setLoading(false));
     fetch("/api/service-areas-page-settings").then((res) => res.json()).then((data) => {
-      if (data && !data.error) setPageSettings((prev) => ({ ...prev, ...data }));
+      if (data && typeof data === "object") {
+        setPageSettings((prev) => ({ ...prev, ...data }));
+      }
     }).catch((err) => console.error("Error loading service areas page settings:", err));
-  }, []);
+  }, [initialAreas]);
   reactExports.useEffect(() => {
     const baseUrl = "https://travelluxx.co.uk";
     const pageUrl = `${baseUrl}/service-areas`;
@@ -40875,7 +41037,69 @@ function ServiceAreas() {
           ]
         },
         area.id
-      )) })
+      )) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mt-20 pt-16 border-t border-white/10 max-w-4xl mx-auto px-4 sm:px-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-12", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CircleQuestionMark, { className: "w-3.5 h-3.5 text-emerald-400" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Service Coverage FAQs" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl sm:text-4xl font-extrabold tracking-tight text-white", children: "Frequently Asked Questions" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-3 text-slate-400 text-sm sm:text-base max-w-2xl mx-auto", children: "Common questions about our executive chauffeur coverage, airport transfers, and private hire service areas." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3.5", children: SERVICE_AREAS_FAQS.map((faq, index) => {
+          const isOpen = openFaqIndex === index;
+          const questionId = `service-areas-faq-q-${index}`;
+          const answerId = `service-areas-faq-a-${index}`;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "div",
+            {
+              className: `rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? "border-emerald-500/50 bg-[#12141c] shadow-lg shadow-emerald-500/5" : "border-slate-800/80 bg-[#0d0e14] hover:border-slate-700"}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "h3",
+                  {
+                    id: questionId,
+                    role: "button",
+                    tabIndex: 0,
+                    "aria-expanded": isOpen,
+                    "aria-controls": answerId,
+                    onClick: () => setOpenFaqIndex(isOpen ? null : index),
+                    onKeyDown: (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenFaqIndex(isOpen ? null : index);
+                      }
+                    },
+                    className: `cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold text-base sm:text-lg leading-snug transition select-none ${isOpen ? "text-emerald-400" : "text-white hover:text-slate-200"}`,
+                    children: [
+                      faq.question,
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "div",
+                        {
+                          className: `h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm" : "bg-slate-800/80 text-slate-400 hover:bg-slate-700"}`,
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "h-4 w-4" })
+                        }
+                      )
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "div",
+                  {
+                    id: answerId,
+                    role: "region",
+                    "aria-labelledby": questionId,
+                    className: `px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t border-slate-800/60 text-slate-300 ${isOpen ? "block" : "hidden"}`,
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "whitespace-pre-line", children: faq.answer })
+                  }
+                )
+              ]
+            },
+            faq.question
+          );
+        }) })
+      ] })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onScrollTo: (id) => {
       if (id === "hero" || !id) window.location.href = "/";
@@ -40932,17 +41156,24 @@ function HomepageFaq({
         {
           className: `rounded-2xl border transition-all duration-300 overflow-hidden ${isRenax ? isOpen ? "border-emerald-500/50 bg-[#12141c] shadow-lg shadow-emerald-500/5" : "border-slate-800/80 bg-[#0d0e14] hover:border-slate-700" : isOpen ? "border-emerald-300 bg-white shadow-md shadow-emerald-600/5 ring-1 ring-emerald-500/20" : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"}`,
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "m-0 p-0 text-inherit font-inherit leading-none", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "h3",
               {
-                type: "button",
                 id: questionId,
+                role: "button",
+                tabIndex: 0,
                 "aria-expanded": isOpen,
                 "aria-controls": answerId,
                 onClick: () => setOpenIndex(isOpen ? null : index),
-                className: `w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${isRenax ? isOpen ? "text-emerald-400" : "text-white hover:text-slate-200" : isOpen ? "text-emerald-800" : "text-slate-900 hover:text-slate-700"}`,
+                onKeyDown: (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setOpenIndex(isOpen ? null : index);
+                  }
+                },
+                className: `cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold text-base sm:text-lg leading-snug transition select-none ${isRenax ? isOpen ? "text-emerald-400" : "text-white hover:text-slate-200" : isOpen ? "text-emerald-800" : "text-slate-900 hover:text-slate-700"}`,
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-base sm:text-lg leading-snug", children: faq.question }),
+                  faq.question,
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "div",
                     {
@@ -40952,7 +41183,7 @@ function HomepageFaq({
                   )
                 ]
               }
-            ) }),
+            ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "div",
               {

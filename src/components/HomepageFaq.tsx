@@ -83,30 +83,41 @@ export default function HomepageFaq({
                     : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
                 }`}
               >
-                <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
-                  <button
-                    type="button"
-                    id={questionId}
-                    aria-expanded={isOpen}
-                    aria-controls={answerId}
-                    onClick={() => setOpenIndex(isOpen ? null : index)}
-                    className={`w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${
-                      isRenax ? (isOpen ? "text-emerald-400" : "text-white hover:text-slate-200") : (isOpen ? "text-emerald-800" : "text-slate-900 hover:text-slate-700")
+                <h3
+                  id={questionId}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isOpen}
+                  aria-controls={answerId}
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setOpenIndex(isOpen ? null : index);
+                    }
+                  }}
+                  className={`cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold text-base sm:text-lg leading-snug transition select-none ${
+                    isRenax
+                      ? isOpen
+                        ? "text-emerald-400"
+                        : "text-white hover:text-slate-200"
+                      : isOpen
+                      ? "text-emerald-800"
+                      : "text-slate-900 hover:text-slate-700"
+                  }`}
+                >
+                  {faq.question}
+                  <div
+                    className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      isOpen
+                        ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                        : isRenax
+                        ? "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
-                    <span className="text-base sm:text-lg leading-snug">{faq.question}</span>
-                    <div
-                      className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
-                        isOpen
-                          ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                          : isRenax
-                          ? "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                      }`}
-                    >
-                      <ChevronDown className="h-4 w-4" />
-                    </div>
-                  </button>
+                    <ChevronDown className="h-4 w-4" />
+                  </div>
                 </h3>
                 <div
                   id={answerId}

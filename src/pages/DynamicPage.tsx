@@ -186,23 +186,28 @@ export default function DynamicPage({
                             : "border-slate-200 bg-white hover:border-slate-300"
                           }`}
                       >
-                        <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
-                          <button
-                            type="button"
-                            id={questionId}
-                            aria-expanded={isOpen}
-                            aria-controls={answerId}
-                            onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                            className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 transition"
-                          >
-                            <span className="text-base sm:text-lg">{faq.question}</span>
-                            <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
-                              }`}>
-                              <ChevronDown
-                                className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                              />
-                            </div>
-                          </button>
+                        <h3
+                          id={questionId}
+                          role="button"
+                          tabIndex={0}
+                          aria-expanded={isOpen}
+                          aria-controls={answerId}
+                          onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setOpenFaqIndex(isOpen ? null : index);
+                            }
+                          }}
+                          className="cursor-pointer flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 text-base sm:text-lg transition select-none"
+                        >
+                          {faq.question}
+                          <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
+                            }`}>
+                            <ChevronDown
+                              className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                            />
+                          </div>
                         </h3>
                         <div
                           id={answerId}

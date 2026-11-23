@@ -252,28 +252,33 @@ export default function ServiceAreas({
                       : "border-slate-800/80 bg-[#0d0e14] hover:border-slate-700"
                   }`}
                 >
-                  <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
-                    <button
-                      type="button"
-                      id={questionId}
-                      aria-expanded={isOpen}
-                      aria-controls={answerId}
-                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                      className={`w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${
-                        isOpen ? "text-emerald-400" : "text-white hover:text-slate-200"
+                  <h3
+                    id={questionId}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isOpen}
+                    aria-controls={answerId}
+                    onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenFaqIndex(isOpen ? null : index);
+                      }
+                    }}
+                    className={`cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold text-base sm:text-lg leading-snug transition select-none ${
+                      isOpen ? "text-emerald-400" : "text-white hover:text-slate-200"
+                    }`}
+                  >
+                    {faq.question}
+                    <div
+                      className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                        isOpen
+                          ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                          : "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
                       }`}
                     >
-                      <span className="text-base sm:text-lg leading-snug">{faq.question}</span>
-                      <div
-                        className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
-                          isOpen
-                            ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                            : "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
-                        }`}
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                      </div>
-                    </button>
+                      <ChevronDown className="h-4 w-4" />
+                    </div>
                   </h3>
                   <div
                     id={answerId}

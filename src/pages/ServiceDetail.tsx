@@ -662,32 +662,33 @@ export default function ServiceDetail({
                           : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
                       }`}
                     >
-                      <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
-                        <button
-                          type="button"
-                          id={questionId}
-                          aria-expanded={isOpen}
-                          aria-controls={answerId}
-                          onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                          className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                      <h3
+                        id={questionId}
+                        role="button"
+                        tabIndex={0}
+                        aria-expanded={isOpen}
+                        aria-controls={answerId}
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setOpenFaqIndex(isOpen ? null : idx);
+                          }
+                        }}
+                        className={`cursor-pointer w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-sm sm:text-base font-bold transition-colors select-none ${
+                          isOpen ? "text-slate-950" : "text-slate-800"
+                        }`}
+                      >
+                        {faq.question}
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                            isOpen
+                              ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                              : "bg-slate-100 text-slate-500"
+                          }`}
                         >
-                          <span
-                            className={`text-sm sm:text-base font-bold transition-colors ${
-                              isOpen ? "text-slate-950" : "text-slate-800"
-                            }`}
-                          >
-                            {faq.question}
-                          </span>
-                          <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                              isOpen
-                                ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                                : "bg-slate-100 text-slate-500"
-                            }`}
-                          >
-                            <ChevronDown className="w-4 h-4" />
-                          </div>
-                        </button>
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
                       </h3>
                       <div
                         id={answerId}
