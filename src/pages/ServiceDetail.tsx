@@ -22,16 +22,63 @@ import {
   ChevronDown
 } from "lucide-react";
 
-export default function ServiceDetail() {
+const DEFAULT_SERVICE_FAQS = [
+  {
+    question: "How far in advance should I book my chauffeur service?",
+    answer:
+      "We recommend booking at least 24 hours in advance to guarantee your preferred luxury vehicle and schedule. However, we also accommodate last-minute bookings subject to vehicle availability.",
+  },
+  {
+    question: "What happens if my flight is delayed?",
+    answer:
+      "We actively track all flights in real-time. Your chauffeur will automatically adjust your pickup time according to your actual flight arrival, and our airport service includes complimentary 60 minutes waiting time from touchdown.",
+  },
+  {
+    question: "Are your prices fixed and all-inclusive?",
+    answer:
+      "Yes. All our rates are 100% fixed and transparent with zero hidden fees. Fuel, taxes, standard wait time, and flight tracking are all included in your quote.",
+  },
+  {
+    question: "What is your cancellation and amendment policy?",
+    answer:
+      "You can modify or cancel your booking free of charge up to 12 hours prior to your scheduled pickup time. Cancellations made within 12 hours may be subject to a cancellation fee.",
+  },
+  {
+    question: "Can I request child seats or additional luggage capacity?",
+    answer:
+      "Absolutely. We offer infant, child, and booster safety seats upon request at no extra charge. For larger parties with excess luggage, our Mercedes V-Class luxury MPVs comfortably accommodate up to 7-8 passengers and 8 large suitcases.",
+  },
+  {
+    question: "What vehicles are in the TravelLuxx fleet?",
+    answer:
+      "Our immaculate executive fleet consists of Mercedes-Benz E-Class, Mercedes-Benz S-Class luxury saloons, and Mercedes-Benz V-Class MPVs, all equipped with climate control, bottled water, and charging ports.",
+  },
+];
+
+interface ServiceDetailProps {
+  initialService?: any;
+  initialAllServices?: any[];
+  initialPageSettings?: any;
+  initialSettings?: any;
+}
+
+export default function ServiceDetail({
+  initialService,
+  initialAllServices,
+  initialPageSettings,
+  initialSettings
+}: ServiceDetailProps = {}) {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
-  const { settings, services, servicesPageSettings, isLoading } = useSettings();
+  const { settings: ctxSettings, services: ctxServices, servicesPageSettings: ctxPageSettings, isLoading: ctxLoading } = useSettings();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   
-  const service = services.find((s: any) => s.slug === slug || s.id === slug);
-  const allServices = services;
-  const pageSettings = servicesPageSettings;
+  const settings = initialSettings || ctxSettings;
+  const allServices = (initialAllServices && initialAllServices.length > 0) ? initialAllServices : ctxServices;
+  const pageSettings = initialPageSettings || ctxPageSettings;
+  const service = initialService || allServices.find((s: any) => s.slug === slug || s.id === slug);
+  const isLoading = !initialService && ctxLoading;
   const notFound = !isLoading && !service;
 
   useEffect(() => {
@@ -44,7 +91,11 @@ export default function ServiceDetail() {
   const pageUrl = service ? `${baseUrl}/services/${service.slug}` : "";
   const metaTitle = service?.metaTitle || service?.ogTitle || (service ? `${service.title} | Luxury Chauffeur & Travel Services | TravelLuxx` : "Service | TravelLuxx");
   const metaDesc = service?.metaDescription || service?.ogDescription || service?.excerpt || (service ? `Premium ${service.title} with TravelLuxx. Fixed rates, professional chauffeurs, and luxury vehicles across the UK.` : "");
-  const serviceFaqs = (Array.isArray(service?.faqs) && service.faqs.length > 0) ? service.faqs : (pageSettings?.faqs || []);
+  const serviceFaqs = (Array.isArray(service?.faqs) && service.faqs.length > 0)
+    ? service.faqs
+    : (Array.isArray(pageSettings?.faqs) && pageSettings.faqs.length > 0)
+    ? pageSettings.faqs
+    : DEFAULT_SERVICE_FAQS;
 
   const serviceSchemas: any[] = [];
   if (service) {
@@ -95,7 +146,7 @@ export default function ServiceDetail() {
     customSchemaJson: service?.customSchema || ""
   });
 
-  if (isLoading && !service) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white">
         <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -228,9 +279,7 @@ export default function ServiceDetail() {
     ? service.howItWorksSteps
     : defaultSteps;
 
-  const faqsList = (Array.isArray(service.faqs) && service.faqs.length > 0)
-    ? service.faqs
-    : (pageSettings?.faqs || []);
+  const faqsList = serviceFaqs;
 
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">

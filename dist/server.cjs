@@ -3079,20 +3079,6 @@ async function startServer() {
     if (nextHandler) {
       return nextHandler(req, res);
     }
-    const cleanPath = (req.path || "/").split("?")[0].replace(/^\/+|\/+$/g, "");
-    const nextPagesDir = import_path.default.join(process.cwd(), ".next", "server", "pages");
-    const candidateFiles = [
-      import_path.default.join(nextPagesDir, cleanPath ? `${cleanPath}.html` : "index.html"),
-      import_path.default.join(nextPagesDir, cleanPath, "index.html"),
-      import_path.default.join(process.cwd(), "dist", "index.html"),
-      import_path.default.join(process.cwd(), "index.html")
-    ];
-    for (const f of candidateFiles) {
-      if (import_fs.default.existsSync(f)) {
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        return res.send(import_fs.default.readFileSync(f, "utf8"));
-      }
-    }
     next();
   });
   app.listen(PORT, "0.0.0.0", () => {

@@ -4042,29 +4042,11 @@ Thank you for choosing ${ws.business_name}!`;
                             console.error("[MODE] Failed to initialize Next.js engine:", err);
                           }
 
-                          // Next.js handles all page requests with static prerendered HTML fallback
+                          // Next.js handles all page requests
                           app.all("*", (req, res, next) => {
                             if (nextHandler) {
                               return nextHandler(req, res);
                             }
-
-                            // Prerendered HTML fallback if nextHandler is not ready
-                            const cleanPath = (req.path || "/").split("?")[0].replace(/^\/+|\/+$/g, "");
-                            const nextPagesDir = path.join(process.cwd(), ".next", "server", "pages");
-                            const candidateFiles = [
-                              path.join(nextPagesDir, cleanPath ? `${cleanPath}.html` : "index.html"),
-                              path.join(nextPagesDir, cleanPath, "index.html"),
-                              path.join(process.cwd(), "dist", "index.html"),
-                              path.join(process.cwd(), "index.html")
-                            ];
-
-                            for (const f of candidateFiles) {
-                              if (fs.existsSync(f)) {
-                                res.setHeader("Content-Type", "text/html; charset=utf-8");
-                                return res.send(fs.readFileSync(f, "utf8"));
-                              }
-                            }
-
                             next();
                           });
 

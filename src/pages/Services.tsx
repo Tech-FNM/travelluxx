@@ -181,10 +181,23 @@ const DEFAULT_FAQS = [
   },
 ];
 
-export default function Services() {
-  const { settings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
-  const services = ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES;
-  const pageSettings = ctxPageSettings;
+interface ServicesProps {
+  initialServices?: any[];
+  initialPageSettings?: any;
+  initialSettings?: any;
+}
+
+export default function Services({
+  initialServices,
+  initialPageSettings,
+  initialSettings,
+}: ServicesProps = {}) {
+  const { settings: ctxSettings, services: ctxServices, servicesPageSettings: ctxPageSettings } = useSettings();
+  const settings = initialSettings || ctxSettings;
+  const services = (initialServices && initialServices.length > 0)
+    ? initialServices
+    : (ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES);
+  const pageSettings = initialPageSettings || ctxPageSettings;
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // SEO Meta Tags & Document Title

@@ -7,7 +7,22 @@
     "metaTitle": "Privacy Policy | Travelluxx Private Hire",
     "metaDescription": "Read Travelluxx privacy policy and data collection terms.",
     "published": true,
-    "updatedAt": "2026-10-30T18:47:39.958Z"
+    "updatedAt": "2026-10-30T18:47:39.958Z",
+    "faqTitle": "Privacy & Data Protection FAQ",
+    "faqs": [
+      {
+        "question": "What personal information does TravelLuxx collect when booking?",
+        "answer": "We only collect essential passenger information required to complete your booking, including your name, contact phone number, email address, and pickup/destination addresses."
+      },
+      {
+        "question": "How is payment and credit card information secured?",
+        "answer": "All payments are processed securely through PCI-DSS compliant payment gateways (such as Mollie). TravelLuxx does not store full credit or debit card numbers on our servers."
+      },
+      {
+        "question": "Is my journey history shared with any third parties?",
+        "answer": "No. TravelLuxx maintains strict confidentiality and never sells or discloses your travel history or personal details to third parties for marketing purposes."
+      }
+    ]
   },
   {
     "id": "page-2",
@@ -15,6 +30,21 @@
     "title": "Terms & Conditions",
     "content": "<h2>Terms & Conditions</h2><p>Welcome to Travelluxx. By accessing or using our chauffeur booking services, you agree to be bound by these terms.</p><h3>Bookings & Cancellations</h3><p>All bookings must be confirmed in advance. Cancellations made 24 hours prior to travel receive full refund.</p>",
     "metaTitle": "Terms & Conditions | Travelluxx",
-    "metaDescription": "Terms and conditions for Travelluxx executive chauffeur bookings."
+    "metaDescription": "Terms and conditions for Travelluxx executive chauffeur bookings.",
+    "faqTitle": "Terms of Service FAQ",
+    "faqs": [
+      {
+        "question": "What is your cancellation and amendment policy?",
+        "answer": "Bookings may be cancelled or rescheduled free of charge up to 12 hours prior to your scheduled pickup time. Cancellations made inside 12 hours may be subject to a cancellation fee."
+      },
+      {
+        "question": "How does complimentary airport waiting time work?",
+        "answer": "All airport pickups include 60 minutes of complimentary waiting time from the moment the aircraft touches down. Additional waiting time is charged at standard hourly rates."
+      },
+      {
+        "question": "Are luggage and personal belongings insured during the transfer?",
+        "answer": "Passengers luggage is transported under our comprehensive operator insurance policy. We ask all passengers to ensure delicate items are safely packed."
+      }
+    ]
   }
 ]

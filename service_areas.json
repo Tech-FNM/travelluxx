@@ -35,5 +35,141 @@
     "metaTitle": "Solihull Chauffeur & Airport Transfers | TravelLuxx",
     "metaDescription": "Book private chauffeur and airport transfers in Solihull with TravelLuxx. Comfortable door-to-door travel for airport, business and UK-wide journeys.",
     "noIndexNoFollow": false
+  },
+  {
+    "id": "service-area-chauffeur-solihull",
+    "title": "Chauffeur Solihull",
+    "slug": "chauffeur-solihull",
+    "heroBadge": "SOLIHULL & WEST MIDLANDS",
+    "heroTitle": "Luxury Chauffeur Services in Solihull",
+    "heroDescription": "Executive door-to-door private hire and airport transfers in Solihull. Immaculate Mercedes vehicles and professional chauffeurs.",
+    "heroImage": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    "heroButtonText": "Calculate Quote",
+    "heroButtonUrl": "/#calculator-section",
+    "content": "<h2>Solihull Luxury Chauffeur & Airport Transfers</h2><p>TravelLuxx provides premium chauffeur services throughout Solihull and the surrounding West Midlands.</p>",
+    "faqTitle": "Frequently Asked Questions - Solihull Chauffeur",
+    "faqs": [
+      {
+        "question": "Can I book an airport transfer in Solihull?",
+        "answer": "Yes. TravelLuxx provides pre-booked airport transfers in Solihull and surrounding regions to Birmingham Airport (BHX), Heathrow (LHR), Gatwick (LGW), Luton (LTN), and Manchester (MAN)."
+      },
+      {
+        "question": "Do you provide real-time flight tracking for Solihull airport pickups?",
+        "answer": "Yes. All airport arrivals booked from or to Solihull include real-time flight tracking and 60 minutes of complimentary waiting time after landing."
+      },
+      {
+        "question": "Can I hire an executive chauffeur for business meetings in Solihull?",
+        "answer": "Absolutely. We provide punctual, discreet corporate chauffeur services across Solihull for executive appointments, business lunches, and conferences."
+      },
+      {
+        "question": "Are TravelLuxx prices for Solihull fixed upfront?",
+        "answer": "Yes, all our fares in Solihull are fixed at the time of reservation. There are no surge prices, meter charges, or hidden fees."
+      }
+    ],
+    "published": true,
+    "metaTitle": "Chauffeur Solihull | Luxury Transfers & Airport Travel | TravelLuxx",
+    "metaDescription": "Book executive chauffeur hire and airport transfers in Solihull with TravelLuxx. Fixed rates, Mercedes fleet, professional drivers."
+  },
+  {
+    "id": "service-area-birmingham",
+    "title": "Birmingham",
+    "slug": "birmingham",
+    "heroBadge": "BIRMINGHAM & MIDLANDS",
+    "heroTitle": "Executive Chauffeur Service Birmingham",
+    "heroDescription": "First-class chauffeur service across Birmingham, Solihull, and the West Midlands. Fixed rates to all major UK airports and intercity travel.",
+    "heroImage": "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85",
+    "heroButtonText": "Book Chauffeur",
+    "heroButtonUrl": "/#calculator-section",
+    "content": "<h2>Chauffeur Service Birmingham & Nationwide Transfers</h2><p>TravelLuxx is Birmingham's leading luxury private hire and executive transfer service.</p>",
+    "faqTitle": "Frequently Asked Questions - Birmingham Chauffeur",
+    "faqs": [
+      {
+        "question": "Can I book an airport transfer in Birmingham?",
+        "answer": "Yes. TravelLuxx provides pre-booked airport transfers in Birmingham and surrounding regions to Birmingham Airport (BHX), Heathrow (LHR), Gatwick (LGW), Luton (LTN), and Manchester (MAN)."
+      },
+      {
+        "question": "Do you provide real-time flight tracking for Birmingham airport pickups?",
+        "answer": "Yes. All airport arrivals booked from or to Birmingham include real-time flight tracking and 60 minutes of complimentary waiting time after landing."
+      },
+      {
+        "question": "Can I hire an executive chauffeur for business meetings in Birmingham?",
+        "answer": "Absolutely. We provide punctual, discreet corporate chauffeur services across Birmingham for executive appointments, business lunches, and conferences."
+      },
+      {
+        "question": "Are TravelLuxx prices for Birmingham fixed upfront?",
+        "answer": "Yes, all our fares in Birmingham are fixed at the time of reservation. There are no surge prices, meter charges, or hidden fees."
+      }
+    ],
+    "published": true,
+    "metaTitle": "Chauffeur Service Birmingham | Luxury Airport Transfers | TravelLuxx",
+    "metaDescription": "Premium private hire and chauffeur service in Birmingham. Fixed prices, executive fleet, and flight monitoring."
+  },
+  {
+    "id": "service-area-coventry",
+    "title": "Coventry",
+    "slug": "coventry",
+    "heroBadge": "COVENTRY & WARWICKSHIRE",
+    "heroTitle": "Luxury Chauffeur Service Coventry",
+    "heroDescription": "Professional private hire and airport transfers serving Coventry, Kenilworth, and Warwickshire.",
+    "heroImage": "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=2000&q=85",
+    "heroButtonText": "Get Quote",
+    "heroButtonUrl": "/#calculator-section",
+    "content": "<h2>Coventry Chauffeur & Airport Transport</h2><p>Seamless door-to-door executive chauffeur travel across Coventry and the Midlands.</p>",
+    "faqTitle": "Frequently Asked Questions - Coventry Chauffeur",
+    "faqs": [
+      {
+        "question": "Can I book an airport transfer in Coventry?",
+        "answer": "Yes. TravelLuxx provides pre-booked airport transfers in Coventry and surrounding regions to Birmingham Airport (BHX), Heathrow (LHR), Gatwick (LGW), Luton (LTN), and Manchester (MAN)."
+      },
+      {
+        "question": "Do you provide real-time flight tracking for Coventry airport pickups?",
+        "answer": "Yes. All airport arrivals booked from or to Coventry include real-time flight tracking and 60 minutes of complimentary waiting time after landing."
+      },
+      {
+        "question": "Can I hire an executive chauffeur for business meetings in Coventry?",
+        "answer": "Absolutely. We provide punctual, discreet corporate chauffeur services across Coventry for executive appointments, business lunches, and conferences."
+      },
+      {
+        "question": "Are TravelLuxx prices for Coventry fixed upfront?",
+        "answer": "Yes, all our fares in Coventry are fixed at the time of reservation. There are no surge prices, meter charges, or hidden fees."
+      }
+    ],
+    "published": true,
+    "metaTitle": "Chauffeur Coventry | Airport Transfers & Executive Travel | TravelLuxx",
+    "metaDescription": "Reliable executive chauffeur service in Coventry. Fixed fares and luxury Mercedes fleet."
+  },
+  {
+    "id": "service-area-warwickshire",
+    "title": "Warwickshire",
+    "slug": "warwickshire",
+    "heroBadge": "WARWICKSHIRE & COTSWOLDS",
+    "heroTitle": "Chauffeur Service Warwickshire",
+    "heroDescription": "Luxury travel across Warwickshire, Leamington Spa, Warwick, and Stratford-upon-Avon.",
+    "heroImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=2000&q=85",
+    "heroButtonText": "Book Transfer",
+    "heroButtonUrl": "/#calculator-section",
+    "content": "<h2>Warwickshire Executive Chauffeur Service</h2><p>Discreet luxury private hire throughout Warwickshire and surrounding regions.</p>",
+    "faqTitle": "Frequently Asked Questions - Warwickshire Chauffeur",
+    "faqs": [
+      {
+        "question": "Can I book an airport transfer in Warwickshire?",
+        "answer": "Yes. TravelLuxx provides pre-booked airport transfers in Warwickshire and surrounding regions to Birmingham Airport (BHX), Heathrow (LHR), Gatwick (LGW), Luton (LTN), and Manchester (MAN)."
+      },
+      {
+        "question": "Do you provide real-time flight tracking for Warwickshire airport pickups?",
+        "answer": "Yes. All airport arrivals booked from or to Warwickshire include real-time flight tracking and 60 minutes of complimentary waiting time after landing."
+      },
+      {
+        "question": "Can I hire an executive chauffeur for business meetings in Warwickshire?",
+        "answer": "Absolutely. We provide punctual, discreet corporate chauffeur services across Warwickshire for executive appointments, business lunches, and conferences."
+      },
+      {
+        "question": "Are TravelLuxx prices for Warwickshire fixed upfront?",
+        "answer": "Yes, all our fares in Warwickshire are fixed at the time of reservation. There are no surge prices, meter charges, or hidden fees."
+      }
+    ],
+    "published": true,
+    "metaTitle": "Chauffeur Service Warwickshire | TravelLuxx Executive Hire",
+    "metaDescription": "Executive private hire and airport transfers in Warwickshire. Fixed prices and luxury vehicles."
   }
 ]

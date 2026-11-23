@@ -4,11 +4,34 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 
-export default function BlogPostDetail() {
-  const { slug } = useParams<{ slug: string }>();
-  const { settings, posts, isLoading: loading } = useSettings();
+const DEFAULT_BLOG_FAQS = [
+  {
+    question: "What makes executive chauffeur travel different from a standard taxi?",
+    answer:
+      "Our executive chauffeur services feature premium Mercedes-Benz vehicles, impeccably presented DBS-checked chauffeurs, complimentary in-cabin amenities, and fixed pricing without metered rates or surge fees.",
+  },
+  {
+    question: "How far in advance should I book my airport chauffeur?",
+    answer:
+      "We recommend booking at least 12 to 24 hours in advance to guarantee vehicle allocation, though same-day urgent bookings can also be arranged.",
+  },
+];
 
-  const post = posts.find((p: any) => p.slug === slug || p.id === slug);
+interface BlogPostDetailProps {
+  initialPost?: any;
+  initialSettings?: any;
+}
+
+export default function BlogPostDetail({
+  initialPost,
+  initialSettings,
+}: BlogPostDetailProps = {}) {
+  const { slug } = useParams<{ slug: string }>();
+  const { settings: ctxSettings, posts, isLoading: ctxLoading } = useSettings();
+  const settings = initialSettings || ctxSettings;
+  const post = initialPost || posts.find((p: any) => p.slug === slug || p.id === slug);
+  const loading = !initialPost && ctxLoading;
+  const postFaqs = (Array.isArray(post?.faqs) && post.faqs.length > 0) ? post.faqs : DEFAULT_BLOG_FAQS;
 
   // Set SEO meta tags and Schema
   useEffect(() => {
@@ -104,11 +127,11 @@ export default function BlogPostDetail() {
         }
       ];
 
-      if (post.faqs && post.faqs.length > 0) {
+      if (postFaqs && postFaqs.length > 0) {
         schemas.push({
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          "mainEntity": post.faqs.map((f: any) => ({
+          "mainEntity": postFaqs.map((f: any) => ({
             "@type": "Question",
             "name": f.question,
             "acceptedAnswer": {
@@ -202,11 +225,11 @@ export default function BlogPostDetail() {
               </div>
 
               {/* FAQs Section */}
-              {post.faqs && post.faqs.length > 0 && (
+              {postFaqs && postFaqs.length > 0 && (
                 <div className="mt-12 pt-8 border-t border-slate-200">
                   <h2 className="font-serif text-2xl font-semibold mb-6 text-slate-900">Frequently Asked Questions</h2>
                   <div className="space-y-4">
-                    {post.faqs.map((faq: any, idx: number) => (
+                    {postFaqs.map((faq: any, idx: number) => (
                       <div 
                         key={idx} 
                         className="bg-white border border-slate-200/60 hover:border-emerald-200 p-5 rounded-xl transition duration-300 hover:shadow-md hover:shadow-emerald-600/5 group"

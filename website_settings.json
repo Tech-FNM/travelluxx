@@ -42,5 +42,30 @@
   "service_title_5": "Business Travel",
   "service_desc_5": "Our chauffeur service Birmingham gives executives and corporate teams punctual, professional and discreet travel.",
   "seo_title": "Private Hire Birmingham | Airport Transfers & Chauffeurs | TravelLuxx",
-  "seo_description": "Book premium private hire Birmingham with fixed fares, no surge pricing and Mercedes-Benz and Audi vehicles. Airport, station and business transfers nationwide."
+  "seo_description": "Book premium private hire Birmingham with fixed fares, no surge pricing and Mercedes-Benz and Audi vehicles. Airport, station and business transfers nationwide.",
+  "homepage_faqs": [
+    {
+      "question": "How do I book an executive transfer with TravelLuxx?",
+      "answer": "You can book easily online using our instant Fare Calculator above, select your desired vehicle class (Economy, Luxury, or Family MPV), specify your pickup time and date, and complete your reservation with instant confirmation."
+    },
+    {
+      "question": "Do you provide flight monitoring for airport pickups?",
+      "answer": "Yes, our team actively monitors all inbound commercial flights in real-time. Whether your flight is delayed or lands early, your chauffeur will adjust their schedule accordingly and meet you inside the terminal with a name board."
+    },
+    {
+      "question": "What vehicle classes are available?",
+      "answer": "We offer Mercedes-Benz E-Class & S-Class executive sedans for up to 4 passengers, and Mercedes V-Class / luxury multi-passenger vehicles (MPVs) for families and business groups carrying up to 7-8 passengers and substantial luggage."
+    },
+    {
+      "question": "Can I apply a promo code or discount voucher?",
+      "answer": "Yes! At Step 3 (Secure Checkout) in our Booking Calculator, you can enter your promo code in the discount field and click Apply to instantly receive your calculated savings before confirming your reservation."
+    },
+    {
+      "question": "What payment methods do you accept?",
+      "answer": "We accept all major credit and debit cards, Apple Pay, Google Pay, and Klarna through our secure Mollie payments integration, as well as pre-authorized Cash on Departure / Pay Later options."
+    }
+  ],
+  "homepage_faq_title": "Frequently Asked Questions",
+  "homepage_faq_subtitle": "Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process.",
+  "homepage_faq_badge": "FAQ & Information"
 }

@@ -3,7 +3,7 @@ import { Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
-import { MapPin, ChevronRight } from "lucide-react";
+import { MapPin, ChevronRight, ChevronDown, HelpCircle } from "lucide-react";
 
 type ServiceArea = {
   id: string;
@@ -23,11 +23,46 @@ type ServiceArea = {
   published?: boolean;
 };
 
-export default function ServiceAreas() {
-  const { settings } = useSettings();
-  const [areas, setAreas] = useState<ServiceArea[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pageSettings, setPageSettings] = useState<any>({
+const SERVICE_AREAS_FAQS = [
+  {
+    question: "Which areas and regions across the UK does TravelLuxx cover?",
+    answer:
+      "TravelLuxx provides executive chauffeur hire and airport transfers across Solihull, Birmingham, Coventry, Warwickshire, and connects passengers to all UK airports and major cities nationwide.",
+  },
+  {
+    question: "Can I book a transfer starting or ending outside your listed service areas?",
+    answer:
+      "Yes, our private hire license covers nationwide pre-booked journeys. Whether you need an intercity transfer to London, Manchester, or Southampton cruise ports, we provide door-to-door service.",
+  },
+  {
+    question: "Are your fares fixed regardless of the service area?",
+    answer:
+      "Yes, every journey is calculated on a 100% fixed-rate basis at the time of booking. There are no surprise meter charges, surge pricing, or hidden fees.",
+  },
+  {
+    question: "How do I book an executive transfer in my area?",
+    answer:
+      "You can book instantly online using our instant Fare Calculator, or get in touch with our 24/7 team via WhatsApp or phone for bespoke itineraries and multi-stop journeys.",
+  },
+];
+
+interface ServiceAreasProps {
+  initialAreas?: ServiceArea[];
+  initialPageSettings?: any;
+  initialSettings?: any;
+}
+
+export default function ServiceAreas({
+  initialAreas,
+  initialPageSettings,
+  initialSettings,
+}: ServiceAreasProps = {}) {
+  const { settings: ctxSettings } = useSettings();
+  const settings = initialSettings || ctxSettings;
+  const [areas, setAreas] = useState<ServiceArea[]>(initialAreas || []);
+  const [loading, setLoading] = useState(!initialAreas || initialAreas.length === 0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [pageSettings, setPageSettings] = useState<any>(initialPageSettings || {
     hero_enabled: true,
     hero_tag: "SERVICE AREAS",
     hero_title: "Explore TravelLuxx Service Areas Across the UK",
@@ -45,6 +80,12 @@ export default function ServiceAreas() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
+    if (initialAreas && initialAreas.length > 0) {
+      setAreas(initialAreas);
+      setLoading(false);
+      return;
+    }
+
     // Fetch Areas
     fetch("/api/service-areas")
       .then(res => res.json())
@@ -58,10 +99,12 @@ export default function ServiceAreas() {
     fetch("/api/service-areas-page-settings")
       .then(res => res.json())
       .then(data => {
-        if (data && !data.error) setPageSettings((prev: any) => ({ ...prev, ...data }));
+        if (data && typeof data === "object") {
+          setPageSettings((prev: any) => ({ ...prev, ...data }));
+        }
       })
       .catch(err => console.error("Error loading service areas page settings:", err));
-  }, []);
+  }, [initialAreas]);
 
   // SEO Meta Tags
   useEffect(() => {
@@ -179,6 +222,74 @@ export default function ServiceAreas() {
               ))}
             </div>
           )}
+
+        {/* Service Areas FAQs */}
+        <section className="mt-20 pt-16 border-t border-white/10 max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+              <HelpCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Service Coverage FAQs</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-3 text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Common questions about our executive chauffeur coverage, airport transfers, and private hire service areas.
+            </p>
+          </div>
+
+          <div className="space-y-3.5">
+            {SERVICE_AREAS_FAQS.map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              const questionId = `service-areas-faq-q-${index}`;
+              const answerId = `service-areas-faq-a-${index}`;
+              return (
+                <div
+                  key={faq.question}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? "border-emerald-500/50 bg-[#12141c] shadow-lg shadow-emerald-500/5"
+                      : "border-slate-800/80 bg-[#0d0e14] hover:border-slate-700"
+                  }`}
+                >
+                  <h3 className="m-0 p-0 text-inherit font-inherit leading-none">
+                    <button
+                      type="button"
+                      id={questionId}
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                      className={`w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold transition ${
+                        isOpen ? "text-emerald-400" : "text-white hover:text-slate-200"
+                      }`}
+                    >
+                      <span className="text-base sm:text-lg leading-snug">{faq.question}</span>
+                      <div
+                        className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                          isOpen
+                            ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
+                            : "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
+                        }`}
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </div>
+                    </button>
+                  </h3>
+                  <div
+                    id={answerId}
+                    role="region"
+                    aria-labelledby={questionId}
+                    className={`px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t border-slate-800/60 text-slate-300 ${
+                      isOpen ? "block" : "hidden"
+                    }`}
+                  >
+                    <p className="whitespace-pre-line">{faq.answer}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         </div>
       </main>

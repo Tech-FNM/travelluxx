@@ -91,7 +91,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         const cached = localStorage.getItem("travelluxx_cached_settings");
         if (cached) return JSON.parse(cached);
       }
-    } catch (e) {}
+    } catch (e) { }
     return DEFAULT_FALLBACK_SETTINGS;
   });
   const [pages, setPages] = useState<any[]>(() => {
@@ -100,7 +100,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         const cached = localStorage.getItem("travelluxx_cached_pages");
         if (cached) return JSON.parse(cached);
       }
-    } catch (e) {}
+    } catch (e) { }
     return [];
   });
   const [services, setServices] = useState<any[]>(() => {
@@ -109,7 +109,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         const cached = localStorage.getItem("travelluxx_cached_services");
         if (cached) return JSON.parse(cached);
       }
-    } catch (e) {}
+    } catch (e) { }
     return [];
   });
   const [posts, setPosts] = useState<any[]>([]);
@@ -123,7 +123,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           if (Array.isArray(parsed) && parsed.length > 0) return parsed;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return [
       { id: "nav-home", label: "Home", href: "/", target: "_self" },
       {
@@ -182,7 +182,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             try {
               const fb = await fetch(fallbackUrl);
               if (fb.ok) return await fb.json();
-            } catch (e) {}
+            } catch (e) { }
           }
           return null;
         }
@@ -193,7 +193,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             try {
               const fb = await fetch(fallbackUrl);
               if (fb.ok) return await fb.json();
-            } catch (err) {}
+            } catch (err) { }
           }
           return null;
         }
@@ -219,7 +219,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setSettings(settingsData);
         try {
           localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
-        } catch (e) {}
+        } catch (e) { }
       }
       setPages(Array.isArray(pagesData) ? pagesData : []);
       setServices(Array.isArray(servicesData) ? servicesData : []);
@@ -229,7 +229,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setMenuItems(menuItemsData);
         try {
           localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
-        } catch (e) {}
+        } catch (e) { }
       } else {
         // Fallback default menu items if empty
         const defaultMenu = [
@@ -241,16 +241,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             target: "_self",
             children: Array.isArray(servicesData) && servicesData.length > 0
               ? servicesData.map((s: any) => ({
-                  id: `srv-${s.slug}`,
-                  label: s.title || s.name || s.slug,
-                  href: `/services/${s.slug}`,
-                  target: "_self"
-                }))
+                id: `srv-${s.slug}`,
+                label: s.title || s.name || s.slug,
+                href: `/services/${s.slug}`,
+                target: "_self"
+              }))
               : [
-                  { id: "srv-airport-transfers", label: "Airport Transfers", href: "/services/airport-transfers", target: "_self" },
-                  { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
-                  { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
-                ]
+                { id: "srv-airport-transfers", label: "Airport Transfers", href: "/services/airport-transfers", target: "_self" },
+                { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+                { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+              ]
           },
           {
             id: "nav-service-areas",
@@ -288,9 +288,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <SettingsContext.Provider value={{ 
-      settings, pages, services, posts, servicesPageSettings, menuItems, 
-      isLoading, refreshSettings, updateSettingsLocally 
+    <SettingsContext.Provider value={{
+      settings, pages, services, posts, servicesPageSettings, menuItems,
+      isLoading, refreshSettings, updateSettingsLocally
     }}>
       {children}
     </SettingsContext.Provider>

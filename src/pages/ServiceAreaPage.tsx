@@ -6,16 +6,54 @@ import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 import { usePageSeo } from "../utils/seo";
 
-export default function ServiceAreaPage() {
+const DEFAULT_AREA_FAQS = [
+  {
+    question: "How do I book an airport transfer in this area?",
+    answer:
+      "You can book easily online using our instant Fare Calculator above. Enter your pickup address and desired airport, select your luxury vehicle, and receive instant confirmation.",
+  },
+  {
+    question: "Do you monitor flights for airport pickups?",
+    answer:
+      "Yes, our team monitors all inbound commercial flights in real-time. Whether your flight is early or delayed, your chauffeur will be waiting inside arrivals with a name board.",
+  },
+  {
+    question: "Are your prices fixed and all-inclusive?",
+    answer:
+      "Yes. All TravelLuxx fares are fixed upfront with zero hidden fees. Fuel, taxes, airport flight tracking, and standard waiting time are all included.",
+  },
+  {
+    question: "Can I book a private chauffeur for business travel or private events?",
+    answer:
+      "Yes, we provide flexible one-way, return, and full-day as-directed chauffeur hire for corporate meetings, private events, weddings, and long-distance UK journeys.",
+  },
+];
+
+interface ServiceAreaPageProps {
+  initialArea?: any;
+  initialSettings?: any;
+}
+
+export default function ServiceAreaPage({
+  initialArea,
+  initialSettings,
+}: ServiceAreaPageProps = {}) {
   const { slug } = useParams<{ slug: string }>();
-  const { settings, isLoading } = useSettings();
-  const [serviceArea, setServiceArea] = useState<any>(null);
-  const [areaLoading, setAreaLoading] = useState(true);
+  const { settings: ctxSettings, isLoading } = useSettings();
+  const settings = initialSettings || ctxSettings;
+  const [serviceArea, setServiceArea] = useState<any>(initialArea || null);
+  const [areaLoading, setAreaLoading] = useState(!initialArea);
   const [areaError, setAreaError] = useState("");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    if (initialArea && (initialArea.slug === slug || initialArea.id === slug)) {
+      setServiceArea(initialArea);
+      setAreaLoading(false);
+      return;
+    }
 
     let active = true;
     setAreaLoading(true);
@@ -39,7 +77,7 @@ export default function ServiceAreaPage() {
     return () => {
       active = false;
     };
-  }, [slug]);
+  }, [slug, initialArea]);
 
   // Compute schemas & SEO metadata
   const baseUrl = "https://travelluxx.co.uk";
@@ -48,7 +86,8 @@ export default function ServiceAreaPage() {
   const description = serviceArea?.metaDescription || serviceArea?.ogDescription || serviceArea?.heroDescription || "Private chauffeur travel and airport transfers tailored around your location and schedule.";
   const ogImage = serviceArea?.ogImage || serviceArea?.heroImage || "";
   const validFaqs = useMemo(() => {
-    return (Array.isArray(serviceArea?.faqs) ? serviceArea.faqs : []).filter((f: any) => f && (f.question || f.answer));
+    const list = (Array.isArray(serviceArea?.faqs) ? serviceArea.faqs : []).filter((f: any) => f && (f.question || f.answer));
+    return list.length > 0 ? list : DEFAULT_AREA_FAQS;
   }, [serviceArea]);
 
   const pageSchemas = useMemo(() => {

@@ -4,8 +4,13 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 
-export default function BlogList() {
-  const { posts, isLoading: loading } = useSettings();
+interface BlogListProps {
+  initialPosts?: any[];
+}
+
+export default function BlogList({ initialPosts }: BlogListProps = {}) {
+  const { posts: ctxPosts, isLoading: loading } = useSettings();
+  const posts = (initialPosts && initialPosts.length > 0) ? initialPosts : ctxPosts;
 
 
 

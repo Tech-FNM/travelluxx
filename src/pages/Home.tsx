@@ -12,10 +12,11 @@ import GoogleReviewsSection from "../components/GoogleReviewsSection";
 import { trackVisit, trackClick } from "../utils/analytics";
 import { useSettings } from "../context/SettingsContext";
 
-export default function Home() {
+export default function Home({ initialSettings }: { initialSettings?: any } = {}) {
   const [calculatorPickup, setCalculatorPickup] = useState("");
   const [calculatorDropoff, setCalculatorDropoff] = useState("");
-  const { settings, isLoading, updateSettingsLocally } = useSettings();
+  const { settings: ctxSettings, isLoading, updateSettingsLocally } = useSettings();
+  const settings = initialSettings || ctxSettings;
   const [homepageContent, setHomepageContent] = useState<any>(null);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function Home() {
   if (settings.homepage_displays === "page") {
     return (
       <div className="min-h-screen bg-white text-slate-800 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
-        <Navbar onScrollTo={() => {}} />
+        <Navbar onScrollTo={() => { }} />
         <main className="flex-grow max-w-4xl mx-auto px-6 py-28 w-full">
           {!homepageContent ? (
             <div className="text-center py-20 text-slate-400">Loading home...</div>
@@ -78,7 +79,7 @@ export default function Home() {
             </div>
           )}
         </main>
-        <Footer onScrollTo={() => {}} />
+        <Footer onScrollTo={() => { }} />
       </div>
     );
   }

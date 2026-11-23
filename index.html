@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" id="site-favicon" />
 
-    <!-- Structured Data / JSON-LD Schemas -->
-    <script type="application/ld+json">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" id="site-favicon" />
+
+  <!-- Structured Data / JSON-LD Schemas -->
+  <script type="application/ld+json">
     [
       {
         "@context": "https://schema.org",
@@ -96,8 +97,8 @@
     ]
     </script>
 
-    <!-- FAQPage JSON-LD Schema Markup -->
-    <script type="application/ld+json">
+  <!-- FAQPage JSON-LD Schema Markup -->
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -146,96 +147,118 @@
     }
     </script>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Mapbox GL CSS -->
-    <link href='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css' rel='stylesheet' />
-    <!-- Leaflet Map CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  </head>
-  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950">
-    <div id="root">
-      <header class="py-6 px-4 max-w-7xl mx-auto flex items-center justify-between">
-        <a href="/" class="text-xl font-bold tracking-tight text-white">TravelLuxx</a>
-        <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-300">
-          <a href="/">Home</a>
-          <a href="/services">Services</a>
-          <a href="/service-areas">Service Areas</a>
-          <a href="/blog">Blog</a>
-        </nav>
-      </header>
-      <main>
-        <section class="py-16 text-center max-w-4xl mx-auto px-4">
-          <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight uppercase">
-            Private Hire Birmingham – Nationwide Airport Transfers
-          </h1>
-          <p class="mt-4 text-slate-300 text-base sm:text-lg">
-            Experience premium private travel in beautifully presented Mercedes-Benz and Audi vehicles. Every journey comes with a fixed rate and absolutely no surge pricing.
-          </p>
-        </section>
-        <section id="faq" class="py-20 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-900">
-          <div class="text-center mb-12 sm:mb-16">
-            <span class="inline-block text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3">FAQ &amp; Information</span>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">Frequently Asked Questions</h2>
-            <p class="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto">Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process.</p>
-          </div>
-          <div class="space-y-4">
-            <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
-              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">How do I book an executive transfer with TravelLuxx?</h3>
-              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">You can book easily online using our instant Fare Calculator above, select your desired vehicle class (Economy, Luxury, or Family MPV), specify your pickup time and date, and complete your reservation with instant confirmation.</p>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
-              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">Do you provide flight monitoring for airport pickups?</h3>
-              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Yes, our team actively monitors all inbound commercial flights in real-time. Whether your flight is delayed or lands early, your chauffeur will adjust their schedule accordingly and meet you inside the terminal with a name board.</p>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
-              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">What vehicle classes are available?</h3>
-              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">We offer Mercedes-Benz E-Class &amp; S-Class executive sedans for up to 4 passengers, and Mercedes V-Class / luxury multi-passenger vehicles (MPVs) for families and business groups carrying up to 7-8 passengers and substantial luggage.</p>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
-              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">Can I apply a promo code or discount voucher?</h3>
-              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Yes! At Step 3 (Secure Checkout) in our Booking Calculator, you can enter your promo code in the discount field and click 'Apply' to instantly receive your calculated savings before confirming your reservation.</p>
-            </div>
-            <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
-              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">What payment methods do you accept?</h3>
-              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">We accept all major credit and debit cards, Apple Pay, Google Pay, and Klarna through our secure Mollie payments integration, as well as pre-authorized Cash on Departure / Pay Later options.</p>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-    <!-- Global Google Maps Error & Watermark Suppression -->
-    <script>
-      window.gm_authFailure = function() {
-        console.warn("Google Maps notice handled.");
-      };
-      if (typeof window !== "undefined") {
-        function suppressGoogleOverlays() {
-          const errModal = document.querySelector('.gm-err-container, .dismissButton');
-          if (errModal) {
-            const btn = document.querySelector('.dismissButton');
-            if (btn) {
-              try { btn.click(); } catch(e) {}
-            }
-            try { errModal.remove(); } catch(e) {}
-          }
-          const pbc = document.querySelectorAll('.gm-style-pbc, .gm-style-pbt, .gm-style-moc');
-          pbc.forEach(function(el) {
-            el.style.setProperty('display', 'none', 'important');
-          });
-        }
-        const observer = new MutationObserver(suppressGoogleOverlays);
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-        setInterval(suppressGoogleOverlays, 300);
-      }
-    </script>
-    <!-- Leaflet Map JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <!-- Google Maps Platform JavaScript API (disabled for purana map) -->
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoifKToOK0u8KPcYS8FhvAMVMSHYSKVdE&libraries=places,geometry"></script> -->
-    <script type="module" src="./src/main.tsx"></script>
-  </body>
-</html>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Mapbox GL CSS -->
+  <link href='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css' rel='stylesheet' />
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
 
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950">
+  <div id="root">
+    <header class="py-6 px-4 max-w-7xl mx-auto flex items-center justify-between">
+      <a href="/" class="text-xl font-bold tracking-tight text-white">TravelLuxx</a>
+      <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-300">
+        <a href="/">Home</a>
+        <a href="/services">Services</a>
+        <a href="/service-areas">Service Areas</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+    <main>
+      <section class="py-16 text-center max-w-4xl mx-auto px-4">
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight uppercase">
+          Private Hire Birmingham – Nationwide Airport Transfers
+        </h1>
+        <p class="mt-4 text-slate-300 text-base sm:text-lg">
+          Experience premium private travel in beautifully presented Mercedes-Benz and Audi vehicles. Every journey
+          comes with a fixed rate and absolutely no surge pricing.
+        </p>
+      </section>
+      <section id="faq" class="py-20 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-900">
+        <div class="text-center mb-12 sm:mb-16">
+          <span class="inline-block text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3">FAQ &amp;
+            Information</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">Frequently Asked
+            Questions</h2>
+          <p class="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto">Everything you need to know about our
+            chauffeur services, airport transfers, vehicle fleet, and booking process.</p>
+        </div>
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-white mb-2">How do I book an executive transfer with
+              TravelLuxx?</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">You can book easily online using our instant
+              Fare Calculator above, select your desired vehicle class (Economy, Luxury, or Family MPV), specify your
+              pickup time and date, and complete your reservation with instant confirmation.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-white mb-2">Do you provide flight monitoring for airport
+              pickups?</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Yes, our team actively monitors all inbound
+              commercial flights in real-time. Whether your flight is delayed or lands early, your chauffeur will adjust
+              their schedule accordingly and meet you inside the terminal with a name board.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-white mb-2">What vehicle classes are available?</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">We offer Mercedes-Benz E-Class &amp; S-Class
+              executive sedans for up to 4 passengers, and Mercedes V-Class / luxury multi-passenger vehicles (MPVs) for
+              families and business groups carrying up to 7-8 passengers and substantial luggage.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-white mb-2">Can I apply a promo code or discount voucher?
+            </h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Yes! At Step 3 (Secure Checkout) in our
+              Booking Calculator, you can enter your promo code in the discount field and click 'Apply' to instantly
+              receive your calculated savings before confirming your reservation.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-[#0d0e14] p-5 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-white mb-2">What payment methods do you accept?</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">We accept all major credit and debit cards,
+              Apple Pay, Google Pay, and Klarna through our secure Mollie payments integration, as well as
+              pre-authorized Cash on Departure / Pay Later options.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <!-- Global Google Maps Error & Watermark Suppression -->
+  <script>
+    window.gm_authFailure = function () {
+      console.warn("Google Maps notice handled.");
+    };
+    if (typeof window !== "undefined") {
+      function suppressGoogleOverlays() {
+        const errModal = document.querySelector('.gm-err-container, .dismissButton');
+        if (errModal) {
+          const btn = document.querySelector('.dismissButton');
+          if (btn) {
+            try { btn.click(); } catch (e) { }
+          }
+          try { errModal.remove(); } catch (e) { }
+        }
+        const pbc = document.querySelectorAll('.gm-style-pbc, .gm-style-pbt, .gm-style-moc');
+        pbc.forEach(function (el) {
+          el.style.setProperty('display', 'none', 'important');
+        });
+      }
+      const observer = new MutationObserver(suppressGoogleOverlays);
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+      setInterval(suppressGoogleOverlays, 300);
+    }
+  </script>
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Google Maps Platform JavaScript API (disabled for purana map) -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoifKToOK0u8KPcYS8FhvAMVMSHYSKVdE&libraries=places,geometry"></script> -->
+  <script type="module" src="./src/main.tsx"></script>
+</body>
+
+</html>

@@ -19,7 +19,29 @@
     "published": true,
     "order": 1,
     "metaTitle": "Luxury Airport Transfers UK | TravelLuxx Chauffeurs",
-    "metaDescription": "Book reliable airport transfers across Heathrow, Gatwick, Birmingham, Manchester & all UK airports with TravelLuxx. Fixed rates & flight monitoring."
+    "metaDescription": "Book reliable airport transfers across Heathrow, Gatwick, Birmingham, Manchester & all UK airports with TravelLuxx. Fixed rates & flight monitoring.",
+    "faqs": [
+      {
+        "question": "How do you monitor flight arrival times and delays?",
+        "answer": "We track all inbound commercial flights in real time using automated flight radar integration. If your flight arrives early or is delayed, your chauffeur will adjust their arrival accordingly so they are waiting when you land."
+      },
+      {
+        "question": "Where will I meet my chauffeur at the airport?",
+        "answer": "Your chauffeur will greet you inside the airport arrivals hall holding a personalized name board, assist you with your luggage, and escort you to your executive vehicle."
+      },
+      {
+        "question": "How much complimentary waiting time is included for airport pickups?",
+        "answer": "All airport pickups include 60 minutes of complimentary waiting time starting from the moment your aircraft touches down, giving you ample time to clear immigration and collect your luggage."
+      },
+      {
+        "question": "Can I book an airport transfer for early mornings or late nights?",
+        "answer": "Yes, our luxury airport chauffeur services operate 24 hours a day, 7 days a week, 365 days a year across all UK airports."
+      },
+      {
+        "question": "Which vehicle should I select for airport luggage capacity?",
+        "answer": "For 1 to 3 passengers with standard luggage, our Mercedes E-Class and S-Class sedans are ideal. For larger groups or families with 4 or more large suitcases, we recommend our spacious Mercedes V-Class MPV."
+      }
+    ]
   },
   {
     "id": "service-private-transfers",
@@ -41,7 +63,25 @@
     "published": true,
     "order": 2,
     "metaTitle": "Private Chauffeur Transfers UK | TravelLuxx",
-    "metaDescription": "Premium private door-to-door chauffeur transfers across the UK. Travel in executive luxury with TravelLuxx."
+    "metaDescription": "Premium private door-to-door chauffeur transfers across the UK. Travel in executive luxury with TravelLuxx.",
+    "faqs": [
+      {
+        "question": "What is included with a private door-to-door transfer?",
+        "answer": "Every private transfer includes dedicated door-to-door service in an immaculate executive vehicle, complimentary bottled water, in-car Wi-Fi, phone charging cables, and a licensed professional chauffeur."
+      },
+      {
+        "question": "Are private transfer prices fixed or metered?",
+        "answer": "All TravelLuxx fares are 100% fixed upfront. You will never experience metered surge pricing or unexpected traffic surcharges."
+      },
+      {
+        "question": "Can I add intermediate stops to my private transfer?",
+        "answer": "Yes. You can specify intermediate stops when booking online or by contacting our team. Your driver will follow your custom route precisely."
+      },
+      {
+        "question": "How far in advance do I need to book a private transfer?",
+        "answer": "We recommend booking at least 12 to 24 hours in advance to guarantee your preferred vehicle, but we also accommodate same-day urgent bookings subject to availability."
+      }
+    ]
   },
   {
     "id": "service-long-distance-travel",
@@ -63,7 +103,25 @@
     "published": true,
     "order": 3,
     "metaTitle": "Long Distance Chauffeur Service UK | TravelLuxx",
-    "metaDescription": "Direct, nationwide long-distance travel in executive comfort. Book comfortable intercity private transfers across the UK."
+    "metaDescription": "Direct, nationwide long-distance travel in executive comfort. Book comfortable intercity private transfers across the UK.",
+    "faqs": [
+      {
+        "question": "Do you provide nationwide long-distance transfers across the UK?",
+        "answer": "Yes, we provide comfortable, door-to-door long-distance chauffeur travel between any UK cities, towns, and regions including London, Birmingham, Manchester, Leeds, and Scotland."
+      },
+      {
+        "question": "Can we take rest and comfort breaks during the journey?",
+        "answer": "Absolutely. You have complete control over your schedule. Your chauffeur will happily pull into convenient service plazas or scenic spots whenever you wish to stretch your legs or grab a coffee."
+      },
+      {
+        "question": "Is the vehicle equipped for long-distance work and relaxation?",
+        "answer": "Yes. Our executive fleet features reclining leather seating, whisper-quiet cabin acoustics, dual-zone climate control, onboard Wi-Fi, and laptop charging ports."
+      },
+      {
+        "question": "Can I arrange a same-day or multi-day return trip?",
+        "answer": "Yes, we regularly cater for same-day return itineraries as well as multi-day chauffeur assignments across the UK."
+      }
+    ]
   },
   {
     "id": "service-business-travel",
@@ -85,7 +143,25 @@
     "published": true,
     "order": 4,
     "metaTitle": "Corporate Chauffeur & Business Travel UK | TravelLuxx",
-    "metaDescription": "Executive chauffeur transportation for meetings, corporate events, and VIP clients across the UK."
+    "metaDescription": "Executive chauffeur transportation for meetings, corporate events, and VIP clients across the UK.",
+    "faqs": [
+      {
+        "question": "Can we set up a corporate business account with invoicing?",
+        "answer": "Yes. We offer dedicated corporate accounts featuring monthly consolidated invoicing, priority booking access, and dedicated account manager support."
+      },
+      {
+        "question": "Are your chauffeurs trained in executive privacy and confidentiality?",
+        "answer": "All TravelLuxx chauffeurs are bound by strict non-disclosure terms, ensuring complete privacy and discretion for confidential phone calls, negotiations, and paperwork."
+      },
+      {
+        "question": "Can you handle multi-vehicle coordination for corporate events?",
+        "answer": "Yes, our events logistics team can manage simultaneous transport for dozens of delegates, executives, and VIP guests across multiple vehicles with real-time dispatch tracking."
+      },
+      {
+        "question": "What is the corporate cancellation policy?",
+        "answer": "We offer flexible cancellation policies for registered business accounts, allowing penalty-free changes up to 12 hours before scheduled departure."
+      }
+    ]
   },
   {
     "id": "service-family-transfers",
@@ -107,7 +183,25 @@
     "published": true,
     "order": 5,
     "metaTitle": "Family & Group Holiday Transfers UK | TravelLuxx",
-    "metaDescription": "Spacious luxury MPV transfers for families and groups across the UK. Large luggage capacity and child seats available."
+    "metaDescription": "Spacious luxury MPV transfers for families and groups across the UK. Large luggage capacity and child seats available.",
+    "faqs": [
+      {
+        "question": "Do you supply child and baby booster seats?",
+        "answer": "Yes! We provide complimentary age-appropriate child safety seats (infant rear-facing, toddler, and booster seats) professionally sanitized and installed before arrival. Simply request them during booking."
+      },
+      {
+        "question": "Which vehicle is best suited for family vacations?",
+        "answer": "Our Mercedes-Benz V-Class MPV is the ultimate family vehicle, offering generous seating for up to 7-8 passengers and cavernous boot space for 6-8 large suitcases plus folding pushchairs."
+      },
+      {
+        "question": "Are all TravelLuxx chauffeurs DBS-checked?",
+        "answer": "Yes. All our drivers hold enhanced DBS background checks, private hire council licensing, and extensive professional passenger driving experience."
+      },
+      {
+        "question": "Can we make child-friendly comfort stops along the way?",
+        "answer": "Of course! Our chauffeurs are exceptionally patient, courteous, and family-friendly, always ready to pause for feeding, restrooms, or fresh air."
+      }
+    ]
   },
   {
     "id": "service-luxury-travel",
@@ -129,7 +223,25 @@
     "published": true,
     "order": 6,
     "metaTitle": "VIP Luxury Chauffeur Service UK | TravelLuxx",
-    "metaDescription": "Unrivalled luxury chauffeur services in the UK. Flagship executive fleet for weddings, VIP events, and special occasions."
+    "metaDescription": "Unrivalled luxury chauffeur services in the UK. Flagship executive fleet for weddings, VIP events, and special occasions.",
+    "faqs": [
+      {
+        "question": "Which vehicles are available for luxury travel?",
+        "answer": "Our flagship luxury fleet includes the Mercedes-Benz S-Class long-wheelbase executive sedan and bespoke VIP Mercedes V-Class with luxury leather lounge seating."
+      },
+      {
+        "question": "What VIP amenities are included with luxury travel?",
+        "answer": "Luxury travel reservations include chilled bottled mineral water, luxury confectionery, climate control, charging cables for all devices, and an immaculately attired chauffeur."
+      },
+      {
+        "question": "Can I book a luxury chauffeur for weddings or red carpet galas?",
+        "answer": "Yes. We specialize in wedding car hire, red-carpet film premieres, awards ceremonies, and diplomatic VIP transport with customized vehicle ribbons and route planning."
+      },
+      {
+        "question": "Can you provide close-protection or security-trained drivers?",
+        "answer": "Yes, upon prior arrangement we can assign security-aware chauffeurs experienced in VIP protection and route evasion techniques."
+      }
+    ]
   },
   {
     "id": "service-hourly-as-directed",
@@ -162,8 +274,12 @@
         "answer": "Yes, you can easily extend your hire duration on the day by notifying your chauffeur or calling our 24/7 team."
       },
       {
-        "question": "Are fuel and parking fees included?",
+        "question": "Are fuel and parking fees included in hourly hire?",
         "answer": "Fuel is included within agreed mileage allowances. Congestion charges and parking fees are billed transparently at actual cost."
+      },
+      {
+        "question": "Can the chauffeur wait for me while I attend meetings or shopping?",
+        "answer": "Yes, with as-directed hire your chauffeur remains strictly on standby outside your venue, ready to depart whenever you return."
       }
     ]
   }
