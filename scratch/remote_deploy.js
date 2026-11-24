@@ -16,6 +16,9 @@ const commands = [
   "cd public_html",
   "pkill -f 'vite build' || true",
   "pkill -f 'esbuild' || true",
+  // Bookings and settings saved on the live site are written to JSON files that are tracked in git,
+  // so the reset below wipes them. Keep a timestamped copy outside the web root first.
+  "BK=../deploy_backups/$(date +%Y%m%d-%H%M%S); mkdir -p $BK && cp -p *.json $BK/; echo \"Backed up $(ls $BK | wc -l) JSON files to $BK\"",
   "git reset --hard",
   "git pull origin main",
   "npm install --prefer-offline",

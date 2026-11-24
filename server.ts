@@ -9,6 +9,13 @@ import { createMollieClient } from "@mollie/api-client";
 
 dotenv.config();
 
+// The hosting panel launches this app with a plain `npm start` and no NODE_ENV. The bundled
+// dist/server.cjs is the production entry, so default to production when running it; otherwise
+// Next.js would start in dev mode on the live server. `npm run dev` (tsx server.ts) is unaffected.
+if (!process.env.NODE_ENV && /server\.cjs$/.test(process.argv[1] || "")) {
+  process.env.NODE_ENV = "production";
+}
+
 const BOOKINGS_PATH = path.join(process.cwd(), "bookings.json");
 const SETTINGS_PATH = path.join(process.cwd(), "settings.json");
 const PRICING_PATH = path.join(process.cwd(), "pricing.json");

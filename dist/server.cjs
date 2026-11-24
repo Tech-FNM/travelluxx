@@ -40,6 +40,9 @@ var import_nodemailer = __toESM(require("nodemailer"), 1);
 var import_api_client = require("@mollie/api-client");
 var import_mongoose = __toESM(require("mongoose"), 1);
 import_dotenv.default.config();
+if (!process.env.NODE_ENV && /server\.cjs$/.test(process.argv[1] || "")) {
+  process.env.NODE_ENV = "production";
+}
 var BOOKINGS_PATH = import_path.default.join(process.cwd(), "bookings.json");
 var SETTINGS_PATH = import_path.default.join(process.cwd(), "settings.json");
 var PRICING_PATH = import_path.default.join(process.cwd(), "pricing.json");
