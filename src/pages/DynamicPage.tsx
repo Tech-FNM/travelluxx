@@ -186,29 +186,30 @@ export default function DynamicPage({
                             : "border-slate-200 bg-white hover:border-slate-300"
                           }`}
                       >
-                        <h3
-                          id={questionId}
-                          role="button"
-                          tabIndex={0}
-                          aria-expanded={isOpen}
-                          aria-controls={answerId}
+                        {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
+                        <div
                           onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              setOpenFaqIndex(isOpen ? null : index);
-                            }
-                          }}
-                          className="cursor-pointer flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-slate-900 text-base sm:text-lg transition select-none"
+                          className="cursor-pointer flex w-full items-center justify-between gap-4 p-5 select-none"
                         >
-                          {faq.question}
-                          <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
-                            }`}>
+                          <h3
+                            id={questionId}
+                            className="text-left font-semibold text-slate-900 text-base sm:text-lg transition"
+                          >
+                            {faq.question}
+                          </h3>
+                          <button
+                            type="button"
+                            aria-expanded={isOpen}
+                            aria-controls={answerId}
+                            aria-labelledby={questionId}
+                            className={`cursor-pointer h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
+                              }`}
+                          >
                             <ChevronDown
                               className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                             />
-                          </div>
-                        </h3>
+                          </button>
+                        </div>
                         <div
                           id={answerId}
                           role="region"

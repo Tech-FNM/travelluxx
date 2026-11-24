@@ -11,7 +11,7 @@ const config = {
   keepaliveInterval: 10000
 };
 
-// Skip npm run build since dist/ is already pre-built and committed to git
+// dist/server.cjs is pre-built and committed to git; only the Next.js pages (.next/) are built on the server
 const commands = [
   "cd public_html",
   "pkill -f 'vite build' || true",
@@ -19,11 +19,15 @@ const commands = [
   "git reset --hard",
   "git pull origin main",
   "npm install --prefer-offline",
+  // The pages are rendered by Next.js, and .next/ is NOT in git, so it must be built here.
+  // If the build fails we exit before touching the running server, so the site stays up.
+  "echo 'Building Next.js pages...'",
+  "npm run next:build || { echo 'NEXT BUILD FAILED - old server left running'; exit 1; }",
   "echo 'Killing process running on port 3000...'",
   "fuser -k 3000/tcp || kill -9 $(lsof -t -i:3000) || true",
   "sleep 2",
   "echo 'Starting server...'",
-  "nohup npm start > server.log 2>&1 &",
+  "NODE_ENV=production nohup npm start > server.log 2>&1 &",
   "sleep 3",
   "echo 'Server status check:'",
   "curl -I http://localhost:3000 || true"

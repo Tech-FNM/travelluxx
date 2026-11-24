@@ -509,34 +509,33 @@ export default function Services({
                           : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
                       }`}
                     >
-                      <h3
-                        id={questionId}
-                        role="button"
-                        tabIndex={0}
-                        aria-expanded={isOpen}
-                        aria-controls={answerId}
+                      {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
+                      <div
                         onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            setOpenFaqIndex(isOpen ? null : idx);
-                          }
-                        }}
-                        className={`cursor-pointer w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 text-sm sm:text-base font-bold transition-colors select-none ${
-                          isOpen ? "text-slate-950" : "text-slate-800"
-                        }`}
+                        className="cursor-pointer w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 select-none"
                       >
-                        {faq.question}
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                        <h3
+                          id={questionId}
+                          className={`text-left text-sm sm:text-base font-bold transition-colors ${
+                            isOpen ? "text-slate-950" : "text-slate-800"
+                          }`}
+                        >
+                          {faq.question}
+                        </h3>
+                        <button
+                          type="button"
+                          aria-expanded={isOpen}
+                          aria-controls={answerId}
+                          aria-labelledby={questionId}
+                          className={`cursor-pointer w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
                             isOpen
                               ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
                               : "bg-slate-100 text-slate-500"
                           }`}
                         >
                           <ChevronDown className="w-4 h-4" />
-                        </div>
-                      </h3>
+                        </button>
+                      </div>
                       <div
                         id={answerId}
                         role="region"

@@ -83,32 +83,31 @@ export default function HomepageFaq({
                     : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
                 }`}
               >
-                <h3
-                  id={questionId}
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={isOpen}
-                  aria-controls={answerId}
+                {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
+                <div
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setOpenIndex(isOpen ? null : index);
-                    }
-                  }}
-                  className={`cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left font-semibold text-base sm:text-lg leading-snug transition select-none ${
-                    isRenax
-                      ? isOpen
-                        ? "text-emerald-400"
-                        : "text-white hover:text-slate-200"
-                      : isOpen
-                      ? "text-emerald-800"
-                      : "text-slate-900 hover:text-slate-700"
-                  }`}
+                  className="group cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 select-none"
                 >
-                  {faq.question}
-                  <div
-                    className={`h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                  <h3
+                    id={questionId}
+                    className={`text-left font-semibold text-base sm:text-lg leading-snug transition ${
+                      isRenax
+                        ? isOpen
+                          ? "text-emerald-400"
+                          : "text-white group-hover:text-slate-200"
+                        : isOpen
+                        ? "text-emerald-800"
+                        : "text-slate-900 group-hover:text-slate-700"
+                    }`}
+                  >
+                    {faq.question}
+                  </h3>
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-controls={answerId}
+                    aria-labelledby={questionId}
+                    className={`cursor-pointer h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                       isOpen
                         ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
                         : isRenax
@@ -117,8 +116,8 @@ export default function HomepageFaq({
                     }`}
                   >
                     <ChevronDown className="h-4 w-4" />
-                  </div>
-                </h3>
+                  </button>
+                </div>
                 <div
                   id={answerId}
                   role="region"
