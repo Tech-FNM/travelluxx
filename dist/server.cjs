@@ -928,6 +928,12 @@ function generateFallbackRoutePoints(lat1, lng1, lat2, lng2, stepsCount = 10) {
 }
 var app = (0, import_express.default)();
 var PORT = process.env.PORT || 3e3;
+app.use((req, _res, next) => {
+  if (Object.getPrototypeOf(req.headers) === null) {
+    Object.setPrototypeOf(req.headers, Object.prototype);
+  }
+  next();
+});
 app.use((req, res, next) => {
   const host = req.headers.host || "";
   if (host.toLowerCase().startsWith("www.")) {

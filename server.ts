@@ -1551,6 +1551,16 @@ Thank you for choosing ${ws.business_name}!`;
               const app = express();
               const PORT = process.env.PORT || 3000;
 
+              // Node 27 creates request headers as a null-prototype object, and Next.js 16 still calls
+              // req.headers.hasOwnProperty(...), which makes every page render throw there. Give the
+              // headers object a normal prototype again. Does nothing on older Node versions.
+              app.use((req, _res, next) => {
+                if (Object.getPrototypeOf(req.headers) === null) {
+                  Object.setPrototypeOf(req.headers, Object.prototype);
+                }
+                next();
+              });
+
               // www ko non-www par 301 redirect karo (yeh sabse pehle chalna chahiye)
               app.use((req, res, next) => {
                 const host = req.headers.host || "";

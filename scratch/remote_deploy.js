@@ -120,31 +120,40 @@ rm -f "$HOME/next-build.tgz"
 echo "build $(cat .next/BUILD_ID) is in place"
 
 say "5/5 Restarting the app"
-is_up() { curl -s --max-time 8 http://127.0.0.1:3000/ 2> /dev/null | grep -q "__NEXT_DATA__"; }
-wait_up() { for i in $(seq 1 "$1"); do sleep 2; is_up && return 0; done; return 1; }
-fuser -k 3000/tcp > /dev/null 2>&1
-# The hosting panel supervises \`npm start\` in this folder and normally brings the app back by itself.
-if wait_up 20; then
-  echo "the hosting panel restarted the app"
-else
-  echo "the hosting panel did not restart the app within 40s, starting it manually"
+listening() { [ -n "$(lsof -t -i:3000 2> /dev/null)" ]; }
+healthy() { curl -s --max-time 8 http://127.0.0.1:3000/ 2> /dev/null | grep -q "__NEXT_DATA__"; }
+http_code() { curl -s -o /dev/null -w '%{http_code}' --max-time 8 http://127.0.0.1:3000/; }
+# Stops EVERY copy of the app first: a copy that failed to get the port lingers and uses up the
+# container's small thread allowance. The hosting panel supervises "npm start" in this folder and
+# normally brings one copy back within a few seconds; if it does not, one is started by hand.
+start_app() {
+  pkill -f "node dist/server.cjs" > /dev/null 2>&1
+  for i in $(seq 1 15); do sleep 2; listening && return 0; done
+  echo "the hosting panel did not restart the app within 30s, starting it manually"
   nohup npm start > server.log 2>&1 < /dev/null &
-  wait_up 20
-fi
+  for i in $(seq 1 15); do sleep 2; listening && return 0; done
+  return 1
+}
+start_app
+for i in $(seq 1 10); do healthy && break; sleep 2; done
 
-if ! is_up; then
-  echo; echo "THE NEW VERSION DID NOT START. Last log lines:"
-  tail -n 15 server.log 2> /dev/null
-  tail -n 15 "$HOME"/persistent_app_*.log 2> /dev/null
+if ! healthy; then
+  echo; echo "THE NEW VERSION IS NOT SERVING PAGES (homepage answered HTTP $(http_code)). Last log lines:"
+  tail -n 12 "$HOME"/persistent_app_*.log 2> /dev/null
+  tail -n 12 server.log 2> /dev/null
   echo; echo "Rolling back to the previous version..."
-  fuser -k 3000/tcp > /dev/null 2>&1
   git reset --hard "$PREV" > /dev/null
   rm -rf .next
   [ -d .next.old ] && mv .next.old .next
-  npm install --prefer-offline --no-audit --no-fund > /dev/null 2>&1
-  nohup npm start > server.log 2>&1 < /dev/null &
-  sleep 10
-  echo "previous version answers with HTTP $(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:3000/)"
+  start_app
+  for i in $(seq 1 10); do [ "$(http_code)" = "200" ] && break; sleep 2; done
+  if [ "$(http_code)" != "200" ]; then
+    # The previous version may need the dependencies it was installed with.
+    npm install --prefer-offline --no-audit --no-fund > /dev/null 2>&1
+    start_app
+    for i in $(seq 1 10); do [ "$(http_code)" = "200" ] && break; sleep 2; done
+  fi
+  echo "previous version answers with HTTP $(http_code)"
   exit 1
 fi
 
