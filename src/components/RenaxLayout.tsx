@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Users, 
-  Briefcase, 
-  Compass, 
-  CheckCircle2, 
-  Sparkles, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  ShieldCheck, 
+import {
+  Briefcase,
+  Compass,
+  CheckCircle2,
+  Check,
+  Armchair,
+  Phone,
+  Mail,
+  MapPin,
+  ShieldCheck,
   ArrowRight,
+  ArrowUpRight,
   Wifi,
   Wind,
   Smartphone,
@@ -18,13 +19,7 @@ import {
   Volume2,
   BookOpen,
   Shield,
-  Layers,
-  ChevronRight,
-  Info,
-  Calendar,
-  Clock,
-  ThumbsUp,
-  Star
+  Layers
 } from "lucide-react";
 import BookingCalculator from "./BookingCalculator";
 import AirportsGrid from "./AirportsGrid";
@@ -68,12 +63,12 @@ export default function RenaxLayout({
   const [activeFleetTab, setActiveFleetTab] = useState<"Economy" | "Luxury" | "Family">("Luxury");
   const [bgImage, setBgImage] = useState<string>(() => {
     const customSetting = settings?.hero_image || settings?.heroImage;
-    return (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : heroImg;
+    return (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : getCustomImage("hero_bg", heroImg);
   });
 
   useEffect(() => {
     const customSetting = settings?.hero_image || settings?.heroImage;
-    setBgImage((customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : heroImg);
+    setBgImage((customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : getCustomImage("hero_bg", heroImg));
   }, [settings]);
 
   useEffect(() => {
@@ -83,8 +78,8 @@ export default function RenaxLayout({
       .catch(err => console.error("Failed to fetch fleet pricing:", err));
   }, []);
 
-  const formattedPhone = whatsappNum.startsWith("44") 
-    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` 
+  const formattedPhone = whatsappNum.startsWith("44")
+    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
     : whatsappNum;
 
   const rawTitle = settings?.homepage_hero_title || "Nationwide Airport | Transfers & Private Chauffeur";
@@ -152,180 +147,171 @@ export default function RenaxLayout({
     }
   };
 
+  // Amenity icons sit bare next to the label (no tinted tile).
+  const amenityIconClass = "mt-0.5 h-5 w-5 shrink-0 text-brand-300";
+
   const getAmenityIcon = (feature: string) => {
     const f = feature.toLowerCase();
-    if (f.includes("wi-fi") || f.includes("wifi")) return <Wifi className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("climate") || f.includes("air-con") || f.includes("air conditioning")) return <Wind className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("charging") || f.includes("usb")) return <Smartphone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("water") || f.includes("bottle")) return <Droplet className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("entertainment") || f.includes("tv")) return <Tv className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("quiet") || f.includes("acoustic")) return <Volume2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("leather") || f.includes("seat") || f.includes("reclining")) return <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("newspaper") || f.includes("book")) return <BookOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("privacy") || f.includes("glass")) return <Shield className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("boot") || f.includes("capacity")) return <Briefcase className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    if (f.includes("door")) return <Layers className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
-    return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
+    if (f.includes("wi-fi") || f.includes("wifi")) return <Wifi className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("climate") || f.includes("air-con") || f.includes("air conditioning")) return <Wind className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("charging") || f.includes("usb")) return <Smartphone className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("water") || f.includes("bottle")) return <Droplet className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("entertainment") || f.includes("tv")) return <Tv className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("quiet") || f.includes("acoustic")) return <Volume2 className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("leather") || f.includes("seat") || f.includes("reclining")) return <Armchair className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("newspaper") || f.includes("book")) return <BookOpen className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("privacy") || f.includes("glass")) return <Shield className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("boot") || f.includes("capacity")) return <Briefcase className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    if (f.includes("door")) return <Layers className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
+    return <CheckCircle2 className={amenityIconClass} strokeWidth={1.5} aria-hidden="true" />;
   };
 
   const selectedFleet = fleet[activeFleetTab];
 
   return (
-    <div className="bg-[#08090d] text-slate-100 font-['Outfit'] antialiased selection:bg-emerald-600 selection:text-white">
-      
+    <div className="bg-brand-950 text-stone-300 antialiased">
+
       {/* 1. RENAX LUXURY HERO */}
-      <section id="hero" className="relative min-h-[95vh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-black">
-        <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+      <section id="hero" className="relative flex min-h-[88vh] items-end overflow-hidden bg-brand-950">
+        <div className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden">
           <img
+            data-parallax
             src={bgImage}
             alt="Travelluxx Executive Luxury Chauffeur Banner - Solihull & London"
-            className="w-full h-full object-cover opacity-35 scale-105 transition-all duration-700"
+            className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#08090d]/80 via-[#08090d]/40 to-[#08090d]"></div>
+          {/* Flat scrim for legibility: the copy sits on the photograph */}
+          <div className="absolute inset-0 bg-brand-950/70"></div>
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center space-y-8">
-          <div className="flex justify-center">
-            <div className="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full text-xs font-semibold text-emerald-400 tracking-widest uppercase">
-              <Sparkles className="w-3 h-3 text-emerald-400 animate-pulse" />
-              <span>{badgeText}</span>
-            </div>
-          </div>
+        <div className="tl-container relative z-10 pt-32 pb-16 lg:pt-40 lg:pb-24">
+          <div className="max-w-4xl">
+            <span data-reveal className="tl-eyebrow tl-eyebrow-light">{badgeText}</span>
 
-          <div className="space-y-4">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-none uppercase">
-              {titlePart1} <br />
+            <h1 data-reveal="lines" className="tl-h1 mt-6 text-balance text-white">
+              {titlePart1}{" "}
               {titlePart2 && (
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
+                <span className="block italic text-brand-200">
                   {titlePart2}
                 </span>
               )}
             </h1>
-            <p className="text-slate-400 text-sm sm:text-base lg:text-lg max-w-xl mx-auto leading-relaxed font-light">
+
+            <p data-reveal data-reveal-delay="0.15" className="tl-lead mt-6 max-w-2xl text-stone-300">
               {heroDesc}
             </p>
-          </div>
 
-          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto pt-6 border-t border-slate-900">
-            <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>{ind1}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Compass className="w-4 h-4 text-emerald-400" />
-              <span>{ind2}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-              <span>{ind3}</span>
-            </div>
-          </div>
+            <div data-reveal data-reveal-delay="0.3" className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <button
+                onClick={handleBtn1Click}
+                className="tl-btn tl-btn-light w-full sm:w-auto"
+              >
+                <span>{btn1Text}</span>
+                <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              </button>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
-            <button
-              onClick={handleBtn1Click}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold tracking-wide px-8 py-4 rounded-xl text-sm transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-emerald-600/10 hover:shadow-emerald-600/30 w-full sm:w-auto"
+              <a
+                href={btn2Link}
+                className="tl-btn tl-btn-outline-light w-full sm:w-auto"
+              >
+                <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                <span>{btn2Text}</span>
+              </a>
+            </div>
+
+            <div
+              data-reveal
+              data-reveal-delay="0.45"
+              className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-stone-300 sm:flex-row sm:flex-wrap sm:gap-x-10"
             >
-              <span>{btn1Text}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <a
-              href={btn2Link}
-              className="flex items-center justify-center space-x-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold tracking-wide px-8 py-4 rounded-xl text-sm transition-all duration-300 w-full sm:w-auto"
-            >
-              <Phone className="w-4 h-4 text-emerald-400 fill-current" />
-              <span>{btn2Text}</span>
-            </a>
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                <span>{ind1}</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Compass className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                <span>{ind2}</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                <span>{ind3}</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2. RENAX BOOKING CALCULATOR SEGMENT */}
-      <section id="calculator-section" className="relative z-20 -mt-20 max-w-6xl mx-auto px-4">
-        <div className="bg-[#0e1017] border border-slate-800/80 rounded-[28px] shadow-2xl p-6 sm:p-10">
-          <div className="text-center mb-8">
-            <span className="text-emerald-400 font-sans text-xs tracking-widest uppercase font-bold">Luxury Ride</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">Book Your Chauffeur Transfer</h2>
-          </div>
-          <BookingCalculator
-            initialPickup={calculatorPickup}
-            initialDropoff={calculatorDropoff}
-            settings={settings}
-          />
+      {/* 2. RENAX BOOKING CALCULATOR SEGMENT (the calculator renders its own full-width section) */}
+      <section id="calculator-section" className="border-t border-white/10 bg-brand-900">
+        <div className="tl-container pt-20 pb-12 lg:pt-28 lg:pb-16">
+          <span data-reveal className="tl-eyebrow tl-eyebrow-light">Luxury Ride</span>
+          <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">Book Your Chauffeur Transfer</h2>
         </div>
+        <BookingCalculator
+          initialPickup={calculatorPickup}
+          initialDropoff={calculatorDropoff}
+          settings={settings}
+        />
       </section>
 
-      {/* III. ABOUT COMPANY SECTION (RENAX DEMO 12 ACCURATE STYLE) */}
-      <section id="about" className="py-24 bg-[#08090d] border-t border-slate-900/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* III. ABOUT COMPANY SECTION */}
+      <section id="about" className="tl-section bg-brand-950">
+        <div className="tl-container">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
             {/* Left Block - Copy */}
-            <div className="space-y-6">
-              <span className="text-emerald-400 text-xs tracking-widest uppercase font-bold block">About Travelluxx</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white uppercase tracking-tight leading-tight">
-                We Are More Than <br />
-                <span className="text-emerald-400">A Private Hire Company</span>
+            <div>
+              <span data-reveal className="tl-eyebrow tl-eyebrow-light">About Travelluxx</span>
+              <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">
+                We Are More Than{" "}
+                <span className="block italic text-brand-300">A Private Hire Company</span>
               </h2>
-              <p className="text-slate-400 text-sm leading-relaxed font-light">
+              <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-xl text-stone-300">
                 At {brandName}, we provide a first-class private hire and airport chauffeur service across the United Kingdom. With absolute luxury and punctuality, our services are customized for executive corporate transfers, weddings, and premium airport pickups.
               </p>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-semibold text-slate-200">Sports & Luxury Cars</span>
+
+              <div data-reveal-group className="mt-8 grid grid-cols-1 sm:grid-cols-2 sm:gap-x-10">
+                <div className="flex items-center gap-3 border-t border-white/10 py-4">
+                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <span className="text-sm font-medium text-stone-200">Sports & Luxury Cars</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-semibold text-slate-200">Executive Economy Cars</span>
+                <div className="flex items-center gap-3 border-t border-white/10 py-4">
+                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <span className="text-sm font-medium text-stone-200">Executive Economy Cars</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-semibold text-slate-200">High Capacity MPVs</span>
+                <div className="flex items-center gap-3 border-t border-white/10 py-4">
+                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <span className="text-sm font-medium text-stone-200">High Capacity MPVs</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-semibold text-slate-200">24/7 Flight Monitoring</span>
+                <div className="flex items-center gap-3 border-t border-white/10 py-4">
+                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <span className="text-sm font-medium text-stone-200">24/7 Flight Monitoring</span>
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div data-reveal className="mt-6">
                 <button
                   onClick={() => handleScrollTo("contact")}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 shadow-md shadow-emerald-700/10"
+                  className="tl-btn tl-btn-outline-light"
                 >
-                  Read More ↗
+                  Read More
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </button>
               </div>
             </div>
 
-            {/* Right Block - Graphic Image Representation */}
-            <div className="relative rounded-3xl overflow-hidden aspect-square lg:aspect-[4/3] border border-slate-800/40 bg-slate-950">
-              <img
-                src={getCustomImage("about_showcase", transferPortImg)}
-                alt="Travelluxx Luxury Chauffeur Driver Service - Solihull & London"
-                className="w-full h-full object-cover opacity-75"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-              
-              {/* Play Overlay Box */}
-              <div className="absolute bottom-6 left-6 flex items-center space-x-4 bg-emerald-950/80 border border-emerald-500/20 px-4 py-3 rounded-2xl backdrop-blur-sm">
-                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
-                  <Sparkles className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest leading-none">Chauffeur Certified</p>
-                  <p className="text-xs text-white font-bold mt-1 leading-none">Safe & Professional Travels</p>
-                </div>
+            {/* Right Block - Photograph with a caption underneath */}
+            <div>
+              <div data-reveal="image" className="aspect-square overflow-hidden bg-brand-900 lg:aspect-[4/3]">
+                <img
+                  src={getCustomImage("about_showcase", transferPortImg)}
+                  alt="Travelluxx Luxury Chauffeur Driver Service - Solihull & London"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+
+              <div data-reveal className="mt-5 flex flex-col gap-1.5 border-b border-white/10 pb-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-300">Chauffeur Certified</p>
+                <p className="text-sm font-medium text-white">Safe & Professional Travels</p>
               </div>
             </div>
           </div>
@@ -333,107 +319,100 @@ export default function RenaxLayout({
       </section>
 
       {/* 4. RENAX FLEET SHOWCASE */}
-      <section id="fleet" className="py-24 bg-[#0a0b0e] border-t border-slate-900/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold">Our Premium Fleet</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-4 uppercase">
+      <section id="fleet" className="tl-section bg-brand-900">
+        <div className="tl-container">
+          <div>
+            <span data-reveal className="tl-eyebrow tl-eyebrow-light">Our Premium Fleet</span>
+            <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">
               Explore Our Luxury Vehicles
             </h2>
-            <p className="text-slate-400 text-sm leading-relaxed">
+            <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl text-stone-300">
               Curated luxury fleets of state-of-the-art Mercedes-Benz and Audi models. Meticulously clean, safe, and chauffeured to your location.
             </p>
           </div>
 
           {/* Tabs */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-[#0e1017] border border-slate-800/80 p-1.5 rounded-2xl flex space-x-1 sm:space-x-2">
-              {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveFleetTab(tab)}
-                  className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    activeFleetTab === tab
-                      ? "bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/10"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  {tab === "Family" ? "Family / MPV" : tab}
-                </button>
-              ))}
-            </div>
+          <div data-reveal className="mt-12 flex gap-8 border-b border-white/10 sm:gap-10">
+            {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveFleetTab(tab)}
+                aria-pressed={activeFleetTab === tab}
+                className={`-mb-px min-h-12 cursor-pointer border-b-2 pt-2 pb-3 text-sm font-medium transition-colors duration-200 sm:text-base ${
+                  activeFleetTab === tab
+                    ? "border-brand-300 text-white"
+                    : "border-transparent text-stone-400 hover:text-white"
+                }`}
+              >
+                {tab === "Family" ? "Family / MPV" : tab}
+              </button>
+            ))}
           </div>
 
-          {/* Car Card Panel (Renax-inspired card with specs) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-[#0e1017] border border-slate-800/60 p-6 sm:p-10 rounded-[28px] shadow-lg">
-            <div className="lg:col-span-7 relative rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] group border border-slate-800/40 shadow-sm bg-slate-950">
+          {/* Selected vehicle class: photograph left, specification right */}
+          <div className="mt-10 grid grid-cols-1 items-start gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-16">
+            <div data-reveal="image" className="group aspect-video overflow-hidden bg-brand-950 lg:col-span-7 lg:aspect-[4/3]">
               {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((key) => (
                 <img
                   key={key}
                   src={fleet[key].image}
                   alt={fleet[key]?.alt || `${fleet[key]?.name || key} - Luxury Chauffeur Car Solihull & London`}
                   loading="eager"
-                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeFleetTab === key ? "block" : "hidden"}`}
+                  className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${activeFleetTab === key ? "block" : "hidden"}`}
                 />
               ))}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-              
-              <div className="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md">
-                From {selectedFleet.rate} / mile
-              </div>
             </div>
 
-            <div className="lg:col-span-5 space-y-6">
-              <div className="space-y-1">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white uppercase tracking-wide">
+            <div data-reveal className="lg:col-span-5">
+              <div>
+                <h3 className="text-2xl leading-snug font-semibold text-white">
                   {selectedFleet.name}
                 </h3>
-                <p className="text-emerald-400 text-xs sm:text-sm font-semibold tracking-wider">{selectedFleet.tagline}</p>
+                <p className="mt-2 text-sm text-brand-300">{selectedFleet.tagline}</p>
               </div>
 
-              <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-light">
+              <div className="mt-6 flex items-baseline gap-2 text-sm text-stone-400">
+                From <span className="font-display text-4xl leading-none font-medium text-white lining-nums">{selectedFleet.rate}</span> / mile
+              </div>
+
+              <p className="mt-6 text-base leading-relaxed text-stone-300">
                 {selectedFleet.description}
               </p>
 
-              <div className="grid grid-cols-3 gap-4 py-4 border-t border-b border-slate-800/60">
-                <div className="flex flex-col items-center justify-center p-2.5 bg-slate-900/40 rounded-xl border border-slate-800/40">
-                  <Users className="w-5 h-5 text-emerald-400 mb-1" />
-                  <span className="text-[10px] text-slate-400">PASSENGERS</span>
-                  <span className="text-xs font-bold text-white mt-0.5">{selectedFleet.passengers}</span>
+              <div className="mt-8 grid grid-cols-1 divide-y divide-white/10 border-y border-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                <div className="flex items-baseline justify-between gap-4 py-4 sm:block sm:pr-5">
+                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">PASSENGERS</span>
+                  <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.passengers}</span>
                 </div>
-                <div className="flex flex-col items-center justify-center p-2.5 bg-slate-900/40 rounded-xl border border-slate-800/40">
-                  <Briefcase className="w-5 h-5 text-emerald-400 mb-1" />
-                  <span className="text-[10px] text-slate-400">LUGGAGE</span>
-                  <span className="text-xs font-bold text-white mt-0.5">{selectedFleet.luggage} Slots</span>
+                <div className="flex items-baseline justify-between gap-4 py-4 sm:block sm:px-5">
+                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">LUGGAGE</span>
+                  <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.luggage} Slots</span>
                 </div>
-                <div className="flex flex-col items-center justify-center p-2.5 bg-slate-900/40 rounded-xl border border-slate-800/40">
-                  <Compass className="w-5 h-5 text-emerald-400 mb-1" />
-                  <span className="text-[10px] text-slate-400">TRANSMISSION</span>
-                  <span className="text-xs font-bold text-white mt-0.5">{selectedFleet.transmission}</span>
+                <div className="flex items-baseline justify-between gap-4 py-4 sm:block sm:pl-5">
+                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">TRANSMISSION</span>
+                  <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.transmission}</span>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <h4 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Included Amenities:</h4>
-                <div className="grid grid-cols-2 gap-2 text-xs text-slate-300">
+              <div className="mt-8">
+                <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-400">Included Amenities:</h4>
+                <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 text-sm text-stone-300 sm:grid-cols-2">
                   {selectedFleet.features.map((feat, idx) => (
-                    <div key={idx} className="flex items-center space-x-2">
-                      <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/10 flex items-center justify-center shrink-0">
-                        {getAmenityIcon(feat)}
-                      </div>
-                      <span className="truncate">{feat}</span>
+                    <div key={idx} className="flex items-start gap-3">
+                      {getAmenityIcon(feat)}
+                      <span className="leading-6">{feat}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div className="mt-9">
                 <button
                   onClick={() => handleScrollTo("calculator-section")}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-4 rounded-xl text-sm transition-all duration-300 shadow-md shadow-emerald-700/10 cursor-pointer flex justify-center items-center space-x-2"
+                  className="tl-btn tl-btn-light w-full sm:w-auto"
                 >
                   <span>Select vehicle class</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -441,56 +420,46 @@ export default function RenaxLayout({
         </div>
       </section>
 
-      {/* VII. CAR RENTAL PROCESS / STEPS (RENAX DEMO 12 ACCURATE STYLE) */}
-      <section className="py-24 bg-[#08090d] border-t border-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold">How It Works</span>
-            <h2 className="text-3xl font-bold text-white uppercase">3 Easy Steps to Rent</h2>
+      {/* VII. CAR RENTAL PROCESS / STEPS */}
+      <section className="tl-section bg-brand-950">
+        <div className="tl-container">
+          <div>
+            <span data-reveal className="tl-eyebrow tl-eyebrow-light">How It Works</span>
+            <h2 data-reveal="lines" className="tl-h2 mt-4 text-white lining-nums">3 Easy Steps to Rent</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div data-reveal-group className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-12 lg:mt-16">
             {/* Step 1 */}
-            <div className="bg-[#0e1017] border border-slate-800/60 p-8 rounded-3xl relative overflow-hidden group shadow-lg">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
-                <Calendar className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">1. Choose A Class</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
-                Select your preferred luxury class—Economy, Chauffeur First Class, or high capacity Family MPVs according to requirements.
-              </p>
-              {/* Circular bottom-left mask element representation */}
-              <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-[#08090d] rounded-full flex items-center justify-center font-bold text-xs text-slate-500 select-none group-hover:text-emerald-400 transition-colors duration-300 border border-slate-900">
+            <div className="border-t border-white/10 pt-8">
+              <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
                 01
               </div>
+              <h3 className="tl-h3 mt-6 text-white">1. Choose A Class</h3>
+              <p className="mt-3 text-base leading-relaxed text-stone-300">
+                Select your preferred luxury class—Economy, Chauffeur First Class, or high capacity Family MPVs according to requirements.
+              </p>
             </div>
 
             {/* Step 2 */}
-            <div className="bg-[#0e1017] border border-slate-800/60 p-8 rounded-3xl relative overflow-hidden group shadow-lg">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
-                <Clock className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">2. Book Chauffeur</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
-                Enter your locations, date, and pickup times in our fixed rates calculator. Confirm pricing and chauffeur details.
-              </p>
-              <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-[#08090d] rounded-full flex items-center justify-center font-bold text-xs text-slate-500 select-none group-hover:text-emerald-400 transition-colors duration-300 border border-slate-900">
+            <div className="border-t border-white/10 pt-8">
+              <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
                 02
               </div>
+              <h3 className="tl-h3 mt-6 text-white">2. Book Chauffeur</h3>
+              <p className="mt-3 text-base leading-relaxed text-stone-300">
+                Enter your locations, date, and pickup times in our fixed rates calculator. Confirm pricing and chauffeur details.
+              </p>
             </div>
 
             {/* Step 3 */}
-            <div className="bg-[#0e1017] border border-slate-800/60 p-8 rounded-3xl relative overflow-hidden group shadow-lg">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
-                <ThumbsUp className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">3. Enjoy Journey</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
-                Our professionally dressed licensed chauffeur arrives on-time in a pristine vehicle to complete your nationwide transfer.
-              </p>
-              <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-[#08090d] rounded-full flex items-center justify-center font-bold text-xs text-slate-500 select-none group-hover:text-emerald-400 transition-colors duration-300 border border-slate-900">
+            <div className="border-t border-white/10 pt-8">
+              <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
                 03
               </div>
+              <h3 className="tl-h3 mt-6 text-white">3. Enjoy Journey</h3>
+              <p className="mt-3 text-base leading-relaxed text-stone-300">
+                Our professionally dressed licensed chauffeur arrives on-time in a pristine vehicle to complete your nationwide transfer.
+              </p>
             </div>
           </div>
         </div>
@@ -499,15 +468,13 @@ export default function RenaxLayout({
       {/* IX. VERIFIED GOOGLE CLIENT REVIEWS */}
       <GoogleReviewsSection isRenax={true} />
 
-      {/* 5. AIRPORT TRANSFER CARDS */}
-      <section className="py-24 bg-[#08090d] border-t border-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold">Fixed Presets</span>
-            <h2 className="text-3xl font-bold text-white uppercase">Popular Transfer Routes</h2>
-          </div>
-          <AirportsGrid onSelectTransfer={handleSelectTransferPreset} />
+      {/* 5. AIRPORT TRANSFER CARDS (the grid renders its own full-width section) */}
+      <section className="border-t border-white/10 bg-brand-900">
+        <div className="tl-container pt-20 pb-12 lg:pt-28 lg:pb-16">
+          <span data-reveal className="tl-eyebrow tl-eyebrow-light">Fixed Presets</span>
+          <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">Popular Transfer Routes</h2>
         </div>
+        <AirportsGrid onSelectTransfer={handleSelectTransferPreset} />
       </section>
 
       {/* HOMEPAGE FAQS */}
@@ -520,39 +487,46 @@ export default function RenaxLayout({
       />
 
       {/* 6. CONTACT SEGMENT */}
-      <section id="contact" className="py-24 bg-[#0e1017] border-t border-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <span className="text-emerald-400 text-xs tracking-widest uppercase block mb-3 font-bold font-sans">Get In Touch</span>
-            <h2 className="text-3xl font-bold text-white uppercase font-sans">Contact Our Desk</h2>
-            <p className="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">
-              Have unique requirements or need a dedicated luxury chauffeur contract? Fill out our contact form below.
-            </p>
-          </div>
-          <div className="bg-[#08090d] border border-slate-800/60 p-6 sm:p-10 rounded-[28px] shadow-lg">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center text-xs">
-              <div className="p-4 bg-[#0e1017] border border-slate-800/40 rounded-2xl">
-                <Phone className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
-                <p className="text-slate-400">Call / WhatsApp</p>
-                <p className="text-white font-bold mt-1">{formattedPhone}</p>
-              </div>
-              <div className="p-4 bg-[#0e1017] border border-slate-800/40 rounded-2xl">
-                <Mail className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
-                <p className="text-slate-400">Email Address</p>
-                <p className="text-white font-bold mt-1 truncate">{emailAddr}</p>
-              </div>
-              <div className="p-4 bg-[#0e1017] border border-slate-800/40 rounded-2xl">
-                <MapPin className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
-                <p className="text-slate-400">Head Office</p>
-                <p className="text-white font-bold mt-1 line-clamp-1">{officeAddr.split(",")[0]}</p>
-              </div>
+      <section id="contact" className="tl-section border-t border-white/10 bg-brand-900">
+        <div className="tl-container">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-5">
+              <span data-reveal className="tl-eyebrow tl-eyebrow-light">Get In Touch</span>
+              <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">Contact Our Desk</h2>
+              <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-md text-stone-300">
+                Have unique requirements or need a dedicated luxury chauffeur contract? Fill out our contact form below.
+              </p>
             </div>
-            
-            <div className="p-2">
-              <div className="text-slate-300">
+
+            <div className="lg:col-span-7">
+              <div data-reveal-group className="divide-y divide-white/10 border-y border-white/10">
+                <div className="flex items-start gap-5 py-6">
+                  <Phone className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">Call / WhatsApp</p>
+                    <p className="mt-2 text-lg font-medium text-white">{formattedPhone}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-5 py-6">
+                  <Mail className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">Email Address</p>
+                    <p className="mt-2 text-lg font-medium break-words text-white">{emailAddr}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-5 py-6">
+                  <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">Head Office</p>
+                    <p className="mt-2 text-lg font-medium text-white">{officeAddr.split(",")[0]}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div data-reveal className="mt-8">
                 <form className="space-y-4">
-                  <div className="text-slate-300 text-center">
-                    <p className="text-xs">Please use the contact form details below to query custom routes.</p>
+                  <div>
+                    <p className="text-sm text-stone-400">Please use the contact form details below to query custom routes.</p>
                   </div>
                 </form>
               </div>

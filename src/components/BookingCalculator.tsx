@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { 
   MapPin, Plane, ArrowRight, Calendar, Clock, Users, Briefcase, 
   CreditCard, ShieldCheck, Compass, Check, AlertCircle, Phone, 
-  HelpCircle, Sparkles, Receipt, Landmark, Activity, Car, AlertTriangle,
+  HelpCircle, Receipt, Landmark, Activity, Car, AlertTriangle,
   Trash2, ArrowLeft, ArrowUp, ArrowDown, Plus, Navigation, Coins
 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -12,7 +12,7 @@ import { trackClick } from "../utils/analytics";
 const GoogleBookingMap = dynamic(() => import("./GoogleBookingMap"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full min-h-[300px] bg-slate-900/60 flex items-center justify-center text-slate-400 text-xs">
+    <div className="w-full h-full min-h-[300px] bg-stone-100 flex items-center justify-center text-stone-500 text-sm">
       Loading interactive map...
     </div>
   ),
@@ -216,6 +216,14 @@ const UK_LOCATIONS: { [key: string]: { lat: number; lng: number; name: string } 
   
   return streets;
 };
+
+// Presentational only: step names shown in the progress stepper (same wording as the current-step caption).
+const STEP_LABELS = [
+  "Instant Pricing Options",
+  "Passenger Schedule Details",
+  "Secure Checkout Gateway",
+  "Reservation Confirmed",
+];
 
 export default function BookingCalculator({ initialPickup = "", initialDropoff = "", settings }: BookingCalculatorProps) {
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
@@ -1436,97 +1444,104 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   };
 
   return (
-    <section id="calculator" className="py-20 bg-white text-slate-800 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section id="calculator" className="tl-section bg-ivory text-stone-700 relative">
+      <div className="tl-container">
+
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-semibold">Instant Booking System</span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
+        <div className="mb-12 lg:mb-14">
+          <span data-reveal className="tl-eyebrow">Instant Booking System</span>
+          <h2 data-reveal="lines" className="tl-h2 mt-4">
             Calculate & Book Your Chauffeur
           </h2>
-          <p className="text-slate-500 text-sm sm:text-base mt-2">
+          <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
             Get instant, guaranteed prices side by side and complete a secure checkout in under 60 seconds. Whether you need private hire Birmingham for an airport run, a business meeting or a special night out, simply enter your pickup and drop-off to see your fixed fare.
           </p>
         </div>
 
         {/* Outer Split Panel Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden items-stretch">
-          
+        <div data-reveal="fade" className="tl-card grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-x-12 lg:gap-y-10 rounded-sm p-6 sm:p-10 relative items-stretch">
+
           {/* STEPPER METADATA SUBBAR */}
-          <div className="lg:col-span-12 flex justify-between items-center border-b border-slate-200 pb-4 mb-2">
-            <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-sans tracking-wider uppercase text-slate-400">Booking progress:</span>
-              <div className="flex space-x-1.5">
-                {[1, 2, 3, 4].map((step) => (
-                  <div
-                    key={step}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      currentStep === step
-                        ? "w-8 bg-emerald-600"
-                        : currentStep > step
-                        ? "w-4 bg-emerald-600/50"
-                        : "w-3 bg-slate-200"
-                    }`}
-                  ></div>
-                ))}
+          <div className="lg:col-span-12 min-w-0">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+              <span className="text-sm text-stone-500">Booking progress:</span>
+              <div className="text-sm font-medium text-brand-800 lg:hidden">
+                {currentStep === 1 && "1. Instant Pricing Options"}
+                {currentStep === 2 && "2. Passenger Schedule Details"}
+                {currentStep === 3 && "3. Secure Checkout Gateway"}
+                {currentStep === 4 && "4. Reservation Confirmed"}
               </div>
             </div>
-            <div className="text-[10px] font-sans text-emerald-700 uppercase tracking-widest font-semibold">
-              {currentStep === 1 && "1. Instant Pricing Options"}
-              {currentStep === 2 && "2. Passenger Schedule Details"}
-              {currentStep === 3 && "3. Secure Checkout Gateway"}
-              {currentStep === 4 && "4. Reservation Confirmed"}
-            </div>
+            <ol aria-label="Booking progress" className="mt-4 grid grid-cols-4 border-b border-stone-200">
+              {[1, 2, 3, 4].map((step) => (
+                <li
+                  key={step}
+                  aria-current={currentStep === step ? "step" : undefined}
+                  className={`-mb-px flex items-baseline gap-2.5 border-b-2 pb-3 pr-4 text-sm transition-colors duration-200 ${
+                    currentStep === step
+                      ? "border-brand-700 font-medium text-brand-800"
+                      : currentStep > step
+                      ? "border-transparent text-stone-700"
+                      : "border-transparent text-stone-400"
+                  }`}
+                >
+                  <span className="tabular-nums">{step}</span>
+                  <span className="hidden lg:inline">{STEP_LABELS[step - 1]}</span>
+                </li>
+              ))}
+            </ol>
           </div>
 
           {/* LEFT BLOCK: INPUTS & VEHICLES & FORMS (Colspan 7) */}
-          <div ref={leftFormRef} className="lg:col-span-7 flex flex-col space-y-6 self-start w-full">
-            
+          <div ref={leftFormRef} className="lg:col-span-7 flex flex-col self-start w-full min-w-0">
+
             {/* STEP 1: CALCULATOR / VEHICLE SELECT */}
             {currentStep === 1 && (
-              <div className="space-y-4">
-                
+              <div className="space-y-8">
+
                 {/* Inputs card */}
-                <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-semibold text-slate-900 font-display">Where would you like to travel?</h3>
-                    
-                    <div className="space-y-3">
+                <div className="space-y-6">
+                  <div className="space-y-6">
+                    <h3 className="tl-h3">Where would you like to travel?</h3>
+
+                    <div className="space-y-5">
                       <div className="relative" ref={pickupRef}>
-                        <div className="absolute left-4 top-3.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 font-sans text-[9px] font-bold">P</div>
-                        <input
-                          type="text"
-                          placeholder="Enter Pick-up Location or Postal Code..."
-                          value={pickupInput}
-                          onChange={(e) => {
-                            handleInput(e.target.value, 'pickup');
-                          }}
-                          onFocus={() => handleInput(pickupInput, 'pickup', false)}
-                          className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 pl-11 pr-12 text-sm text-slate-800 transition placeholder:text-slate-400"
-                        />
-                        <button type="button" onClick={useMyLocation} className="absolute right-3 top-2.5 text-slate-400 hover:text-emerald-600"><Compass className="w-5 h-5"/></button>
+                        <label className="block">
+                          <span className="tl-label">Pick-up location</span>
+                          <span className="relative block">
+                            <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-medium text-stone-400">P</span>
+                            <input
+                              type="text"
+                              placeholder="Enter Pick-up Location or Postal Code..."
+                              value={pickupInput}
+                              onChange={(e) => {
+                                handleInput(e.target.value, 'pickup');
+                              }}
+                              onFocus={() => handleInput(pickupInput, 'pickup', false)}
+                              className="tl-input pl-11 pr-12 text-ellipsis"
+                            />
+                          </span>
+                        </label>
+                        <button type="button" onClick={useMyLocation} aria-label="Use my current location for pick-up" className="absolute bottom-0 right-0 flex h-12 w-12 cursor-pointer items-center justify-center text-stone-400 transition-colors duration-200 hover:text-brand-700"><Compass className="w-5 h-5" strokeWidth={1.5} /></button>
                         {pickupSuggestions.length > 0 && (
-                          <div className="absolute z-50 w-full bg-white border border-slate-200 mt-1.5 rounded-2xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100">
+                          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-sm border border-stone-200 bg-white shadow-sm">
                             {pickupSuggestions.map((loc, idx) => (
                               <div
                                 key={idx}
-                                className="p-3 text-sm hover:bg-emerald-50/60 cursor-pointer flex items-center space-x-3 transition group"
+                                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm transition-colors duration-200 hover:bg-stone-50"
                                 onClick={() => handleSelectSuggestion(loc, 'pickup')}
                               >
-                                <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-emerald-100 text-slate-500 group-hover:text-emerald-700 flex items-center justify-center shrink-0">
-                                  {loc.type === "airport" ? (
-                                    <Plane className="w-4 h-4" />
-                                  ) : (
-                                    <MapPin className="w-4 h-4" />
-                                  )}
-                                </div>
+                                {loc.type === "airport" ? (
+                                  <Plane className="h-5 w-5 shrink-0 text-stone-400" strokeWidth={1.5} />
+                                ) : (
+                                  <MapPin className="h-5 w-5 shrink-0 text-stone-400" strokeWidth={1.5} />
+                                )}
                                 <div className="flex flex-col min-w-0 flex-1">
-                                  <span className="font-semibold text-slate-900 text-xs truncate">
+                                  <span className="truncate font-medium text-stone-900">
                                     {loc.mainText || loc.name}
                                   </span>
                                   {loc.secondaryText && (
-                                    <span className="text-[11px] text-slate-500 truncate">
+                                    <span className="truncate text-xs text-stone-500">
                                       {loc.secondaryText}
                                     </span>
                                   )}
@@ -1541,39 +1556,42 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
 
                       <div className="relative" ref={dropoffRef}>
-                        <div className="absolute left-4 top-3.5 flex h-5 w-5 items-center justify-center rounded-full bg-rose-50 text-rose-600 font-sans text-[9px] font-bold">D</div>
-                        <input
-                          type="text"
-                          placeholder="Enter Drop-off Destination or Airport..."
-                          value={dropoffInput}
-                          onChange={(e) => {
-                            handleInput(e.target.value, 'dropoff');
-                          }}
-                          onFocus={() => handleInput(dropoffInput, 'dropoff', false)}
-                          className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 pl-11 pr-12 text-sm text-slate-800 transition placeholder:text-slate-400"
-                        />
-                        <button type="button" onClick={useMyDropoffLocation} className="absolute right-3 top-2.5 text-slate-400 hover:text-emerald-600"><Compass className="w-5 h-5"/></button>
+                        <label className="block">
+                          <span className="tl-label">Drop-off location</span>
+                          <span className="relative block">
+                            <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-medium text-stone-400">D</span>
+                            <input
+                              type="text"
+                              placeholder="Enter Drop-off Destination or Airport..."
+                              value={dropoffInput}
+                              onChange={(e) => {
+                                handleInput(e.target.value, 'dropoff');
+                              }}
+                              onFocus={() => handleInput(dropoffInput, 'dropoff', false)}
+                              className="tl-input pl-11 pr-12 text-ellipsis"
+                            />
+                          </span>
+                        </label>
+                        <button type="button" onClick={useMyDropoffLocation} aria-label="Use my current location for drop-off" className="absolute bottom-0 right-0 flex h-12 w-12 cursor-pointer items-center justify-center text-stone-400 transition-colors duration-200 hover:text-brand-700"><Compass className="w-5 h-5" strokeWidth={1.5} /></button>
                         {dropoffSuggestions.length > 0 && (
-                          <div className="absolute z-50 w-full bg-white border border-slate-200 mt-1.5 rounded-2xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100">
+                          <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-sm border border-stone-200 bg-white shadow-sm">
                             {dropoffSuggestions.map((loc, idx) => (
                               <div
                                 key={idx}
-                                className="p-3 text-sm hover:bg-rose-50/60 cursor-pointer flex items-center space-x-3 transition group"
+                                className="flex cursor-pointer items-center gap-3 px-4 py-3 text-sm transition-colors duration-200 hover:bg-stone-50"
                                 onClick={() => handleSelectSuggestion(loc, 'dropoff')}
                               >
-                                <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-rose-100 text-slate-500 group-hover:text-rose-600 flex items-center justify-center shrink-0">
-                                  {loc.type === "airport" ? (
-                                    <Plane className="w-4 h-4" />
-                                  ) : (
-                                    <MapPin className="w-4 h-4" />
-                                  )}
-                                </div>
+                                {loc.type === "airport" ? (
+                                  <Plane className="h-5 w-5 shrink-0 text-stone-400" strokeWidth={1.5} />
+                                ) : (
+                                  <MapPin className="h-5 w-5 shrink-0 text-stone-400" strokeWidth={1.5} />
+                                )}
                                 <div className="flex flex-col min-w-0 flex-1">
-                                  <span className="font-semibold text-slate-900 text-xs truncate">
+                                  <span className="truncate font-medium text-stone-900">
                                     {loc.mainText || loc.name}
                                   </span>
                                   {loc.secondaryText && (
-                                    <span className="text-[11px] text-slate-500 truncate">
+                                    <span className="truncate text-xs text-stone-500">
                                       {loc.secondaryText}
                                     </span>
                                   )}
@@ -1586,77 +1604,81 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       </div>
                     </div>
 
-                    <div className="flex items-center text-[11px] text-slate-500 px-1 pt-0.5">
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                        <span>Search any UK postcode, city or airport, or click anywhere on the map to pin exact locations.</span>
-                      </span>
+                    <div className="flex items-start gap-2 text-sm text-stone-500">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" strokeWidth={1.5} />
+                      <span>Search any UK postcode, city or airport, or click anywhere on the map to pin exact locations.</span>
                     </div>
 
                     {errorMsg && (
-                      <div className="flex items-center space-x-2 text-xs text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200/50">
-                        <AlertCircle className="w-4 h-4 shrink-0" />
+                      <div role="alert" className="flex items-start gap-3 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} />
                         <span>{errorMsg}</span>
                       </div>
                     )}
 
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <div className="relative flex-1">
-                        <div className="absolute left-4 top-3.5 text-slate-400">
-                          <Calendar className="w-4 h-4" />
-                        </div>
-                        <input
-                          type="date"
-                          value={rideDate}
-                          onChange={(e) => setRideDate(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 pl-11 pr-4 text-sm text-slate-800 transition"
-                        />
-                      </div>
-                      <div className="relative flex-1">
-                        <div className="absolute left-4 top-3.5 text-slate-400">
-                          <Clock className="w-4 h-4" />
-                        </div>
-                        <input
-                          type="time"
-                          value={rideTime}
-                          onChange={(e) => setRideTime(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 pl-11 pr-4 text-sm text-slate-800 transition"
-                        />
-                      </div>
+                    <div className="flex flex-col sm:flex-row gap-5">
+                      <label className="block min-w-0 flex-1">
+                        <span className="tl-label">Date</span>
+                        <span className="relative block">
+                          <Calendar aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
+                          <input
+                            type="date"
+                            value={rideDate}
+                            onChange={(e) => setRideDate(e.target.value)}
+                            className="tl-input pl-11"
+                          />
+                        </span>
+                      </label>
+                      <label className="block min-w-0 flex-1">
+                        <span className="tl-label">Time</span>
+                        <span className="relative block">
+                          <Clock aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
+                          <input
+                            type="time"
+                            value={rideTime}
+                            onChange={(e) => setRideTime(e.target.value)}
+                            className="tl-input pl-11"
+                          />
+                        </span>
+                      </label>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3">
-                      {["Economy", "Luxury", "Family"].map((vehicle) => {
-                        const rates: Record<string, string> = {
-                          Economy: "£1.50/mi",
-                          Luxury: "£2.00/mi",
-                          Family: "£2.50/mi"
-                        };
-                        return (
-                          <button
-                            key={vehicle}
-                            type="button"
-                            onClick={() => setSelectedVehicle(vehicle as any)}
-                            className={`border rounded-xl p-3 text-xs font-semibold flex flex-col items-center justify-center space-y-1 transition-all ${
-                              selectedVehicle === vehicle
-                                ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
-                                : "bg-slate-50 text-slate-600 border-slate-200 hover:border-emerald-600"
-                            }`}
-                          >
-                            <span className="font-display font-medium">
-                              {vehicle === "Family" ? "Family / MPV" : vehicle}
-                            </span>
-                          </button>
-                        );
-                      })}
+                    <div role="group" aria-label="Vehicle class">
+                      <span className="tl-label">Vehicle class</span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {["Economy", "Luxury", "Family"].map((vehicle) => {
+                          const rates: Record<string, string> = {
+                            Economy: "£1.50/mi",
+                            Luxury: "£2.00/mi",
+                            Family: "£2.50/mi"
+                          };
+                          return (
+                            <button
+                              key={vehicle}
+                              type="button"
+                              onClick={() => setSelectedVehicle(vehicle as any)}
+                              aria-pressed={selectedVehicle === vehicle}
+                              className={`tl-card flex h-12 cursor-pointer items-center rounded-sm px-4 text-sm font-medium sm:justify-center ${
+                                selectedVehicle === vehicle
+                                  ? "border-brand-700 ring-1 ring-brand-700 bg-brand-50/40 text-brand-800"
+                                  : "tl-card-hover text-stone-700"
+                              }`}
+                            >
+                              <span>
+                                {vehicle === "Family" ? "Family / MPV" : vehicle}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                  <div className="flex gap-3">
                     <button
                       onClick={() => calculateDistance()}
                       disabled={loadingRoute}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-5 rounded-xl text-xs sm:text-sm transition-all shadow-md shadow-emerald-600/10 flex justify-center items-center space-x-2 cursor-pointer disabled:opacity-50"
+                      className="tl-btn tl-btn-primary min-w-0 flex-1"
                     >
                       {loadingRoute ? (
                         <>
@@ -1666,16 +1688,17 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       ) : (
                         <>
                           <span>Calculate Quote</span>
-                          <ArrowRight className="w-4 h-4" />
+                          <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                         </>
                       )}
                     </button>
                     <button
                       onClick={clearRoute}
-                      className="text-slate-500 hover:text-rose-600 font-medium py-3 px-4 rounded-xl transition text-sm flex items-center justify-center border border-slate-200"
+                      className="tl-btn tl-btn-outline w-12 shrink-0 px-0 text-stone-600"
                       title="Clear Route"
+                      aria-label="Clear Route"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" strokeWidth={1.5} />
                     </button>
                   </div>
 
@@ -1683,48 +1706,48 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                 {/* Pricing display panels shown first */}
                 {distanceResult && (
-                  <div className="space-y-4 animate-fade-in mt-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                    <h4 className="text-xs font-semibold uppercase font-sans tracking-wider text-slate-400">Route & Pricing Summary</h4>
-                    
-                    <div className="grid grid-cols-2 gap-3 text-xs font-sans text-slate-500">
-                      <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                        <span className="block text-slate-400 text-[9px] uppercase tracking-wider">Total Distance</span>
-                        <strong className="text-slate-800 text-sm">
+                  <div className="space-y-6 border-t border-stone-200 pt-8">
+                    <h4 className="tl-h3">Route & Pricing Summary</h4>
+
+                    <dl className="divide-y divide-stone-200 border-y border-stone-200 text-sm">
+                      <div className="flex items-baseline justify-between gap-6 py-3">
+                        <dt className="text-stone-600">Total Distance</dt>
+                        <dd className="text-right font-medium text-stone-900 tabular-nums">
                           {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi
-                          <span className="text-[11px] font-normal text-slate-500 ml-1">
+                          <span className="ml-1 font-normal text-stone-500">
                             ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km)
                           </span>
-                        </strong>
+                        </dd>
                       </div>
-                      <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                        <span className="block text-slate-400 text-[9px] uppercase tracking-wider">Est. Driving Time</span>
-                        <strong className="text-slate-800 text-sm">~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins</strong>
+                      <div className="flex items-baseline justify-between gap-6 py-3">
+                        <dt className="text-stone-600">Est. Driving Time</dt>
+                        <dd className="text-right font-medium text-stone-900 tabular-nums">~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins</dd>
                       </div>
-                      <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                        <span className="block text-slate-400 text-[9px] uppercase tracking-wider">Selected Plan</span>
-                        <strong className="text-slate-800 text-sm">{selectedVehicle === "Family" ? "Family / MPV" : selectedVehicle}</strong>
-                      </div>
-                      <div className="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100">
-                        <span className="block text-emerald-600/80 text-[9px] uppercase tracking-wider">Estimated Fare</span>
-                        <strong className="text-emerald-700 text-base font-bold">£{selectedPrice.toFixed(2)}</strong>
+                      <div className="flex items-baseline justify-between gap-6 py-3">
+                        <dt className="text-stone-600">Selected Plan</dt>
+                        <dd className="text-right font-medium text-stone-900">{selectedVehicle === "Family" ? "Family / MPV" : selectedVehicle}</dd>
                       </div>
                       {distanceResult.waitingTime > 0 && (
-                        <div className="bg-amber-50/60 p-2.5 rounded-xl border border-amber-200/60 col-span-2 flex justify-between items-center">
-                          <div>
-                            <span className="block text-amber-700 text-[9px] uppercase tracking-wider font-semibold">Stay / Waiting Charges</span>
-                            <strong className="text-slate-800 text-xs">{stops.length} Stop(s) • Total Wait: {distanceResult.waitingTime} Mins</strong>
-                          </div>
-                          <strong className="text-amber-800 text-sm font-bold">£{Number(distanceResult.waitingChargeAmount || 0).toFixed(2)}</strong>
+                        <div className="flex items-baseline justify-between gap-6 py-3">
+                          <dt className="text-stone-600">
+                            <span className="block">Stay / Waiting Charges</span>
+                            <span className="mt-0.5 block text-xs text-stone-500">{stops.length} Stop(s) • Total Wait: {distanceResult.waitingTime} Mins</span>
+                          </dt>
+                          <dd className="text-right font-medium text-stone-900 tabular-nums">£{Number(distanceResult.waitingChargeAmount || 0).toFixed(2)}</dd>
                         </div>
                       )}
-                    </div>
+                      <div className="flex items-baseline justify-between gap-6 py-4">
+                        <dt className="text-lg font-semibold text-stone-900">Estimated Fare</dt>
+                        <dd className="text-right text-2xl font-semibold text-stone-900 tabular-nums">£{selectedPrice.toFixed(2)}</dd>
+                      </div>
+                    </dl>
 
                     <button
                       onClick={() => { setCurrentStep(2); }}
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl text-sm transition-all flex items-center justify-center space-x-2 shadow-md shadow-emerald-600/10 cursor-pointer"
+                      className="tl-btn tl-btn-primary w-full"
                     >
                       <span>Continue Booking Details</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                     </button>
                   </div>
                 )}
@@ -1733,127 +1756,127 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
             {/* STEP 2: RIDE SCHEDULE & CONTACTS */}
             {currentStep === 2 && (
-              <form onSubmit={handleReserveDetailsSubmit} className="space-y-4">
+              <form onSubmit={handleReserveDetailsSubmit} className="space-y-8">
                 {/* removed date and time fields */}
-                <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
-                  <div className="space-y-4">
+                <div className="space-y-6">
+                  <div className="space-y-6">
                     {distanceResult && (
-                      <div className="p-3.5 bg-emerald-50/70 border border-emerald-100 rounded-xl text-xs space-y-1">
-                        <div className="flex justify-between items-center text-emerald-950 font-semibold">
-                          <span className="truncate pr-2">{distanceResult.pickupDisplay || pickupInput} → {distanceResult.dropoffDisplay || dropoffInput}</span>
-                          <span className="text-emerald-700 font-bold shrink-0">£{selectedPrice.toFixed(2)}</span>
+                      <div className="border-l-2 border-brand-700 bg-brand-50 px-4 py-3 text-sm text-stone-800">
+                        <div className="flex items-baseline justify-between gap-4 font-medium text-stone-900">
+                          <span className="truncate">{distanceResult.pickupDisplay || pickupInput} → {distanceResult.dropoffDisplay || dropoffInput}</span>
+                          <span className="shrink-0 font-semibold tabular-nums">£{selectedPrice.toFixed(2)}</span>
                         </div>
-                        <div className="text-[11px] text-slate-500">
+                        <div className="mt-1 text-xs text-stone-600">
                           {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km) • ~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins • {selectedVehicle} Class
                         </div>
                       </div>
                     )}
 
-                    <h3 className="text-sm font-semibold text-slate-900 font-display">Contact Information</h3>
+                    <h3 className="tl-h3">Contact Information</h3>
 
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-1.5">Passenger Full Name</label>
+                    <div className="space-y-5">
+                      <label className="block">
+                        <span className="tl-label">Passenger full name</span>
                         <input
                           type="text"
                           placeholder="John Doe"
                           value={passengerName}
                           onChange={(e) => setPassengerName(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs text-slate-800 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition"
+                          className="tl-input"
                           required
                         />
-                      </div>
+                      </label>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-1.5">Passenger Email</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <label className="block min-w-0">
+                          <span className="tl-label">Passenger email</span>
                           <input
                             type="email"
                             placeholder="johndoe@example.com"
                             value={passengerEmail}
                             onChange={(e) => setPassengerEmail(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs text-slate-800 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition"
+                            className="tl-input"
                             required
                           />
-                        </div>
+                        </label>
 
-                        <div>
-                          <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-1.5">Mobile Phone (WhatsApp ready)</label>
+                        <label className="block min-w-0">
+                          <span className="tl-label">Mobile phone (WhatsApp ready)</span>
                           <input
                             type="tel"
                             placeholder="e.g. 0121 714 0876"
                             value={passengerPhone}
                             onChange={(e) => setPassengerPhone(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs text-slate-800 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition"
+                            className="tl-input"
                             required
                           />
-                        </div>
+                        </label>
 
-                        <div>
-                          <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-1.5">Alternate Phone (Optional)</label>
+                        <label className="block min-w-0">
+                          <span className="tl-label">Alternate phone (optional)</span>
                           <input
                             type="tel"
                             placeholder="e.g. 0121 714 0876"
                             value={passengerAlternatePhone}
                             onChange={(e) => setPassengerAlternatePhone(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs text-slate-800 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition"
+                            className="tl-input"
                           />
-                        </div>
+                        </label>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-3 pt-2">
-                        <div>
-                          <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1.5">Passengers</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 items-end gap-5">
+                        <label className="block min-w-0">
+                          <span className="tl-label">Passengers</span>
                           <select
                             value={passengerCount}
                             onChange={(e) => setPassengerCount(Number(e.target.value))}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-3 text-xs text-slate-800 focus:outline-none"
+                            className="tl-input"
                           >
                             {[1, 2, 3, 4, 5, 6, 7, 8].map(n => (
                               <option key={n} value={n}>{n}</option>
                             ))}
                           </select>
-                        </div>
+                        </label>
 
-                        <div>
-                          <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1.5">Bags / Luggage</label>
+                        <label className="block min-w-0">
+                          <span className="tl-label">Bags / luggage</span>
                           <select
                             value={luggageCount}
                             onChange={(e) => setLuggageCount(Number(e.target.value))}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-3 text-xs text-slate-800 focus:outline-none"
+                            className="tl-input"
                           >
                             {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(n => (
                               <option key={n} value={n}>{n}</option>
                             ))}
                           </select>
-                        </div>
+                        </label>
 
-                        <div>
-                          <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1.5">Flight No (Optional)</label>
+                        <label className="col-span-2 block min-w-0 sm:col-span-1">
+                          <span className="tl-label">Flight no (optional)</span>
                           <input
                             type="text"
                             placeholder="e.g. EK37"
                             value={flightNumber}
                             onChange={(e) => setFlightNumber(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-3 text-xs text-slate-800 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition"
+                            className="tl-input"
                           />
-                        </div>
+                        </label>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex space-x-3 mt-4">
+                <div className="flex flex-col-reverse gap-3 sm:flex-row">
                   <button
                     type="button"
                     onClick={() => setCurrentStep(1)}
-                    className="flex-1 bg-white hover:bg-slate-50 text-slate-700 py-4 rounded-xl text-xs sm:text-sm font-semibold transition border border-slate-200 cursor-pointer"
+                    className="tl-btn tl-btn-outline sm:flex-1"
                   >
                     Back to Rates
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md shadow-emerald-600/10 cursor-pointer"
+                    className="tl-btn tl-btn-primary sm:flex-1"
                   >
                     Proceed to Payment
                   </button>
@@ -1863,149 +1886,154 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
             {/* STEP 3: INTEGRATED STRIPE / PAYPAL GATEWAY */}
             {currentStep === 3 && (
-              <div className="space-y-4">
-                <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-6">
-                  <div className="space-y-6">
-                    <div className="border-b border-slate-100 pb-4">
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-semibold text-slate-900 font-display">Secure Transaction Checkout</h3>
-                        <div className="text-right">
-                          <span className="text-[10px] text-slate-400 block font-sans">Total Payable:</span>
-                          <span className="text-xl font-extrabold font-display text-emerald-700">£{finalPayablePrice.toFixed(2)}</span>
+              <div className="space-y-3">
+                <div className="space-y-8">
+                  <div className="space-y-8">
+                    <div className="border-b border-stone-200 pb-6">
+                      <div className="flex items-end justify-between gap-6">
+                        <h3 className="tl-h3">Secure Transaction Checkout</h3>
+                        <div className="shrink-0 text-right">
+                          <span className="block text-xs text-stone-500">Total Payable:</span>
+                          <span className="text-2xl font-semibold text-stone-900 tabular-nums">£{finalPayablePrice.toFixed(2)}</span>
                         </div>
                       </div>
 
                       {/* Price breakdown when promo applied */}
                       {appliedPromo && (
-                        <div className="mt-3 p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-xs space-y-1">
-                          <div className="flex justify-between text-slate-600">
-                            <span>Standard Fare:</span>
-                            <span className="line-through">£{originalBasePrice.toFixed(2)}</span>
+                        <dl className="mt-5 divide-y divide-stone-200 border-t border-stone-200 text-sm">
+                          <div className="flex items-baseline justify-between gap-6 py-3">
+                            <dt className="text-stone-600">Standard Fare:</dt>
+                            <dd className="text-right text-stone-500 line-through tabular-nums">£{originalBasePrice.toFixed(2)}</dd>
                           </div>
-                          <div className="flex justify-between font-semibold text-emerald-700">
-                            <span>Promo Discount ({appliedPromo.code}):</span>
-                            <span>-£{promoDiscountAmount.toFixed(2)}</span>
+                          <div className="flex items-baseline justify-between gap-6 py-3">
+                            <dt className="text-stone-600">Promo Discount ({appliedPromo.code}):</dt>
+                            <dd className="text-right font-medium text-brand-700 tabular-nums">-£{promoDiscountAmount.toFixed(2)}</dd>
                           </div>
-                          <div className="flex justify-between pt-1 border-t border-emerald-200 text-slate-900 font-bold">
-                            <span>Final Amount:</span>
-                            <span>£{finalPayablePrice.toFixed(2)}</span>
+                          <div className="flex items-baseline justify-between gap-6 pt-3 text-lg font-semibold text-stone-900">
+                            <dt>Final Amount:</dt>
+                            <dd className="text-right tabular-nums">£{finalPayablePrice.toFixed(2)}</dd>
                           </div>
-                        </div>
+                        </dl>
                       )}
                     </div>
 
                     {/* PROMO CODE INPUT BOX */}
-                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-                      <label className="block text-xs font-semibold text-slate-700">
-                        🎟️ Have a Coupon Code or Voucher?
-                      </label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={promoInput}
-                          onChange={e => {
-                            setPromoInput(e.target.value.toUpperCase());
-                            setPromoError("");
-                          }}
-                          placeholder="ENTER COUPON CODE (e.g. LUXURY10)"
-                          disabled={!!appliedPromo || promoLoading}
-                          className="flex-1 uppercase font-mono tracking-wider border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 bg-white focus:outline-none focus:border-emerald-600 disabled:bg-slate-100"
-                        />
-                        {appliedPromo ? (
-                          <button
-                            type="button"
-                            onClick={handleRemovePromo}
-                            className="px-4 py-2.5 bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 font-semibold text-xs rounded-xl transition cursor-pointer"
-                          >
-                            Remove
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={handleApplyPromoCode}
-                            disabled={promoLoading || !promoInput.trim()}
-                            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                          >
-                            {promoLoading ? (
-                              <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            ) : null}
-                            <span>Apply</span>
-                          </button>
-                        )}
+                    <div className="space-y-3">
+                      <div>
+                        <label className="tl-label">
+                          Have a coupon code or voucher?
+                        </label>
+                        <div className="flex flex-col gap-3 sm:flex-row">
+                          <input
+                            type="text"
+                            value={promoInput}
+                            onChange={e => {
+                              setPromoInput(e.target.value.toUpperCase());
+                              setPromoError("");
+                            }}
+                            placeholder="ENTER COUPON CODE (e.g. LUXURY10)"
+                            disabled={!!appliedPromo || promoLoading}
+                            aria-label="Coupon code"
+                            className="tl-input min-w-0 uppercase tracking-wider placeholder:tracking-normal disabled:bg-stone-100 disabled:text-stone-500 sm:flex-1"
+                          />
+                          {appliedPromo ? (
+                            <button
+                              type="button"
+                              onClick={handleRemovePromo}
+                              className="tl-btn tl-btn-outline shrink-0"
+                            >
+                              Remove
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={handleApplyPromoCode}
+                              disabled={promoLoading || !promoInput.trim()}
+                              className="tl-btn tl-btn-outline shrink-0"
+                            >
+                              {promoLoading ? (
+                                <div className="w-4 h-4 border-2 border-stone-900 border-t-transparent rounded-full animate-spin" />
+                              ) : null}
+                              <span>Apply</span>
+                            </button>
+                          )}
+                        </div>
                       </div>
 
                       {/* Error or Success feedback */}
                       {promoError && (
-                        <p className="text-xs text-rose-600 font-medium flex items-center gap-1 pt-1">
-                          <AlertTriangle className="w-3.5 h-3.5" />
+                        <p role="alert" className="flex items-start gap-3 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} />
                           <span>{promoError}</span>
                         </p>
                       )}
                       {promoSuccessMsg && (
-                        <p className="text-xs text-emerald-700 font-medium flex items-center gap-1 pt-1">
-                          <Check className="w-3.5 h-3.5" />
+                        <p role="status" className="flex items-start gap-3 border-l-2 border-brand-700 bg-brand-50 px-4 py-3 text-sm text-stone-800">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-700" strokeWidth={1.5} />
                           <span>{promoSuccessMsg}</span>
                         </p>
                       )}
                     </div>
 
                     {/* Payment Tab selectors */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setPaymentMethod("Mollie")}
-                        className={`flex items-center justify-center space-x-2 py-3 px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                        aria-pressed={paymentMethod === "Mollie"}
+                        className={`tl-card flex h-12 cursor-pointer items-center gap-3 rounded-sm px-4 text-sm font-medium ${
                           paymentMethod === "Mollie"
-                            ? "bg-emerald-50 border-emerald-600 text-emerald-700 shadow-sm ring-1 ring-emerald-600/30"
-                            : "bg-white border-slate-200 text-slate-500 hover:text-slate-800"
+                            ? "border-brand-700 ring-1 ring-brand-700 bg-brand-50/40 text-brand-800"
+                            : "tl-card-hover text-stone-700"
                         }`}
                       >
-                        <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                        <span className="font-bold">Mollie Online</span>
+                        <ShieldCheck className="w-5 h-5 shrink-0 text-brand-700" strokeWidth={1.5} />
+                        <span>Mollie Online</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setPaymentMethod("Pay Later")}
-                        className={`flex items-center justify-center space-x-2 py-3 px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                        aria-pressed={paymentMethod === "Pay Later"}
+                        className={`tl-card flex h-12 cursor-pointer items-center gap-3 rounded-sm px-4 text-sm font-medium ${
                           paymentMethod === "Pay Later"
-                            ? "bg-emerald-50 border-emerald-600 text-emerald-700 shadow-sm ring-1 ring-emerald-600/30"
-                            : "bg-white border-slate-200 text-slate-500 hover:text-slate-800"
+                            ? "border-brand-700 ring-1 ring-brand-700 bg-brand-50/40 text-brand-800"
+                            : "tl-card-hover text-stone-700"
                         }`}
                       >
-                        <Coins className="w-4 h-4" />
+                        <Coins className="w-5 h-5 shrink-0 text-brand-700" strokeWidth={1.5} />
                         <span>Pay Later / Cash</span>
                       </button>
                     </div>
 
                     {/* MOLLIE PAYMENT METHOD UI */}
                     {paymentMethod === "Mollie" ? (
-                      <div className="space-y-4 py-2">
-                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-center">
-                          <div className="flex items-center justify-center space-x-2">
-                            <span className="font-display font-extrabold text-slate-800 tracking-wider text-lg">
+                      <div className="space-y-6">
+                        <div className="space-y-3 border-l-2 border-brand-700 bg-brand-50 px-4 py-4 text-stone-800">
+                          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                            <span className="text-lg font-semibold tracking-wide text-stone-900">
                               mollie
                             </span>
-                            <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                            <span className="border-l border-stone-300 pl-3 text-xs text-stone-600">
                               Official Gateway
                             </span>
                           </div>
-                          
-                          <p className="text-xs text-slate-600 leading-relaxed">
-                            Pay safely via <strong>Mollie</strong> supporting <strong>iDEAL, Visa, Mastercard, Bancontact, Klarna, Apple Pay &amp; PayPal</strong>.
+
+                          <p className="text-sm leading-relaxed text-stone-700">
+                            Pay safely via <strong className="font-semibold text-stone-900">Mollie</strong> supporting <strong className="font-semibold text-stone-900">iDEAL, Visa, Mastercard, Bancontact, Klarna, Apple Pay &amp; PayPal</strong>.
                           </p>
 
                           {/* Supported payment badges */}
-                          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-[10px] font-medium text-slate-500">
-                            <span className="bg-white px-2.5 py-1 rounded-md border border-slate-200 font-semibold text-slate-700">iDEAL</span>
-                            <span className="bg-white px-2.5 py-1 rounded-md border border-slate-200 font-semibold text-slate-700">Visa / MC</span>
-                            <span className="bg-white px-2.5 py-1 rounded-md border border-slate-200 font-semibold text-slate-700">Bancontact</span>
-                            <span className="bg-white px-2.5 py-1 rounded-md border border-slate-200 font-semibold text-slate-700">Apple Pay</span>
-                            <span className="bg-white px-2.5 py-1 rounded-md border border-slate-200 font-semibold text-slate-700">Klarna</span>
+                          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-stone-700">
+                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">iDEAL</span>
+                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Visa / MC</span>
+                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Bancontact</span>
+                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Apple Pay</span>
+                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Klarna</span>
                           </div>
                         </div>
 
-                        <div className="flex items-center space-x-2 text-[11px] text-slate-500">
-                          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="flex items-start gap-2 text-sm text-stone-500">
+                          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" strokeWidth={1.5} />
                           <span>Protected by Mollie 256-Bit SSL Bank Grade Encryption.</span>
                         </div>
 
@@ -2013,7 +2041,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           type="button"
                           onClick={handleMollieCheckout}
                           disabled={processingPayment}
-                          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl text-sm transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-md shadow-emerald-600/10 disabled:opacity-55"
+                          className="tl-btn tl-btn-primary w-full"
                         >
                           {processingPayment ? (
                             <>
@@ -2026,16 +2054,16 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </button>
                       </div>
                     ) : (
-                      <div className="space-y-4 py-6 text-center">
-                        <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                          <Coins className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                          <p className="text-xs text-emerald-800 font-semibold">
+                      <div className="space-y-6">
+                        <div className="flex items-start gap-3 border-l-2 border-brand-700 bg-brand-50 px-4 py-4 text-stone-800">
+                          <Coins className="mt-0.5 h-5 w-5 shrink-0 text-brand-700" strokeWidth={1.5} />
+                          <p className="text-sm leading-relaxed">
                             Secure your booking now and pay the driver directly in cash upon arrival.
                           </p>
                         </div>
                         <button
                           onClick={processCheckoutPayment}
-                          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl text-sm transition-all shadow-sm cursor-pointer"
+                          className="tl-btn tl-btn-primary w-full"
                         >
                           Confirm Booking (Pay Later)
                         </button>
@@ -2046,7 +2074,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                 <button
                   onClick={() => setCurrentStep(2)}
-                  className="w-full bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 py-3.5 border border-slate-200 rounded-xl text-xs font-semibold transition cursor-pointer"
+                  className="tl-btn tl-btn-outline w-full"
                 >
                   Back to schedule
                 </button>
@@ -2055,44 +2083,60 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
             {/* STEP 4: RESERVATION SUCCESS */}
             {currentStep === 4 && (
-              <div className="space-y-6 text-center py-6 animate-fade-in">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 mb-2">
-                  <Check className="w-8 h-8" />
-                </div>
-                
-                <div className="space-y-2">
-                  <h3 className="font-display font-bold text-2xl text-slate-900">Chauffeur Reserved Successfully!</h3>
-                  <p className="text-sm text-slate-500 max-w-md mx-auto">
-                    Your luxury airport transfer is secured. A transaction receipt and chauffeur schedule has been dispatched.
-                  </p>
+              <div className="space-y-8">
+                <div className="border-l-2 border-brand-700 bg-brand-50 px-5 py-5 text-stone-800">
+                  <Check className="h-6 w-6 text-brand-700" strokeWidth={1.5} />
+
+                  <div className="mt-3 space-y-2">
+                    <h3 className="text-2xl font-semibold leading-snug text-stone-900">Chauffeur Reserved Successfully!</h3>
+                    <p className="max-w-md text-base leading-relaxed text-stone-700">
+                      Your luxury airport transfer is secured. A transaction receipt and chauffeur schedule has been dispatched.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Booking receipt details summary */}
-                <div className="max-w-md mx-auto bg-slate-50 border border-slate-200 p-6 rounded-2xl text-left space-y-4 shadow-sm">
-                  <div className="flex justify-between items-center border-b border-slate-200 pb-3">
-                    <span className="text-xs font-sans text-slate-400 uppercase">Reservation ID:</span>
-                    <span className="text-sm font-sans font-bold text-emerald-700">{completedBookingId}</span>
+                <dl className="divide-y divide-stone-200 border-y border-stone-200 text-sm">
+                  <div className="flex items-baseline justify-between gap-6 py-3">
+                    <dt className="shrink-0 text-stone-600">Reservation ID:</dt>
+                    <dd className="min-w-0 break-words text-right font-semibold text-brand-800 tabular-nums">{completedBookingId}</dd>
                   </div>
 
-                  <div className="space-y-2 text-xs text-slate-600 font-medium">
-                    <p><strong>Passenger:</strong> {passengerName}</p>
-                    <p><strong>Route:</strong> {distanceResult?.pickupDisplay || pickupInput} → {distanceResult?.dropoffDisplay || dropoffInput}</p>
-                    <p><strong>Distance:</strong> {(distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0).toFixed(1)} mi ({(distanceResult?.distanceKm || (distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0) * 1.60934).toFixed(1)} km)</p>
-                    <p><strong>Date & Time:</strong> {rideDate ? new Date(rideDate + "T12:00:00").toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ""} at {rideTime}</p>
-                    <p><strong>Vehicle:</strong> {selectedVehicle} Class</p>
-                    <p><strong>Total Fare:</strong> <span className="font-sans text-emerald-700 font-semibold">£{completedBookingPrice.toFixed(2)}</span> ({paymentMethod})</p>
+                  <div className="flex items-baseline justify-between gap-6 py-3">
+                    <dt className="shrink-0 text-stone-600">Passenger:</dt>
+                    <dd className="min-w-0 break-words text-right text-stone-900">{passengerName}</dd>
                   </div>
-                </div>
+                  <div className="flex items-baseline justify-between gap-6 py-3">
+                    <dt className="shrink-0 text-stone-600">Route:</dt>
+                    <dd className="min-w-0 break-words text-right text-stone-900">{distanceResult?.pickupDisplay || pickupInput} → {distanceResult?.dropoffDisplay || dropoffInput}</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-6 py-3">
+                    <dt className="shrink-0 text-stone-600">Distance:</dt>
+                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{(distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0).toFixed(1)} mi ({(distanceResult?.distanceKm || (distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0) * 1.60934).toFixed(1)} km)</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-6 py-3">
+                    <dt className="shrink-0 text-stone-600">Date & Time:</dt>
+                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{rideDate ? new Date(rideDate + "T12:00:00").toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ""} at {rideTime}</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-6 py-3">
+                    <dt className="shrink-0 text-stone-600">Vehicle:</dt>
+                    <dd className="min-w-0 text-right text-stone-900">{selectedVehicle} Class</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-6 py-4 text-lg font-semibold text-stone-900">
+                    <dt className="shrink-0">Total Fare:</dt>
+                    <dd className="min-w-0 text-right"><span className="tabular-nums">£{completedBookingPrice.toFixed(2)}</span> <span className="text-sm font-normal text-stone-600">({paymentMethod})</span></dd>
+                  </div>
+                </dl>
 
                 {/* Immediate WhatsApp link */}
-                <div className="space-y-3 max-w-md mx-auto pt-4">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <a
                     href={`https://wa.me/441217140876?text=Hi%20Travelluxx!%20My%20booking%20is%20submitted.%20ID:%20${completedBookingId}%20from%20${encodeURIComponent(distanceResult?.pickupDisplay || "")}%20to%2520${encodeURIComponent(distanceResult?.dropoffDisplay || "")}.%20Total%20Price:%20£${completedBookingPrice}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl text-sm transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+                    className="tl-btn tl-btn-primary sm:flex-1"
                   >
-                    <Phone className="w-5 h-5 fill-current" />
+                    <Phone className="w-5 h-5" strokeWidth={1.5} />
                     <span>Open dispatch in WhatsApp</span>
                   </a>
 
@@ -2105,7 +2149,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       setCurrentStep(1);
                       setSelectedVehicle(null);
                     }}
-                    className="w-full bg-white hover:bg-slate-50 text-slate-600 py-3.5 rounded-xl text-xs font-semibold border border-slate-200 transition cursor-pointer"
+                    className="tl-btn tl-btn-outline sm:flex-1"
                   >
                     Calculate another route
                   </button>
@@ -2120,7 +2164,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
             
             {/* Map wrapper container */}
             <div
-              className="w-full h-[360px] sm:h-[420px] lg:h-[var(--map-height)] min-h-[350px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative flex flex-col transition-[height] duration-300"
+              className="w-full h-[360px] sm:h-[420px] lg:h-[var(--map-height)] min-h-[350px] bg-stone-100 overflow-hidden border border-stone-200 relative flex flex-col"
               style={
                 {
                   "--map-height": formHeight ? `${formHeight}px` : "100%",
@@ -2137,19 +2181,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
               />
               
               {/* Overlay guides: Left */}
-              <div className="absolute top-4 left-4 z-10 bg-white/95 border border-slate-200 px-3 py-2 rounded-xl backdrop-blur flex items-center space-x-2 text-[10px] text-slate-500 shadow-sm">
-                <Compass className="w-3.5 h-3.5 text-emerald-600 animate-spin-slow" />
-                <span className="font-semibold">Interactive Route Mapping</span>
+              <div className="absolute top-3 left-3 z-10 rounded-sm border border-stone-200 bg-white px-3 py-2 text-xs text-stone-700">
+                <span>Interactive Route Mapping</span>
               </div>
 
               {/* Bottom-Left Map Legend Card matching the user's screenshot exactly */}
-              <div className="absolute bottom-4 left-4 z-10 bg-white border border-slate-200/80 px-3 py-2 rounded-xl shadow-md flex items-center space-x-4 text-[11px] font-bold text-slate-800">
-                <div className="flex items-center space-x-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#10b981] inline-block border border-white shadow-sm"></span>
+              <div className="absolute bottom-3 left-3 z-10 flex items-center gap-4 rounded-sm border border-stone-200 bg-white px-3 py-2 text-xs text-stone-700">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand-700"></span>
                   <span>Pickup</span>
                 </div>
-                <div className="flex items-center space-x-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444] inline-block border border-white shadow-sm"></span>
+                <div className="flex items-center gap-2">
+                  <span className="inline-block h-2.5 w-2.5 bg-stone-900"></span>
                   <span>Dropoff</span>
                 </div>
               </div>

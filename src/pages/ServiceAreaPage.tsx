@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useParams } from "../utils/routerCompat";
-import { ArrowRight, ChevronDown, MapPin, HelpCircle } from "lucide-react";
+import { Link, useParams } from "../utils/routerCompat";
+import { ArrowLeft, ArrowRight, Plus, Minus } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 import { usePageSeo } from "../utils/seo";
+import { normalizeRichHtml } from "../utils/richText";
 
 const DEFAULT_AREA_FAQS = [
   {
@@ -146,19 +147,23 @@ export default function ServiceAreaPage({
 
   if ((isLoading || areaLoading) && !serviceArea) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-brand-950">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-brand-300 border-t-transparent" />
       </div>
     );
   }
 
   if (!serviceArea) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-white">
         <Navbar onScrollTo={() => {}} />
-        <main className="mx-auto max-w-3xl px-4 py-32 text-center">
-          <h1 className="text-3xl font-bold text-slate-900">Service area not found</h1>
-          <p className="mt-3 text-slate-600">{areaError || "This area page is not available."}</p>
+        <main className="flex flex-grow flex-col items-center justify-center px-5 py-32 text-center sm:px-8">
+          <h1 className="tl-h2">Service area not found</h1>
+          <p className="tl-lead mt-5 max-w-md">{areaError || "This area page is not available."}</p>
+          <Link to="/service-areas" className="tl-btn tl-btn-primary mt-8">
+            <ArrowLeft className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+            <span>Back to service areas</span>
+          </Link>
         </main>
         <Footer onScrollTo={() => {}} />
       </div>
@@ -168,57 +173,75 @@ export default function ServiceAreaPage({
   const phone = settings?.whatsapp_number || "441217140876";
   const phoneLabel = phone.startsWith("44") ? `+44 ${phone.slice(2, 6)} ${phone.slice(6)}` : phone;
 
+  // Presentational only: the CMS often sets the FAQ title to the same words as the label above it,
+  // so the label is shown only when it says something different from the heading.
+  const faqEyebrow = "Frequently Asked Questions";
+  const faqTitle = serviceArea.faqTitle || `${serviceArea.title} Chauffeur & Transfers FAQ`;
+  const showFaqEyebrow = faqEyebrow.trim().toLowerCase() !== String(faqTitle).trim().toLowerCase();
+
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-800">
+    <div className="flex min-h-screen flex-col bg-white">
       <Navbar onScrollTo={() => {}} />
 
-      <main>
+      <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative isolate overflow-hidden bg-slate-950 text-white">
-          <div
-            className="absolute inset-0 -z-20 bg-cover bg-center opacity-30"
-            style={{ backgroundImage: `url('${serviceArea.heroImage || "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85"}')` }}
-          />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-950/45" />
+        <section className="relative overflow-hidden bg-brand-950">
+          {/* Decorative background photo under a flat dark overlay for legibility */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+            <img
+              src={serviceArea.heroImage || "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85"}
+              alt=""
+              loading="eager"
+              decoding="async"
+              data-parallax
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-brand-950/80" />
+          </div>
 
-          <div className="mx-auto max-w-7xl px-4 pb-20 pt-32 sm:px-6 sm:pb-24 lg:px-8 lg:py-36">
-            <div className="max-w-3xl">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">
-                <MapPin className="h-4 w-4" />
-                {serviceArea.heroBadge || serviceArea.title}
-              </div>
-              <h1 className="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-                {serviceArea.heroTitle || serviceArea.title}
-              </h1>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-                {serviceArea.heroDescription}
-              </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={serviceArea.heroButtonUrl || "/#calculator-section"}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-400"
-                >
-                  {serviceArea.heroButtonText || "Plan your journey"} <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  href={serviceArea.heroSecondaryButtonUrl || `tel:${phone}`}
-                  className="inline-flex items-center justify-center rounded-xl border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/10"
-                >
-                  {serviceArea.heroSecondaryButtonText || `Call ${phoneLabel}`}
-                </a>
-              </div>
+          <div className="tl-container relative pt-32 pb-20 lg:pt-40 lg:pb-24">
+            <span data-reveal className="tl-eyebrow tl-eyebrow-light">
+              {serviceArea.heroBadge || serviceArea.title}
+            </span>
+            <h1
+              data-reveal="lines"
+              className="tl-h1 mt-5 max-w-4xl text-4xl text-balance text-white sm:text-5xl lg:text-6xl"
+            >
+              {serviceArea.heroTitle || serviceArea.title}
+            </h1>
+            <p
+              data-reveal
+              data-reveal-delay="0.15"
+              className="mt-6 max-w-2xl text-lg leading-relaxed text-stone-300"
+            >
+              {serviceArea.heroDescription}
+            </p>
+            <div data-reveal data-reveal-delay="0.3" className="mt-9 flex flex-wrap items-center gap-3">
+              <a
+                href={serviceArea.heroButtonUrl || "/#calculator-section"}
+                className="tl-btn tl-btn-light"
+              >
+                <span>{serviceArea.heroButtonText || "Plan your journey"}</span>
+                <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              </a>
+              <a
+                href={serviceArea.heroSecondaryButtonUrl || `tel:${phone}`}
+                className="tl-btn tl-btn-outline-light"
+              >
+                {serviceArea.heroSecondaryButtonText || `Call ${phoneLabel}`}
+              </a>
             </div>
           </div>
         </section>
 
         {/* Content Body */}
         {serviceArea.content && (
-          <section className="bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl rounded-lg bg-slate-100 p-6 sm:p-8 lg:p-10">
-              <div className="ql-snow">
+          <section className="tl-section bg-white">
+            <div className="tl-container">
+              <div data-reveal className="ql-snow mx-auto max-w-3xl">
                 <div
-                  className="ql-editor page-rich-content service-area-content max-w-5xl text-sm leading-7 text-slate-700 sm:text-base !p-0"
-                  dangerouslySetInnerHTML={{ __html: serviceArea.content || "" }}
+                  className="ql-editor page-rich-content service-area-content"
+                  dangerouslySetInnerHTML={{ __html: normalizeRichHtml(serviceArea.content) }}
                 />
               </div>
             </div>
@@ -227,72 +250,66 @@ export default function ServiceAreaPage({
 
         {/* FAQs Section */}
         {validFaqs.length > 0 && (
-          <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3 border border-emerald-200">
-                <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Frequently Asked Questions</span>
-              </div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                {serviceArea.faqTitle || `${serviceArea.title} Chauffeur & Transfers FAQ`}
-              </h2>
-              <p className="mt-3 text-sm text-slate-500 max-w-xl mx-auto">
-                Got questions about traveling in or around {serviceArea.title}? Here are quick answers to the most common questions.
-              </p>
-            </div>
+          <section className="tl-section bg-ivory">
+            <div className="tl-container">
+              <div className="mx-auto max-w-3xl">
+                {showFaqEyebrow && (
+                  <span data-reveal className="tl-eyebrow">{faqEyebrow}</span>
+                )}
+                <h2 data-reveal="lines" className={showFaqEyebrow ? "tl-h2 mt-4" : "tl-h2"}>
+                  {faqTitle}
+                </h2>
+                <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
+                  Got questions about traveling in or around {serviceArea.title}? Here are quick answers to the most common questions.
+                </p>
 
-            <div className="mt-10 space-y-3">
-              {validFaqs.map((faq: any, index: number) => {
-                const isOpen = openFaqIndex === index;
-                const questionId = `area-faq-q-${index}`;
-                const answerId = `area-faq-a-${index}`;
-                return (
-                  <div
-                    key={faq.question || index}
-                    className={`rounded-xl border transition-all duration-200 overflow-hidden ${
-                      isOpen
-                        ? "border-emerald-300 bg-emerald-50/30 shadow-sm"
-                        : "border-slate-200 bg-white hover:border-slate-300"
-                    }`}
-                  >
-                    {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
-                    <div
-                      onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                      className="cursor-pointer flex w-full items-center justify-between gap-4 p-5 select-none"
-                    >
-                      <h3
-                        id={questionId}
-                        className="text-left font-semibold text-slate-900 text-base sm:text-lg transition"
-                      >
-                        {faq.question}
-                      </h3>
-                      <button
-                        type="button"
-                        aria-expanded={isOpen}
-                        aria-controls={answerId}
-                        aria-labelledby={questionId}
-                        className={`cursor-pointer h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                          isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
-                        }`}
-                      >
-                        <ChevronDown
-                          className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                        />
-                      </button>
-                    </div>
-                    <div
-                      id={answerId}
-                      role="region"
-                      aria-labelledby={questionId}
-                      className={`px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60 ${
-                        isOpen ? "block" : "hidden"
-                      }`}
-                    >
-                      <p>{faq.answer}</p>
-                    </div>
-                  </div>
-                );
-              })}
+                <div data-reveal-group className="mt-12 divide-y divide-stone-200 border-y border-stone-200">
+                  {validFaqs.map((faq: any, index: number) => {
+                    const isOpen = openFaqIndex === index;
+                    const questionId = `area-faq-q-${index}`;
+                    const answerId = `area-faq-a-${index}`;
+                    return (
+                      <div key={faq.question || index}>
+                        {/* The question is a plain <h3> (text only). The toggle lives on the row + icon button. */}
+                        <div
+                          onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                          className="flex cursor-pointer items-start justify-between gap-6 py-6"
+                        >
+                          <h3
+                            id={questionId}
+                            className="text-base leading-snug font-medium text-stone-900 sm:text-lg"
+                          >
+                            {faq.question}
+                          </h3>
+                          <button
+                            type="button"
+                            aria-expanded={isOpen}
+                            aria-controls={answerId}
+                            aria-labelledby={questionId}
+                            className="-my-2.5 -mr-3 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center text-stone-500 transition-colors duration-200 hover:text-stone-900"
+                          >
+                            {isOpen ? (
+                              <Minus className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                            ) : (
+                              <Plus className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                            )}
+                          </button>
+                        </div>
+                        <div
+                          id={answerId}
+                          role="region"
+                          aria-labelledby={questionId}
+                          className={`pr-10 pb-6 leading-relaxed text-stone-600 ${
+                            isOpen ? "block" : "hidden"
+                          }`}
+                        >
+                          <p>{faq.answer}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </section>
         )}

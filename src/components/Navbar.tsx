@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "../utils/routerCompat";
-import { Phone, Mail, MapPin, Compass, Shield, Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { travelluxxLogoBase64 } from "../assets/travelluxx_logo_datauri";
 import { trackClick } from "../utils/analytics";
 import { getCustomImage } from "../utils/customImages";
@@ -40,6 +40,13 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
   const isRenax = settings?.active_theme === "renax";
 
+  // Phone number, formatted the same way as the footer (+44 1217 140876)
+  const whatsappNum = String(settings?.whatsapp_number || "441217140876");
+  const formattedPhone = whatsappNum.startsWith("44")
+    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
+    : whatsappNum;
+  const phoneHref = whatsappNum.startsWith("44") ? `tel:+${whatsappNum}` : `tel:${whatsappNum}`;
+
   const fallbackMenuItems = [
     { id: "nav-home", label: "Home", href: "/", target: "_self" },
     {
@@ -73,25 +80,44 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
   const activeNavItems = (Array.isArray(menuItems) && menuItems.length > 0) ? menuItems : fallbackMenuItems;
 
+  // Shared class strings (light bar / renax dark bar)
+  const barTone = isRenax
+    ? "bg-brand-950 border-white/10 text-stone-200"
+    : "bg-white border-stone-200 text-stone-700";
+  const hairline = isRenax ? "border-white/10" : "border-stone-200";
+
+  // Desktop
+  const deskLink = `inline-flex items-center gap-1.5 py-2 text-sm font-medium cursor-pointer transition-colors duration-200 ${isRenax ? "text-stone-200 hover:text-brand-300" : "text-stone-700 hover:text-brand-700"
+    }`;
+  const deskParentLink = `inline-flex items-center gap-1.5 py-2 text-sm font-medium cursor-pointer transition-colors duration-200 ${isRenax ? "text-stone-200 group-hover/dropdown:text-brand-300" : "text-stone-700 group-hover/dropdown:text-brand-700"
+    }`;
+  const deskChildLink = `block w-full px-5 py-2.5 text-left text-sm cursor-pointer transition-colors duration-200 ${isRenax
+      ? "text-stone-200 hover:bg-white/5 hover:text-brand-300"
+      : "text-stone-700 hover:bg-stone-50 hover:text-brand-700"
+    }`;
+
+  // Mobile
+  const mobLink = `flex min-h-12 items-center py-2 text-left text-base font-medium cursor-pointer transition-colors duration-200 ${isRenax ? "text-stone-200 hover:text-brand-300" : "text-stone-900 hover:text-brand-700"
+    }`;
+  const mobChildLink = `flex min-h-12 w-full items-center py-2 text-left text-sm cursor-pointer transition-colors duration-200 ${isRenax ? "text-stone-300 hover:text-brand-300" : "text-stone-600 hover:text-brand-700"
+    }`;
+
   return (
-    <header className={`sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${isRenax
-        ? "bg-[#0c0d12]/95 border-b border-slate-800/80 shadow-md text-white font-['Outfit']"
-        : "bg-white/95 border-b border-slate-200/80 shadow-sm font-sans"
-      }`}>
+    <header className={`sticky top-0 z-50 border-b ${barTone}`}>
       {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-24">
+      <div className="tl-container">
+        <div className="flex h-[72px] items-center justify-between gap-6 lg:grid lg:h-20 lg:grid-cols-[1fr_auto_1fr] lg:gap-10">
 
           {/* Logo Section */}
-          <div className="flex items-center group/logo relative">
-            <div className="relative flex items-center justify-center shrink-0 cursor-pointer" onClick={() => onScrollTo("hero")}>
+          <div className="flex items-center">
+            <div className="flex shrink-0 cursor-pointer items-center justify-center" onClick={() => onScrollTo("hero")}>
               <img
                 src={brandLogo || travelluxxLogoBase64}
                 alt={`${brandName} Logo`}
                 width={260}
                 height={80}
                 decoding="async"
-                className="h-14 sm:h-16 md:h-18 w-auto max-w-[210px] sm:max-w-[260px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
+                className="h-11 w-auto max-w-[180px] object-contain lg:h-12 lg:max-w-[200px]"
                 onError={() => {
                   if (brandLogo !== travelluxxLogoBase64) {
                     setBrandLogo(travelluxxLogoBase64);
@@ -102,7 +128,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-7 text-sm font-bold">
+          <nav aria-label="Main" className="hidden h-full items-center gap-9 lg:flex">
             {activeNavItems.map((item) => {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0;
               const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
@@ -110,45 +136,40 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
               if (hasChildren) {
                 return (
-                  <div key={item.id} className="relative group/dropdown py-2">
-                    <div className="flex items-center gap-1 cursor-pointer">
-                      {isAnchor && sectionId ? (
-                        <button
-                          type="button"
-                          onClick={() => onScrollTo(sectionId)}
-                          className={`transition cursor-pointer font-bold tracking-wide flex items-center gap-1 ${isRenax ? "text-slate-200 group-hover/dropdown:text-emerald-400" : "text-slate-700 group-hover/dropdown:text-emerald-600"
-                            }`}
-                        >
-                          <span>{item.label}</span>
-                          <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" />
-                        </button>
-                      ) : item.href?.startsWith("http") ? (
-                        <a
-                          href={item.href || "#"}
-                          target={item.target || "_self"}
-                          className={`transition cursor-pointer font-bold tracking-wide flex items-center gap-1 ${isRenax ? "text-slate-200 group-hover/dropdown:text-emerald-400" : "text-slate-700 group-hover/dropdown:text-emerald-600"
-                            }`}
-                        >
-                          <span>{item.label}</span>
-                          <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" />
-                        </a>
-                      ) : (
-                        <Link
-                          to={item.href || "/"}
-                          className={`transition cursor-pointer font-bold tracking-wide flex items-center gap-1 ${isRenax ? "text-slate-200 group-hover/dropdown:text-emerald-400" : "text-slate-700 group-hover/dropdown:text-emerald-600"
-                            }`}
-                        >
-                          <span>{item.label}</span>
-                          <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover/dropdown:rotate-180" />
-                        </Link>
-                      )}
-                    </div>
+                  <div key={item.id} className="group/dropdown relative flex h-full items-center">
+                    {isAnchor && sectionId ? (
+                      <button
+                        type="button"
+                        onClick={() => onScrollTo(sectionId)}
+                        className={deskParentLink}
+                      >
+                        <span>{item.label}</span>
+                        <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
+                      </button>
+                    ) : item.href?.startsWith("http") ? (
+                      <a
+                        href={item.href || "#"}
+                        target={item.target || "_self"}
+                        className={deskParentLink}
+                      >
+                        <span>{item.label}</span>
+                        <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
+                      </a>
+                    ) : (
+                      <Link
+                        to={item.href || "/"}
+                        className={deskParentLink}
+                      >
+                        <span>{item.label}</span>
+                        <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
+                      </Link>
+                    )}
 
-                    {/* Floating Dropdown Card */}
-                    <div className="absolute top-full left-0 pt-2 z-50 min-w-[220px] opacity-0 translate-y-1 pointer-events-none group-hover/dropdown:opacity-100 group-hover/dropdown:translate-y-0 group-hover/dropdown:pointer-events-auto transition-all duration-200 ease-out">
-                      <div className={`rounded-xl shadow-2xl border p-2 backdrop-blur-xl ${isRenax
-                          ? "bg-[#0f121d]/95 border-slate-700/70 text-white shadow-black/60"
-                          : "bg-white/95 border-slate-200/90 text-slate-800 shadow-slate-300/40"
+                    {/* Dropdown panel: hangs from the bar's hairline; opens on hover and on keyboard focus */}
+                    <div className="invisible absolute top-full -left-5 z-50 group-hover/dropdown:visible group-has-[:focus-visible]/dropdown:visible">
+                      <div className={`max-h-[calc(100vh-7rem)] w-max max-w-[340px] min-w-[240px] overflow-y-auto rounded-sm border py-2 shadow-sm ${isRenax
+                          ? "bg-brand-950 border-white/10"
+                          : "bg-white border-stone-200"
                         }`}>
                         {item.children.map((child: any) => {
                           const childIsAnchor = child.href?.startsWith("/#") || child.href?.startsWith("#");
@@ -160,10 +181,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                                 key={child.id}
                                 type="button"
                                 onClick={() => onScrollTo(childSectionId)}
-                                className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-between ${isRenax
-                                    ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200"
-                                    : "hover:bg-emerald-50 hover:text-emerald-700 text-slate-700"
-                                  }`}
+                                className={deskChildLink}
                               >
                                 <span>{child.label}</span>
                               </button>
@@ -175,10 +193,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                                 key={child.id}
                                 href={child.href}
                                 target={child.target || "_self"}
-                                className={`block px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer ${isRenax
-                                    ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200"
-                                    : "hover:bg-emerald-50 hover:text-emerald-700 text-slate-700"
-                                  }`}
+                                className={deskChildLink}
                               >
                                 {child.label}
                               </a>
@@ -189,10 +204,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                             <Link
                               key={child.id}
                               to={child.href}
-                              className={`block px-3.5 py-2.5 rounded-lg text-xs font-semibold transition cursor-pointer ${isRenax
-                                  ? "hover:bg-white/10 hover:text-emerald-400 text-slate-200"
-                                  : "hover:bg-emerald-50 hover:text-emerald-700 text-slate-700"
-                                }`}
+                              className={deskChildLink}
                             >
                               {child.label}
                             </Link>
@@ -209,8 +221,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                   <button
                     key={item.id}
                     onClick={() => onScrollTo(sectionId)}
-                    className={`transition cursor-pointer font-bold tracking-wide ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"
-                      }`}
+                    className={deskLink}
                   >
                     {item.label}
                   </button>
@@ -223,8 +234,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                     key={item.id}
                     href={item.href}
                     target={item.target || "_self"}
-                    className={`transition cursor-pointer font-bold tracking-wide ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"
-                      }`}
+                    className={deskLink}
                   >
                     {item.label}
                   </a>
@@ -235,8 +245,7 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                 <Link
                   key={item.id}
                   to={item.href || "/"}
-                  className={`transition cursor-pointer font-bold tracking-wide ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-700 hover:text-emerald-600"
-                    }`}
+                  className={deskLink}
                 >
                   {item.label}
                 </Link>
@@ -244,14 +253,34 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
             })}
           </nav>
 
-          {/* Mobile menu button */}
-          <div className="flex md:hidden items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 transition focus:outline-none ${isRenax ? "text-white hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
+          {/* Desktop contact: phone + quote */}
+          <div className="hidden items-center justify-end gap-7 lg:flex">
+            <a
+              href={phoneHref}
+              className={`text-sm font-medium whitespace-nowrap transition-colors duration-200 ${isRenax ? "text-stone-200 hover:text-brand-300" : "text-stone-900 hover:text-brand-700"
                 }`}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {formattedPhone}
+            </a>
+            <a
+              href="/#calculator-section"
+              className={`tl-btn h-11 px-5 ${isRenax ? "tl-btn-light" : "tl-btn-primary"}`}
+            >
+              Get a quote
+            </a>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex items-center lg:hidden">
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              className={`-mr-3 inline-flex h-12 w-12 cursor-pointer items-center justify-center transition-colors duration-200 ${isRenax ? "text-white hover:text-brand-300" : "text-stone-900 hover:text-brand-700"
+                }`}
+            >
+              {isOpen ? <X className="h-6 w-6" strokeWidth={1.5} /> : <Menu className="h-6 w-6" strokeWidth={1.5} />}
             </button>
           </div>
         </div>
@@ -259,158 +288,173 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className={`md:hidden border-t py-4 px-6 shadow-lg ${isRenax ? "bg-[#12141c] border-slate-800 text-white font-['Outfit']" : "bg-white border-slate-150 text-slate-800"
-          }`}>
-          <div className="flex flex-col space-y-3">
-            {activeNavItems.map((item) => {
-              const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-              const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
-              const sectionId = isAnchor ? item.href.split("#")[1] : "";
-              const isSubOpen = !!openMobileDropdowns[item.id];
+        <div
+          id="site-mobile-menu"
+          className={`absolute inset-x-0 top-full max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain border-t border-b shadow-sm lg:hidden ${barTone}`}
+        >
+          <div className="tl-container pb-6">
+            <nav aria-label="Mobile" className={`flex flex-col divide-y border-b ${isRenax ? "divide-white/10" : "divide-stone-200"} ${hairline}`}>
+              {activeNavItems.map((item) => {
+                const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
+                const sectionId = isAnchor ? item.href.split("#")[1] : "";
+                const isSubOpen = !!openMobileDropdowns[item.id];
 
-              if (hasChildren) {
-                return (
-                  <div key={item.id} className="border-b border-slate-100/10 pb-2">
-                    <div className="flex items-center justify-between py-2">
-                      {isAnchor && sectionId ? (
+                if (hasChildren) {
+                  return (
+                    <div key={item.id}>
+                      <div className="flex items-center justify-between gap-2">
+                        {isAnchor && sectionId ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onScrollTo(sectionId);
+                              setIsOpen(false);
+                            }}
+                            className={`${mobLink} flex-1`}
+                          >
+                            {item.label}
+                          </button>
+                        ) : item.href?.startsWith("http") ? (
+                          <a
+                            href={item.href || "#"}
+                            target={item.target || "_self"}
+                            onClick={() => setIsOpen(false)}
+                            className={`${mobLink} flex-1`}
+                          >
+                            {item.label}
+                          </a>
+                        ) : (
+                          <Link
+                            to={item.href || "/"}
+                            onClick={() => setIsOpen(false)}
+                            className={`${mobLink} flex-1`}
+                          >
+                            {item.label}
+                          </Link>
+                        )}
                         <button
                           type="button"
-                          onClick={() => {
-                            onScrollTo(sectionId);
-                            setIsOpen(false);
-                          }}
-                          className={`font-bold transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
+                          onClick={() => setOpenMobileDropdowns(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
+                          aria-label={`${isSubOpen ? "Hide" : "Show"} ${item.label} links`}
+                          aria-expanded={isSubOpen}
+                          className={`-mr-3 inline-flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center transition-colors duration-200 ${isRenax ? "text-stone-400 hover:text-brand-300" : "text-stone-500 hover:text-brand-700"
                             }`}
                         >
-                          {item.label}
+                          <ChevronDown className={`h-5 w-5 ${isSubOpen ? "rotate-180" : ""}`} strokeWidth={1.5} />
                         </button>
-                      ) : item.href?.startsWith("http") ? (
-                        <a
-                          href={item.href || "#"}
-                          target={item.target || "_self"}
-                          onClick={() => setIsOpen(false)}
-                          className={`font-bold transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
-                            }`}
-                        >
-                          {item.label}
-                        </a>
-                      ) : (
-                        <Link
-                          to={item.href || "/"}
-                          onClick={() => setIsOpen(false)}
-                          className={`font-bold transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
-                            }`}
-                        >
-                          {item.label}
-                        </Link>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => setOpenMobileDropdowns(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
-                        className="p-1 text-slate-400 hover:text-emerald-500 transition"
-                      >
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isSubOpen ? "rotate-180" : ""}`} />
-                      </button>
-                    </div>
-
-                    {isSubOpen && (
-                      <div className="pl-3 space-y-1 pt-1 border-l-2 border-emerald-500/40 ml-2">
-                        {item.children.map((child: any) => {
-                          const childIsAnchor = child.href?.startsWith("/#") || child.href?.startsWith("#");
-                          const childSectionId = childIsAnchor ? child.href.split("#")[1] : "";
-
-                          if (childIsAnchor && childSectionId) {
-                            return (
-                              <button
-                                key={child.id}
-                                type="button"
-                                onClick={() => {
-                                  onScrollTo(childSectionId);
-                                  setIsOpen(false);
-                                }}
-                                className={`block w-full text-left py-1.5 text-xs font-semibold transition ${isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"
-                                  }`}
-                              >
-                                {child.label}
-                              </button>
-                            );
-                          }
-                          if (child.href?.startsWith("http")) {
-                            return (
-                              <a
-                                key={child.id}
-                                href={child.href}
-                                target={child.target || "_self"}
-                                onClick={() => setIsOpen(false)}
-                                className={`block py-1.5 text-xs font-semibold transition ${isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"
-                                  }`}
-                              >
-                                {child.label}
-                              </a>
-                            );
-                          }
-
-                          return (
-                            <Link
-                              key={child.id}
-                              to={child.href}
-                              onClick={() => setIsOpen(false)}
-                              className={`block py-1.5 text-xs font-semibold transition ${isRenax ? "text-slate-300 hover:text-emerald-400" : "text-slate-600 hover:text-emerald-600"
-                                }`}
-                            >
-                              {child.label}
-                            </Link>
-                          );
-                        })}
                       </div>
-                    )}
-                  </div>
-                );
-              }
 
-              if (isAnchor && sectionId) {
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      onScrollTo(sectionId);
-                      setIsOpen(false);
-                    }}
-                    className={`text-left font-bold py-2 transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
-                      }`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              }
+                      {isSubOpen && (
+                        <div className={`mb-3 border-l pl-4 ${hairline}`}>
+                          {item.children.map((child: any) => {
+                            const childIsAnchor = child.href?.startsWith("/#") || child.href?.startsWith("#");
+                            const childSectionId = childIsAnchor ? child.href.split("#")[1] : "";
 
-              if (item.href?.startsWith("http")) {
+                            if (childIsAnchor && childSectionId) {
+                              return (
+                                <button
+                                  key={child.id}
+                                  type="button"
+                                  onClick={() => {
+                                    onScrollTo(childSectionId);
+                                    setIsOpen(false);
+                                  }}
+                                  className={mobChildLink}
+                                >
+                                  {child.label}
+                                </button>
+                              );
+                            }
+                            if (child.href?.startsWith("http")) {
+                              return (
+                                <a
+                                  key={child.id}
+                                  href={child.href}
+                                  target={child.target || "_self"}
+                                  onClick={() => setIsOpen(false)}
+                                  className={mobChildLink}
+                                >
+                                  {child.label}
+                                </a>
+                              );
+                            }
+
+                            return (
+                              <Link
+                                key={child.id}
+                                to={child.href}
+                                onClick={() => setIsOpen(false)}
+                                className={mobChildLink}
+                              >
+                                {child.label}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                if (isAnchor && sectionId) {
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        onScrollTo(sectionId);
+                        setIsOpen(false);
+                      }}
+                      className={mobLink}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                }
+
+                if (item.href?.startsWith("http")) {
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      target={item.target || "_self"}
+                      onClick={() => setIsOpen(false)}
+                      className={mobLink}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                }
+
                 return (
-                  <a
+                  <Link
                     key={item.id}
-                    href={item.href}
-                    target={item.target || "_self"}
+                    to={item.href || "/"}
                     onClick={() => setIsOpen(false)}
-                    className={`text-left font-bold py-2 transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
-                      }`}
+                    className={mobLink}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 );
-              }
+              })}
+            </nav>
 
-              return (
-                <Link
-                  key={item.id}
-                  to={item.href || "/"}
-                  onClick={() => setIsOpen(false)}
-                  className={`text-left font-bold py-2 transition cursor-pointer text-sm ${isRenax ? "text-slate-200 hover:text-emerald-400" : "text-slate-800 hover:text-emerald-600"
-                    }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+            {/* Mobile contact: quote + phone */}
+            <div className="flex flex-col gap-3 pt-6">
+              <a
+                href="/#calculator-section"
+                onClick={() => setIsOpen(false)}
+                className={`tl-btn w-full ${isRenax ? "tl-btn-light" : "tl-btn-primary"}`}
+              >
+                Get a quote
+              </a>
+              <a
+                href={phoneHref}
+                className={`tl-btn w-full ${isRenax ? "tl-btn-outline-light" : "tl-btn-outline"}`}
+              >
+                {formattedPhone}
+              </a>
+            </div>
           </div>
         </div>
       )}

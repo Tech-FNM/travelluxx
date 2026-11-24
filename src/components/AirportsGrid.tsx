@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Plane } from "lucide-react";
 
 import airportTransfersImg from "../assets/images/transfer_airport_1786403518712.jpg";
 import portTransfersImg from "../assets/images/transfer_port_1786403532912.jpg";
@@ -75,55 +74,58 @@ export default function AirportsGrid({ onSelectTransfer, settings }: AirportsGri
   ];
 
   return (
-    <section id="airports" className="py-20 bg-white border-t border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section id="airports" className="tl-section bg-ivory">
+      <div className="tl-container">
+
         {/* Section Heading */}
-        <div className="text-center mb-10">
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
+        <div>
+          <span data-reveal className="tl-eyebrow">Coverage</span>
+          <h2 data-reveal="lines" className="tl-h2 mt-4 max-w-3xl">
             {settings?.homepage_airports_title || "We cover all major London airports"}
           </h2>
         </div>
 
-        {/* Airport Taxi Row (6 columns) */}
-        <div className="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm mb-16">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-y lg:divide-y-0 divide-slate-200">
-            {airports.map((airport, idx) => (
-              <div
-                key={airport.code}
-                className={`py-8 px-4 text-center ${
-                  idx >= 3 ? "sm:border-t-0" : ""
-                }`}
-              >
-                <div className="mb-3 flex justify-center">
-                  <Plane className="w-6 h-6 text-slate-700" />
-                </div>
-                <div className="font-bold text-slate-900 text-sm">
-                  {airport.name}
-                </div>
-                <div className="text-[11px] text-slate-400 font-medium mt-0.5">
-                  Airport Taxi
-                </div>
+        {/* Airport Taxi Row (6 columns): hairline grid. Every cell owns its white surface and
+            its border, and overlaps its neighbours by 1px so the lines stay single hairlines;
+            the container itself paints nothing, so nothing shows before the cells reveal. */}
+        <ul data-reveal-group className="mt-12 grid grid-cols-2 pt-px pl-px sm:grid-cols-3 lg:grid-cols-6">
+          {airports.map((airport) => (
+            <li
+              key={airport.code}
+              className="-mt-px -ml-px border border-stone-200 bg-white px-5 py-7 sm:px-6 sm:py-8"
+            >
+              <div className="font-display text-3xl leading-none tracking-wide text-stone-900">
+                {airport.code}
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="mt-4 text-sm font-medium text-stone-700">
+                {airport.name}
+              </div>
+              <div className="mt-0.5 text-xs text-stone-500">
+                Airport Taxi
+              </div>
+            </li>
+          ))}
+        </ul>
 
-        {/* Service Cards Grid (5 columns) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {services.map((service) => (
+        {/* Service Cards Grid. Five equal columns on desktop (xl). In between, the five cards are
+            arranged so no row is left with an empty slot and no column gets too narrow to read:
+            tablet (sm) = one wide card then 2 + 2; small laptop / tablet landscape (lg) = 2 large + 3. */}
+        <div data-reveal-group className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-6 xl:grid-cols-5">
+          {services.map((service, idx) => (
             <div
               key={service.title}
-              className="group bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm flex flex-col"
+              className={`tl-card flex flex-col xl:col-span-1 ${
+                idx === 0 ? "sm:col-span-2 lg:col-span-3" : idx === 1 ? "lg:col-span-3" : "lg:col-span-2"
+              }`}
             >
               {/* Image box */}
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+              <div className={`aspect-[4/3] overflow-hidden bg-stone-100 ${idx === 0 ? "sm:max-lg:aspect-[2/1]" : ""}`}>
                 <img
                   src={service.image}
                   alt={`${service.title} - Luxury Airport Transfer Solihull & London UK`}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="h-full w-full object-cover"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const target = e.currentTarget;
@@ -133,19 +135,16 @@ export default function AirportsGrid({ onSelectTransfer, settings }: AirportsGri
                     }
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
               </div>
 
               {/* Text content */}
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-500 text-xs leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
+              <div className="flex-1 p-5 sm:p-6">
+                <h3 className="tl-h3">
+                  {service.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                  {service.description}
+                </p>
               </div>
             </div>
           ))}

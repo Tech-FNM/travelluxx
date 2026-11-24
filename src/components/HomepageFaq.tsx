@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 export interface FaqItem {
   question: string;
@@ -50,87 +50,82 @@ export default function HomepageFaq({
   if (!displayFaqs || displayFaqs.length === 0) return null;
 
   return (
-    <section className={`py-20 sm:py-24 transition-colors ${isRenax ? "bg-[#0a0b0e] border-t border-slate-900/80 text-white" : "bg-slate-50 border-t border-slate-200/80 text-slate-900"}`}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
-            <HelpCircle className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{badge}</span>
+    <section
+      className={`tl-section ${
+        isRenax
+          ? "bg-brand-950 border-t border-white/10 text-stone-300"
+          : "bg-ivory text-stone-700 [#airports+&]:border-t [#airports+&]:border-stone-200"
+      }`}
+    >
+      <div className="tl-container">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Section header: left column, stays in view while the list scrolls on desktop */}
+          <div className="lg:sticky lg:top-28 lg:col-span-5 lg:self-start">
+            {/* Reveal attributes sit on the elements inside the sticky column, never on the sticky wrapper */}
+            <span data-reveal className={`tl-eyebrow empty:hidden ${isRenax ? "tl-eyebrow-light" : ""}`}>{badge}</span>
+            <h2 data-reveal="lines" className={`tl-h2 mt-4 ${isRenax ? "text-white" : ""}`}>
+              {title || "Frequently Asked Questions"}
+            </h2>
+            <p data-reveal data-reveal-delay="0.1" className={`tl-lead mt-5 max-w-md ${isRenax ? "text-stone-300" : ""}`}>
+              {subtitle || "Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process."}
+            </p>
           </div>
-          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isRenax ? "text-white" : "text-slate-900"}`}>
-            {title || "Frequently Asked Questions"}
-          </h2>
-          <p className={`mt-4 text-base sm:text-lg max-w-2xl mx-auto ${isRenax ? "text-slate-400" : "text-slate-600"}`}>
-            {subtitle || "Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process."}
-          </p>
-        </div>
 
-        <div className="space-y-3.5">
-          {displayFaqs.map((faq, index) => {
-            const isOpen = openIndex === index;
-            const questionId = `homepage-faq-q-${index}`;
-            const answerId = `homepage-faq-a-${index}`;
-            return (
-              <div
-                key={faq.question || index}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                  isRenax
-                    ? isOpen
-                      ? "border-emerald-500/50 bg-[#12141c] shadow-lg shadow-emerald-500/5"
-                      : "border-slate-800/80 bg-[#0d0e14] hover:border-slate-700"
-                    : isOpen
-                    ? "border-emerald-300 bg-white shadow-md shadow-emerald-600/5 ring-1 ring-emerald-500/20"
-                    : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
-                }`}
-              >
-                {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
-                <div
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="group cursor-pointer w-full flex items-center justify-between gap-4 p-5 sm:p-6 select-none"
-                >
-                  <h3
-                    id={questionId}
-                    className={`text-left font-semibold text-base sm:text-lg leading-snug transition ${
-                      isRenax
-                        ? isOpen
-                          ? "text-emerald-400"
-                          : "text-white group-hover:text-slate-200"
-                        : isOpen
-                        ? "text-emerald-800"
-                        : "text-slate-900 group-hover:text-slate-700"
-                    }`}
+          {/* Accordion: right column. Whole items stagger in; nothing inside an item is revealed on its own. */}
+          <div data-reveal-group className={`divide-y border-y lg:col-span-7 ${isRenax ? "divide-white/10 border-white/10" : "divide-stone-200 border-stone-200"}`}>
+            {displayFaqs.map((faq, index) => {
+              const isOpen = openIndex === index;
+              const questionId = `homepage-faq-q-${index}`;
+              const answerId = `homepage-faq-a-${index}`;
+              return (
+                <div key={faq.question || index}>
+                  {/* The question is a plain <h3> (text only). The toggle lives on the row + sibling button. */}
+                  <div
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="group flex items-start justify-between gap-6 py-6 cursor-pointer"
                   >
-                    {faq.question}
-                  </h3>
-                  <button
-                    type="button"
-                    aria-expanded={isOpen}
-                    aria-controls={answerId}
+                    <h3
+                      id={questionId}
+                      className={`text-base leading-snug font-medium transition-colors duration-200 sm:text-lg ${
+                        isRenax
+                          ? "text-white group-hover:text-brand-300"
+                          : "text-stone-900 group-hover:text-brand-800"
+                      }`}
+                    >
+                      {faq.question}
+                    </h3>
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      aria-labelledby={questionId}
+                      className={`-my-2.5 -mr-3 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center transition-colors duration-200 ${
+                        isRenax
+                          ? "text-stone-400 group-hover:text-white"
+                          : "text-stone-500 group-hover:text-stone-900"
+                      }`}
+                    >
+                      {isOpen ? (
+                        <Minus className="h-5 w-5" strokeWidth={1.5} />
+                      ) : (
+                        <Plus className="h-5 w-5" strokeWidth={1.5} />
+                      )}
+                    </button>
+                  </div>
+                  <div
+                    id={answerId}
+                    role="region"
                     aria-labelledby={questionId}
-                    className={`cursor-pointer h-9 w-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
-                      isOpen
-                        ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                        : isRenax
-                        ? "bg-slate-800/80 text-slate-400 hover:bg-slate-700"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
+                    className={`pb-6 pr-10 text-base leading-relaxed ${
+                      isRenax ? "text-stone-300" : "text-stone-600"
+                    } ${isOpen ? "block" : "hidden"}`}
                   >
-                    <ChevronDown className="h-4 w-4" />
-                  </button>
+                    <p className="whitespace-pre-line">{faq.answer}</p>
+                  </div>
                 </div>
-                <div
-                  id={answerId}
-                  role="region"
-                  aria-labelledby={questionId}
-                  className={`px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t transition-all ${
-                    isRenax ? "border-slate-800/60 text-slate-300" : "border-slate-100 text-slate-600"
-                  } ${isOpen ? "block" : "hidden"}`}
-                >
-                  <p className="whitespace-pre-line">{faq.answer}</p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

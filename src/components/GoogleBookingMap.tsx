@@ -105,10 +105,10 @@ export default function GoogleBookingMap({
         className: "custom-leaflet-marker",
         html: `
           <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #059669; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #184f37; border: 3px solid #ffffff; box-shadow: 0 0 0 1px rgba(28,25,23,0.25); display: flex; align-items: center; justify-content: center;">
               <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
             </div>
-            <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">PICKUP</div>
+            <div style="margin-top: 3px; background-color: #ffffff; color: #1c1917; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.4; padding: 1px 6px; border-radius: 2px; border: 1px solid #d6d3d1; text-transform: uppercase; white-space: nowrap;">PICKUP</div>
           </div>
         `,
         iconSize: [28, 48],
@@ -126,10 +126,10 @@ export default function GoogleBookingMap({
         className: "custom-leaflet-marker",
         html: `
           <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #e11d48; border: 3px solid #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
-              <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
+            <div style="width: 28px; height: 28px; border-radius: 2px; background-color: #1c1917; border: 3px solid #ffffff; box-shadow: 0 0 0 1px rgba(28,25,23,0.25); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 8px; height: 8px; border-radius: 1px; background-color: #ffffff;"></div>
             </div>
-            <div style="margin-top: 2px; background-color: #0f172a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;">DROPOFF</div>
+            <div style="margin-top: 3px; background-color: #ffffff; color: #1c1917; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.4; padding: 1px 6px; border-radius: 2px; border: 1px solid #d6d3d1; text-transform: uppercase; white-space: nowrap;">DROPOFF</div>
           </div>
         `,
         iconSize: [28, 48],
@@ -167,7 +167,7 @@ export default function GoogleBookingMap({
             }));
 
             const polyline = L.polyline(latLngs, {
-              color: "#059669",
+              color: "#184f37",
               weight: 5,
               opacity: 0.85,
             }).addTo(map);
@@ -180,8 +180,10 @@ export default function GoogleBookingMap({
             const badgeIcon = L.divIcon({
               className: "custom-distance-badge",
               html: `
-                <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
-                  ${distanceMiles.toFixed(1)} mi (${distanceKm.toFixed(1)} km)
+                <div style="display: flex; justify-content: center;">
+                  <div style="background-color: #ffffff; color: #1c1917; font-size: 11px; font-weight: 600; line-height: 1.4; padding: 3px 8px; border-radius: 2px; border: 1px solid #184f37; font-family: inherit; font-variant-numeric: tabular-nums; white-space: nowrap;">
+                    ${distanceMiles.toFixed(1)} mi (${distanceKm.toFixed(1)} km)
+                  </div>
                 </div>
               `,
               iconSize: [110, 26],
@@ -221,7 +223,7 @@ export default function GoogleBookingMap({
           ];
 
           const polyline = L.polyline(latLngs, {
-            color: "#059669",
+            color: "#184f37",
             weight: 5,
             opacity: 0.85,
           }).addTo(map);
@@ -233,8 +235,10 @@ export default function GoogleBookingMap({
           const badgeIcon = L.divIcon({
             className: "custom-distance-badge",
             html: `
-              <div style="background-color: #ffffff; color: #047857; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 9999px; border: 2px solid #059669; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-family: sans-serif; white-space: nowrap;">
-                ${distanceMiles.toFixed(1)} mi
+              <div style="display: flex; justify-content: center;">
+                <div style="background-color: #ffffff; color: #1c1917; font-size: 11px; font-weight: 600; line-height: 1.4; padding: 3px 8px; border-radius: 2px; border: 1px solid #184f37; font-family: inherit; font-variant-numeric: tabular-nums; white-space: nowrap;">
+                  ${distanceMiles.toFixed(1)} mi
+                </div>
               </div>
             `,
             iconSize: [60, 24],
@@ -263,7 +267,7 @@ export default function GoogleBookingMap({
     <div className="relative w-full h-full min-h-[250px]" style={{ filter: "none", backgroundColor: "#e5e3df" }}>
       <div
         ref={mapContainerRef}
-        className="w-full h-full min-h-[250px] rounded-2xl overflow-hidden border border-slate-200 z-0"
+        className="w-full h-full min-h-[250px] overflow-hidden z-0 [&_.leaflet-bar]:rounded-sm! [&_.leaflet-bar]:shadow-none!"
         style={{ filter: "none", backgroundColor: "#e5e3df" }}
       />
     </div>

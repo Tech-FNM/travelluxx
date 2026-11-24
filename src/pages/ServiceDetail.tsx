@@ -2,25 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { getServiceIcon } from "../utils/serviceIcons";
 import { useSettings } from "../context/SettingsContext";
 import { usePageSeo } from "../utils/seo";
 import {
-  CheckCircle2,
   ArrowRight,
-  Phone,
-  MessageSquare,
-  ShieldCheck,
-  Clock,
-  Car,
+  Check,
   ChevronRight,
-  UserCheck,
-  Star,
-  MapPin,
-  CalendarDays,
-  Tag,
-  ChevronDown
+  MessageSquare,
+  Minus,
+  Phone,
+  Plus
 } from "lucide-react";
+import { normalizeRichHtml } from "../utils/richText";
 
 const DEFAULT_SERVICE_FAQS = [
   {
@@ -148,31 +141,26 @@ export default function ServiceDetail({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#070b14] flex flex-col items-center justify-center text-white">
-        <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-slate-400 text-sm tracking-wide">Loading service details...</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-brand-950 text-white">
+        <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-brand-300 border-t-transparent"></div>
+        <p className="text-sm text-stone-400">Loading service details...</p>
       </div>
     );
   }
 
   if (notFound || !service) {
     return (
-      <div className="min-h-screen bg-[#070b14] text-white flex flex-col">
+      <div className="flex min-h-screen flex-col bg-white">
         <Navbar onScrollTo={() => {}} />
-        <main className="flex-grow flex flex-col items-center justify-center px-4 py-24 text-center">
-          <span className="text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] mb-3 block">
-            404 NOT FOUND
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-4">Service Not Found</h1>
-          <p className="text-slate-400 max-w-md mb-8 text-sm sm:text-base">
+        <main className="flex flex-grow flex-col items-center justify-center px-5 py-24 text-center sm:px-8 lg:py-32">
+          <span className="tl-eyebrow">404 NOT FOUND</span>
+          <h1 className="tl-h2 mt-4">Service Not Found</h1>
+          <p className="tl-lead mt-5 max-w-md">
             The service you are looking for may have been moved, renamed, or is currently unavailable.
           </p>
-          <Link
-            to="/services"
-            className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3 rounded-full text-sm transition"
-          >
+          <Link to="/services" className="tl-btn tl-btn-primary mt-8">
             <span>Browse All Services</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
           </Link>
         </main>
         <Footer onScrollTo={() => {}} />
@@ -180,7 +168,6 @@ export default function ServiceDetail({
     );
   }
 
-  const IconComponent = getServiceIcon(service.icon);
   const heroBg =
     service.heroImage ||
     service.image ||
@@ -282,62 +269,75 @@ export default function ServiceDetail({
   const faqsList = serviceFaqs;
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <Navbar onScrollTo={() => {}} />
 
       <main className="flex-grow">
         {/* ========================================================= */}
-        {/* 1. LUXURY HERO BANNER                                     */}
+        {/* 1. HERO BANNER                                            */}
         {/* ========================================================= */}
-        <section className="relative min-h-[440px] lg:min-h-[500px] flex items-center bg-[#070b14] overflow-hidden">
-          {/* Background image with high luxury gradient */}
+        <section className="relative overflow-hidden bg-brand-950">
+          {/* Background image under a flat dark overlay for legibility */}
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url('${heroBg}')` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/85 to-[#070b14]/40"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-transparent to-[#070b14]/60"></div>
-          </div>
+            aria-hidden="true"
+          ></div>
+          <div className="absolute inset-0 bg-brand-950/75" aria-hidden="true"></div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
+          <div className="tl-container relative pt-32 pb-20 lg:pt-40 lg:pb-28">
             {/* Breadcrumbs */}
-            <nav className="flex items-center gap-2 text-xs text-slate-400 mb-6">
-              <Link to="/" className="hover:text-white transition">
+            <nav
+              data-reveal
+              aria-label="Breadcrumb"
+              className="-my-3 flex items-center gap-x-2.5 text-sm text-stone-400"
+            >
+              <Link to="/" className="shrink-0 py-3 transition-colors duration-200 hover:text-white">
                 Home
               </Link>
-              <ChevronRight className="w-3 h-3 text-slate-600" />
-              <Link to="/services" className="hover:text-white transition">
+              <span aria-hidden="true">/</span>
+              <Link
+                to="/services"
+                className="shrink-0 py-3 transition-colors duration-200 hover:text-white"
+              >
                 Services
               </Link>
-              <ChevronRight className="w-3 h-3 text-slate-600" />
-              <span className="text-emerald-400 font-semibold truncate max-w-[200px] sm:max-w-none">
+              <span aria-hidden="true">/</span>
+              <span aria-current="page" className="min-w-0 truncate text-stone-300">
                 {service.title}
               </span>
             </nav>
 
-            <div className="max-w-3xl space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.18em]">
-                <IconComponent className="w-3.5 h-3.5 text-emerald-400" />
-                <span>{service.heroBadge || "EXECUTIVE CHAUFFEUR SERVICE"}</span>
-              </div>
+            <div className="mt-10 max-w-3xl">
+              <span data-reveal className="tl-eyebrow tl-eyebrow-light">
+                {service.heroBadge || "EXECUTIVE CHAUFFEUR SERVICE"}
+              </span>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
+              <h1
+                data-reveal="lines"
+                className="tl-h1 mt-5 text-4xl text-white sm:text-5xl lg:text-6xl"
+              >
                 {service.title}
               </h1>
 
               {service.excerpt && (
-                <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl font-light">
+                <p
+                  data-reveal
+                  data-reveal-delay="0.15"
+                  className="mt-6 max-w-2xl text-base leading-relaxed text-stone-300 sm:text-lg"
+                >
                   {service.excerpt}
                 </p>
               )}
 
-              <div className="pt-4 flex flex-wrap items-center gap-3">
-                <a
-                  href={service.heroBtn1Url || "/#calculator"}
-                  className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                >
+              <div
+                data-reveal
+                data-reveal-delay="0.3"
+                className="mt-9 flex flex-wrap items-center gap-3"
+              >
+                <a href={service.heroBtn1Url || "/#calculator"} className="tl-btn tl-btn-light">
                   <span>{service.heroBtn1Text || "Book This Service"}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </a>
 
                 <a
@@ -349,9 +349,9 @@ export default function ServiceDetail({
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3.5 rounded-full text-sm backdrop-blur-sm transition duration-300"
+                  className="tl-btn tl-btn-outline-light"
                 >
-                  <MessageSquare className="w-4 h-4 text-emerald-400" />
+                  <MessageSquare className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                   <span>{service.heroBtn2Text || "WhatsApp Inquiry"}</span>
                 </a>
               </div>
@@ -362,40 +362,45 @@ export default function ServiceDetail({
         {/* ========================================================= */}
         {/* 2. MAIN CONTENT & SIDEBAR SECTION                         */}
         {/* ========================================================= */}
-        <section className="py-16 lg:py-24 bg-[#ffffff]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <section className="tl-section bg-white">
+          <div className="tl-container">
+            <div className="mx-auto grid max-w-3xl grid-cols-1 gap-12 lg:max-w-none lg:grid-cols-12 xl:gap-16">
               {/* Left Main Column */}
-              <div className="lg:col-span-8 space-y-10 min-w-0">
+              <div className="min-w-0 space-y-12 lg:col-span-7 xl:col-span-8">
                 {/* Featured Service Image */}
                 {service.image && (
-                  <div className="rounded-2xl overflow-hidden shadow-xl border border-slate-200/80 max-h-[460px] bg-slate-100">
+                  <div
+                    data-reveal="image"
+                    className="aspect-[4/3] overflow-hidden bg-stone-100 sm:aspect-[16/9]"
+                  >
                     <img
                       src={service.image}
                       alt={service.imageAlt || `${service.title} - Executive Chauffeur Services UK`}
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 )}
 
                 {/* Key Highlights / Features Box */}
                 {service.highlightsEnabled !== false && features.length > 0 && (
-                  <div className="bg-[#f8fafc] border border-slate-200/80 rounded-2xl p-6 sm:p-8">
-                    <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-emerald-600 mb-2">
+                  <div data-reveal className="tl-card p-6 sm:p-8">
+                    <h3 className="tl-eyebrow">
                       {service.highlightsBadge || "KEY HIGHLIGHTS"}
                     </h3>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6">
+                    <h4 className="mt-3 text-xl leading-snug font-semibold text-stone-900 sm:text-2xl">
                       {service.highlightsTitle || "What Sets This Service Apart"}
                     </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="mt-6 grid grid-cols-1 gap-x-10 border-b border-stone-200 sm:grid-cols-2">
                       {features.map((feat: string, idx: number) => (
-                        <div key={idx} className="flex items-start gap-3">
-                          <div className="w-6 h-6 rounded-full bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                          </div>
-                          <span className="text-slate-700 text-sm font-medium leading-snug">
+                        <div key={idx} className="flex items-start gap-3 border-t border-stone-200 py-3.5">
+                          <Check
+                            className="mt-0.5 h-4 w-4 shrink-0 text-brand-700"
+                            strokeWidth={1.5}
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm leading-snug text-stone-700">
                             {feat}
                           </span>
                         </div>
@@ -404,12 +409,18 @@ export default function ServiceDetail({
                   </div>
                 )}
 
-                {/* Rich Text Body Content with Enhanced Hierarchy */}
-                <div className="service-rich-content page-rich-content ql-snow break-words overflow-hidden w-full min-w-0">
+                {/* Rich Text Body Content with Enhanced Hierarchy.
+                    The global rich-content CSS zeroes every margin (to mirror the Quill editor), which
+                    leaves headings glued to the paragraph above. The arbitrary-variant utilities below
+                    restore a vertical rhythm for this page only. */}
+                <div
+                  data-reveal
+                  className="service-rich-content page-rich-content ql-snow break-words overflow-hidden w-full max-w-3xl min-w-0 [&_h1]:mt-12! [&_h1]:mb-4! [&_h2]:mt-12! [&_h2]:mb-4! [&_h3]:mt-8! [&_h3]:mb-2! [&_h2+h3]:mt-0! [&_h4]:mt-6! [&_h4]:mb-2! [&_p+p]:mt-4! [&_ul]:my-4! [&_ol]:my-4! [&_.ql-editor>:first-child]:mt-0!"
+                >
                   {service.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: service.content }} className="ql-editor w-full break-words !p-0" />
+                    <div dangerouslySetInnerHTML={{ __html: normalizeRichHtml(service.content) }} className="ql-editor w-full break-words !p-0" />
                   ) : (
-                    <p className="text-slate-600 leading-relaxed break-words">
+                    <p className="leading-relaxed break-words text-stone-600">
                       {service.excerpt}
                     </p>
                   )}
@@ -417,22 +428,24 @@ export default function ServiceDetail({
 
                 {/* Trust & Guarantee Banner */}
                 {service.guaranteeEnabled !== false && (
-                  <div className="bg-gradient-to-br from-[#0c101d] to-[#161d31] rounded-2xl p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-                    <div className="space-y-2 text-center sm:text-left">
-                      <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-extrabold uppercase tracking-[0.15em]">
-                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                        <span>{service.guaranteeBadge || "THE TRAVELLUXX STANDARD"}</span>
-                      </div>
-                      <h3 className="text-xl sm:text-2xl font-bold">
+                  <div
+                    data-reveal="fade"
+                    className="tl-dark flex flex-col gap-8 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
+                  >
+                    <div>
+                      <span className="tl-eyebrow tl-eyebrow-light">
+                        {service.guaranteeBadge || "THE TRAVELLUXX STANDARD"}
+                      </span>
+                      <h3 className="mt-3 text-xl leading-snug font-semibold text-white sm:text-2xl">
                         {service.guaranteeTitle || `Ready to Book Your ${service.title}?`}
                       </h3>
-                      <p className="text-slate-400 text-xs sm:text-sm max-w-md">
+                      <p className="mt-2 max-w-md text-sm leading-relaxed text-stone-300">
                         {service.guaranteeSubtitle || "Get an instant fixed fare in seconds with our online journey calculator."}
                       </p>
                     </div>
                     <a
                       href={service.guaranteeBtnUrl || "/#calculator"}
-                      className="shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm transition shadow-lg hover:scale-105 active:scale-95"
+                      className="tl-btn tl-btn-light shrink-0"
                     >
                       {service.guaranteeBtnText || "Instant Quote"}
                     </a>
@@ -441,86 +454,93 @@ export default function ServiceDetail({
               </div>
 
               {/* Right Sidebar */}
-              <div className="lg:col-span-4 space-y-8">
-                {/* Sticky Booking Card */}
-                <div className="bg-[#0c101d] text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-white/10 sticky top-24 space-y-6">
-                  <div className="border-b border-white/10 pb-6">
-                    <span className="text-emerald-400 text-[11px] font-extrabold uppercase tracking-[0.2em] block mb-1">
+              <div className="flex flex-col gap-8 lg:col-span-5 xl:col-span-4">
+                {/* Sticky Booking Card. Its wrapper fills the spare column height so the card stays
+                    pinned beside the article; the services list below sits outside it, so the pinned
+                    card is never taller than the viewport. No reveal attributes on sticky elements. */}
+                <div className="lg:flex-1">
+                  <div className="tl-card p-6 sm:p-8 lg:sticky lg:top-28">
+                    <span className="tl-eyebrow">
                       {service.sidebarBadge || "RESERVE YOUR RIDE"}
                     </span>
-                    <h3 className="text-xl font-bold text-white">
+                    <h3 className="mt-3 text-xl leading-snug font-semibold text-stone-900">
                       {service.sidebarTitle || "Book Online Instantly"}
                     </h3>
                     {service.priceText && (
                       <div className="mt-3 flex items-baseline gap-2">
-                        <span className="text-xs text-slate-400">Rates:</span>
-                        <span className="text-2xl font-black text-emerald-400">
+                        <span className="text-sm text-stone-500">Rates:</span>
+                        <span className="text-lg font-semibold text-stone-900">
                           {service.priceText}
                         </span>
                       </div>
                     )}
-                  </div>
 
-                  {/* Sidebar Perks */}
-                  <div className="space-y-3 text-xs text-slate-300">
-                    {sidebarPerks.map((perk: string, pIdx: number) => (
-                      <div key={pIdx} className="flex items-center gap-2.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                        <span>{perk}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-2.5 pt-2">
-                    <a
-                      href={service.sidebarBtn1Url || "/#calculator"}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-6 rounded-xl text-sm transition shadow-lg shadow-emerald-500/20"
-                    >
-                      <span>{service.sidebarBtn1Text || "Calculate Fare & Book"}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
-
-                    <a
-                      href={service.sidebarBtn2Url || `tel:${formattedPhone}`}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl text-xs border border-white/10 transition"
-                    >
-                      <Phone className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{service.sidebarBtn2Text || `Call ${formattedPhone}`}</span>
-                    </a>
-                  </div>
-
-                  {/* Other Services Navigation List */}
-                  {service.showSidebarServices !== false && allServices.length > 0 && (
-                    <div className="border-t border-white/10 pt-6 mt-6">
-                      <h4 className="text-xs font-extrabold uppercase tracking-[0.18em] text-emerald-400 mb-4">
-                        ALL OUR SERVICES
-                      </h4>
-                      <div className="space-y-2">
-                        {allServices.map((s) => {
-                          const isCurrent = s.slug === service.slug;
-                          const SvcIcon = getServiceIcon(s.icon);
-                          return (
-                            <Link
-                              key={s.id}
-                              to={`/services/${s.slug}`}
-                              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs transition ${
-                                isCurrent
-                                  ? "bg-emerald-500 text-slate-950 font-bold"
-                                  : "text-slate-300 hover:bg-white/5 hover:text-white"
-                              }`}
-                            >
-                              <div className="flex items-center gap-2.5 truncate">
-                                <SvcIcon className="w-4 h-4 shrink-0 opacity-80" />
-                                <span className="truncate">{s.title}</span>
-                              </div>
-                              <ChevronRight className="w-3.5 h-3.5 shrink-0 opacity-60" />
-                            </Link>
-                          );
-                        })}
-                      </div>
+                    {/* Sidebar Perks */}
+                    <div className="mt-6 divide-y divide-stone-200 border-y border-stone-200">
+                      {sidebarPerks.map((perk: string, pIdx: number) => (
+                        <div key={pIdx} className="flex items-start gap-3 py-3">
+                          <Check
+                            className="mt-0.5 h-4 w-4 shrink-0 text-brand-700"
+                            strokeWidth={1.5}
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm leading-snug text-stone-700">{perk}</span>
+                        </div>
+                      ))}
                     </div>
-                  )}
+
+                    <div className="mt-6 space-y-3">
+                      <a
+                        href={service.sidebarBtn1Url || "/#calculator"}
+                        className="tl-btn tl-btn-primary w-full"
+                      >
+                        <span>{service.sidebarBtn1Text || "Calculate Fare & Book"}</span>
+                        <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                      </a>
+
+                      <a
+                        href={service.sidebarBtn2Url || `tel:${formattedPhone}`}
+                        className="tl-btn tl-btn-outline w-full"
+                      >
+                        <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                        <span>{service.sidebarBtn2Text || `Call ${formattedPhone}`}</span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Other Services Navigation List */}
+                {service.showSidebarServices !== false && allServices.length > 0 && (
+                  <div data-reveal className="tl-card p-6 sm:p-8">
+                    <h4 className="tl-eyebrow">
+                      ALL OUR SERVICES
+                    </h4>
+                    <div className="mt-3 divide-y divide-stone-200 border-b border-stone-200">
+                      {allServices.map((s) => {
+                        const isCurrent = s.slug === service.slug;
+                        return (
+                          <Link
+                            key={s.id}
+                            to={`/services/${s.slug}`}
+                            aria-current={isCurrent ? "page" : undefined}
+                            className={`flex min-h-11 items-center justify-between gap-3 py-2.5 text-sm transition-colors duration-200 ${
+                              isCurrent
+                                ? "font-medium text-brand-700"
+                                : "text-stone-600 hover:text-stone-900"
+                            }`}
+                          >
+                            <span className="truncate">{s.title}</span>
+                            <ChevronRight
+                              className="h-4 w-4 shrink-0 text-stone-400"
+                              strokeWidth={1.5}
+                              aria-hidden="true"
+                            />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -530,50 +550,41 @@ export default function ServiceDetail({
         {/* 3. WHY CHOOSE SECTION                                     */}
         {/* ========================================================= */}
         {service.whyChooseEnabled !== false && (
-          <section className="relative py-20 lg:py-24 bg-[#0c101d] text-white overflow-hidden">
-            <div
-              className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 bg-cover bg-right bg-no-repeat opacity-20 lg:opacity-40 pointer-events-none z-0"
-              style={{
-                backgroundImage:
-                  "url('https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=80')",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0c101d] via-[#0c101d]/60 to-transparent"></div>
-            </div>
-
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-2xl space-y-3 mb-16">
-                <span className="text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em] block">
+          <section className="tl-dark tl-section">
+            <div className="tl-container">
+              <div className="max-w-3xl">
+                <span data-reveal className="tl-eyebrow tl-eyebrow-light">
                   {service.whyChooseBadge || "WHY CHOOSE TRAVELLUXX"}
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">
                   {service.whyChooseTitle || "Your Trusted Travel Partner"}
                 </h2>
-                <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl text-stone-300">
                   {service.whyChooseSubtitle || "We go the extra mile to ensure every journey is comfortable, safe and hassle-free."}
                 </p>
               </div>
 
-              {/* Grid of features */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-                {whyChooseList.map((item: any, idx: number) => {
-                  const ItemIcon = getServiceIcon(item.icon);
-                  return (
-                    <div key={idx} className="flex items-start space-x-4">
-                      <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-slate-300">
-                        <ItemIcon className="w-5 h-5 text-emerald-400" />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm sm:text-base font-bold text-white tracking-tight">
-                          {item.title}
-                        </h4>
-                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                          {item.desc || item.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+              {/* Numbered reasons */}
+              <div
+                data-reveal-group
+                className="mt-14 grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3"
+              >
+                {whyChooseList.map((item: any, idx: number) => (
+                  <div key={idx} className="border-t border-white/10 pt-6">
+                    <span
+                      className="block font-display text-3xl leading-none text-brand-300 lining-nums"
+                      aria-hidden="true"
+                    >
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <h4 className="mt-3 text-base font-semibold text-white">
+                      {item.title}
+                    </h4>
+                    <p className="mt-2 text-sm leading-relaxed text-stone-400">
+                      {item.desc || item.description}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -583,48 +594,40 @@ export default function ServiceDetail({
         {/* 4. HOW IT WORKS                                           */}
         {/* ========================================================= */}
         {service.howItWorksEnabled !== false && (
-          <section className="py-20 lg:py-24 bg-[#fafbfc]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
+          <section className="tl-section bg-ivory">
+            <div className="tl-container">
+              <div className="max-w-3xl">
+                <span data-reveal className="tl-eyebrow">
                   {service.howItWorksBadge || "HOW IT WORKS"}
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                <h2 data-reveal="lines" className="tl-h2 mt-4">
                   {service.howItWorksTitle || "Simple Steps to Your Destination"}
                 </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
                   {service.howItWorksSubtitle || "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time."}
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-                {stepsList.map((step: any, idx: number) => {
-                  const StepIcon = getServiceIcon(step.icon);
-                  return (
-                    <div
-                      key={step.num || step.number || idx}
-                      className="relative flex flex-col items-center text-center space-y-3 group"
-                    >
-                      <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shadow-md">
-                        {step.num || step.number || `0${idx + 1}`}
-                      </div>
-                      <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-800 transition-transform group-hover:scale-105">
-                        <StepIcon className="w-6 h-6 text-slate-800" />
-                      </div>
-                      <h4 className="text-sm font-bold text-slate-900 pt-1">
-                        {step.title}
-                      </h4>
-                      <p className="text-slate-500 text-xs leading-relaxed max-w-xs">
-                        {step.desc || step.description}
-                      </p>
-                      {idx < stepsList.length - 1 && (
-                        <div className="hidden lg:flex absolute top-10 -right-4 transform -translate-y-1/2 text-slate-300">
-                          <ChevronRight className="w-5 h-5" />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+              <div
+                data-reveal-group
+                className="mt-14 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4"
+              >
+                {stepsList.map((step: any, idx: number) => (
+                  <div
+                    key={step.num || step.number || idx}
+                    className="border-t border-stone-300 pt-6"
+                  >
+                    <span className="block font-display text-4xl leading-none text-brand-700 lining-nums">
+                      {step.num || step.number || `0${idx + 1}`}
+                    </span>
+                    <h4 className="mt-4 text-base font-semibold text-stone-900">
+                      {step.title}
+                    </h4>
+                    <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                      {step.desc || step.description}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -634,74 +637,72 @@ export default function ServiceDetail({
         {/* 5. SERVICE FAQs ACCORDION                                 */}
         {/* ========================================================= */}
         {service.faqsEnabled !== false && faqsList.length > 0 && (
-          <section className="py-20 lg:py-24 bg-white border-t border-slate-200/70">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center space-y-3 mb-14">
-                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                  {service.faqBadge || "FREQUENTLY ASKED QUESTIONS"}
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                  {service.faqTitle || `Questions About Our ${service?.title || "Chauffeur Service"}`}
-                </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                  {service.faqSubtitle || "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."}
-                </p>
-              </div>
+          <section className="tl-section bg-white">
+            <div className="tl-container">
+              <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+                <div className="lg:col-span-5">
+                  <span data-reveal className="tl-eyebrow">
+                    {service.faqBadge || "FREQUENTLY ASKED QUESTIONS"}
+                  </span>
+                  <h2 data-reveal="lines" className="tl-h2 mt-4">
+                    {service.faqTitle || `Questions About Our ${service?.title || "Chauffeur Service"}`}
+                  </h2>
+                  <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
+                    {service.faqSubtitle || "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."}
+                  </p>
+                </div>
 
-              <div className="space-y-3.5">
-                {faqsList.map((faq: any, idx: number) => {
-                  const isOpen = openFaqIndex === idx;
-                  const questionId = `service-detail-faq-q-${idx}`;
-                  const answerId = `service-detail-faq-a-${idx}`;
-                  return (
-                    <div
-                      key={idx}
-                      className={`rounded-xl border transition-all duration-200 overflow-hidden ${
-                        isOpen
-                          ? "border-emerald-500/60 bg-emerald-50/40 shadow-sm ring-1 ring-emerald-500/20"
-                          : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50"
-                      }`}
-                    >
-                      {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
-                      <div
-                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        className="cursor-pointer w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 select-none"
-                      >
-                        <h3
-                          id={questionId}
-                          className={`text-left text-sm sm:text-base font-bold transition-colors ${
-                            isOpen ? "text-slate-950" : "text-slate-800"
-                          }`}
-                        >
-                          {faq.question}
-                        </h3>
-                        <button
-                          type="button"
-                          aria-expanded={isOpen}
-                          aria-controls={answerId}
-                          aria-labelledby={questionId}
-                          className={`cursor-pointer w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                            isOpen
-                              ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                              : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div
-                        id={answerId}
-                        role="region"
-                        aria-labelledby={questionId}
-                        className={`px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed ${
-                          isOpen ? "block" : "hidden"
-                        }`}
-                      >
-                        <p className="whitespace-pre-line">{faq.answer}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+                <div className="lg:col-span-7">
+                  <div
+                    data-reveal-group
+                    className="divide-y divide-stone-200 border-y border-stone-200"
+                  >
+                    {faqsList.map((faq: any, idx: number) => {
+                      const isOpen = openFaqIndex === idx;
+                      const questionId = `service-detail-faq-q-${idx}`;
+                      const answerId = `service-detail-faq-a-${idx}`;
+                      return (
+                        <div key={idx}>
+                          {/* The question is a plain <h3> (text only). The toggle lives on the row + icon button. */}
+                          <div
+                            onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                            className="flex cursor-pointer items-start justify-between gap-6 py-6"
+                          >
+                            <h3
+                              id={questionId}
+                              className="text-base leading-snug font-medium text-stone-900 sm:text-lg"
+                            >
+                              {faq.question}
+                            </h3>
+                            <button
+                              type="button"
+                              aria-expanded={isOpen}
+                              aria-controls={answerId}
+                              aria-labelledby={questionId}
+                              className="-my-2.5 -mr-3 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center text-stone-500 transition-colors duration-200 hover:text-stone-900"
+                            >
+                              {isOpen ? (
+                                <Minus className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                              ) : (
+                                <Plus className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                              )}
+                            </button>
+                          </div>
+                          <div
+                            id={answerId}
+                            role="region"
+                            aria-labelledby={questionId}
+                            className={`pr-10 pb-6 leading-relaxed text-stone-600 ${
+                              isOpen ? "block" : "hidden"
+                            }`}
+                          >
+                            <p className="whitespace-pre-line">{faq.answer}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </section>

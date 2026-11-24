@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Star, ExternalLink, ShieldCheck } from "lucide-react";
+import { Star, ExternalLink } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
 
 export interface GoogleReviewItem {
@@ -71,143 +71,149 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
   const subtitle = settings?.homepage_reviews_subtitle || "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel.";
 
   return (
-    <section className={`py-20 sm:py-24 relative overflow-hidden transition-colors ${
-      isRenax ? "bg-[#08090d] border-t border-slate-900/80 text-white" : "bg-white border-t border-slate-200/80 text-slate-900"
+    <section className={`tl-section ${
+      isRenax ? "bg-brand-950 border-t border-white/10 text-stone-300" : "bg-white text-stone-700"
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header with Google Badge */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6">
+      <div className="tl-container">
+        {/* Section Header with Google rating summary */}
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-3 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{badgeText}</span>
-            </div>
-            <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isRenax ? "text-white" : "text-slate-900"}`}>
+            <span data-reveal className={`tl-eyebrow ${isRenax ? "tl-eyebrow-light" : ""}`}>{badgeText}</span>
+            <h2 data-reveal="lines" className={`tl-h2 mt-4 ${isRenax ? "text-white" : ""}`}>
               {mainTitle}
             </h2>
-            <p className={`mt-3 text-base sm:text-lg ${isRenax ? "text-slate-400" : "text-slate-600"}`}>
+            <p data-reveal data-reveal-delay="0.1" className={`tl-lead mt-5 ${isRenax ? "text-stone-300" : ""}`}>
               {subtitle}
             </p>
           </div>
 
-          {/* Google Rating Overview Badge */}
-          <div className={`p-5 rounded-2xl border shrink-0 flex items-center gap-4 ${
-            isRenax ? "bg-[#10121a] border-slate-800" : "bg-slate-50 border-slate-200 shadow-sm"
-          }`}>
-            {/* Google G Logo SVG */}
-            <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-2.5 shrink-0 border border-slate-100">
-              <svg viewBox="0 0 24 24" className="w-full h-full">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                />
-              </svg>
+          {/* Google Rating Overview */}
+          <div data-reveal data-reveal-delay="0.2" className="shrink-0">
+            <div className="flex items-center gap-4">
+              <span className={`font-display text-5xl leading-none lining-nums ${isRenax ? "text-white" : "text-stone-900"}`}>
+                {Number(rating).toFixed(1)}
+              </span>
+              <div className="flex gap-1 text-amber-400" aria-hidden="true">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" strokeWidth={1.5} />
+                ))}
+              </div>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className={`text-2xl font-black ${isRenax ? "text-white" : "text-slate-900"}`}>
-                  {Number(rating).toFixed(1)}
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+              <span className={`inline-flex items-center gap-2 text-sm ${isRenax ? "text-stone-400" : "text-stone-500"}`}>
+                {/* Google G Logo SVG */}
+                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-hidden="true">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  />
+                </svg>
+                <span>
+                  Based on <strong className={`font-medium ${isRenax ? "text-stone-200" : "text-stone-700"}`}>{totalCount} Google Reviews</strong>
                 </span>
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`text-xs ${isRenax ? "text-slate-400" : "text-slate-500"}`}>
-                  Based on <strong>{totalCount} Google Reviews</strong>
-                </span>
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs text-emerald-500 hover:text-emerald-400 font-semibold inline-flex items-center gap-0.5 hover:underline"
-                >
-                  <span>View All</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
+              </span>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={`tl-link -my-3 py-3 ${isRenax ? "text-brand-300 hover:text-white" : ""}`}
+              >
+                <span>View All</span>
+                <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} />
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Reviews Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Reviews Cards Grid: wide cards so a quote keeps a comfortable line length.
+            Two per row; three per row when the count divides evenly by three. */}
+        <div
+          data-reveal-group
+          className={`mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:mt-16 ${
+            dashboardReviews.length % 3 === 0 ? "lg:grid-cols-3" : ""
+          }`}
+        >
           {dashboardReviews.map((review, idx) => (
             <div
               key={idx}
-              className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${
-                isRenax
-                  ? "bg-[#0f1118]/90 border-slate-800/80 hover:border-emerald-500/40"
-                  : "bg-white border-slate-200/90 shadow-sm hover:border-slate-300"
+              className={`flex flex-col justify-between p-6 sm:p-8 ${
+                isRenax ? "border border-white/10" : "tl-card"
               }`}
             >
               <div>
                 {/* Star Rating */}
-                <div className="flex items-center gap-1 text-amber-400 mb-4">
+                <div
+                  className="flex items-center gap-1 text-amber-400"
+                  role="img"
+                  aria-label={`${Number(review.rating) || 5} out of 5 stars`}
+                >
                   {[...Array(Number(review.rating) || 5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" strokeWidth={1.5} />
                   ))}
                 </div>
 
                 {/* Review Text */}
-                <p className={`text-sm leading-relaxed mb-6 font-normal ${
-                  isRenax ? "text-slate-300" : "text-slate-700"
+                <p className={`mt-5 text-base leading-relaxed ${
+                  isRenax ? "text-stone-300" : "text-stone-700"
                 }`}>
                   "{review.text}"
                 </p>
               </div>
 
               {/* Author Info & Google Icon */}
-              <div className={`pt-4 border-t flex items-center justify-between ${
-                isRenax ? "border-slate-800/80" : "border-slate-100"
+              <div className={`mt-8 flex items-center justify-between gap-3 border-t pt-5 ${
+                isRenax ? "border-white/10" : "border-stone-200"
               }`}>
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   {review.profile_photo_url ? (
                     <img
                       src={review.profile_photo_url}
                       alt={review.author_name}
-                      className="w-9 h-9 rounded-full object-cover border border-slate-200"
+                      className={`h-10 w-10 shrink-0 rounded-full border object-cover ${
+                        isRenax ? "border-white/10" : "border-stone-200"
+                      }`}
                     />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-500 font-bold flex items-center justify-center text-sm border border-emerald-500/30">
+                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-medium ${
+                      isRenax ? "bg-white/10 text-white" : "bg-stone-100 text-stone-700"
+                    }`}>
                       {review.author_name ? review.author_name.charAt(0) : "G"}
                     </div>
                   )}
-                  <div>
-                    <h4 className={`text-xs font-bold ${isRenax ? "text-white" : "text-slate-900"}`}>
+                  <div className="min-w-0">
+                    <h4 className={`text-sm font-semibold ${isRenax ? "text-white" : "text-stone-900"}`}>
                       {review.author_name || "Customer"}
                     </h4>
                     {review.relative_time_description && (
-                      <span className={`text-[11px] ${isRenax ? "text-slate-500" : "text-slate-400"}`}>
+                      <span className={`block text-xs ${isRenax ? "text-stone-400" : "text-stone-500"}`}>
                         {review.relative_time_description}
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* Small Google Icon Badge */}
+                {/* Small Google Icon (44px tap target, 16px bare mark) */}
                 <a
                   href={mapsUrl}
                   target="_blank"
                   rel="noreferrer"
                   title="Verified Google Review"
-                  className="w-5 h-5 opacity-80 hover:opacity-100 transition"
+                  aria-label="Verified Google Review"
+                  className="-m-3.5 flex h-11 w-11 shrink-0 items-center justify-center"
                 >
-                  <svg viewBox="0 0 24 24" className="w-full h-full">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
                     <path
                       fill="#4285F4"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

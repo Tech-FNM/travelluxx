@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Compass, Phone, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { Compass, Phone, ArrowRight, ShieldCheck } from "lucide-react";
 import heroImg from "../assets/images/hero_background_1786403449488.jpg";
 import { getCustomImage } from "../utils/customImages";
 
@@ -35,8 +35,8 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
   }, [settings]);
 
   // Format WhatsApp / Phone number for presentation
-  const formattedPhone = whatsappNum.startsWith("44") 
-    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}` 
+  const formattedPhone = whatsappNum.startsWith("44")
+    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
     : whatsappNum;
 
   const rawTitle = settings?.homepage_hero_title || "Nationwide Airport | Transfers & Private Hire";
@@ -68,10 +68,10 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
   };
 
   return (
-    <section id="hero" className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-slate-950">
-      
+    <section id="hero" className="relative flex min-h-[88vh] items-end overflow-hidden bg-brand-950">
+
       {/* Background image of luxury car cruising along scenic route */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+      <div className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden">
         <img
           src={bgImage}
           alt={settings?.hero_image_alt || `${brandName} - Executive Luxury Chauffeur Service Solihull & London UK`}
@@ -86,72 +86,69 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
               setBgImage(FALLBACK_HERO_URL);
             }
           }}
-          className="w-full h-full object-cover opacity-50 scale-105"
+          data-parallax
+          className="h-full w-full object-cover"
         />
-        {/* Deep, premium dark radial overlay for premium branding & maximum text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/30 to-slate-950/90"></div>
-        <div className="absolute inset-0 bg-slate-950/15"></div>
+        {/* Legibility gradients: the copy sits bottom-left on the photograph */}
+        <div className="absolute inset-0 bg-brand-950/45 lg:bg-brand-950/15"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-brand-950 via-brand-950/70 to-transparent lg:via-brand-950/50"></div>
+        <div className="absolute inset-0 hidden bg-linear-to-r from-brand-950/80 via-brand-950/35 to-transparent lg:block"></div>
       </div>
 
-      {/* Main Content (Centered & Single Column) */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center space-y-10">
-        
-        {/* Premium Badge */}
-        <div className="flex justify-center">
-          <div className="inline-flex items-center space-x-2 bg-emerald-500/15 border border-emerald-500/30 px-5 py-2.5 rounded-full text-xs font-sans text-emerald-300 font-semibold shadow-inner">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-            <span>{badgeText}</span>
-          </div>
-        </div>
+      {/* Main Content (left-aligned, anchored to the bottom) */}
+      <div className="tl-container relative z-10 pt-28 pb-14 sm:pb-16 lg:pb-20">
+        <div className="max-w-4xl">
 
-        {/* Heading */}
-        <div className="space-y-6">
-          <h1 className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-tight">
-            {titlePart1} {titlePart2 && <br className="hidden sm:inline" />}
+          {/* Eyebrow */}
+          <span data-reveal className="tl-eyebrow tl-eyebrow-light">{badgeText}</span>
+
+          {/* Heading */}
+          <h1 data-reveal="lines" className="tl-h1 mt-6 text-pretty text-white">
+            {titlePart1}{" "}
             {titlePart2 && (
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400 drop-shadow-sm">
+              <span className="block italic text-brand-200">
                 {titlePart2}
               </span>
             )}
           </h1>
 
           {/* Description */}
-          <p className="text-slate-300 text-sm sm:text-base lg:text-xl leading-relaxed max-w-2xl mx-auto">
+          <p data-reveal data-reveal-delay="0.15" className="mt-6 max-w-2xl text-base leading-relaxed text-stone-200 sm:text-lg">
             {heroDesc}
           </p>
-        </div>
 
-        {/* Micro value tags */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-slate-300 border-t border-slate-800 pt-8 max-w-xl mx-auto">
-          <div className="flex items-center space-x-2.5">
-            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span className="font-medium">{ind1}</span>
+          {/* CTA Buttons */}
+          <div data-reveal data-reveal-delay="0.3" className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <button
+              onClick={handleBtn1Click}
+              className="tl-btn tl-btn-light w-full sm:w-auto"
+            >
+              <span>{btn1Text}</span>
+              <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+            </button>
+
+            <a
+              href={btn2Link}
+              className="tl-btn tl-btn-outline-light w-full sm:w-auto"
+            >
+              <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              <span>{btn2Text}</span>
+            </a>
           </div>
-          <div className="flex items-center space-x-2.5">
-            <Compass className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span className="font-medium">{ind2}</span>
+
+          {/* Micro value tags */}
+          <div data-reveal data-reveal-delay="0.45" className="mt-10 flex max-w-2xl flex-col gap-3 border-t border-white/15 pt-6 text-sm text-stone-300 sm:flex-row sm:gap-10">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+              <span>{ind1}</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <Compass className="h-4 w-4 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+              <span>{ind2}</span>
+            </div>
           </div>
+
         </div>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-          <button
-            onClick={handleBtn1Click}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 cursor-pointer border border-emerald-500/20 group transform active:scale-95 w-full sm:w-auto"
-          >
-            <span>{btn1Text}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-
-          <a
-            href={btn2Link}
-            className="flex items-center justify-center space-x-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white px-8 py-4 rounded-xl text-sm font-semibold transition shadow-sm font-sans backdrop-blur-sm transform active:scale-95 w-full sm:w-auto"
-          >
-            <Phone className="w-4 h-4 fill-white text-emerald-400" />
-            <span>{btn2Text}</span>
-          </a>
-        </div>
-
       </div>
 
     </section>

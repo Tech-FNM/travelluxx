@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, HelpCircle, CheckCircle } from "lucide-react";
+import { Send, CheckCircle } from "lucide-react";
 import { trackClick } from "../utils/analytics";
 
 interface ContactFormProps {
@@ -51,134 +51,127 @@ export default function ContactForm({ settings }: ContactFormProps) {
   };
 
   return (
-    <section id="contact" className="py-24 bg-white border-t border-slate-200 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-100/35 rounded-full blur-3xl pointer-events-none"></div>
+    <section id="contact" className="tl-section bg-white">
+      <div className="tl-container">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
           {/* Left Block: Contact coordinates */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="space-y-4">
-              <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block font-semibold">Get in Touch</span>
-              <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
-                Connect With Our Dispatch Office
-              </h2>
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-                Need a multi-day itinerary, corporate account or custom arrangement? For chauffeur hire Birmingham quotes, drop us a line or message us on WhatsApp. Our dispatch operators are active 24/7.
-              </p>
-            </div>
+          <div className="lg:col-span-5">
+            <span data-reveal className="tl-eyebrow">Get in Touch</span>
+            <h2 data-reveal="lines" className="tl-h2 mt-4">
+              Connect With Our Dispatch Office
+            </h2>
+            <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5">
+              Need a multi-day itinerary, corporate account or custom arrangement? For chauffeur hire Birmingham quotes, drop us a line or message us on WhatsApp. Our dispatch operators are active 24/7.
+            </p>
 
-            <div className="space-y-4">
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-xs font-semibold text-slate-400 uppercase block tracking-wider">Office Address</span>
-                  <span className="text-sm text-slate-600 mt-1 block leading-relaxed font-medium">
-                    {officeAddress}
-                  </span>
-                </div>
+            <dl data-reveal-group className="mt-10 divide-y divide-stone-200 border-y border-stone-200">
+              <div className="py-5">
+                <dt className="text-xs uppercase tracking-[0.2em] text-stone-500">Office Address</dt>
+                <dd className="mt-2 text-base text-stone-900">
+                  {officeAddress}
+                </dd>
               </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-xs font-semibold text-slate-400 uppercase block tracking-wider">Email Dispatch</span>
-                  <a href={`mailto:${businessEmail}`} className="text-sm text-emerald-700 mt-1 block hover:underline font-semibold">
+              <div className="py-5">
+                <dt className="text-xs uppercase tracking-[0.2em] text-stone-500">Email Dispatch</dt>
+                <dd className="mt-2 text-base text-stone-900">
+                  <a
+                    href={`mailto:${businessEmail}`}
+                    className="-my-2.5 inline-block py-2.5 break-all underline decoration-stone-300 underline-offset-4 transition-colors duration-200 hover:text-brand-700 hover:decoration-brand-700"
+                  >
                     {businessEmail}
                   </a>
-                </div>
+                </dd>
               </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-xs font-semibold text-slate-400 uppercase block tracking-wider">WhatsApp & Telephone Hotline</span>
-                  <a href={`tel:${whatsappNum}`} className="text-sm text-slate-700 font-sans font-bold mt-1 block hover:text-emerald-700 transition">
+              <div className="py-5">
+                <dt className="text-xs uppercase tracking-[0.2em] text-stone-500">WhatsApp & Telephone Hotline</dt>
+                <dd className="mt-2 text-base text-stone-900">
+                  <a
+                    href={`tel:${whatsappNum}`}
+                    className="-my-2.5 inline-block py-2.5 underline decoration-stone-300 underline-offset-4 transition-colors duration-200 hover:text-brand-700 hover:decoration-brand-700"
+                  >
                     {formattedPhone}
                   </a>
-                </div>
+                </dd>
               </div>
-            </div>
+            </dl>
           </div>
 
-          {/* Right Block: General Inquiry submit card */}
-          <div className="lg:col-span-7 bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-sm">
-            
+          {/* Right Block: General Inquiry form. The reveal sits on this stable wrapper so that
+              swapping the form for the success state does not replay it. */}
+          <div data-reveal data-reveal-delay="0.1" className="tl-card p-6 sm:p-10 lg:col-span-7">
+
             {success ? (
-              <div className="text-center py-10 space-y-4 animate-fade-in">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 mb-2">
-                  <CheckCircle className="w-6 h-6" />
-                </div>
-                <h3 className="font-display font-bold text-xl text-slate-900">Message Dispatched Successfully</h3>
-                <p className="text-slate-500 text-sm max-w-sm mx-auto leading-relaxed">
+              <div role="status">
+                <CheckCircle className="h-8 w-8 text-brand-700" strokeWidth={1.5} />
+                <h3 className="tl-h3 mt-6">Message Dispatched Successfully</h3>
+                <p className="mt-3 max-w-md text-base leading-relaxed text-stone-600">
                   We have received your general inquiry! A Travelluxx operator will email or text back under 15 minutes.
                 </p>
                 <button
                   onClick={() => setSuccess(false)}
-                  className="px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-xs rounded-xl text-slate-600 font-semibold transition cursor-pointer"
+                  className="tl-btn tl-btn-outline mt-8"
                 >
                   Send another inquiry
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="font-display font-bold text-lg text-slate-900 mb-4 flex items-center space-x-2">
-                  <HelpCircle className="w-5 h-5 text-emerald-700" />
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <h3 className="tl-h3">
                   <span>Submit a Customised Inquiry</span>
                 </h3>
 
                 <div>
-                  <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-2">Full Name</label>
+                  <label htmlFor="contact-form-name" className="tl-label">Full Name</label>
                   <input
+                    id="contact-form-name"
                     type="text"
                     placeholder="e.g. Richard Sterling"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 px-4 text-xs text-slate-800 transition placeholder:text-slate-400"
+                    className="tl-input"
                     required
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-2">Email Address</label>
+                    <label htmlFor="contact-form-email" className="tl-label">Email Address</label>
                     <input
+                      id="contact-form-email"
                       type="email"
                       placeholder="e.g. sterling@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 px-4 text-xs text-slate-800 transition placeholder:text-slate-400"
+                      className="tl-input"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-2">Phone (Optional)</label>
+                    <label htmlFor="contact-form-phone" className="tl-label">Phone (Optional)</label>
                     <input
+                      id="contact-form-phone"
                       type="tel"
                       placeholder="e.g. 0121 714 0876"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 px-4 text-xs text-slate-800 transition placeholder:text-slate-400"
+                      className="tl-input"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-500 font-sans uppercase tracking-wider mb-2">Message Description</label>
+                  <label htmlFor="contact-form-message" className="tl-label">Message Description</label>
                   <textarea
+                    id="contact-form-message"
                     rows={4}
                     placeholder="Tell us your dates, route and passenger details and we will confirm your private hire Birmingham booking quickly."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:outline-none rounded-xl py-3 px-4 text-xs text-slate-800 transition placeholder:text-slate-400 resize-none"
+                    className="tl-input min-h-40 resize-none"
                     required
                   ></textarea>
                 </div>
@@ -186,7 +179,7 @@ export default function ContactForm({ settings }: ContactFormProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm transition-all shadow-md shadow-emerald-600/10 flex justify-center items-center space-x-2 cursor-pointer disabled:opacity-50"
+                  className="tl-btn tl-btn-primary w-full"
                 >
                   {loading ? (
                     <>
@@ -195,7 +188,7 @@ export default function ContactForm({ settings }: ContactFormProps) {
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
+                      <Send className="h-4 w-4" strokeWidth={1.5} />
                       <span>Dispatch Inquiry Sheet</span>
                     </>
                   )}

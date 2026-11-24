@@ -11,6 +11,7 @@ import HomepageFaq from "../components/HomepageFaq";
 import GoogleReviewsSection from "../components/GoogleReviewsSection";
 import { trackVisit, trackClick } from "../utils/analytics";
 import { useSettings } from "../context/SettingsContext";
+import { normalizeRichHtml } from "../utils/richText";
 
 export default function Home({ initialSettings }: { initialSettings?: any } = {}) {
   const [calculatorPickup, setCalculatorPickup] = useState("");
@@ -60,20 +61,20 @@ export default function Home({ initialSettings }: { initialSettings?: any } = {}
   // 1. STATIC HOMEPAGE VIEW
   if (settings.homepage_displays === "page") {
     return (
-      <div className="min-h-screen bg-white text-slate-800 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
+      <div className="flex min-h-screen flex-col bg-white text-stone-700">
         <Navbar onScrollTo={() => { }} />
-        <main className="flex-grow max-w-4xl mx-auto px-6 py-28 w-full">
+        <main className="tl-container flex-grow py-16 lg:py-24">
           {!homepageContent ? (
-            <div className="text-center py-20 text-slate-400">Loading home...</div>
+            <div className="py-20 text-center text-stone-500">Loading home...</div>
           ) : (
-            <div className="bg-white sm:p-8 sm:rounded-2xl sm:border sm:border-slate-100 sm:shadow-sm">
-              <h1 className="text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b border-slate-200">
+            <div className="mx-auto max-w-3xl">
+              <h1 className="tl-h1 mb-10 border-b border-stone-200 pb-8 text-4xl text-stone-900 sm:text-5xl">
                 {homepageContent.title}
               </h1>
               <div className="ql-snow">
                 <div
-                  className="ql-editor page-rich-content text-slate-700 text-base leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: homepageContent.content }}
+                  className="ql-editor page-rich-content text-base leading-relaxed text-stone-700"
+                  dangerouslySetInnerHTML={{ __html: normalizeRichHtml(homepageContent.content) }}
                 />
               </div>
             </div>
@@ -87,7 +88,7 @@ export default function Home({ initialSettings }: { initialSettings?: any } = {}
   // 2. RENAX LUXURY THEME VIEW
   if (settings.active_theme === "renax") {
     return (
-      <div className="min-h-screen bg-[#0c0d12] text-slate-100 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
+      <div className="flex min-h-screen flex-col bg-brand-950 text-stone-200">
         <Navbar onScrollTo={handleScrollTo} />
         <RenaxLayout
           settings={settings}
@@ -106,7 +107,7 @@ export default function Home({ initialSettings }: { initialSettings?: any } = {}
 
   // 3. CLASSIC EMERALD THEME VIEW
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col selection:bg-emerald-600 selection:text-white font-sans">
+    <div className="flex min-h-screen flex-col bg-white text-stone-700">
       <Navbar onScrollTo={handleScrollTo} />
 
       <main className="flex-grow">
@@ -148,13 +149,14 @@ export default function Home({ initialSettings }: { initialSettings?: any } = {}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackClick("whatsapp_hotline")}
-        className="fixed bottom-6 right-6 z-40 bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 group border border-emerald-500/20 flex items-center justify-center"
+        aria-label="Chat on WhatsApp"
+        className="group fixed right-5 bottom-5 z-40 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-brand-800 text-white shadow-md transition-colors duration-200 hover:bg-brand-700 sm:right-6 sm:bottom-6"
         title="Instant WhatsApp Hotline"
       >
-        <svg className="w-6 h-6 fill-current" viewBox="0 0 16 16">
+        <svg className="h-6 w-6 fill-current" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
         </svg>
-        <span className="absolute right-14 top-1/2 transform -translate-y-1/2 bg-white border border-slate-200 text-emerald-700 text-[10px] font-sans font-bold py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 shadow-md transition duration-300 pointer-events-none whitespace-nowrap">
+        <span className="pointer-events-none invisible absolute top-1/2 right-full mr-3 -translate-y-1/2 rounded-sm bg-stone-900 px-2.5 py-1.5 text-xs whitespace-nowrap text-white group-hover:visible group-focus-visible:visible">
           WhatsApp Hotline
         </span>
       </a>

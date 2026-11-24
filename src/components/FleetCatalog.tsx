@@ -14,8 +14,8 @@ import {
   Tv, 
   Volume2, 
   Shield, 
-  Layers, 
-  Sparkles,
+  Layers,
+  Armchair,
   Smartphone,
   BookOpen,
   ArrowRight
@@ -58,7 +58,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
       rate: pricing?.Economy?.perMile !== undefined ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
       description: settings?.fleet_economy_description || "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
       cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
-      features: (settings?.fleet_economy_features || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(",").map((s: string) => s.trim()).filter(Boolean)
+      features: (settings?.fleet_economy_features || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
     },
     Luxury: {
       name: settings?.fleet_luxury_name || "First Class Luxury Chauffeur",
@@ -68,7 +68,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
       rate: pricing?.Luxury?.perMile !== undefined ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
       description: settings?.fleet_luxury_description || "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
       cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
-      features: (settings?.fleet_luxury_features || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(",").map((s: string) => s.trim()).filter(Boolean)
+      features: (settings?.fleet_luxury_features || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
     },
     Family: {
       name: settings?.fleet_family_name || "Family & Executive MPV",
@@ -78,70 +78,84 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
       rate: pricing?.Family?.perMile !== undefined ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
       description: settings?.fleet_family_description || "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
       cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
-      features: (settings?.fleet_family_features || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(",").map((s: string) => s.trim()).filter(Boolean)
+      features: (settings?.fleet_family_features || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
     }
   };
 
   const selectedClass = fleet[activeTab];
 
-  // Map amenity text to relevant premium icons
+  // Map amenity text to relevant icons (bare, thin stroke, brand green)
   const getAmenityIcon = (feature: string) => {
     const f = feature.toLowerCase();
-    if (f.includes("wi-fi") || f.includes("wifi")) return <Wifi className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("climate") || f.includes("air-con") || f.includes("air conditioning")) return <Wind className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("charging") || f.includes("usb")) return <Smartphone className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("water") || f.includes("bottle")) return <Droplet className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("entertainment") || f.includes("tv")) return <Tv className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("quiet") || f.includes("acoustic")) return <Volume2 className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("leather") || f.includes("seat") || f.includes("reclining")) return <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("newspaper") || f.includes("book")) return <BookOpen className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("privacy") || f.includes("glass")) return <Shield className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("boot") || f.includes("capacity")) return <Briefcase className="w-4 h-4 text-emerald-600 shrink-0" />;
-    if (f.includes("door")) return <Layers className="w-4 h-4 text-emerald-600 shrink-0" />;
-    return <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />;
+    const iconClass = "mt-0.5 h-4 w-4 shrink-0 text-brand-700";
+    if (f.includes("wi-fi") || f.includes("wifi")) return <Wifi className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("climate") || f.includes("air-con") || f.includes("air conditioning")) return <Wind className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("charging") || f.includes("usb")) return <Smartphone className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("water") || f.includes("bottle")) return <Droplet className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("entertainment") || f.includes("tv")) return <Tv className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("quiet") || f.includes("acoustic")) return <Volume2 className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("leather") || f.includes("seat") || f.includes("reclining")) return <Armchair className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("newspaper") || f.includes("book")) return <BookOpen className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("privacy") || f.includes("glass")) return <Shield className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("boot") || f.includes("capacity")) return <Briefcase className={iconClass} strokeWidth={1.5} />;
+    if (f.includes("door")) return <Layers className={iconClass} strokeWidth={1.5} />;
+    return <CheckCircle2 className={iconClass} strokeWidth={1.5} />;
   };
 
   return (
-    <section id="fleet" className="py-24 bg-slate-50 border-t border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section id="fleet" className="tl-section bg-white">
+      <div className="tl-container">
+
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-emerald-700 font-sans text-xs tracking-widest uppercase block mb-3 font-bold">
+        <div>
+          <span data-reveal className="tl-eyebrow">
             {settings?.homepage_fleet_subtitle || "Our Premium Fleet"}
           </span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4">
+          <h2 data-reveal="lines" className="tl-h2 mt-4">
             {settings?.homepage_fleet_title || "Travel in Premium Comfort"}
           </h2>
-          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+          <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
             {settings?.homepage_fleet_description || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers."}
           </p>
         </div>
 
-        {/* Tab Buttons */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white border border-slate-200 p-1.5 rounded-2xl flex space-x-1 sm:space-x-2 shadow-sm">
-            {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === tab
-                    ? "bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-bold shadow-md shadow-emerald-600/10"
-                    : "text-slate-500 hover:text-slate-800"
-                }`}
-              >
-                {tab === "Family" ? "Family / MPV" : tab}
-              </button>
-            ))}
-          </div>
+        {/* Class tabs */}
+        <div
+          data-reveal
+          role="tablist"
+          aria-label="Vehicle class"
+          className="mt-10 flex gap-8 border-b border-stone-200 sm:gap-10 lg:mt-12"
+        >
+          {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((tab) => (
+            <button
+              key={tab}
+              id={`fleet-tab-${tab}`}
+              role="tab"
+              aria-selected={activeTab === tab}
+              aria-controls="fleet-panel"
+              onClick={() => setActiveTab(tab)}
+              className={`-mb-px cursor-pointer border-b-2 pt-3 pb-4 text-sm font-medium transition-colors duration-200 ${
+                activeTab === tab
+                  ? "border-brand-700 text-brand-800"
+                  : "border-transparent text-stone-500 hover:text-stone-900"
+              }`}
+            >
+              {tab === "Family" ? "Family / MPV" : tab}
+            </button>
+          ))}
         </div>
 
         {/* Tab Content Display */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-white border border-slate-200/80 p-8 sm:p-12 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300">
-          
-          {/* Left Block - Image */}
-          <div className="lg:col-span-6 relative rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] group border border-slate-200/60 shadow-sm bg-slate-100">
+        <div
+          id="fleet-panel"
+          role="tabpanel"
+          aria-labelledby={`fleet-tab-${activeTab}`}
+          className="mt-10 grid grid-cols-1 items-start gap-10 lg:mt-14 lg:grid-cols-2 lg:gap-12 xl:grid-cols-12 xl:gap-16"
+        >
+
+          {/* Left Block - Image. 3:2 rather than 4:3: the fleet photos are 16:9 studio shots with the
+              car filling the frame, and a 4:3 crop cuts the nose and tail off the Economy car. */}
+          <div data-reveal="image" className="aspect-[3/2] overflow-hidden bg-stone-100 xl:col-span-7">
             {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((key) => (
               <img
                 key={key}
@@ -149,7 +163,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
                 alt={fleet[key].alt || `${fleet[key].name} - Executive Chauffeur Car`}
                 loading="eager"
                 decoding="async"
-                className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeTab === key ? "block" : "hidden"}`}
+                className={`h-full w-full object-cover ${activeTab === key ? "block" : "hidden"}`}
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   const target = e.currentTarget;
@@ -165,46 +179,40 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
                 }}
               />
             ))}
-            {/* Ambient vignette */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
           </div>
 
           {/* Right Block - Features & Specifications */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="space-y-1.5">
-              <h3 className="font-display font-bold text-2xl sm:text-3xl text-slate-900">
-                {selectedClass.name}
-              </h3>
-              <p className="text-emerald-700 font-semibold text-xs sm:text-sm">{selectedClass.tagline}</p>
-            </div>
+          <div data-reveal data-reveal-delay="0.15" className="xl:col-span-5">
+            <h3 className="font-display text-3xl sm:text-4xl font-medium text-stone-900">
+              {selectedClass.name}
+            </h3>
+            <p className="mt-3 text-brand-700 text-sm font-medium">{selectedClass.tagline}</p>
 
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="mt-6 text-base leading-relaxed text-stone-600">
               {selectedClass.description}
             </p>
 
             {/* Key Luxury Amenities Grid */}
-            <div className="space-y-3.5 border-t border-slate-100 pt-5">
-              <h4 className="text-xs font-sans text-slate-400 uppercase tracking-widest font-bold">Included On-Board Amenities:</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="mt-8 border-t border-stone-200 pt-8">
+              <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">Included On-Board Amenities:</h4>
+              <ul className="mt-5 grid grid-cols-1 gap-x-8 gap-y-3.5 sm:grid-cols-2">
                 {selectedClass.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-center space-x-2.5 text-sm text-slate-600 font-medium">
-                    <div className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100/50 flex items-center justify-center shrink-0">
-                      {getAmenityIcon(feat)}
-                    </div>
+                  <li key={idx} className="flex items-start gap-3 text-sm leading-5 text-stone-700 sm:only:col-span-2">
+                    {getAmenityIcon(feat)}
                     <span>{feat}</span>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             {/* Select class and scroll to calculator button */}
-            <div className="pt-4 border-t border-slate-100">
+            <div className="mt-10">
               <button
                 onClick={() => onSelectClass(activeTab)}
-                className="w-full sm:w-auto bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-800 hover:to-emerald-700 text-white font-bold px-6 py-4 rounded-xl text-sm transition-all shadow-md shadow-emerald-700/10 cursor-pointer flex justify-center items-center space-x-2"
+                className="tl-btn tl-btn-primary w-full sm:w-auto"
               >
                 <span>Book This Class Now</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </div>
           </div>

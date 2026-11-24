@@ -82,79 +82,58 @@ const DEFAULT_FALLBACK_SETTINGS = {
   seo_description: "Book premium private hire Birmingham with fixed fares, no surge pricing and Mercedes-Benz and Audi vehicles. Airport, station and business transfers nationwide."
 };
 
+const DEFAULT_MENU_ITEMS = [
+    { id: "nav-home", label: "Home", href: "/", target: "_self" },
+    {
+      id: "nav-services",
+      label: "Services",
+      href: "/services",
+      target: "_self",
+      children: [
+        { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
+        { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
+        { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
+        { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
+        { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
+      ]
+    },
+    {
+      id: "nav-service-areas",
+      label: "Service Areas",
+      href: "/service-areas",
+      target: "_self",
+      children: [
+        { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
+        { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
+        { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
+        { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
+        { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
+      ]
+    },
+    { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
+  ];
+
+function readCache(key: string): any {
+  try {
+    const cached = localStorage.getItem(key);
+    return cached ? JSON.parse(cached) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<any>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const cached = localStorage.getItem("travelluxx_cached_settings");
-        if (cached) return JSON.parse(cached);
-      }
-    } catch (e) { }
-    return DEFAULT_FALLBACK_SETTINGS;
-  });
-  const [pages, setPages] = useState<any[]>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const cached = localStorage.getItem("travelluxx_cached_pages");
-        if (cached) return JSON.parse(cached);
-      }
-    } catch (e) { }
-    return [];
-  });
-  const [services, setServices] = useState<any[]>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const cached = localStorage.getItem("travelluxx_cached_services");
-        if (cached) return JSON.parse(cached);
-      }
-    } catch (e) { }
-    return [];
-  });
+  // Every visitor starts from the same defaults the server rendered with. Reading the browser
+  // cache here instead would make the first client render differ from the server HTML (a React
+  // hydration error for returning visitors); the cache is applied right after mount, below.
+  const [settings, setSettings] = useState<any>(DEFAULT_FALLBACK_SETTINGS);
+  const [pages, setPages] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [servicesPageSettings, setServicesPageSettings] = useState<any>(null);
-  const [menuItems, setMenuItems] = useState<any[]>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const cached = localStorage.getItem("travelluxx_cached_menu");
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-      }
-    } catch (e) { }
-    return [
-      { id: "nav-home", label: "Home", href: "/", target: "_self" },
-      {
-        id: "nav-services",
-        label: "Services",
-        href: "/services",
-        target: "_self",
-        children: [
-          { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
-          { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
-          { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
-          { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
-          { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
-        ]
-      },
-      {
-        id: "nav-service-areas",
-        label: "Service Areas",
-        href: "/service-areas",
-        target: "_self",
-        children: [
-          { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
-          { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
-          { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
-          { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
-          { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
-        ]
-      },
-      { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
-    ];
-  });
+  const [menuItems, setMenuItems] = useState<any[]>(DEFAULT_MENU_ITEMS);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchSettings = async () => {
@@ -276,6 +255,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    // Show the copy cached on the last visit straight away, then refresh from the server.
+    const cachedSettings = readCache("travelluxx_cached_settings");
+    if (cachedSettings) setSettings(cachedSettings);
+    const cachedPages = readCache("travelluxx_cached_pages");
+    if (Array.isArray(cachedPages)) setPages(cachedPages);
+    const cachedServices = readCache("travelluxx_cached_services");
+    if (Array.isArray(cachedServices)) setServices(cachedServices);
+    const cachedMenu = readCache("travelluxx_cached_menu");
+    if (Array.isArray(cachedMenu) && cachedMenu.length > 0) setMenuItems(cachedMenu);
     fetchSettings();
   }, []);
 

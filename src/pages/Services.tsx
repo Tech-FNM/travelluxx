@@ -2,27 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { getServiceIcon } from "../utils/serviceIcons";
 import { useSettings } from "../context/SettingsContext";
-import {
-  Plane,
-  Car,
-  Route,
-  Briefcase,
-  Users,
-  Crown,
-  UserCheck,
-  Tag,
-  Clock,
-  MapPin,
-  ShieldCheck,
-  CalendarDays,
-  CheckCircle2,
-  ChevronRight,
-  ArrowRight,
-  ChevronDown,
-  HelpCircle,
-} from "lucide-react";
+import { ArrowRight, Minus, Plus } from "lucide-react";
 
 // Default fallback services if API not yet populated
 const DEFAULT_SERVICES = [
@@ -338,7 +319,7 @@ export default function Services({
   }, [faqs]);
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
+    <div className="flex min-h-screen flex-col bg-white">
       {/* Global Navbar */}
       <Navbar onScrollTo={(id) => { if (id === "hero" || !id) { window.location.href = "/"; } }} />
 
@@ -347,42 +328,44 @@ export default function Services({
         {/* 1. HERO SECTION                                           */}
         {/* ========================================================= */}
         {heroEnabled && (
-          <section className="relative min-h-[520px] lg:min-h-[580px] flex items-center bg-[#070b14] overflow-hidden">
-            {/* Hero Background Image with Gradient Overlay */}
+          <section className="relative overflow-hidden bg-brand-950">
+            {/* Hero background image under a flat dark overlay for legibility */}
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{
                 backgroundImage: `url('${heroImage}')`,
               }}
-            >
-              {/* Dark gradient to ensure high readability and match luxury mockup */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/80 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-transparent to-[#070b14]/50"></div>
-            </div>
+              aria-hidden="true"
+            ></div>
+            <div className="absolute inset-0 bg-brand-950/75" aria-hidden="true"></div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
-              <div className="max-w-2xl space-y-5">
-                <span className="inline-block text-emerald-400 text-xs font-extrabold uppercase tracking-[0.2em]">
-                  {heroTag}
-                </span>
+            <div className="tl-container relative pt-32 pb-20 lg:pt-40 lg:pb-28">
+              <span data-reveal className="tl-eyebrow tl-eyebrow-light">{heroTag}</span>
 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
-                  {heroTitle}
-                </h1>
+              <h1
+                data-reveal="lines"
+                className="tl-h1 mt-5 max-w-4xl text-4xl text-white sm:text-5xl lg:text-6xl"
+              >
+                {heroTitle}
+              </h1>
 
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
-                  {heroDescription}
-                </p>
+              <p
+                data-reveal
+                data-reveal-delay="0.15"
+                className="mt-6 max-w-2xl text-base leading-relaxed text-stone-300 sm:text-lg"
+              >
+                {heroDescription}
+              </p>
 
-                <div className="pt-3">
-                  <a
-                    href={heroButtonUrl}
-                    className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                  >
-                    <span>{heroButtonText}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                </div>
+              <div
+                data-reveal
+                data-reveal-delay="0.3"
+                className="mt-9 flex flex-wrap items-center gap-3"
+              >
+                <a href={heroButtonUrl} className="tl-btn tl-btn-light">
+                  <span>{heroButtonText}</span>
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                </a>
               </div>
             </div>
           </section>
@@ -392,79 +375,67 @@ export default function Services({
         {/* 2. TRAVEL SOLUTIONS FOR EVERY JOURNEY (DYNAMIC CARDS GRID)*/}
         {/* ========================================================= */}
         {catalogEnabled && (
-          <section className="py-20 lg:py-24 bg-[#ffffff]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section className="tl-section bg-white">
+            <div className="tl-container">
               {/* Section Header */}
-              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span className="text-emerald-600 text-xs font-extrabold uppercase tracking-[0.2em] block">
-                  {catalogTag}
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                  {catalogTitle}
-                </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              <div className="max-w-3xl">
+                <span data-reveal className="tl-eyebrow">{catalogTag}</span>
+                <h2 data-reveal="lines" className="tl-h2 mt-4">{catalogTitle}</h2>
+                <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
                   {catalogDescription}
                 </p>
               </div>
 
               {/* Dynamic Services Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div
+                data-reveal-group
+                className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2 lg:mt-16 lg:grid-cols-3"
+              >
                 {services.map((svc) => {
-                  const IconComponent = getServiceIcon(svc.icon);
                   const detailUrl = `/services/${svc.slug}`;
                   const desc = svc.excerpt || svc.description || "";
 
                   return (
                     <div
                       key={svc.id || svc.slug}
-                      className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1"
+                      className="tl-card tl-card-hover group relative flex flex-col"
                     >
-                      {/* Card Image Container */}
-                      <Link to={detailUrl} className="relative h-52 w-full overflow-hidden bg-slate-100 block">
+                      {/* Card Image */}
+                      <Link
+                        to={detailUrl}
+                        className="block aspect-[4/3] w-full overflow-hidden bg-stone-100"
+                      >
                         <img
                           src={
                             svc.image ||
                             "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80"
                           }
                           alt={svc.imageAlt || `${svc.title} - Executive Chauffeur Services UK`}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                           loading="lazy"
                           decoding="async"
                         />
                       </Link>
 
-                      {/* Floating Dark Icon Badge overlapping image */}
-                      <div className="px-6 -mt-6 relative z-10">
-                        <div className="w-12 h-12 rounded-full bg-[#0c1322] border-2 border-white shadow-md flex items-center justify-center text-white">
-                          <IconComponent className="w-5 h-5 text-emerald-400" />
-                        </div>
-                      </div>
-
                       {/* Card Content */}
-                      <div className="p-6 pt-3 flex-grow flex flex-col justify-between space-y-4">
-                        <div className="space-y-2">
-                          <Link to={detailUrl} className="block">
-                            <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                              {svc.title}
-                            </h3>
-                          </Link>
-                          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
-                            {desc}
-                          </p>
-                        </div>
+                      <div className="flex flex-grow flex-col p-6">
+                        {/* The title link is stretched over the whole card so the card itself is the link. */}
+                        <Link to={detailUrl} className="block after:absolute after:inset-0">
+                          <h3 className="tl-h3">{svc.title}</h3>
+                        </Link>
+                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-stone-600">
+                          {desc}
+                        </p>
 
-                        <div className="pt-2 flex items-center justify-between border-t border-slate-100 mt-2">
-                          <Link
-                            to={detailUrl}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
-                          >
-                            <span>Learn More</span>
-                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                        <div className="mt-auto flex items-center justify-between gap-4 pt-4">
+                          <Link to={detailUrl} className="tl-link relative z-10 min-h-11">
+                            <span>View service</span>
+                            <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                           </Link>
 
                           <a
                             href="/#calculator"
-                            className="text-[11px] font-semibold text-slate-500 hover:text-slate-900 transition"
+                            className="relative z-10 inline-flex min-h-11 items-center text-sm text-stone-500 underline-offset-4 transition-colors duration-200 hover:text-stone-900 hover:underline"
                           >
                             Book Now
                           </a>
@@ -480,75 +451,68 @@ export default function Services({
 
         {/* 4. Frequently Asked Questions (FAQ) Section */}
         {faqEnabled && faqs.length > 0 && (
-          <section className="py-20 lg:py-24 bg-white border-t border-slate-200/80">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center space-y-3 mb-14">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-emerald-500/30 bg-emerald-50 text-emerald-700">
-                  <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{faqTag}</span>
+          <section className="tl-section bg-ivory">
+            <div className="tl-container">
+              <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+                <div className="lg:col-span-5">
+                  <span data-reveal className="tl-eyebrow">{faqTag}</span>
+                  <h2 data-reveal="lines" className="tl-h2 mt-4">{faqTitle}</h2>
+                  <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
+                    {faqDescription}
+                  </p>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                  {faqTitle}
-                </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                  {faqDescription}
-                </p>
-              </div>
 
-              <div className="space-y-3.5">
-                {faqs.map((faq: any, idx: number) => {
-                  const isOpen = openFaqIndex === idx;
-                  const questionId = `services-faq-q-${idx}`;
-                  const answerId = `services-faq-a-${idx}`;
-                  return (
-                    <div
-                      key={idx}
-                      className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                        isOpen
-                          ? "border-emerald-300 bg-emerald-50/40 shadow-md ring-1 ring-emerald-500/20"
-                          : "border-slate-200 bg-white hover:border-slate-300 shadow-sm"
-                      }`}
-                    >
-                      {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
-                      <div
-                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        className="cursor-pointer w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 select-none"
-                      >
-                        <h3
-                          id={questionId}
-                          className={`text-left text-sm sm:text-base font-bold transition-colors ${
-                            isOpen ? "text-slate-950" : "text-slate-800"
-                          }`}
-                        >
-                          {faq.question}
-                        </h3>
-                        <button
-                          type="button"
-                          aria-expanded={isOpen}
-                          aria-controls={answerId}
-                          aria-labelledby={questionId}
-                          className={`cursor-pointer w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                            isOpen
-                              ? "bg-emerald-500 text-slate-950 rotate-180 shadow-sm"
-                              : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div
-                        id={answerId}
-                        role="region"
-                        aria-labelledby={questionId}
-                        className={`px-5 sm:px-6 pb-5 pt-1 border-t border-emerald-500/15 text-slate-600 text-xs sm:text-sm leading-relaxed ${
-                          isOpen ? "block" : "hidden"
-                        }`}
-                      >
-                        <p className="whitespace-pre-line">{faq.answer}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+                <div className="lg:col-span-7">
+                  <div
+                    data-reveal-group
+                    className="divide-y divide-stone-200 border-y border-stone-200"
+                  >
+                    {faqs.map((faq: any, idx: number) => {
+                      const isOpen = openFaqIndex === idx;
+                      const questionId = `services-faq-q-${idx}`;
+                      const answerId = `services-faq-a-${idx}`;
+                      return (
+                        <div key={idx}>
+                          {/* The question is a plain <h3> (text only). The toggle lives on the row + icon button. */}
+                          <div
+                            onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                            className="flex cursor-pointer items-start justify-between gap-6 py-6"
+                          >
+                            <h3
+                              id={questionId}
+                              className="text-base leading-snug font-medium text-stone-900 sm:text-lg"
+                            >
+                              {faq.question}
+                            </h3>
+                            <button
+                              type="button"
+                              aria-expanded={isOpen}
+                              aria-controls={answerId}
+                              aria-labelledby={questionId}
+                              className="-my-2.5 -mr-3 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center text-stone-500 transition-colors duration-200 hover:text-stone-900"
+                            >
+                              {isOpen ? (
+                                <Minus className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                              ) : (
+                                <Plus className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                              )}
+                            </button>
+                          </div>
+                          <div
+                            id={answerId}
+                            role="region"
+                            aria-labelledby={questionId}
+                            className={`pr-10 pb-6 leading-relaxed text-stone-600 ${
+                              isOpen ? "block" : "hidden"
+                            }`}
+                          >
+                            <p className="whitespace-pre-line">{faq.answer}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </section>

@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "../utils/routerCompat";
+import { ArrowLeft } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
+import { normalizeRichHtml } from "../utils/richText";
 
 const DEFAULT_BLOG_FAQS = [
   {
@@ -156,177 +158,121 @@ export default function BlogPostDetail({
   }, [post]);
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#1a1a1a] flex flex-col font-sans antialiased">
+    <div className="min-h-screen bg-white text-stone-700 flex flex-col">
       <Navbar onScrollTo={(id) => {
         if (id === "hero" || !id) {
           window.location.href = "/";
         }
       }} />
 
-      <main className="flex-1 w-full py-8 md:py-16">
+      <main className="flex-1 w-full">
         {loading ? (
-          <div className="text-center py-32 text-slate-400 font-sans">Loading article...</div>
+          <div className="tl-container py-40 text-center text-base text-stone-500">Loading article...</div>
         ) : !post ? (
-          <div className="text-center py-32 max-w-md mx-auto px-6">
-            <p className="text-2xl font-serif text-slate-800 mb-4">Article Not Found</p>
-            <Link to="/blog" className="text-emerald-700 hover:text-emerald-800 underline font-semibold text-sm">← Back to Blog</Link>
+          <div className="tl-container py-40 text-center">
+            <p className="text-2xl font-medium text-stone-900">Article Not Found</p>
+            <Link to="/blog" className="tl-link mt-4 min-h-11">
+              <ArrowLeft className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              Back to Blog
+            </Link>
           </div>
         ) : (
-          <article className="w-full">
+          <article className="w-full pt-20 pb-20 lg:pt-28 lg:pb-28">
             {/* Header Section */}
-            <div className="max-w-3xl mx-auto px-4 md:px-6 text-center mb-8 md:mb-12">
-              <div className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold mb-4">
-                {post.date ? new Date(post.date).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' }) : ""}
-              </div>
-              <h1 className="text-3xl md:text-5xl font-serif font-normal text-slate-900 leading-tight tracking-tight mb-6">
-                {post.title}
-              </h1>
-              <div className="flex items-center justify-center gap-2 text-xs text-slate-500 font-medium">
-                <span>By {post.author || "Travelluxx Editorial"}</span>
-                <span>•</span>
-                <span>Chauffeur &amp; Travel Guides</span>
+            <div className="tl-container">
+              <div className="mx-auto max-w-3xl text-center">
+                <div data-reveal className="text-xs uppercase tracking-[0.2em] text-stone-500 empty:hidden">
+                  {post.date ? new Date(post.date).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' }) : ""}
+                </div>
+                <h1 data-reveal="lines" className="tl-h1 mt-6 text-4xl text-balance text-stone-900 sm:text-5xl">
+                  {post.title}
+                </h1>
+                {/* Excerpt */}
+                {post.excerpt && (
+                  <div data-reveal data-reveal-delay="0.15" className="tl-lead mt-6">
+                    {post.excerpt}
+                  </div>
+                )}
+                <div
+                  data-reveal
+                  data-reveal-delay="0.3"
+                  className="mt-8 flex flex-col items-center justify-center gap-2 text-xs uppercase tracking-[0.2em] text-stone-500 sm:flex-row sm:gap-4"
+                >
+                  <span>By {post.author || "Travelluxx Editorial"}</span>
+                  <span aria-hidden="true" className="hidden h-px w-8 bg-stone-300 sm:block" />
+                  <span>Chauffeur &amp; Travel Guides</span>
+                </div>
               </div>
             </div>
 
             {/* Featured Image */}
             {post.image && (
-              <div className="max-w-4xl mx-auto px-4 md:px-6 mb-10 md:mb-14">
-                <div className="aspect-[21/9] w-full overflow-hidden rounded shadow-sm bg-slate-100">
+              <div className="tl-container mt-12 lg:mt-16">
+                <div data-reveal="image" className="mx-auto aspect-[16/9] w-full max-w-5xl overflow-hidden bg-stone-100">
                   <img
                     src={post.image}
                     alt={post.imageAlt || `${post.title} - Travelluxx Executive Chauffeur Blog`}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>
             )}
 
             {/* Article Content */}
-            <div className="max-w-4xl mx-auto px-4 md:px-6">
-              {/* Excerpt */}
-              {post.excerpt && (
-                <div className="text-slate-500 text-lg md:text-xl font-light italic leading-relaxed mb-8 border-l-2 border-emerald-600 pl-4">
-                  {post.excerpt}
+            <div className="tl-container mt-12 lg:mt-16">
+              <div className="mx-auto max-w-3xl">
+                {/* Rich Body Content */}
+                {/* Lists saved as plain <ul>/<ol> lose their markers to Quill's `.ql-editor li` reset: inherit them back from the list. */}
+                <div data-reveal className="ql-snow">
+                  <div
+                    className="ql-editor page-rich-content article-body-content [&_li:not([data-list])]:[list-style-type:inherit]!"
+                    dangerouslySetInnerHTML={{ __html: normalizeRichHtml(post.content) }}
+                  />
                 </div>
-              )}
 
-              {/* Rich Body Content */}
-              <div className="ql-snow">
-                <div
-                  className="ql-editor page-rich-content article-body-content font-serif text-[17px] md:text-[19px] text-[#292929] leading-relaxed space-y-6"
-                  style={{
-                    lineHeight: "1.8",
-                    letterSpacing: "-0.003em"
-                  }}
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
-              </div>
-
-              {/* FAQs Section */}
-              {postFaqs && postFaqs.length > 0 && (
-                <div className="mt-12 pt-8 border-t border-slate-200">
-                  <h2 className="font-serif text-2xl font-semibold mb-6 text-slate-900">Frequently Asked Questions</h2>
-                  <div className="space-y-4">
-                    {postFaqs.map((faq: any, idx: number) => (
-                      <div 
-                        key={idx} 
-                        className="bg-white border border-slate-200/60 hover:border-emerald-200 p-5 rounded-xl transition duration-300 hover:shadow-md hover:shadow-emerald-600/5 group"
-                      >
-                        <h3 className="font-sans text-base font-semibold text-slate-800 group-hover:text-emerald-700 transition duration-300 mb-2">{faq.question}</h3>
-                        <p className="font-serif text-slate-600 text-sm md:text-base leading-relaxed">{faq.answer}</p>
-                      </div>
-                    ))}
+                {/* FAQs Section */}
+                {postFaqs && postFaqs.length > 0 && (
+                  <div className="mt-16 lg:mt-24">
+                    <h2 data-reveal="lines" className="tl-h2 text-3xl sm:text-4xl">Frequently Asked Questions</h2>
+                    <div data-reveal-group className="mt-8 divide-y divide-stone-200 border-y border-stone-200">
+                      {postFaqs.map((faq: any, idx: number) => (
+                        <div key={idx} className="py-6">
+                          <h3 className="text-lg font-medium text-stone-900">{faq.question}</h3>
+                          <p className="mt-2 leading-relaxed text-stone-600">{faq.answer}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Back to Blog */}
-              <div className="mt-12 pt-8 border-t border-slate-200 text-center">
-                <Link to="/blog" className="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-800 font-bold text-sm transition">
-                  ← Back to Articles
-                </Link>
+                {/* Back to Blog */}
+                <div className="mt-8">
+                  <Link to="/blog" className="tl-link min-h-11">
+                    <ArrowLeft className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                    Back to Articles
+                  </Link>
+                </div>
               </div>
             </div>
           </article>
         )}
       </main>
 
-      {/* Inject custom global CSS to format all standard HTML elements from backend text editors */}
+      {/* Article-only additions to the shared .page-rich-content typography (src/index.css) */}
       <style>{`
-        .article-body-content {
-          word-break: break-word;
-          overflow-wrap: break-word;
-          white-space: normal !important;
-        }
+        .article-body-content,
         .article-body-content p {
-          margin-bottom: 1.5rem;
           word-break: break-word;
           overflow-wrap: break-word;
           white-space: normal !important;
-        }
-        .article-body-content h2 {
-          font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: #0f172a;
-          margin-top: 2rem;
-          margin-bottom: 1rem;
-          line-height: 1.3;
-        }
-        @media (min-width: 768px) {
-          .article-body-content h2 {
-            font-size: 1.8rem;
-          }
-        }
-        .article-body-content h3 {
-          font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-          font-size: 1.3rem;
-          font-weight: 600;
-          color: #1e293b;
-          margin-top: 1.75rem;
-          margin-bottom: 0.75rem;
-        }
-        @media (min-width: 768px) {
-          .article-body-content h3 {
-            font-size: 1.5rem;
-          }
-        }
-        .article-body-content ul {
-          list-style-type: disc;
-          padding-left: 1.5rem;
-          margin-bottom: 1.5rem;
-        }
-        .article-body-content ol {
-          list-style-type: decimal;
-          padding-left: 1.5rem;
-          margin-bottom: 1.5rem;
-        }
-        .article-body-content li {
-          margin-bottom: 0.5rem;
-        }
-        .article-body-content a {
-          color: #047857;
-          text-decoration: underline;
-        }
-        .article-body-content a:hover {
-          color: #065f46;
         }
         .article-body-content blockquote {
-          border-left: 3px solid #10b981;
-          padding-left: 1.25rem;
-          font-style: italic;
-          color: #4b5563;
-          margin: 1.5rem 0;
+          color: var(--color-stone-600);
         }
         .article-body-content img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 4px;
-          margin: 2rem auto;
-          display: block;
-          box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+          border-radius: 2px;
         }
       `}</style>
 

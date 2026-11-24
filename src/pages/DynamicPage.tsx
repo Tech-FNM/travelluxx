@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "../utils/routerCompat";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 import { usePageSeo } from "../utils/seo";
+import { normalizeRichHtml } from "../utils/richText";
 
 interface DynamicPageProps {
   initialPage?: any;
@@ -120,28 +121,31 @@ export default function DynamicPage({
 
     if (fetching && !page) {
       return (
-        <div className={`min-h-screen flex items-center justify-center ${isRenax ? "bg-[#0c0d12]" : "bg-white"}`}>
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+        <div className={`min-h-screen flex items-center justify-center ${isRenax ? "bg-brand-950" : "bg-white"}`}>
+          <div
+            role="status"
+            aria-label="Loading"
+            className={`h-8 w-8 animate-spin rounded-full border-2 border-t-transparent ${isRenax ? "border-brand-300" : "border-brand-700"}`}
+          />
         </div>
       );
     }
 
     if (!page) {
       return (
-        <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>
+        <div className={`min-h-screen flex flex-col ${isRenax ? "bg-brand-950 text-stone-200" : "bg-white text-stone-700"}`}>
           <Navbar onScrollTo={() => { }} />
-          <main className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-lg mx-auto py-28">
-            <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 text-slate-400">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <main className="tl-container flex flex-1 flex-col items-center justify-center py-32 text-center lg:py-40">
+            <h1 data-reveal="lines" className={`tl-h1 text-4xl sm:text-5xl ${isRenax ? "text-white" : "text-stone-900"}`}>Page Not Found</h1>
+            <p data-reveal data-reveal-delay="0.15" className={`tl-lead mt-5 max-w-md ${isRenax ? "text-stone-300" : ""}`}>The page you are looking for does not exist or may have been moved.</p>
+            <div data-reveal data-reveal-delay="0.3" className="mt-9">
+              <button
+                onClick={() => navigate("/")}
+                className={`tl-btn ${isRenax ? "tl-btn-light" : "tl-btn-primary"}`}
+              >
+                Back to Home
+              </button>
             </div>
-            <h1 className="text-2xl font-bold mb-2">Page Not Found</h1>
-            <p className="text-sm text-slate-500 mb-6">The page you are looking for does not exist or may have been moved.</p>
-            <button
-              onClick={() => navigate("/")}
-              className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm"
-            >
-              Back to Home
-            </button>
           </main>
           <Footer onScrollTo={() => { }} />
         </div>
@@ -149,83 +153,98 @@ export default function DynamicPage({
     }
 
     return (
-      <div className={`min-h-screen flex flex-col font-sans ${isRenax ? "bg-[#0c0d12] text-slate-100" : "bg-white text-slate-800"}`}>
+      <div className={`min-h-screen flex flex-col ${isRenax ? "bg-brand-950 text-stone-200" : "bg-white text-stone-700"}`}>
         <Navbar onScrollTo={() => { }} />
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
-          <div className="w-full">
-            <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-8 pb-4 border-b break-words ${isRenax ? "text-white border-white/10" : "text-slate-900 border-slate-200"}`}>{page.title}</h1>
-            <div className={`ql-snow ${isRenax ? "dark-page-content" : ""}`}>
-              <div
-                className={`ql-editor page-rich-content ${isRenax ? "text-slate-200" : "text-slate-800"}`}
-                dangerouslySetInnerHTML={{ __html: page.content }}
-              />
+        <main className="flex-1 w-full">
+          {/* Page header */}
+          <div className={isRenax ? "border-b border-white/10" : "bg-ivory"}>
+            <div className="tl-container pt-32 pb-16 lg:pt-40 lg:pb-20">
+              <h1 data-reveal="lines" className={`tl-h1 max-w-4xl text-4xl break-words sm:text-5xl ${isRenax ? "text-white" : "text-stone-900"}`}>{page.title}</h1>
             </div>
+          </div>
 
-            {/* Page FAQs section if present */}
-            {pageFaqs.length > 0 && (
-              <div className="mt-16 pt-12 border-t border-slate-200 max-w-4xl">
-                <div className="mb-6">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2 border border-emerald-200">
-                    <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Frequently Asked Questions</span>
+          {/* Rich content */}
+          <div className="tl-container tl-section">
+            <div data-reveal className="max-w-3xl">
+              <div className={`ql-snow ${isRenax ? "dark-page-content" : ""}`}>
+                {/* Lists saved as plain <ul>/<ol> lose their markers to Quill's `.ql-editor li` reset: inherit them back from the list. */}
+                <div
+                  className={`ql-editor page-rich-content [&_li:not([data-list])]:[list-style-type:inherit]! ${isRenax ? "text-stone-200" : "text-stone-700"}`}
+                  dangerouslySetInnerHTML={{ __html: normalizeRichHtml(page.content) }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Page FAQs section if present */}
+          {pageFaqs.length > 0 && (
+            <div className={isRenax ? "border-t border-white/10" : "bg-ivory"}>
+              <div className="tl-container tl-section">
+                <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-16">
+                  <div className="lg:col-span-5">
+                    <span data-reveal className={`tl-eyebrow ${isRenax ? "tl-eyebrow-light" : ""}`}>Frequently Asked Questions</span>
+                    <h2 data-reveal="lines" className={`tl-h2 mt-4 text-3xl sm:text-4xl ${isRenax ? "text-white" : ""}`}>
+                      {page.faqTitle || `${page.title} FAQ`}
+                    </h2>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                    {page.faqTitle || `${page.title} FAQ`}
-                  </h2>
-                </div>
-                <div className="space-y-3">
-                  {pageFaqs.map((faq: any, index: number) => {
-                    const isOpen = openFaqIndex === index;
-                    const questionId = `page-faq-q-${index}`;
-                    const answerId = `page-faq-a-${index}`;
-                    return (
-                      <div
-                        key={faq.question || index}
-                        className={`rounded-xl border transition-all duration-200 overflow-hidden ${isOpen
-                            ? "border-emerald-300 bg-emerald-50/30 shadow-sm"
-                            : "border-slate-200 bg-white hover:border-slate-300"
-                          }`}
-                      >
-                        {/* The question is a plain <h3> (text only). The toggle lives on the row + chevron button. */}
-                        <div
-                          onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                          className="cursor-pointer flex w-full items-center justify-between gap-4 p-5 select-none"
-                        >
-                          <h3
-                            id={questionId}
-                            className="text-left font-semibold text-slate-900 text-base sm:text-lg transition"
+                  <div
+                    data-reveal-group
+                    className={`divide-y border-y lg:col-span-7 ${isRenax ? "divide-white/10 border-white/10" : "divide-stone-200 border-stone-200"}`}
+                  >
+                    {pageFaqs.map((faq: any, index: number) => {
+                      const isOpen = openFaqIndex === index;
+                      const questionId = `page-faq-q-${index}`;
+                      const answerId = `page-faq-a-${index}`;
+                      return (
+                        <div key={faq.question || index}>
+                          {/* The question is a plain <h3> (text only). The toggle lives on the row + sibling button. */}
+                          <div
+                            onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                            className="group flex items-start justify-between gap-6 py-6 cursor-pointer"
                           >
-                            {faq.question}
-                          </h3>
-                          <button
-                            type="button"
-                            aria-expanded={isOpen}
-                            aria-controls={answerId}
+                            <h3
+                              id={questionId}
+                              className={`text-base leading-snug font-medium transition-colors duration-200 sm:text-lg ${isRenax
+                                  ? "text-white group-hover:text-brand-300"
+                                  : "text-stone-900 group-hover:text-brand-800"
+                                }`}
+                            >
+                              {faq.question}
+                            </h3>
+                            <button
+                              type="button"
+                              aria-expanded={isOpen}
+                              aria-controls={answerId}
+                              aria-labelledby={questionId}
+                              className={`-my-2.5 -mr-3 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center transition-colors duration-200 ${isRenax
+                                  ? "text-stone-400 group-hover:text-white"
+                                  : "text-stone-500 group-hover:text-stone-900"
+                                }`}
+                            >
+                              {isOpen ? (
+                                <Minus className="h-5 w-5" strokeWidth={1.5} />
+                              ) : (
+                                <Plus className="h-5 w-5" strokeWidth={1.5} />
+                              )}
+                            </button>
+                          </div>
+                          <div
+                            id={answerId}
+                            role="region"
                             aria-labelledby={questionId}
-                            className={`cursor-pointer h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-600"
+                            className={`pb-6 pr-10 text-base leading-relaxed ${isRenax ? "text-stone-300" : "text-stone-600"} ${isOpen ? "block" : "hidden"
                               }`}
                           >
-                            <ChevronDown
-                              className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                            />
-                          </button>
+                            <p>{faq.answer}</p>
+                          </div>
                         </div>
-                        <div
-                          id={answerId}
-                          role="region"
-                          aria-labelledby={questionId}
-                          className={`px-5 pb-5 pt-1 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-emerald-100/60 ${isOpen ? "block" : "hidden"
-                            }`}
-                        >
-                          <p>{faq.answer}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </main>
         <Footer onScrollTo={() => { }} />
       </div>
