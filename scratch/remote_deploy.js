@@ -62,7 +62,9 @@ const collectAliases = (dir, prefix) => {
       continue;
     }
     const link = `${prefix}${name}`;
-    const target = path.relative(root, fs.realpathSync(full)).split(path.sep).join("/");
+    // "node_modules/<package>", wherever this machine's node_modules really lives.
+    const real = fs.realpathSync(full).split(path.sep).join("/");
+    const target = real.slice(real.lastIndexOf("/node_modules/") + 1);
     const up = "../".repeat(1 + link.split("/").length);
     linkCommands.push(
       `[ -e "${target}" ] || abort "dependency ${target} is missing on the server"`,
@@ -86,10 +88,26 @@ abort() {
   exit 1
 }
 
-[ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh" > /dev/null 2>&1
 cd "$HOME/public_html" || abort "public_html not found"
+
+# Node: nvm has no default version on this server, so "node" is not on PATH in a plain shell.
+# Use the same Node the running app uses, else the newest one installed.
+LISTENER=$(lsof -t -i:3000 2> /dev/null | head -1)
+NODE_BIN=""
+[ -n "$LISTENER" ] && NODE_BIN=$(dirname "$(readlink "/proc/$LISTENER/exe" 2> /dev/null)" 2> /dev/null)
+if [ ! -x "$NODE_BIN/npm" ]; then
+  NODE_BIN=$(ls -d "$HOME"/.nvm/versions/node/*/bin 2> /dev/null | sort -V | tail -1)
+fi
+[ -x "$NODE_BIN/npm" ] && export PATH="$NODE_BIN:$PATH"
 command -v npm > /dev/null || abort "npm is not available on the server"
+echo "using node $(node -v) from $NODE_BIN"
 [ "$(stat -c %s "$HOME/next-build.tgz" 2> /dev/null)" = "${bytes}" ] || abort "the build upload is incomplete"
+
+# A copy of the app that lost the port keeps running and wastes the container's small thread
+# allowance (git and npm then fail with "unable to create thread"). Stop those; keep the live one.
+for p in $(pgrep -x -f "node dist/server.cjs"); do
+  [ "$p" = "$LISTENER" ] || { kill "$p" 2> /dev/null && echo "stopped an idle duplicate of the app (pid $p)"; }
+done
 
 say "1/5 Backing up live data files"
 # Bookings and settings saved on the live site are written to JSON files that are tracked in git,
