@@ -1,5 +1,21 @@
+// Deploys the site to the production server.
+//
+//   node scratch/remote_deploy.js               build locally, upload the build, restart
+//   node scratch/remote_deploy.js --skip-build  reuse the .next folder that is already here
+//   node scratch/remote_deploy.js --dry-run     print what would run on the server, change nothing
+//
+// Commit and push first: the server takes its code from GitHub (origin/main).
+//
+// Why the build runs on this machine and not on the server: the hosting container allows only
+// about 64 threads and very little memory, so `next build` cannot run there, and `git pull`
+// only works with pack.threads=1. The server just receives the finished .next folder.
 import { Client } from "ssh2";
+import { spawn, spawnSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const conn = new Client();
 
 const config = {
@@ -11,57 +27,185 @@ const config = {
   keepaliveInterval: 10000
 };
 
-// dist/server.cjs is pre-built and committed to git; only the Next.js pages (.next/) are built on the server
-const commands = [
-  "cd public_html",
-  "pkill -f 'vite build' || true",
-  "pkill -f 'esbuild' || true",
-  // Bookings and settings saved on the live site are written to JSON files that are tracked in git,
-  // so the reset below wipes them. Keep a timestamped copy outside the web root first.
-  "BK=../deploy_backups/$(date +%Y%m%d-%H%M%S); mkdir -p $BK && cp -p *.json $BK/; echo \"Backed up $(ls $BK | wc -l) JSON files to $BK\"",
-  "git reset --hard",
-  "git pull origin main",
-  "npm install --prefer-offline",
-  // The pages are rendered by Next.js, and .next/ is NOT in git, so it must be built here.
-  // If the build fails we exit before touching the running server, so the site stays up.
-  "echo 'Building Next.js pages...'",
-  "npm run next:build || { echo 'NEXT BUILD FAILED - old server left running'; exit 1; }",
-  "echo 'Killing process running on port 3000...'",
-  "fuser -k 3000/tcp || kill -9 $(lsof -t -i:3000) || true",
-  "sleep 2",
-  "echo 'Starting server...'",
-  "NODE_ENV=production nohup npm start > server.log 2>&1 &",
-  "sleep 3",
-  "echo 'Server status check:'",
-  "curl -I http://localhost:3000 || true"
-];
+function fail(message) {
+  console.error(`\n✖ ${message}`);
+  process.exit(1);
+}
 
-conn.on("ready", () => {
-  console.log("🔓 SSH Connection established!");
-  
-  conn.shell((err, stream) => {
-    if (err) { console.error("Shell error:", err); conn.end(); return; }
-    
-    stream.on("close", () => {
-      console.log("🔒 Connection closed.");
-      conn.end();
-    });
-    
-    stream.on("data", (data) => {
-      process.stdout.write(data.toString());
-    });
+const git = (...args) => spawnSync("git", args, { cwd: root, encoding: "utf8" }).stdout.trim();
 
-    stream.stderr.on("data", (data) => {
-      process.stderr.write(data.toString());
-    });
+// ---------------------------------------------------------------- 1. local checks + build
+const head = git("rev-parse", "HEAD");
+if (head !== git("rev-parse", "origin/main")) {
+  fail("Your latest commit is not on GitHub yet. Run `git push origin main`, then deploy again.");
+}
+if (git("status", "--porcelain", "--", "pages", "src", "public", "server.ts", "next.config.mjs", "package.json")) {
+  console.warn("⚠ You have uncommitted changes. They will be in the uploaded pages, but not in the code the server pulls from GitHub.");
+}
 
-    const fullCommand = commands.join("\n") + "\nexit\n";
-    stream.end(fullCommand);
+if (!process.argv.includes("--skip-build")) {
+  console.log("① Building the site locally...");
+  const build = spawnSync("npx next build", { cwd: root, stdio: "inherit", shell: true });
+  if (build.status !== 0) fail("The local build failed. Nothing was deployed.");
+}
+if (!fs.existsSync(path.join(root, ".next", "BUILD_ID"))) fail("There is no .next build to upload.");
+
+// Turbopack loads some server packages through hashed aliases in .next/node_modules. Those are
+// symlinks into this machine's node_modules, so they are recreated on the server instead of uploaded.
+const linkCommands = [];
+const aliasDir = path.join(root, ".next", "node_modules");
+const collectAliases = (dir, prefix) => {
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name);
+    if (name.startsWith("@") && !fs.lstatSync(full).isSymbolicLink()) {
+      collectAliases(full, `${prefix}${name}/`);
+      continue;
+    }
+    const link = `${prefix}${name}`;
+    const target = path.relative(root, fs.realpathSync(full)).split(path.sep).join("/");
+    const up = "../".repeat(1 + link.split("/").length);
+    linkCommands.push(
+      `[ -e "${target}" ] || abort "dependency ${target} is missing on the server"`,
+      `mkdir -p "$(dirname ".next.new/node_modules/${link}")" && ln -sfn "${up}${target}" ".next.new/node_modules/${link}"`
+    );
+  }
+};
+if (fs.existsSync(aliasDir)) collectAliases(aliasDir, "");
+
+// ---------------------------------------------------------------- 2. what runs on the server
+// Plain bash. Nothing in here uses ${...} so it can live in a template string.
+const remoteScript = (bytes) => `#!/bin/bash
+say() { echo; echo "== $*"; }
+PREV=""
+abort() {
+  echo; echo "DEPLOY ABORTED: $*"
+  if [ -n "$PREV" ] && [ "$(git rev-parse HEAD)" != "$PREV" ]; then
+    git reset --hard "$PREV" > /dev/null && echo "Code on the server was put back to the previous commit."
+  fi
+  echo "The running site was not restarted."
+  exit 1
+}
+
+[ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh" > /dev/null 2>&1
+cd "$HOME/public_html" || abort "public_html not found"
+command -v npm > /dev/null || abort "npm is not available on the server"
+[ "$(stat -c %s "$HOME/next-build.tgz" 2> /dev/null)" = "${bytes}" ] || abort "the build upload is incomplete"
+
+say "1/5 Backing up live data files"
+# Bookings and settings saved on the live site are written to JSON files that are tracked in git,
+# so the reset below wipes them. Keep a timestamped copy outside the web root first.
+BK="../deploy_backups/$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$BK" && cp -p *.json "$BK"/ || abort "backup failed"
+echo "$(ls "$BK" | wc -l) JSON files copied to $BK"
+
+say "2/5 Updating code from GitHub"
+PREV=$(git rev-parse HEAD)
+git config pack.threads 1
+git reset --hard || abort "git reset failed"
+git pull origin main || abort "git pull failed"
+[ "$(git rev-parse HEAD)" = "${head}" ] || abort "the server pulled commit $(git rev-parse --short HEAD), but the uploaded build was made from ${head.slice(0, 7)}"
+
+say "3/5 Installing dependencies"
+npm install --prefer-offline --no-audit --no-fund || abort "npm install failed"
+
+say "4/5 Unpacking the uploaded build"
+rm -rf .next.new && mkdir .next.new || abort "cannot create .next.new"
+tar -xzf "$HOME/next-build.tgz" -C .next.new --strip-components=1 || abort "cannot unpack the uploaded build"
+[ -f .next.new/BUILD_ID ] || abort "the uploaded build is incomplete"
+${linkCommands.join("\n")}
+rm -rf .next.old
+[ -d .next ] && mv .next .next.old
+mv .next.new .next || abort "cannot activate the new build"
+rm -f "$HOME/next-build.tgz"
+echo "build $(cat .next/BUILD_ID) is in place"
+
+say "5/5 Restarting the app"
+is_up() { curl -s --max-time 8 http://127.0.0.1:3000/ 2> /dev/null | grep -q "__NEXT_DATA__"; }
+wait_up() { for i in $(seq 1 "$1"); do sleep 2; is_up && return 0; done; return 1; }
+fuser -k 3000/tcp > /dev/null 2>&1
+# The hosting panel supervises \`npm start\` in this folder and normally brings the app back by itself.
+if wait_up 20; then
+  echo "the hosting panel restarted the app"
+else
+  echo "the hosting panel did not restart the app within 40s, starting it manually"
+  nohup npm start > server.log 2>&1 < /dev/null &
+  wait_up 20
+fi
+
+if ! is_up; then
+  echo; echo "THE NEW VERSION DID NOT START. Last log lines:"
+  tail -n 15 server.log 2> /dev/null
+  tail -n 15 "$HOME"/persistent_app_*.log 2> /dev/null
+  echo; echo "Rolling back to the previous version..."
+  fuser -k 3000/tcp > /dev/null 2>&1
+  git reset --hard "$PREV" > /dev/null
+  rm -rf .next
+  [ -d .next.old ] && mv .next.old .next
+  npm install --prefer-offline --no-audit --no-fund > /dev/null 2>&1
+  nohup npm start > server.log 2>&1 < /dev/null &
+  sleep 10
+  echo "previous version answers with HTTP $(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:3000/)"
+  exit 1
+fi
+
+echo
+echo "DEPLOYED: commit $(git log -1 --format='%h %s' | cut -c1-70), build $(cat .next/BUILD_ID)"
+`;
+
+// ---------------------------------------------------------------- 3. upload + run
+// Runs one remote command, optionally feeding it input, and resolves with its exit code.
+function remote(command, feed) {
+  return new Promise((resolve, reject) => {
+    conn.exec(command, (err, stream) => {
+      if (err) return reject(err);
+      stream.on("close", (code) => resolve(code));
+      stream.on("data", (data) => process.stdout.write(data.toString()));
+      stream.stderr.on("data", (data) => process.stderr.write(data.toString()));
+      if (feed) feed(stream);
+      else stream.end();
+    });
   });
+}
+
+conn.on("ready", async () => {
+  try {
+    console.log("② Uploading the build...");
+    let bytes = 0;
+    let tarFailed = false;
+    const uploadCode = await remote('cat > "$HOME/next-build.tgz"', (stream) => {
+      // Relative paths and stdout only, so this works with both GNU tar and Windows' built-in tar.
+      const tar = spawn(
+        "tar",
+        ["-czf", "-", "--exclude=.next/cache", "--exclude=.next/dev", "--exclude=.next/node_modules", "--exclude=.next/trace", "--exclude=.next/trace-build", ".next"],
+        { cwd: root, stdio: ["ignore", "pipe", "inherit"] }
+      );
+      tar.stdout.on("data", (chunk) => { bytes += chunk.length; });
+      tar.stdout.pipe(stream);
+      tar.on("error", (e) => fail(`Could not run tar: ${e.message}`));
+      tar.on("close", (tarCode) => { if (tarCode !== 0) tarFailed = true; });
+    });
+    if (uploadCode !== 0 || bytes === 0 || tarFailed) fail("Uploading the build failed. Nothing was changed on the server.");
+    console.log(`   ${(bytes / 1024 / 1024).toFixed(1)} MB uploaded`);
+
+    await remote('cat > "$HOME/.deploy_remote.sh"', (stream) => stream.end(remoteScript(bytes)));
+
+    console.log("③ Updating the server...");
+    const code = await remote('bash -l "$HOME/.deploy_remote.sh"');
+    conn.end();
+    if (code !== 0) fail("The deploy did not complete. See the messages above.");
+    console.log("\n✔ Deploy finished.");
+  } catch (e) {
+    conn.end();
+    fail(`Deploy error: ${e.message}`);
+  }
 });
 
-conn.on("error", (err) => {
-  console.error("SSH Connection error:", err.message);
-});
+conn.on("error", (err) => fail(`SSH connection error: ${err.message}`));
 
-conn.connect(config);
+if (process.argv.includes("--dry-run")) {
+  // Shows exactly what would run on the server, without connecting to it.
+  console.log(remoteScript(0));
+} else {
+  console.log("Connecting to the server...");
+  conn.connect(config);
+}
