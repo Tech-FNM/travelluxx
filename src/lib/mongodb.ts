@@ -162,8 +162,21 @@ function cleanDocs(docs: any[]) {
   return docs.map(cleanDoc);
 }
 
+// Keys that must never reach the browser (pages serialise their props into the HTML).
+const SECRET_SETTING_KEY = /^(mollie_api_key|google_places_api_key|smtp_.*|.*password.*|.*secret.*|.*_token)$/i;
+export function publicSettings(settings: any): any {
+  if (!settings || typeof settings !== "object") return settings;
+  const out: any = {};
+  for (const [k, v] of Object.entries(settings)) if (!SECRET_SETTING_KEY.test(k)) out[k] = v;
+  return out;
+}
+
 // Data fetch helpers with MongoDB first, local JSON as secondary fallback
 export async function getWebsiteSettings(): Promise<any> {
+  return publicSettings(await readWebsiteSettings());
+}
+
+async function readWebsiteSettings(): Promise<any> {
   try {
     await connectToDatabase();
     const doc = await SettingModel.findOne({ key: "website" }).lean();
@@ -225,9 +238,7 @@ export async function getServices(onlyPublished = true): Promise<any[]> {
     await connectToDatabase();
     const query = onlyPublished ? { published: { $ne: false } } : {};
     const docs = await ServiceModel.find(query).sort({ order: 1, createdAt: 1 }).lean();
-    if (docs && docs.length > 0) {
-      return cleanDocs(docs);
-    }
+    return cleanDocs(docs || []);
   } catch (err) {
     console.warn("MongoDB getServices fallback:", err);
   }
@@ -248,7 +259,7 @@ export async function getServiceBySlug(slug: string): Promise<any | null> {
       $or: [{ slug }, { id: slug }],
       published: { $ne: false },
     }).lean();
-    if (doc) return cleanDoc(doc);
+    return doc ? cleanDoc(doc) : null;
   } catch (err) {
     console.warn(`MongoDB getServiceBySlug(${slug}) fallback:`, err);
   }
@@ -268,9 +279,7 @@ export async function getServiceAreas(onlyPublished = true): Promise<any[]> {
     await connectToDatabase();
     const query = onlyPublished ? { published: { $ne: false } } : {};
     const docs = await ServiceAreaModel.find(query).sort({ title: 1 }).lean();
-    if (docs && docs.length > 0) {
-      return cleanDocs(docs);
-    }
+    return cleanDocs(docs || []);
   } catch (err) {
     console.warn("MongoDB getServiceAreas fallback:", err);
   }
@@ -291,7 +300,7 @@ export async function getServiceAreaBySlug(slug: string): Promise<any | null> {
       $or: [{ slug }, { id: slug }],
       published: { $ne: false },
     }).lean();
-    if (doc) return cleanDoc(doc);
+    return doc ? cleanDoc(doc) : null;
   } catch (err) {
     console.warn(`MongoDB getServiceAreaBySlug(${slug}) fallback:`, err);
   }
@@ -309,10 +318,8 @@ export async function getServiceAreaBySlug(slug: string): Promise<any | null> {
 export async function getPages(): Promise<any[]> {
   try {
     await connectToDatabase();
-    const docs = await PageModel.find({}).lean();
-    if (docs && docs.length > 0) {
-      return cleanDocs(docs);
-    }
+    const docs = await PageModel.find({ published: { $nin: [false, 0, "0"] } } as any).lean();
+    return cleanDocs(docs || []);
   } catch (err) {
     console.warn("MongoDB getPages fallback:", err);
   }
@@ -320,7 +327,7 @@ export async function getPages(): Promise<any[]> {
     const filePath = path.join(process.cwd(), "pages.json");
     if (fs.existsSync(filePath)) {
       const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-      return cleanDocs(data);
+      return cleanDocs(data.filter((p: any) => p.published !== false && p.published !== 0));
     }
   } catch (e) {}
   return [];
@@ -331,8 +338,9 @@ export async function getPageBySlug(slug: string): Promise<any | null> {
     await connectToDatabase();
     const doc = await PageModel.findOne({
       $or: [{ slug }, { id: slug }],
-    }).lean();
-    if (doc) return cleanDoc(doc);
+      published: { $nin: [false, 0, "0"] },
+    } as any).lean();
+    return doc ? cleanDoc(doc) : null;
   } catch (err) {
     console.warn(`MongoDB getPageBySlug(${slug}) fallback:`, err);
   }
@@ -340,7 +348,7 @@ export async function getPageBySlug(slug: string): Promise<any | null> {
     const filePath = path.join(process.cwd(), "pages.json");
     if (fs.existsSync(filePath)) {
       const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-      const found = data.find((p: any) => p.slug === slug || p.id === slug);
+      const found = data.find((p: any) => (p.slug === slug || p.id === slug) && p.published !== false && p.published !== 0);
       if (found) return cleanDoc(found);
     }
   } catch (e) {}
@@ -350,11 +358,9 @@ export async function getPageBySlug(slug: string): Promise<any | null> {
 export async function getPosts(onlyPublished = true): Promise<any[]> {
   try {
     await connectToDatabase();
-    const query = onlyPublished ? { published: 1 } : {};
+    const query: any = onlyPublished ? { published: { $nin: [false, 0, "0"] } } : {};
     const docs = await PostModel.find(query).sort({ createdAt: -1 }).lean();
-    if (docs && docs.length > 0) {
-      return cleanDocs(docs);
-    }
+    return cleanDocs(docs || []);
   } catch (err) {
     console.warn("MongoDB getPosts fallback:", err);
   }
@@ -373,8 +379,9 @@ export async function getPostBySlug(slug: string): Promise<any | null> {
     await connectToDatabase();
     const doc = await PostModel.findOne({
       $or: [{ slug }, { id: slug }],
-    }).lean();
-    if (doc) return cleanDoc(doc);
+      published: { $nin: [false, 0, "0"] },
+    } as any).lean();
+    return doc ? cleanDoc(doc) : null;
   } catch (err) {
     console.warn(`MongoDB getPostBySlug(${slug}) fallback:`, err);
   }
@@ -384,6 +391,32 @@ export async function getPostBySlug(slug: string): Promise<any | null> {
       const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
       const found = data.find((p: any) => (p.slug === slug || p.id === slug) && p.published !== false && p.published !== 0);
       if (found) return cleanDoc(found);
+    }
+  } catch (e) {}
+  return null;
+}
+
+/**
+ * The navigation menu (dashboard → Menus), so pages can render it in their server HTML.
+ * A saved menu (Setting key "menu") is used as-is, even an empty one. menu.json is read only when
+ * the database cannot be reached or holds no saved menu yet — the same order /api/menu uses.
+ * Returns null when neither has a menu (the header then uses its built-in default).
+ */
+export async function getMenu(): Promise<any[] | null> {
+  try {
+    await connectToDatabase();
+    const doc = await SettingModel.findOne({ key: "menu" } as any).lean();
+    if (doc && Array.isArray((doc as any).value)) {
+      return cleanDocs((doc as any).value);
+    }
+  } catch (err) {
+    console.warn("MongoDB getMenu fallback:", err);
+  }
+  try {
+    const filePath = path.join(process.cwd(), "menu.json");
+    if (fs.existsSync(filePath)) {
+      const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      if (Array.isArray(data)) return cleanDocs(data);
     }
   } catch (e) {}
   return null;

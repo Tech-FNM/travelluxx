@@ -7,18 +7,17 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `http://localhost:${process.env.PORT || 3000}/api/:path*`,
-      },
-      {
-        source: "/uploads/:path*",
-        destination: `http://localhost:${process.env.PORT || 3000}/uploads/:path*`,
-      },
-    ];
+  // The six short area addresses were duplicate copies of the chauffeur-… pages (separate records
+  // that went stale). Send visitors and search engines to the real page.
+  async redirects() {
+    return ["solihull", "coventry", "leamington-spa", "warwick", "worcester", "cheltenham"].map((name) => ({
+      source: `/service-areas/${name}`,
+      destination: `/service-areas/chauffeur-${name}`,
+      permanent: true,
+    }));
   },
+  // No /api or /uploads rewrites: server.ts (Express) answers those before Next.js sees the request.
+  // A rewrite here would bake the build machine's port into the build and break /api/revalidate.
 };
 
 export default nextConfig;

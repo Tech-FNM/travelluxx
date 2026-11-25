@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "../utils/routerCompat";
 import { ArrowRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
+import { useContent } from "../content/useContent";
 
 interface BlogListProps {
   initialPosts?: any[];
@@ -12,75 +13,8 @@ interface BlogListProps {
 export default function BlogList({ initialPosts }: BlogListProps = {}) {
   const { posts: ctxPosts, isLoading: loading } = useSettings();
   const posts = (initialPosts && initialPosts.length > 0) ? initialPosts : ctxPosts;
-
-
-
-  // SEO meta tags, canonical, OG, schema
-  useEffect(() => {
-    const baseUrl = "https://travelluxx.co.uk";
-    const blogUrl = `${baseUrl}/blog`;
-
-    document.title = "Luxury Travel Blog & News | TravelLuxx";
-
-    const setMeta = (attr: string, attrVal: string, content: string) => {
-      let el = document.querySelector(`meta[${attr}='${attrVal}']`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute(attr, attrVal);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-
-    const desc = "Read luxury travel insights, airport guides, and executive chauffeur articles from TravelLuxx.";
-    setMeta("name", "description", desc);
-    setMeta("name", "robots", "index, follow");
-
-    let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", blogUrl);
-
-    setMeta("property", "og:type", "website");
-    setMeta("property", "og:url", blogUrl);
-    setMeta("property", "og:title", "Luxury Travel Blog & News | TravelLuxx");
-    setMeta("property", "og:description", desc);
-    setMeta("property", "og:site_name", "TravelLuxx");
-
-    setMeta("property", "twitter:card", "summary_large_image");
-    setMeta("property", "twitter:url", blogUrl);
-    setMeta("property", "twitter:title", "Luxury Travel Blog & News | TravelLuxx");
-    setMeta("property", "twitter:description", desc);
-
-    // Schema
-    const existingScript = document.getElementById("jsonld-bloglist-schema");
-    if (existingScript) existingScript.remove();
-
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "@id": blogUrl,
-      "name": "Luxury Travel Blog & News",
-      "description": desc,
-      "url": blogUrl,
-      "inLanguage": "en-GB",
-      "isPartOf": { "@id": `${baseUrl}/#website` }
-    };
-
-    const script = document.createElement("script");
-    script.id = "jsonld-bloglist-schema";
-    script.type = "application/ld+json";
-    script.innerHTML = JSON.stringify(schema);
-    document.head.appendChild(script);
-
-    return () => {
-      const s = document.getElementById("jsonld-bloglist-schema");
-      if (s) s.remove();
-    };
-  }, []);
+  const c = useContent();
+  // SEO (title, meta, Open Graph, JSON-LD) is rendered on the server by pages/blog/index.tsx.
 
   return (
     <div className="min-h-screen bg-white text-stone-700 flex flex-col">
@@ -91,11 +25,11 @@ export default function BlogList({ initialPosts }: BlogListProps = {}) {
         <div className="bg-ivory">
           <div className="tl-container pt-32 pb-16 lg:pt-40 lg:pb-20">
             <span data-reveal className="tl-eyebrow">
-              Travelluxx Journal
+              {c.t("blog_index_eyebrow")}
             </span>
-            <h1 data-reveal="lines" className="tl-h1 mt-5 text-4xl text-stone-900 sm:text-5xl lg:text-6xl">Luxury Travel & News</h1>
+            <h1 data-reveal="lines" className="tl-h1 mt-5 text-4xl text-stone-900 sm:text-5xl lg:text-6xl">{c.t("blog_index_title")}</h1>
             <p data-reveal data-reveal-delay="0.15" className="tl-lead mt-6 max-w-2xl">
-              Insights, airport guides, and executive travel articles from our chauffeur team.
+              {c.t("blog_index_intro")}
             </p>
           </div>
         </div>
@@ -104,9 +38,9 @@ export default function BlogList({ initialPosts }: BlogListProps = {}) {
         <div className="bg-white">
           <div className="tl-container tl-section">
             {loading ? (
-              <div className="py-16 text-base text-stone-500">Loading articles...</div>
+              <div className="py-16 text-base text-stone-500">{c.t("blog_index_loading")}</div>
             ) : posts.length === 0 ? (
-              <div className="border-y border-stone-200 py-16 text-base text-stone-500">No blog articles available yet.</div>
+              <div className="border-y border-stone-200 py-16 text-base text-stone-500">{c.t("blog_index_empty")}</div>
             ) : (
               <div data-reveal-group className="grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
                 {posts.map((post) => (
@@ -116,7 +50,7 @@ export default function BlogList({ initialPosts }: BlogListProps = {}) {
                       <div className="aspect-[3/2] overflow-hidden bg-stone-100">
                         <img
                           src={post.image}
-                          alt={post.imageAlt || `${post.title} - Travelluxx Chauffeur Blog`}
+                          alt={post.imageAlt || `${post.title}${c.t("blog_index_image_alt_suffix")}`}
                           loading="lazy"
                           decoding="async"
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -134,7 +68,7 @@ export default function BlogList({ initialPosts }: BlogListProps = {}) {
                       to={`/blog/${post.slug}`}
                       className="tl-link relative z-10 mt-5 self-start"
                     >
-                      Read Article
+                      {c.t("blog_index_read_more")}
                       <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                     </Link>
                   </article>

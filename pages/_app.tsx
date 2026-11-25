@@ -7,7 +7,7 @@ import "../src/index.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SettingsProvider>
+    <SettingsProvider initialSettings={pageProps?.settings} initialMenu={pageProps?.menu}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

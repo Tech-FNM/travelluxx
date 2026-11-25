@@ -1,12 +1,15 @@
 import React from "react";
-import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import DynamicPage from "../src/pages/DynamicPage";
-import { getPages, getPageBySlug, getWebsiteSettings } from "../lib/mongodb";
+import SeoHead from "../src/components/SeoHead";
+import { getMenu, getPages, getPageBySlug, getWebsiteSettings } from "../lib/mongodb";
+import { contentText } from "../src/content/useContent";
+import { absoluteUrl, businessName, cmsPageFaqs, faqPageSchema, siteBaseUrl } from "../src/lib/seoSchemas";
 
 interface GenericCmsPageProps {
   page: any;
   settings: any;
+  menu: any[] | null;
 }
 
 export default function GenericCmsPage({ page, settings }: GenericCmsPageProps) {
@@ -14,50 +17,50 @@ export default function GenericCmsPage({ page, settings }: GenericCmsPageProps) 
     return <DynamicPage />;
   }
 
-  const baseUrl = "https://travelluxx.co.uk";
-  const pageUrl = `${baseUrl}/${page.slug || ""}`;
+  const s = settings || {};
+  const base = siteBaseUrl(s);
+  const path = `/${page.slug || ""}`;
+  const pageUrl = `${base}${path}`;
   const metaTitle =
-    page.metaTitle || page.ogTitle || `${page.title} | TravelLuxx`;
+    page.metaTitle ||
+    page.ogTitle ||
+    contentText(s, "page_meta_title_pattern").replace(/\{title\}/g, page.title || "");
   const metaDesc = page.metaDescription || page.ogDescription || "";
-  const pageFaqs =
-    Array.isArray(page.faqs) && page.faqs.length > 0 ? page.faqs : [];
+  const pageImage = absoluteUrl(base, page.socialImage || page.image);
 
-  const faqSchema =
-    pageFaqs.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "@id": `${pageUrl}#faq`,
-          mainEntity: pageFaqs
-            .filter((f: any) => f && (f.question || f.answer))
-            .map((f: any) => ({
-              "@type": "Question",
-              name: f.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: f.answer,
-              },
-            })),
-        }
-      : null;
+  const webPage = {
+    "@context": "https://schema.org",
+    "@type": page.template === "About Page" ? "AboutPage" : page.template === "Contact Page" ? "ContactPage" : "WebPage",
+    "@id": pageUrl,
+    name: page.title,
+    description: metaDesc || undefined,
+    url: pageUrl,
+    inLanguage: "en-GB",
+    datePublished: page.date || undefined,
+    dateModified: page.updatedAt || page.date || undefined,
+    image: pageImage || undefined,
+    isPartOf: { "@id": `${base}/#website` },
+    publisher: { "@type": "Organization", "@id": `${base}/#organization`, name: businessName(s), url: `${base}/` },
+  };
 
   return (
     <>
-      <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDesc} />
-        <meta
-          name="robots"
-          content={page.noIndexNoFollow ? "noindex, nofollow" : "index, follow"}
-        />
-        <link rel="canonical" href={pageUrl} />
-        {faqSchema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-          />
-        )}
-      </Head>
+      <SeoHead
+        settings={s}
+        path={path}
+        title={metaTitle}
+        description={metaDesc}
+        ogType={page.ogType}
+        ogTitle={page.ogTitle}
+        ogDescription={page.ogDescription}
+        image={page.socialImage || page.image}
+        xTitle={page.xTitle}
+        xDescription={page.xDescription}
+        xImage={page.xImage}
+        noIndex={page.noIndexNoFollow}
+        schemas={[webPage, faqPageSchema(pageUrl, cmsPageFaqs(page))]}
+        customSchema={page.customSchema}
+      />
       <DynamicPage initialPage={page} initialSettings={settings} />
     </>
   );
@@ -81,9 +84,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const [page, settings] = await Promise.all([
+    const [page, settings, menu] = await Promise.all([
       getPageBySlug(slug),
       getWebsiteSettings(),
+      getMenu().catch(() => null),
     ]);
 
     if (!page) {
@@ -94,6 +98,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       props: {
         page,
         settings: settings || {},
+        menu: menu ?? null,
       },
       revalidate: 60,
     };

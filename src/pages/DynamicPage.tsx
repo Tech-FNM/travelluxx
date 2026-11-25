@@ -4,8 +4,8 @@ import { Plus, Minus } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
-import { usePageSeo } from "../utils/seo";
 import { normalizeRichHtml } from "../utils/richText";
+import { useContent } from "../content/useContent";
 
 interface DynamicPageProps {
   initialPage?: any;
@@ -22,6 +22,8 @@ export default function DynamicPage({
   const [fetching, setFetching] = useState(!initialPage);
   const { settings: ctxSettings, isLoading: globalLoading } = useSettings();
   const settings = initialSettings || ctxSettings;
+  const c = useContent(settings);
+  const withTitle = (pattern: string) => pattern.replace(/\{title\}/g, page?.title || "");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const cleanSlug = (slug || "").replace(/^\/+|\/+$/g, "");
@@ -52,70 +54,10 @@ export default function DynamicPage({
       });
   }, [cleanSlug, initialPage]);
 
-  const baseUrl = "https://travelluxx.co.uk";
-  const pageUrl = page ? `${baseUrl}/${page.slug || cleanSlug}` : "";
-  const metaTitle = page?.metaTitle || page?.ogTitle || (page ? `${page.title} | TravelLuxx` : "Page | TravelLuxx");
-  const metaDesc = page?.metaDescription || page?.ogDescription || "";
-  const pageImage = page?.socialImage || page?.image || "";
+  // SEO (title, meta, Open Graph, WebPage and FAQ JSON-LD) is rendered on the server by pages/[slug].tsx.
   const pageFaqs = useMemo(() => {
     return (Array.isArray(page?.faqs) ? page.faqs : []).filter((f: any) => f && (f.question || f.answer));
   }, [page]);
-
-  const pageSchemas = useMemo(() => {
-    if (!page) return [];
-    const list: any[] = [
-      {
-        "@context": "https://schema.org",
-        "@type": page.template === "About Page" ? "AboutPage" : page.template === "Contact Page" ? "ContactPage" : "WebPage",
-        "@id": pageUrl,
-        "name": page.title,
-        "description": metaDesc,
-        "url": pageUrl,
-        "inLanguage": "en-GB",
-        "datePublished": page.date || undefined,
-        "dateModified": page.updatedAt || page.date || undefined,
-        "image": pageImage ? (pageImage.startsWith("http") ? pageImage : baseUrl + pageImage) : undefined,
-        "publisher": {
-          "@type": "Organization",
-          "name": settings?.business_name || "TravelLuxx",
-          "url": baseUrl
-        }
-      }
-    ];
-
-    if (pageFaqs.length > 0) {
-      list.push({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "@id": `${pageUrl}#faq`,
-        "mainEntity": pageFaqs.map((f: any) => ({
-          "@type": "Question",
-          "name": f.question,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": f.answer
-          }
-        }))
-      });
-    }
-
-    return list;
-  }, [page, pageUrl, metaDesc, pageImage, pageFaqs, settings, baseUrl]);
-
-  usePageSeo({
-    title: metaTitle,
-    description: metaDesc,
-    canonicalUrl: pageUrl,
-    ogTitle: page?.ogTitle || metaTitle,
-    ogDescription: page?.ogDescription || metaDesc,
-    ogImage: pageImage ? (pageImage.startsWith("http") ? pageImage : baseUrl + pageImage) : "",
-    ogUrl: pageUrl,
-    ogType: page?.ogType || "website",
-    noIndex: Boolean(settings?.search_engine_visibility || page?.noIndexNoFollow),
-    siteName: settings?.business_name || "TravelLuxx",
-    schemas: pageSchemas,
-    customSchemaJson: page?.customSchema || ""
-  });
 
   const isRenax = settings?.active_theme === "renax";
 
@@ -124,7 +66,7 @@ export default function DynamicPage({
         <div className={`min-h-screen flex items-center justify-center ${isRenax ? "bg-brand-950" : "bg-white"}`}>
           <div
             role="status"
-            aria-label="Loading"
+            aria-label={c.t("page_loading_label")}
             className={`h-8 w-8 animate-spin rounded-full border-2 border-t-transparent ${isRenax ? "border-brand-300" : "border-brand-700"}`}
           />
         </div>
@@ -136,14 +78,18 @@ export default function DynamicPage({
         <div className={`min-h-screen flex flex-col ${isRenax ? "bg-brand-950 text-stone-200" : "bg-white text-stone-700"}`}>
           <Navbar onScrollTo={() => { }} />
           <main className="tl-container flex flex-1 flex-col items-center justify-center py-32 text-center lg:py-40">
-            <h1 data-reveal="lines" className={`tl-h1 text-4xl sm:text-5xl ${isRenax ? "text-white" : "text-stone-900"}`}>Page Not Found</h1>
-            <p data-reveal data-reveal-delay="0.15" className={`tl-lead mt-5 max-w-md ${isRenax ? "text-stone-300" : ""}`}>The page you are looking for does not exist or may have been moved.</p>
+            <h1 data-reveal="lines" className={`tl-h1 text-4xl sm:text-5xl ${isRenax ? "text-white" : "text-stone-900"}`}>{c.t("page_not_found_title")}</h1>
+            <p data-reveal data-reveal-delay="0.15" className={`tl-lead mt-5 max-w-md ${isRenax ? "text-stone-300" : ""}`}>{c.t("page_not_found_text")}</p>
             <div data-reveal data-reveal-delay="0.3" className="mt-9">
               <button
-                onClick={() => navigate("/")}
+                onClick={() => {
+                  const href = c.t("page_not_found_button_link") || "/";
+                  if (/^(https?:|mailto:|tel:)/i.test(href)) window.location.href = href;
+                  else navigate(href);
+                }}
                 className={`tl-btn ${isRenax ? "tl-btn-light" : "tl-btn-primary"}`}
               >
-                Back to Home
+                {c.t("page_not_found_button_text")}
               </button>
             </div>
           </main>
@@ -182,9 +128,9 @@ export default function DynamicPage({
               <div className="tl-container tl-section">
                 <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-16">
                   <div className="lg:col-span-5">
-                    <span data-reveal className={`tl-eyebrow ${isRenax ? "tl-eyebrow-light" : ""}`}>Frequently Asked Questions</span>
+                    <span data-reveal className={`tl-eyebrow ${isRenax ? "tl-eyebrow-light" : ""}`}>{c.t("page_faq_eyebrow")}</span>
                     <h2 data-reveal="lines" className={`tl-h2 mt-4 text-3xl sm:text-4xl ${isRenax ? "text-white" : ""}`}>
-                      {page.faqTitle || `${page.title} FAQ`}
+                      {page.faqTitle || withTitle(c.t("page_faq_heading_fallback"))}
                     </h2>
                   </div>
                   <div

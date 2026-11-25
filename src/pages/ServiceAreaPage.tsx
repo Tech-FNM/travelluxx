@@ -12,47 +12,14 @@ import {
   areaArticleImage,
   areaHeroImage,
   areaPlaceName,
+  fillPlaceholders,
   heroFrameClass,
   phoneFromSettings,
 } from "../components/areas/areaShared";
+import { useContent } from "../content/useContent";
 
-// Presentation copy: facts that hold for every area.
-const HERO_FACTS = [
-  { title: "Fixed fares", text: "Agreed when you book" },
-  { title: "Licensed drivers", text: "Private hire chauffeurs" },
-  { title: "Flight monitoring", text: "On airport pickups" },
-  { title: "24/7 booking", text: "Online or by phone" },
-];
-
-const BOOKING_FACTS = [
-  { label: "Fare", value: "Fixed when you book" },
-  { label: "Vehicles", value: "Mercedes-Benz and Audi" },
-  { label: "Airport pickups", value: "Flight monitored" },
-  { label: "Payment", value: "Online or pay later" },
-];
-
-const DEFAULT_AREA_FAQS = [
-  {
-    question: "How do I book an airport transfer in this area?",
-    answer:
-      "You can book easily online using our instant Fare Calculator above. Enter your pickup address and desired airport, select your luxury vehicle, and receive instant confirmation.",
-  },
-  {
-    question: "Do you monitor flights for airport pickups?",
-    answer:
-      "Yes, our team monitors all inbound commercial flights in real-time. Whether your flight is early or delayed, your chauffeur will be waiting inside arrivals with a name board.",
-  },
-  {
-    question: "Are your prices fixed and all-inclusive?",
-    answer:
-      "Yes. All TravelLuxx fares are fixed upfront with zero hidden fees. Fuel, taxes, airport flight tracking, and standard waiting time are all included.",
-  },
-  {
-    question: "Can I book a private chauffeur for business travel or private events?",
-    answer:
-      "Yes, we provide flexible one-way, return, and full-day as-directed chauffeur hire for corporate meetings, private events, weddings, and long-distance UK journeys.",
-  },
-];
+// Shared texts for every area live in src/content/sections/areaDetail.ts (dashboard: Site Content).
+const FACT_NUMBERS = [1, 2, 3, 4];
 
 interface ServiceAreaPageProps {
   initialArea?: any;
@@ -66,6 +33,7 @@ export default function ServiceAreaPage({
   const { slug } = useParams<{ slug: string }>();
   const { settings: ctxSettings, isLoading } = useSettings();
   const settings = initialSettings || ctxSettings;
+  const c = useContent(settings);
   const [serviceArea, setServiceArea] = useState<any>(initialArea || null);
   const [areaLoading, setAreaLoading] = useState(!initialArea);
   const [areaError, setAreaError] = useState("");
@@ -125,10 +93,19 @@ export default function ServiceAreaPage({
   const title = serviceArea?.metaTitle || serviceArea?.ogTitle || (serviceArea ? `${serviceArea.heroTitle || serviceArea.title} | TravelLuxx` : "Service Area | TravelLuxx");
   const description = serviceArea?.metaDescription || serviceArea?.ogDescription || serviceArea?.heroDescription || "Private chauffeur travel and airport transfers tailored around your location and schedule.";
   const ogImage = serviceArea?.ogImage || serviceArea?.heroImage || "";
+  // Fallback questions (shared by all areas) for an area that has no FAQs of its own.
+  const fallbackFaqs = FACT_NUMBERS.map(n => ({
+    question: c.t(`area_detail_faq${n}_question`),
+    answer: c.t(`area_detail_faq${n}_answer`),
+  })).filter(f => f.question || f.answer);
+  const fallbackFaqsKey = JSON.stringify(fallbackFaqs);
+  const faqEnabled = c.on("area_detail_faq_enabled");
   const validFaqs = useMemo(() => {
+    if (!faqEnabled) return [];
     const list = (Array.isArray(serviceArea?.faqs) ? serviceArea.faqs : []).filter((f: any) => f && (f.question || f.answer));
-    return list.length > 0 ? list : DEFAULT_AREA_FAQS;
-  }, [serviceArea]);
+    return list.length > 0 ? list : fallbackFaqs;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceArea, fallbackFaqsKey, faqEnabled]);
 
   const pageSchemas = useMemo(() => {
     if (!serviceArea) return [];
@@ -197,11 +174,11 @@ export default function ServiceAreaPage({
       <div className="flex min-h-screen flex-col bg-white">
         <Navbar onScrollTo={() => {}} />
         <main className="flex flex-grow flex-col items-center justify-center px-5 py-32 text-center sm:px-8">
-          <h1 className="tl-h2">Service area not found</h1>
-          <p className="tl-lead mt-5 max-w-md">{areaError || "This area page is not available."}</p>
+          <h1 className="tl-h2">{c.t("area_detail_notfound_title")}</h1>
+          <p className="tl-lead mt-5 max-w-md">{areaError || c.t("area_detail_notfound_text")}</p>
           <Link to="/service-areas" className="tl-btn tl-btn-primary mt-8">
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-            <span>Back to service areas</span>
+            <span>{c.t("area_detail_notfound_button")}</span>
           </Link>
         </main>
         <Footer onScrollTo={() => {}} />
@@ -215,11 +192,14 @@ export default function ServiceAreaPage({
   // "Chauffeur Coventry" -> "Coventry": the place itself, for the breadcrumb and the new sections.
   const place = areaPlaceName(serviceArea);
   const heroImage = areaHeroImage(serviceArea);
+  // An editable text with {area}, {title} and {phone} filled in for this area.
+  const fill = (key: string) =>
+    fillPlaceholders(c.t(key), { area: place, title: String(serviceArea.title || ""), phone: phoneLabel });
 
   // Presentational only: the CMS often sets the FAQ title to the same words as the label above it,
   // so the label is shown only when it says something different from the heading.
-  const faqEyebrow = "Frequently Asked Questions";
-  const faqTitle = serviceArea.faqTitle || `${serviceArea.title} Chauffeur & Transfers FAQ`;
+  const faqEyebrow = c.t("area_detail_faq_eyebrow");
+  const faqTitle = serviceArea.faqTitle || fill("area_detail_faq_title");
   const showFaqEyebrow = faqEyebrow.trim().toLowerCase() !== String(faqTitle).trim().toLowerCase();
 
   return (
@@ -250,11 +230,11 @@ export default function ServiceAreaPage({
             <nav aria-label="Breadcrumb" data-reveal="fade" className="pt-5 lg:pt-8">
               <ol className="flex flex-wrap items-center gap-x-3 text-xs font-medium tracking-[0.18em] text-stone-300 uppercase">
                 <li>
-                  <Link to="/" className="inline-block py-3 transition-colors duration-200 hover:text-white">Home</Link>
+                  <Link to="/" className="inline-block py-3 transition-colors duration-200 hover:text-white">{c.t("area_detail_breadcrumb_home")}</Link>
                 </li>
                 <li aria-hidden="true" className="text-stone-400">/</li>
                 <li>
-                  <Link to="/service-areas" className="inline-block py-3 transition-colors duration-200 hover:text-white">Service areas</Link>
+                  <Link to="/service-areas" className="inline-block py-3 transition-colors duration-200 hover:text-white">{c.t("area_detail_breadcrumb_areas")}</Link>
                 </li>
                 <li aria-hidden="true" className="text-stone-400">/</li>
                 <li aria-current="page" className="py-3 text-white">{place}</li>
@@ -280,38 +260,42 @@ export default function ServiceAreaPage({
               </p>
               <div data-reveal data-reveal-delay="0.3" className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <a
-                  href={serviceArea.heroButtonUrl || "/#calculator-section"}
+                  href={serviceArea.heroButtonUrl || c.t("area_detail_hero_button_url")}
                   className="tl-btn tl-btn-light"
                 >
-                  <span>{serviceArea.heroButtonText || "Plan your journey"}</span>
+                  <span>{serviceArea.heroButtonText || fill("area_detail_hero_button_text")}</span>
                   <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </a>
                 <a
                   href={serviceArea.heroSecondaryButtonUrl || `tel:${phone}`}
                   className="tl-btn tl-btn-outline-light"
                 >
-                  {serviceArea.heroSecondaryButtonText || `Call ${phoneLabel}`}
+                  {serviceArea.heroSecondaryButtonText || fill("area_detail_hero_call_text")}
                 </a>
               </div>
             </div>
 
             {/* What every journey includes, under a hairline that draws itself */}
-            <div data-reveal="rule" data-reveal-delay="0.4" className="h-px w-full bg-white/20" />
-            <ul
-              data-reveal="fade"
-              data-reveal-delay="0.55"
-              className="grid grid-cols-2 lg:grid-cols-4"
-            >
-              {HERO_FACTS.map(fact => (
-                <li
-                  key={fact.title}
-                  className="py-5 pr-4 lg:border-l lg:border-white/15 lg:py-6 lg:pl-8 lg:first:border-l-0 lg:first:pl-0 [&:nth-child(n+3)]:border-t [&:nth-child(n+3)]:border-white/10 lg:[&:nth-child(n+3)]:border-t-0"
+            {c.on("area_detail_facts_enabled") && (
+              <>
+                <div data-reveal="rule" data-reveal-delay="0.4" className="h-px w-full bg-white/20" />
+                <ul
+                  data-reveal="fade"
+                  data-reveal-delay="0.55"
+                  className="grid grid-cols-2 lg:grid-cols-4"
                 >
-                  <span className="block text-sm font-medium text-white">{fact.title}</span>
-                  <span className="mt-1 block text-xs text-stone-400">{fact.text}</span>
-                </li>
-              ))}
-            </ul>
+                  {FACT_NUMBERS.map(n => (
+                    <li
+                      key={n}
+                      className="py-5 pr-4 lg:border-l lg:border-white/15 lg:py-6 lg:pl-8 lg:first:border-l-0 lg:first:pl-0 [&:nth-child(n+3)]:border-t [&:nth-child(n+3)]:border-white/10 lg:[&:nth-child(n+3)]:border-t-0"
+                    >
+                      <span className="block text-sm font-medium text-white">{fill(`area_detail_fact${n}_title`)}</span>
+                      <span className="mt-1 block text-xs text-stone-400">{fill(`area_detail_fact${n}_text`)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         </section>
 
@@ -324,7 +308,7 @@ export default function ServiceAreaPage({
                   <div data-reveal="image" className="aspect-[3/2] w-full overflow-hidden bg-stone-100 sm:aspect-[16/9]">
                     <img
                       src={areaArticleImage(serviceArea)}
-                      alt={`TravelLuxx chauffeur service in ${place}`}
+                      alt={fill("area_detail_article_image_alt")}
                       loading="lazy"
                       decoding="async"
                       className="h-full w-full object-cover"
@@ -342,20 +326,20 @@ export default function ServiceAreaPage({
               <aside className={serviceArea.content ? "lg:col-span-5 xl:col-span-4 xl:col-start-9" : "lg:col-span-5"}>
                 {/* Sticky on desktop, so it carries no reveal attribute */}
                 <div className="tl-dark p-7 sm:p-9 lg:sticky lg:top-28 lg:p-7 xl:p-9">
-                  <span className="tl-eyebrow tl-eyebrow-light">Book in {place}</span>
+                  <span className="tl-eyebrow tl-eyebrow-light">{fill("area_detail_booking_eyebrow")}</span>
                   <h2 className="mt-5 font-display text-3xl leading-[1.1] font-medium text-white">
-                    A fixed fare for your {place} journey
+                    {fill("area_detail_booking_title")}
                   </h2>
                   <dl className="mt-7 divide-y divide-white/10 border-y border-white/10">
-                    {BOOKING_FACTS.map(fact => (
-                      <div key={fact.label} className="flex items-baseline justify-between gap-6 py-3.5">
-                        <dt className="text-sm text-stone-400">{fact.label}</dt>
-                        <dd className="text-right text-sm font-medium text-white">{fact.value}</dd>
+                    {FACT_NUMBERS.map(n => (
+                      <div key={n} className="flex items-baseline justify-between gap-6 py-3.5">
+                        <dt className="text-sm text-stone-400">{fill(`area_detail_booking_row${n}_label`)}</dt>
+                        <dd className="text-right text-sm font-medium text-white">{fill(`area_detail_booking_row${n}_value`)}</dd>
                       </div>
                     ))}
                   </dl>
-                  <a href="/#calculator-section" className="tl-btn tl-btn-light mt-8 w-full">
-                    <span>Get a fixed quote</span>
+                  <a href={c.t("area_detail_booking_button_url")} className="tl-btn tl-btn-light mt-8 w-full">
+                    <span>{fill("area_detail_booking_button_text")}</span>
                     <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                   </a>
                   <a
@@ -372,20 +356,22 @@ export default function ServiceAreaPage({
         </section>
 
         {/* STATEMENT */}
-        <section className="tl-section bg-ivory">
-          <div className="tl-container">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
-              <div className="lg:col-span-3">
-                <span data-reveal className="tl-eyebrow">Every journey</span>
-              </div>
-              <div className="lg:col-span-9">
-                <p data-reveal="words" className="tl-statement">
-                  Wherever you are heading from {place}, a licensed chauffeur arrives in a Mercedes-Benz or Audi, and the fare is the one you agreed when you booked.
-                </p>
+        {c.on("area_detail_statement_enabled") && (
+          <section className="tl-section bg-ivory">
+            <div className="tl-container">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
+                <div className="lg:col-span-3">
+                  <span data-reveal className="tl-eyebrow">{fill("area_detail_statement_eyebrow")}</span>
+                </div>
+                <div className="lg:col-span-9">
+                  <p data-reveal="words" className="tl-statement">
+                    {fill("area_detail_statement_text")}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* OTHER AREAS: rendered once the list has loaded */}
         <OtherAreas areas={allAreas} current={serviceArea} />
@@ -403,12 +389,12 @@ export default function ServiceAreaPage({
                     {faqTitle}
                   </h2>
                   <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-md">
-                    Got questions about traveling in or around {serviceArea.title}? Here are quick answers to the most common questions.
+                    {fill("area_detail_faq_intro")}
                   </p>
                   <div data-reveal data-reveal-delay="0.2" className="mt-8">
                     <a href={contact.href} className="tl-link py-2">
                       <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-                      <span>Ask us on {contact.label}</span>
+                      <span>{fillPlaceholders(c.t("area_detail_faq_ask_text"), { area: place, title: String(serviceArea.title || ""), phone: contact.label })}</span>
                     </a>
                   </div>
                 </div>

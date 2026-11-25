@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { useContent } from "../content/useContent";
 
 export interface FaqItem {
   question: string;
@@ -41,13 +42,21 @@ export default function HomepageFaq({
   faqs,
   title,
   subtitle,
-  badge = "FAQ & Information",
+  badge,
   isRenax = false
 }: HomepageFaqProps) {
+  const c = useContent();
   const displayFaqs = (Array.isArray(faqs) && faqs.length > 0) ? faqs.filter(f => f.question && f.answer) : defaultHomepageFaqs;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  // "Section Visible" switch in the dashboard (Homepage tab > Homepage FAQ Section, and Site Content)
+  if (!c.on("homepage_faqs_enabled")) return null;
   if (!displayFaqs || displayFaqs.length === 0) return null;
+
+  // Props come from the page's settings; fall back to the Site Content values/defaults.
+  const badgeText = badge || c.t("homepage_faq_badge");
+  const titleText = title || c.t("homepage_faq_title");
+  const subtitleText = subtitle || c.t("homepage_faq_subtitle");
 
   return (
     <section
@@ -62,12 +71,12 @@ export default function HomepageFaq({
           {/* Section header: left column, stays in view while the list scrolls on desktop */}
           <div className="lg:sticky lg:top-28 lg:col-span-5 lg:self-start">
             {/* Reveal attributes sit on the elements inside the sticky column, never on the sticky wrapper */}
-            <span data-reveal className={`tl-eyebrow empty:hidden ${isRenax ? "tl-eyebrow-light" : ""}`}>{badge}</span>
+            <span data-reveal className={`tl-eyebrow empty:hidden ${isRenax ? "tl-eyebrow-light" : ""}`}>{badgeText}</span>
             <h2 data-reveal="lines" className={`tl-h2 mt-4 ${isRenax ? "text-white" : ""}`}>
-              {title || "Frequently Asked Questions"}
+              {titleText}
             </h2>
             <p data-reveal data-reveal-delay="0.1" className={`tl-lead mt-5 max-w-md ${isRenax ? "text-stone-300" : ""}`}>
-              {subtitle || "Everything you need to know about our chauffeur services, airport transfers, vehicle fleet, and booking process."}
+              {subtitleText}
             </p>
           </div>
 

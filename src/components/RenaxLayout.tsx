@@ -31,7 +31,9 @@ import mercedesLuxuryImg from "../assets/images/fleet_luxury_1786403483244.jpg";
 import mercedesFamilyImg from "../assets/images/fleet_family_1786403496325.jpg";
 import heroImg from "../assets/images/hero_background_1786403449488.jpg";
 import transferPortImg from "../assets/images/transfer_port_1786403532912.jpg";
-import { getCustomImage } from "../utils/customImages";
+import { settingImage } from "../utils/customImages";
+import { formatUkPhone, phoneHref } from "../utils/phone";
+import { useContent } from "../content/useContent";
 
 interface RenaxLayoutProps {
   settings: any;
@@ -54,6 +56,24 @@ export default function RenaxLayout({
   handleSelectTransferPreset,
   handleSelectClassPreset
 }: RenaxLayoutProps) {
+  const c = useContent(settings);
+  // Shared settings (fleet_*, hero_image_alt) that the dashboard edits for the default homepage:
+  // use the saved value when there is one, otherwise the Renax wording.
+  const pick = (key: string, fallback: string): string => {
+    const v = settings?.[key];
+    return typeof v === "string" && v.trim() !== "" ? v : fallback;
+  };
+  const pickList = (key: string, fallback: string[]): string[] => {
+    const v = settings?.[key];
+    return typeof v === "string" && v.trim() !== ""
+      ? v.split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
+      : fallback;
+  };
+  const goTo = (link: string) => {
+    if (link.startsWith("#")) handleScrollTo(link.substring(1));
+    else window.location.href = link;
+  };
+
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
   const whatsappNum = settings?.whatsapp_number || "441217140876";
   const emailAddr = settings?.business_email || "info@travelluxx.co.uk";
@@ -61,15 +81,8 @@ export default function RenaxLayout({
 
   const [pricing, setPricing] = useState<any>(null);
   const [activeFleetTab, setActiveFleetTab] = useState<"Economy" | "Luxury" | "Family">("Luxury");
-  const [bgImage, setBgImage] = useState<string>(() => {
-    const customSetting = settings?.hero_image || settings?.heroImage;
-    return (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : getCustomImage("hero_bg", heroImg);
-  });
-
-  useEffect(() => {
-    const customSetting = settings?.hero_image || settings?.heroImage;
-    setBgImage((customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : getCustomImage("hero_bg", heroImg));
-  }, [settings]);
+  // Hero photo: the dashboard hero image, else the bundled photo.
+  const bgImage = settingImage(settings?.hero_image || settings?.heroImage, heroImg);
 
   useEffect(() => {
     fetch("/api/pricing")
@@ -78,9 +91,7 @@ export default function RenaxLayout({
       .catch(err => console.error("Failed to fetch fleet pricing:", err));
   }, []);
 
-  const formattedPhone = whatsappNum.startsWith("44")
-    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
-    : whatsappNum;
+  const formattedPhone = formatUkPhone(whatsappNum);
 
   const rawTitle = settings?.homepage_hero_title || "Nationwide Airport | Transfers & Private Chauffeur";
   const titleParts = rawTitle.split("|");
@@ -96,7 +107,7 @@ export default function RenaxLayout({
   const btn1Text = settings?.homepage_hero_btn_text || "Book Chauffeur Now";
   const btn1Link = settings?.homepage_hero_btn_link || "calculator-section";
   const btn2Text = settings?.homepage_hero_phone_text || formattedPhone;
-  const btn2Link = settings?.homepage_hero_phone_link || `tel:${whatsappNum}`;
+  const btn2Link = settings?.homepage_hero_phone_link || phoneHref(whatsappNum);
 
   const handleBtn1Click = () => {
     if (btn1Link === "calculator-section") {
@@ -108,43 +119,55 @@ export default function RenaxLayout({
     }
   };
 
+  const economyName = pick("fleet_economy_name", "Business Economy Class");
+  const luxuryName = pick("fleet_luxury_name", c.t("renax_fleet_luxury_name"));
+  const familyName = pick("fleet_family_name", "Family & Executive MPV");
+
   const fleet = {
     Economy: {
-      name: "Business Economy Class",
-      tagline: "Elegant, clean, and highly efficient travel.",
-      image: getCustomImage("fleet_Economy", mercedesEconomyImg),
+      name: economyName,
+      alt: pick("fleet_economy_alt", `${economyName} - Luxury Chauffeur Car Solihull & London`),
+      tagline: pick("fleet_economy_tagline", "Elegant, clean, and highly efficient travel."),
+      image: settingImage(settings?.fleet_economy_image, mercedesEconomyImg),
       rate: pricing?.Economy?.perMile !== undefined ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
-      description: "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
+      description: pick("fleet_economy_description", "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency."),
       cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
-      features: ["Complimentary 4G Wi-Fi", "Dual-zone Climate Control", "USB Charging Ports", "Bottle Holders & Newspapers"],
-      passengers: 4,
-      luggage: 2,
-      transmission: "Auto"
+      features: pickList("fleet_economy_features", ["Complimentary 4G Wi-Fi", "Dual-zone Climate Control", "USB Charging Ports", "Bottle Holders & Newspapers"]),
+      passengers: c.t("renax_fleet_economy_passengers"),
+      luggage: c.t("renax_fleet_economy_luggage"),
+      transmission: c.t("renax_fleet_economy_transmission")
     },
     Luxury: {
-      name: "First Chauffeur Class",
-      tagline: "The pinnacle of executive comfort and style.",
-      image: getCustomImage("fleet_Luxury", mercedesLuxuryImg),
+      name: luxuryName,
+      alt: pick("fleet_luxury_alt", `${luxuryName} - Luxury Chauffeur Car Solihull & London`),
+      tagline: pick("fleet_luxury_tagline", "The pinnacle of executive comfort and style."),
+      image: settingImage(settings?.fleet_luxury_image, mercedesLuxuryImg),
       rate: pricing?.Luxury?.perMile !== undefined ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
-      description: "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
+      description: pick("fleet_luxury_description", "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs."),
       cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
-      features: ["Premium Leather Reclining Seats", "Complimentary Bottled Water", "Ambient Lighting Controls", "Rear Seat Entertainment Systems", "Quiet Acoustic Cabins"],
-      passengers: 4,
-      luggage: 3,
-      transmission: "Auto"
+      features: pickList("fleet_luxury_features", ["Premium Leather Reclining Seats", "Complimentary Bottled Water", "Ambient Lighting Controls", "Rear Seat Entertainment Systems", "Quiet Acoustic Cabins"]),
+      passengers: c.t("renax_fleet_luxury_passengers"),
+      luggage: c.t("renax_fleet_luxury_luggage"),
+      transmission: c.t("renax_fleet_luxury_transmission")
     },
     Family: {
-      name: "Family & Executive MPV",
-      tagline: "Generous space for luggage and loved ones.",
-      image: getCustomImage("fleet_Family", mercedesFamilyImg),
+      name: familyName,
+      alt: pick("fleet_family_alt", `${familyName} - Luxury Chauffeur Car Solihull & London`),
+      tagline: pick("fleet_family_tagline", "Generous space for luggage and loved ones."),
+      image: settingImage(settings?.fleet_family_image, mercedesFamilyImg),
       rate: pricing?.Family?.perMile !== undefined ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
-      description: "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
+      description: pick("fleet_family_description", "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort."),
       cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
-      features: ["Conference Seating Options", "Massive Boot Capacity", "Automatic Sliding Doors", "Privacy Glass", "Individual Air-Con Units", "Child Seats Available (On Request)"],
-      passengers: 7,
-      luggage: 6,
-      transmission: "Auto"
+      features: pickList("fleet_family_features", ["Conference Seating Options", "Massive Boot Capacity", "Automatic Sliding Doors", "Privacy Glass", "Individual Air-Con Units", "Child Seats Available (On Request)"]),
+      passengers: c.t("renax_fleet_family_passengers"),
+      luggage: c.t("renax_fleet_family_luggage"),
+      transmission: c.t("renax_fleet_family_transmission")
     }
+  };
+  const fleetTabLabel = {
+    Economy: c.t("renax_fleet_tab_economy"),
+    Luxury: c.t("renax_fleet_tab_luxury"),
+    Family: c.t("renax_fleet_tab_family")
   };
 
   // Amenity icons sit bare next to the label (no tinted tile).
@@ -177,7 +200,7 @@ export default function RenaxLayout({
           <img
             data-parallax
             src={bgImage}
-            alt="Travelluxx Executive Luxury Chauffeur Banner - Solihull & London"
+            alt={pick("hero_image_alt", `${brandName} Executive Luxury Chauffeur Banner - Solihull & London`)}
             className="h-full w-full object-cover"
           />
           {/* Flat scrim for legibility: the copy sits on the photograph */}
@@ -244,8 +267,8 @@ export default function RenaxLayout({
       {/* 2. RENAX BOOKING CALCULATOR SEGMENT (the calculator renders its own full-width section) */}
       <section id="calculator-section" className="border-t border-white/10 bg-brand-900">
         <div className="tl-container pt-20 pb-12 lg:pt-28 lg:pb-16">
-          <span data-reveal className="tl-eyebrow tl-eyebrow-light">Luxury Ride</span>
-          <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">Book Your Chauffeur Transfer</h2>
+          <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("renax_booking_eyebrow")}</span>
+          <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">{c.t("renax_booking_title")}</h2>
         </div>
         <BookingCalculator
           initialPickup={calculatorPickup}
@@ -255,45 +278,36 @@ export default function RenaxLayout({
       </section>
 
       {/* III. ABOUT COMPANY SECTION */}
+      {c.on("renax_about_enabled") && (
       <section id="about" className="tl-section bg-brand-950">
         <div className="tl-container">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
             {/* Left Block - Copy */}
             <div>
-              <span data-reveal className="tl-eyebrow tl-eyebrow-light">About Travelluxx</span>
+              <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("renax_about_eyebrow")}</span>
               <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">
-                We Are More Than{" "}
-                <span className="block italic text-brand-300">A Private Hire Company</span>
+                {c.t("renax_about_title_line1")}{" "}
+                <span className="block italic text-brand-300">{c.t("renax_about_title_line2")}</span>
               </h2>
               <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-xl text-stone-300">
-                At {brandName}, we provide a first-class private hire and airport chauffeur service across the United Kingdom. With absolute luxury and punctuality, our services are customized for executive corporate transfers, weddings, and premium airport pickups.
+                {c.t("renax_about_text").replace(/\{business_name\}/g, brandName)}
               </p>
 
               <div data-reveal-group className="mt-8 grid grid-cols-1 sm:grid-cols-2 sm:gap-x-10">
-                <div className="flex items-center gap-3 border-t border-white/10 py-4">
-                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
-                  <span className="text-sm font-medium text-stone-200">Sports & Luxury Cars</span>
-                </div>
-                <div className="flex items-center gap-3 border-t border-white/10 py-4">
-                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
-                  <span className="text-sm font-medium text-stone-200">Executive Economy Cars</span>
-                </div>
-                <div className="flex items-center gap-3 border-t border-white/10 py-4">
-                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
-                  <span className="text-sm font-medium text-stone-200">High Capacity MPVs</span>
-                </div>
-                <div className="flex items-center gap-3 border-t border-white/10 py-4">
-                  <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
-                  <span className="text-sm font-medium text-stone-200">24/7 Flight Monitoring</span>
-                </div>
+                {c.lines("renax_about_features").map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-3 border-t border-white/10 py-4">
+                    <Check className="h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
+                    <span className="text-sm font-medium text-stone-200">{item}</span>
+                  </div>
+                ))}
               </div>
 
               <div data-reveal className="mt-6">
                 <button
-                  onClick={() => handleScrollTo("contact")}
+                  onClick={() => goTo(c.t("renax_about_btn_link"))}
                   className="tl-btn tl-btn-outline-light"
                 >
-                  Read More
+                  {c.t("renax_about_btn_text")}
                   <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </button>
               </div>
@@ -303,31 +317,33 @@ export default function RenaxLayout({
             <div>
               <div data-reveal="image" className="aspect-square overflow-hidden bg-brand-900 lg:aspect-[4/3]">
                 <img
-                  src={getCustomImage("about_showcase", transferPortImg)}
-                  alt="Travelluxx Luxury Chauffeur Driver Service - Solihull & London"
+                  src={settingImage(c.t("renax_about_image"), transferPortImg)}
+                  alt={c.t("renax_about_image_alt")}
                   className="h-full w-full object-cover"
                 />
               </div>
 
               <div data-reveal className="mt-5 flex flex-col gap-1.5 border-b border-white/10 pb-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-300">Chauffeur Certified</p>
-                <p className="text-sm font-medium text-white">Safe & Professional Travels</p>
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand-300">{c.t("renax_about_caption_label")}</p>
+                <p className="text-sm font-medium text-white">{c.t("renax_about_caption_text")}</p>
               </div>
             </div>
           </div>
         </div>
       </section>
+      )}
 
       {/* 4. RENAX FLEET SHOWCASE */}
+      {c.on("renax_fleet_enabled") && (
       <section id="fleet" className="tl-section bg-brand-900">
         <div className="tl-container">
           <div>
-            <span data-reveal className="tl-eyebrow tl-eyebrow-light">Our Premium Fleet</span>
+            <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("renax_fleet_eyebrow")}</span>
             <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">
-              Explore Our Luxury Vehicles
+              {c.t("renax_fleet_title")}
             </h2>
             <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl text-stone-300">
-              Curated luxury fleets of state-of-the-art Mercedes-Benz and Audi models. Meticulously clean, safe, and chauffeured to your location.
+              {c.t("renax_fleet_text")}
             </p>
           </div>
 
@@ -344,7 +360,7 @@ export default function RenaxLayout({
                     : "border-transparent text-stone-400 hover:text-white"
                 }`}
               >
-                {tab === "Family" ? "Family / MPV" : tab}
+                {fleetTabLabel[tab]}
               </button>
             ))}
           </div>
@@ -372,7 +388,7 @@ export default function RenaxLayout({
               </div>
 
               <div className="mt-6 flex items-baseline gap-2 text-sm text-stone-400">
-                From <span className="font-display text-4xl leading-none font-medium text-white lining-nums">{selectedFleet.rate}</span> / mile
+                {c.t("renax_fleet_price_prefix")} <span className="font-display text-4xl leading-none font-medium text-white lining-nums">{selectedFleet.rate}</span> {c.t("renax_fleet_price_suffix")}
               </div>
 
               <p className="mt-6 text-base leading-relaxed text-stone-300">
@@ -381,21 +397,21 @@ export default function RenaxLayout({
 
               <div className="mt-8 grid grid-cols-1 divide-y divide-white/10 border-y border-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
                 <div className="flex items-baseline justify-between gap-4 py-4 sm:block sm:pr-5">
-                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">PASSENGERS</span>
+                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">{c.t("renax_fleet_passengers_label")}</span>
                   <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.passengers}</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-4 py-4 sm:block sm:px-5">
-                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">LUGGAGE</span>
-                  <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.luggage} Slots</span>
+                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">{c.t("renax_fleet_luggage_label")}</span>
+                  <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.luggage} {c.t("renax_fleet_luggage_suffix")}</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-4 py-4 sm:block sm:pl-5">
-                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">TRANSMISSION</span>
+                  <span className="block text-xs uppercase tracking-[0.14em] text-stone-400">{c.t("renax_fleet_transmission_label")}</span>
                   <span className="block text-base font-medium text-white sm:mt-2 sm:text-lg">{selectedFleet.transmission}</span>
                 </div>
               </div>
 
               <div className="mt-8">
-                <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-400">Included Amenities:</h4>
+                <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-400">{c.t("renax_fleet_amenities_title")}</h4>
                 <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 text-sm text-stone-300 sm:grid-cols-2">
                   {selectedFleet.features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-3">
@@ -411,7 +427,7 @@ export default function RenaxLayout({
                   onClick={() => handleScrollTo("calculator-section")}
                   className="tl-btn tl-btn-light w-full sm:w-auto"
                 >
-                  <span>Select vehicle class</span>
+                  <span>{c.t("renax_fleet_btn_text")}</span>
                   <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </button>
               </div>
@@ -419,65 +435,50 @@ export default function RenaxLayout({
           </div>
         </div>
       </section>
+      )}
 
       {/* VII. CAR RENTAL PROCESS / STEPS */}
+      {c.on("renax_steps_enabled") && (
       <section className="tl-section bg-brand-950">
         <div className="tl-container">
           <div>
-            <span data-reveal className="tl-eyebrow tl-eyebrow-light">How It Works</span>
-            <h2 data-reveal="lines" className="tl-h2 mt-4 text-white lining-nums">3 Easy Steps to Rent</h2>
+            <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("renax_steps_eyebrow")}</span>
+            <h2 data-reveal="lines" className="tl-h2 mt-4 text-white lining-nums">{c.t("renax_steps_title")}</h2>
           </div>
 
           <div data-reveal-group className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-12 lg:mt-16">
-            {/* Step 1 */}
-            <div className="border-t border-white/10 pt-8">
-              <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
-                01
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="border-t border-white/10 pt-8">
+                <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
+                  {c.t(`renax_step${n}_number`)}
+                </div>
+                <h3 className="tl-h3 mt-6 text-white">{c.t(`renax_step${n}_title`)}</h3>
+                <p className="mt-3 text-base leading-relaxed text-stone-300">
+                  {c.t(`renax_step${n}_text`)}
+                </p>
               </div>
-              <h3 className="tl-h3 mt-6 text-white">1. Choose A Class</h3>
-              <p className="mt-3 text-base leading-relaxed text-stone-300">
-                Select your preferred luxury class—Economy, Chauffeur First Class, or high capacity Family MPVs according to requirements.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="border-t border-white/10 pt-8">
-              <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
-                02
-              </div>
-              <h3 className="tl-h3 mt-6 text-white">2. Book Chauffeur</h3>
-              <p className="mt-3 text-base leading-relaxed text-stone-300">
-                Enter your locations, date, and pickup times in our fixed rates calculator. Confirm pricing and chauffeur details.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="border-t border-white/10 pt-8">
-              <div aria-hidden="true" className="font-display text-5xl leading-none text-brand-300 lining-nums select-none">
-                03
-              </div>
-              <h3 className="tl-h3 mt-6 text-white">3. Enjoy Journey</h3>
-              <p className="mt-3 text-base leading-relaxed text-stone-300">
-                Our professionally dressed licensed chauffeur arrives on-time in a pristine vehicle to complete your nationwide transfer.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
+      )}
 
       {/* IX. VERIFIED GOOGLE CLIENT REVIEWS */}
-      <GoogleReviewsSection isRenax={true} />
+      {c.on("renax_reviews_enabled") && <GoogleReviewsSection isRenax={true} />}
 
       {/* 5. AIRPORT TRANSFER CARDS (the grid renders its own full-width section) */}
+      {c.on("renax_routes_enabled") && (
       <section className="border-t border-white/10 bg-brand-900">
         <div className="tl-container pt-20 pb-12 lg:pt-28 lg:pb-16">
-          <span data-reveal className="tl-eyebrow tl-eyebrow-light">Fixed Presets</span>
-          <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">Popular Transfer Routes</h2>
+          <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("renax_routes_eyebrow")}</span>
+          <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">{c.t("renax_routes_title")}</h2>
         </div>
         <AirportsGrid onSelectTransfer={handleSelectTransferPreset} />
       </section>
+      )}
 
       {/* HOMEPAGE FAQS */}
+      {c.on("renax_faq_enabled") && (
       <HomepageFaq
         faqs={settings?.homepage_faqs}
         title={settings?.homepage_faq_title}
@@ -485,16 +486,18 @@ export default function RenaxLayout({
         badge={settings?.homepage_faq_badge}
         isRenax={true}
       />
+      )}
 
       {/* 6. CONTACT SEGMENT */}
+      {c.on("renax_contact_enabled") && (
       <section id="contact" className="tl-section border-t border-white/10 bg-brand-900">
         <div className="tl-container">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
-              <span data-reveal className="tl-eyebrow tl-eyebrow-light">Get In Touch</span>
-              <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">Contact Our Desk</h2>
+              <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("renax_contact_eyebrow")}</span>
+              <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">{c.t("renax_contact_title")}</h2>
               <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-md text-stone-300">
-                Have unique requirements or need a dedicated luxury chauffeur contract? Fill out our contact form below.
+                {c.t("renax_contact_text")}
               </p>
             </div>
 
@@ -503,21 +506,21 @@ export default function RenaxLayout({
                 <div className="flex items-start gap-5 py-6">
                   <Phone className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">Call / WhatsApp</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">{c.t("renax_contact_phone_label")}</p>
                     <p className="mt-2 text-lg font-medium text-white">{formattedPhone}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-5 py-6">
                   <Mail className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">Email Address</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">{c.t("renax_contact_email_label")}</p>
                     <p className="mt-2 text-lg font-medium break-words text-white">{emailAddr}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-5 py-6">
                   <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">Head Office</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400">{c.t("renax_contact_office_label")}</p>
                     <p className="mt-2 text-lg font-medium text-white">{officeAddr.split(",")[0]}</p>
                   </div>
                 </div>
@@ -526,7 +529,7 @@ export default function RenaxLayout({
               <div data-reveal className="mt-8">
                 <form className="space-y-4">
                   <div>
-                    <p className="text-sm text-stone-400">Please use the contact form details below to query custom routes.</p>
+                    <p className="text-sm text-stone-400">{c.t("renax_contact_note")}</p>
                   </div>
                 </form>
               </div>
@@ -534,6 +537,7 @@ export default function RenaxLayout({
           </div>
         </div>
       </section>
+      )}
 
     </div>
   );

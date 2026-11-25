@@ -5,9 +5,56 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 import { getServiceIcon, AVAILABLE_SERVICE_ICONS } from "../utils/serviceIcons";
 import ServiceAreasManager from "./ServiceAreasManager";
+import SiteContentEditor from "../components/admin/SiteContentEditor";
+import ReviewsListEditor from "../components/admin/ReviewsListEditor";
+import { contentText, contentLines } from "../content/useContent";
+
+// Service text fields that fall back to the site-wide Site Content value (Services section) when empty.
+// The second value is the text the editor used to pre-fill; a stored copy of it is treated as empty.
+const SERVICE_TEXT_DEFAULTS: Record<string, [string, string]> = {
+  heroBadge: ["service_detail_hero_badge", "EXECUTIVE CHAUFFEUR SERVICE"],
+  heroBtn1Text: ["service_detail_hero_btn1_text", "Book This Service"],
+  heroBtn1Url: ["service_detail_hero_btn1_url", "/#calculator"],
+  heroBtn2Text: ["service_detail_hero_btn2_text", "WhatsApp Inquiry"],
+  highlightsBadge: ["service_detail_highlights_badge", "KEY HIGHLIGHTS"],
+  highlightsTitle: ["service_detail_highlights_title", "What Sets This Service Apart"],
+  guaranteeBadge: ["service_detail_guarantee_badge", "THE TRAVELLUXX STANDARD"],
+  guaranteeSubtitle: ["service_detail_guarantee_subtitle", "Get an instant fixed fare in seconds with our online journey calculator."],
+  guaranteeBtnText: ["service_detail_guarantee_btn_text", "Instant Quote"],
+  guaranteeBtnUrl: ["service_detail_guarantee_btn_url", "/#calculator"],
+  sidebarBadge: ["service_detail_sidebar_badge", "RESERVE YOUR RIDE"],
+  sidebarTitle: ["service_detail_sidebar_title", "Book Online Instantly"],
+  sidebarBtn1Text: ["service_detail_sidebar_btn1_text", "Calculate Fare & Book"],
+  sidebarBtn1Url: ["service_detail_sidebar_btn1_url", "/#calculator"],
+  whyChooseBadge: ["service_detail_why_choose_badge", "WHY CHOOSE TRAVELLUXX"],
+  whyChooseTitle: ["service_detail_why_choose_title", "Your Trusted Travel Partner"],
+  whyChooseSubtitle: ["service_detail_why_choose_subtitle", "We go the extra mile to ensure every journey is comfortable, safe and hassle-free."],
+  howItWorksBadge: ["service_detail_how_it_works_badge", "HOW IT WORKS"],
+  howItWorksTitle: ["service_detail_how_it_works_title", "Simple Steps to Your Destination"],
+  howItWorksSubtitle: ["service_detail_how_it_works_subtitle", "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time."],
+  faqBadge: ["service_detail_faq_badge", "FREQUENTLY ASKED QUESTIONS"],
+  faqSubtitle: ["service_detail_faq_subtitle", "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."],
+};
+const SERVICE_PLACEHOLDER_KEYS: Record<string, string> = {
+  ...Object.fromEntries(Object.entries(SERVICE_TEXT_DEFAULTS).map(([f, [k]]) => [f, k])),
+  guaranteeTitle: "service_detail_guarantee_title",
+  faqTitle: "service_detail_faq_title",
+};
+const OLD_SERVICE_SIDEBAR_PERKS = [
+  "24/7 Availability & Instant Confirmation",
+  "Fixed Price Guarantee — No Hidden Fees",
+  "Licensed, DBS-Checked Executive Chauffeurs",
+  "Immaculate Mercedes Fleet with Free Wi-Fi"
+];
+/** A service's stored text, or "" when it is empty or the old pre-filled default. */
+const ownServiceText = (found: any, field: string): string => {
+  const v = typeof found?.[field] === "string" ? found[field] : "";
+  const old = SERVICE_TEXT_DEFAULTS[field]?.[1];
+  return old !== undefined && v.trim() === old ? "" : v;
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Tab = "dashboard" | "leads" | "posts" | "pages" | "services" | "service-areas" | "media" | "menus" | "promocodes" | "settings" | "inquiries";
+type Tab = "dashboard" | "leads" | "posts" | "pages" | "content" | "services" | "service-areas" | "media" | "menus" | "promocodes" | "settings" | "inquiries";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function toBase64(file: File): Promise<string> {
@@ -659,6 +706,28 @@ export function YoastSeoBox({
   );
 }
 
+// Every dashboard request to /api/admin/* carries the login token, wherever the request is made
+// (this file, ServiceAreasManager, editors). A 401 means the session ended: show the login form.
+if (typeof window !== "undefined" && !(window as any).__travelluxxAdminFetch) {
+  (window as any).__travelluxxAdminFetch = true;
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = (input: RequestInfo | URL, init: RequestInit = {}) => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    let path = url;
+    try { path = new URL(url, window.location.origin).pathname; } catch {}
+    if (path.startsWith("/api/admin") && path !== "/api/admin/login") {
+      const token = localStorage.getItem("travelluxx_admin_token");
+      const headers = new Headers(init.headers || (input instanceof Request ? input.headers : undefined));
+      if (token && !headers.has("Authorization")) headers.set("Authorization", `Bearer ${token}`);
+      return originalFetch(input, { ...init, headers }).then((res) => {
+        if (res.status === 401) window.dispatchEvent(new Event("travelluxx-admin-logged-out"));
+        return res;
+      });
+    }
+    return originalFetch(input, init);
+  };
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -703,54 +772,57 @@ export default function AdminDashboard() {
     noIndexNoFollow: false,
     faqs: [] as any[],
     // Dynamic Hero Banner Fields
-    heroBadge: "EXECUTIVE CHAUFFEUR SERVICE",
-    heroBtn1Text: "Book This Service",
-    heroBtn1Url: "/#calculator",
-    heroBtn2Text: "WhatsApp Inquiry",
+    heroBadge: "",
+    heroBtn1Text: "",
+    heroBtn1Url: "",
+    heroBtn2Text: "",
     heroBtn2Url: "",
     // Dynamic Highlights Box Fields
     highlightsEnabled: true,
-    highlightsBadge: "KEY HIGHLIGHTS",
-    highlightsTitle: "What Sets This Service Apart",
+    highlightsBadge: "",
+    highlightsTitle: "",
     // Dynamic Guarantee Banner Fields
     guaranteeEnabled: true,
-    guaranteeBadge: "THE TRAVELLUXX STANDARD",
+    guaranteeBadge: "",
     guaranteeTitle: "",
-    guaranteeSubtitle: "Get an instant fixed fare in seconds with our online journey calculator.",
-    guaranteeBtnText: "Instant Quote",
-    guaranteeBtnUrl: "/#calculator",
+    guaranteeSubtitle: "",
+    guaranteeBtnText: "",
+    guaranteeBtnUrl: "",
     // Dynamic Sidebar Card Fields
-    sidebarBadge: "RESERVE YOUR RIDE",
-    sidebarTitle: "Book Online Instantly",
-    sidebarBtn1Text: "Calculate Fare & Book",
-    sidebarBtn1Url: "/#calculator",
+    sidebarBadge: "",
+    sidebarTitle: "",
+    sidebarBtn1Text: "",
+    sidebarBtn1Url: "",
     sidebarBtn2Text: "",
     sidebarBtn2Url: "",
-    sidebarPerks: [
-      "24/7 Availability & Instant Confirmation",
-      "Fixed Price Guarantee — No Hidden Fees",
-      "Licensed, DBS-Checked Executive Chauffeurs",
-      "Immaculate Mercedes Fleet with Free Wi-Fi"
-    ] as string[],
+    sidebarPerks: [] as string[],
     newSidebarPerk: "",
     showSidebarServices: true,
     // Dynamic Why Choose Section Fields
     whyChooseEnabled: true,
-    whyChooseBadge: "WHY CHOOSE TRAVELLUXX",
-    whyChooseTitle: "Your Trusted Travel Partner",
-    whyChooseSubtitle: "We go the extra mile to ensure every journey is comfortable, safe and hassle-free.",
+    whyChooseBadge: "",
+    whyChooseTitle: "",
+    whyChooseSubtitle: "",
     whyChooseItems: [] as any[],
     // Dynamic How It Works Section Fields
     howItWorksEnabled: true,
-    howItWorksBadge: "HOW IT WORKS",
-    howItWorksTitle: "Simple Steps to Your Destination",
-    howItWorksSubtitle: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+    howItWorksBadge: "",
+    howItWorksTitle: "",
+    howItWorksSubtitle: "",
     howItWorksSteps: [] as any[],
     // Dynamic FAQ Section Fields
     faqsEnabled: true,
-    faqBadge: "FREQUENTLY ASKED QUESTIONS",
+    faqBadge: "",
     faqTitle: "",
-    faqSubtitle: "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
+    faqSubtitle: "",
+    focusKeyphrase: "",
+    ogTitle: "",
+    ogDescription: "",
+    xTitle: "",
+    xDescription: "",
+    socialImage: "",
+    xImage: "",
+    customSchema: ""
   });
   const [servicesPageSettings, setServicesPageSettings] = useState<any>({
     hero_enabled: true,
@@ -784,7 +856,6 @@ export default function AdminDashboard() {
     meta_description: ""
   });
   const [yoastServiceTab, setYoastServiceTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
-  const [focusKeyphraseService, setFocusKeyphraseService] = useState("");
   const [inquiriesLoading, setInquiriesLoading] = useState(false);
   const [selectedBookingIds, setSelectedBookingIds] = useState<string[]>([]);
   const [selectedInquiryIds, setSelectedInquiryIds] = useState<string[]>([]);
@@ -823,8 +894,6 @@ export default function AdminDashboard() {
   const [yoastPageTab, setYoastPageTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [yoastHomeTab, setYoastHomeTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
   const [yoastServicesTab, setYoastServicesTab] = useState<"seo" | "readability" | "schema" | "social">("seo");
-  const [focusKeyphrasePost, setFocusKeyphrasePost] = useState("");
-  const [focusKeyphrasePage, setFocusKeyphrasePage] = useState("");
   const [editingHomepage, setEditingHomepage] = useState(false);
   const [editingServicesPage, setEditingServicesPage] = useState(false);
   const [editingServiceAreasPage, setEditingServiceAreasPage] = useState(false);
@@ -864,13 +933,19 @@ export default function AdminDashboard() {
     metaTitle: "",
     metaDescription: "",
     date: "",
-    author: "admin",
+    author: "",
     template: "Single Posts",
     discussion: "Open",
     socialImage: "",
     xImage: "",
     noIndexNoFollow: false,
-    faqs: [] as any[]
+    faqs: [] as any[],
+    focusKeyphrase: "",
+    ogTitle: "",
+    ogDescription: "",
+    xTitle: "",
+    xDescription: "",
+    customSchema: ""
   });
 
   // Page editor
@@ -889,8 +964,27 @@ export default function AdminDashboard() {
     image: "",
     socialImage: "",
     xImage: "",
-    noIndexNoFollow: false
+    noIndexNoFollow: false,
+    faqs: [] as any[],
+    faqTitle: "",
+    focusKeyphrase: "",
+    ogTitle: "",
+    ogDescription: "",
+    xTitle: "",
+    xDescription: "",
+    customSchema: ""
   });
+
+  // Focus keyphrases live in the form objects so they are saved with the post/page/service.
+  const focusKeyphrasePost = postForm.focusKeyphrase || "";
+  const setFocusKeyphrasePost = (v: string) => setPostForm(f => ({ ...f, focusKeyphrase: v }));
+  const focusKeyphrasePage = pageForm.focusKeyphrase || "";
+  const setFocusKeyphrasePage = (v: string) => setPageForm(f => ({ ...f, focusKeyphrase: v }));
+  const focusKeyphraseService = serviceForm.focusKeyphrase || "";
+  const setFocusKeyphraseService = (v: string) => setServiceForm(f => ({ ...f, focusKeyphrase: v }));
+  // Placeholder for a service text field: the current site-wide value from Site Content → Services.
+  const servicePh = (field: string) =>
+    contentText(settings, SERVICE_PLACEHOLDER_KEYS[field]).replace(/\{service\}/g, serviceForm.title || "Service");
 
   // Media upload
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -968,13 +1062,13 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!token) return;
     if (routeTab) {
-      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "services", "service-areas", "media", "menus", "promocodes", "settings", "inquiries"];
+      const validTabs: Tab[] = ["dashboard", "leads", "posts", "pages", "content", "services", "service-areas", "media", "menus", "promocodes", "settings", "inquiries"];
       if (validTabs.includes(routeTab as Tab)) {
         setActiveTab(routeTab as Tab);
       }
       if (routeTab === "settings" && routeSubtab) {
         const validSubTabs = ["general", "connectors", "writing"];
-        if (validSubTabs.includes(routeSubtab)) {
+        if (validSubTabs.includes(String(routeSubtab))) {
           setSettingsTab(routeSubtab as any);
         }
       }
@@ -993,23 +1087,30 @@ export default function AdminDashboard() {
         if (found) {
           setEditingPost(found);
           setPostForm({
+            ...found,
             title: found.title,
             slug: found.slug,
             excerpt: found.excerpt || "",
             content: found.content || "",
             image: found.image || "",
             imageAlt: found.imageAlt || "",
-            published: found.published !== false,
+            published: found.published !== false && found.published !== 0 && found.published !== "0",
             metaTitle: found.metaTitle || "",
             metaDescription: found.metaDescription || "",
             date: found.date || new Date().toISOString().split("T")[0],
-            author: found.author || "admin",
+            author: found.author || "",
             template: found.template || "Single Posts",
             discussion: found.discussion || "Open",
             socialImage: found.socialImage || "",
             xImage: found.xImage || "",
             noIndexNoFollow: !!found.noIndexNoFollow,
-            faqs: found.faqs || []
+            faqs: found.faqs || [],
+            focusKeyphrase: found.focusKeyphrase || "",
+            ogTitle: found.ogTitle || "",
+            ogDescription: found.ogDescription || "",
+            xTitle: found.xTitle || "",
+            xDescription: found.xDescription || "",
+            customSchema: found.customSchema || ""
           });
         }
       } else if (routeSubtab === "new") {
@@ -1025,13 +1126,19 @@ export default function AdminDashboard() {
           metaTitle: "",
           metaDescription: "",
           date: new Date().toISOString().split("T")[0],
-          author: "admin",
+          author: "",
           template: "Single Posts",
           discussion: "Open",
           socialImage: "",
           xImage: "",
           noIndexNoFollow: false,
-          faqs: []
+          faqs: [],
+          focusKeyphrase: "",
+          ogTitle: "",
+          ogDescription: "",
+          xTitle: "",
+          xDescription: "",
+          customSchema: ""
         });
       } else {
         setEditingPost(undefined);
@@ -1050,12 +1157,13 @@ export default function AdminDashboard() {
           setEditingHomepage(false);
           setEditingServicesPage(false);
           setPageForm({
+            ...found,
             title: found.title,
             slug: found.slug,
             content: found.content || "",
             metaTitle: found.metaTitle || "",
             metaDescription: found.metaDescription || "",
-            published: found.published !== false,
+            published: found.published !== false && found.published !== 0 && found.published !== "0",
             date: found.date || new Date().toISOString().split("T")[0],
             author: found.author || "admin",
             template: found.template || "Default Template",
@@ -1063,7 +1171,15 @@ export default function AdminDashboard() {
             image: found.image || "",
             socialImage: found.socialImage || "",
             xImage: found.xImage || "",
-            noIndexNoFollow: !!found.noIndexNoFollow
+            noIndexNoFollow: !!found.noIndexNoFollow,
+            faqs: Array.isArray(found.faqs) ? found.faqs : [],
+            faqTitle: found.faqTitle || "",
+            focusKeyphrase: found.focusKeyphrase || "",
+            ogTitle: found.ogTitle || "",
+            ogDescription: found.ogDescription || "",
+            xTitle: found.xTitle || "",
+            xDescription: found.xDescription || "",
+            customSchema: found.customSchema || ""
           });
         }
       } else if (routeSubtab === "new") {
@@ -1084,7 +1200,15 @@ export default function AdminDashboard() {
           image: "",
           socialImage: "",
           xImage: "",
-          noIndexNoFollow: false
+          noIndexNoFollow: false,
+          faqs: [],
+          faqTitle: "",
+          focusKeyphrase: "",
+          ogTitle: "",
+          ogDescription: "",
+          xTitle: "",
+          xDescription: "",
+          customSchema: ""
         });
       } else if (routeSubtab === "homepage") {
         setEditingHomepage(true);
@@ -1119,6 +1243,9 @@ export default function AdminDashboard() {
         if (found) {
           setEditingService(found);
           setServiceForm({
+            // Every saved field first (SEO/social fields such as ogTitle, socialImage, xTitle and
+            // customSchema were otherwise blank in the editor after a reload), then the defaults below.
+            ...found,
             title: found.title || "",
             slug: found.slug || "",
             excerpt: found.excerpt || "",
@@ -1130,56 +1257,60 @@ export default function AdminDashboard() {
             features: Array.isArray(found.features) ? found.features : [],
             newFeatureText: "",
             priceText: found.priceText || "",
-            published: found.published !== false,
+            published: found.published !== false && found.published !== 0 && found.published !== "0",
             order: found.order !== undefined ? found.order : 0,
             metaTitle: found.metaTitle || "",
             metaDescription: found.metaDescription || "",
             noIndexNoFollow: !!found.noIndexNoFollow,
             faqs: found.faqs || [],
-            heroBadge: found.heroBadge || "EXECUTIVE CHAUFFEUR SERVICE",
-            heroBtn1Text: found.heroBtn1Text || "Book This Service",
-            heroBtn1Url: found.heroBtn1Url || "/#calculator",
-            heroBtn2Text: found.heroBtn2Text || "WhatsApp Inquiry",
+            heroBadge: ownServiceText(found, "heroBadge"),
+            heroBtn1Text: ownServiceText(found, "heroBtn1Text"),
+            heroBtn1Url: ownServiceText(found, "heroBtn1Url"),
+            heroBtn2Text: ownServiceText(found, "heroBtn2Text"),
             heroBtn2Url: found.heroBtn2Url || "",
             highlightsEnabled: found.highlightsEnabled !== false,
-            highlightsBadge: found.highlightsBadge || "KEY HIGHLIGHTS",
-            highlightsTitle: found.highlightsTitle || "What Sets This Service Apart",
+            highlightsBadge: ownServiceText(found, "highlightsBadge"),
+            highlightsTitle: ownServiceText(found, "highlightsTitle"),
             guaranteeEnabled: found.guaranteeEnabled !== false,
-            guaranteeBadge: found.guaranteeBadge || "THE TRAVELLUXX STANDARD",
+            guaranteeBadge: ownServiceText(found, "guaranteeBadge"),
             guaranteeTitle: found.guaranteeTitle || "",
-            guaranteeSubtitle: found.guaranteeSubtitle || "Get an instant fixed fare in seconds with our online journey calculator.",
-            guaranteeBtnText: found.guaranteeBtnText || "Instant Quote",
-            guaranteeBtnUrl: found.guaranteeBtnUrl || "/#calculator",
-            sidebarBadge: found.sidebarBadge || "RESERVE YOUR RIDE",
-            sidebarTitle: found.sidebarTitle || "Book Online Instantly",
-            sidebarBtn1Text: found.sidebarBtn1Text || "Calculate Fare & Book",
-            sidebarBtn1Url: found.sidebarBtn1Url || "/#calculator",
+            guaranteeSubtitle: ownServiceText(found, "guaranteeSubtitle"),
+            guaranteeBtnText: ownServiceText(found, "guaranteeBtnText"),
+            guaranteeBtnUrl: ownServiceText(found, "guaranteeBtnUrl"),
+            sidebarBadge: ownServiceText(found, "sidebarBadge"),
+            sidebarTitle: ownServiceText(found, "sidebarTitle"),
+            sidebarBtn1Text: ownServiceText(found, "sidebarBtn1Text"),
+            sidebarBtn1Url: ownServiceText(found, "sidebarBtn1Url"),
             sidebarBtn2Text: found.sidebarBtn2Text || "",
             sidebarBtn2Url: found.sidebarBtn2Url || "",
-            sidebarPerks: Array.isArray(found.sidebarPerks) && found.sidebarPerks.length > 0
+            // Empty list = the site-wide list from Site Content; a stored copy of the old pre-filled list counts as empty.
+            sidebarPerks: Array.isArray(found.sidebarPerks) && found.sidebarPerks.join("|") !== OLD_SERVICE_SIDEBAR_PERKS.join("|")
               ? found.sidebarPerks
-              : [
-                  "24/7 Availability & Instant Confirmation",
-                  "Fixed Price Guarantee — No Hidden Fees",
-                  "Licensed, DBS-Checked Executive Chauffeurs",
-                  "Immaculate Mercedes Fleet with Free Wi-Fi"
-                ],
+              : [],
             newSidebarPerk: "",
             showSidebarServices: found.showSidebarServices !== false,
             whyChooseEnabled: found.whyChooseEnabled !== false,
-            whyChooseBadge: found.whyChooseBadge || "WHY CHOOSE TRAVELLUXX",
-            whyChooseTitle: found.whyChooseTitle || "Your Trusted Travel Partner",
-            whyChooseSubtitle: found.whyChooseSubtitle || "We go the extra mile to ensure every journey is comfortable, safe and hassle-free.",
+            whyChooseBadge: ownServiceText(found, "whyChooseBadge"),
+            whyChooseTitle: ownServiceText(found, "whyChooseTitle"),
+            whyChooseSubtitle: ownServiceText(found, "whyChooseSubtitle"),
             whyChooseItems: Array.isArray(found.whyChooseItems) ? found.whyChooseItems : [],
             howItWorksEnabled: found.howItWorksEnabled !== false,
-            howItWorksBadge: found.howItWorksBadge || "HOW IT WORKS",
-            howItWorksTitle: found.howItWorksTitle || "Simple Steps to Your Destination",
-            howItWorksSubtitle: found.howItWorksSubtitle || "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+            howItWorksBadge: ownServiceText(found, "howItWorksBadge"),
+            howItWorksTitle: ownServiceText(found, "howItWorksTitle"),
+            howItWorksSubtitle: ownServiceText(found, "howItWorksSubtitle"),
             howItWorksSteps: Array.isArray(found.howItWorksSteps) ? found.howItWorksSteps : [],
             faqsEnabled: found.faqsEnabled !== false,
-            faqBadge: found.faqBadge || "FREQUENTLY ASKED QUESTIONS",
+            faqBadge: ownServiceText(found, "faqBadge"),
             faqTitle: found.faqTitle || "",
-            faqSubtitle: found.faqSubtitle || "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
+            faqSubtitle: ownServiceText(found, "faqSubtitle"),
+            focusKeyphrase: found.focusKeyphrase || "",
+            ogTitle: found.ogTitle || "",
+            ogDescription: found.ogDescription || "",
+            xTitle: found.xTitle || "",
+            xDescription: found.xDescription || "",
+            socialImage: found.socialImage || "",
+            xImage: found.xImage || "",
+            customSchema: found.customSchema || ""
           });
         }
       } else if (routeSubtab === "new") {
@@ -1207,48 +1338,51 @@ export default function AdminDashboard() {
           metaDescription: "",
           noIndexNoFollow: false,
           faqs: [],
-          heroBadge: "EXECUTIVE CHAUFFEUR SERVICE",
-          heroBtn1Text: "Book This Service",
-          heroBtn1Url: "/#calculator",
-          heroBtn2Text: "WhatsApp Inquiry",
+          heroBadge: "",
+          heroBtn1Text: "",
+          heroBtn1Url: "",
+          heroBtn2Text: "",
           heroBtn2Url: "",
           highlightsEnabled: true,
-          highlightsBadge: "KEY HIGHLIGHTS",
-          highlightsTitle: "What Sets This Service Apart",
+          highlightsBadge: "",
+          highlightsTitle: "",
           guaranteeEnabled: true,
-          guaranteeBadge: "THE TRAVELLUXX STANDARD",
+          guaranteeBadge: "",
           guaranteeTitle: "",
-          guaranteeSubtitle: "Get an instant fixed fare in seconds with our online journey calculator.",
-          guaranteeBtnText: "Instant Quote",
-          guaranteeBtnUrl: "/#calculator",
-          sidebarBadge: "RESERVE YOUR RIDE",
-          sidebarTitle: "Book Online Instantly",
-          sidebarBtn1Text: "Calculate Fare & Book",
-          sidebarBtn1Url: "/#calculator",
+          guaranteeSubtitle: "",
+          guaranteeBtnText: "",
+          guaranteeBtnUrl: "",
+          sidebarBadge: "",
+          sidebarTitle: "",
+          sidebarBtn1Text: "",
+          sidebarBtn1Url: "",
           sidebarBtn2Text: "",
           sidebarBtn2Url: "",
-          sidebarPerks: [
-            "24/7 Availability & Instant Confirmation",
-            "Fixed Price Guarantee — No Hidden Fees",
-            "Licensed, DBS-Checked Executive Chauffeurs",
-            "Immaculate Mercedes Fleet with Free Wi-Fi"
-          ],
+          sidebarPerks: [],
           newSidebarPerk: "",
           showSidebarServices: true,
           whyChooseEnabled: true,
-          whyChooseBadge: "WHY CHOOSE TRAVELLUXX",
-          whyChooseTitle: "Your Trusted Travel Partner",
-          whyChooseSubtitle: "We go the extra mile to ensure every journey is comfortable, safe and hassle-free.",
+          whyChooseBadge: "",
+          whyChooseTitle: "",
+          whyChooseSubtitle: "",
           whyChooseItems: [],
           howItWorksEnabled: true,
-          howItWorksBadge: "HOW IT WORKS",
-          howItWorksTitle: "Simple Steps to Your Destination",
-          howItWorksSubtitle: "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time.",
+          howItWorksBadge: "",
+          howItWorksTitle: "",
+          howItWorksSubtitle: "",
           howItWorksSteps: [],
           faqsEnabled: true,
-          faqBadge: "FREQUENTLY ASKED QUESTIONS",
+          faqBadge: "",
           faqTitle: "",
-          faqSubtitle: "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
+          faqSubtitle: "",
+          focusKeyphrase: "",
+          ogTitle: "",
+          ogDescription: "",
+          xTitle: "",
+          xDescription: "",
+          socialImage: "",
+          xImage: "",
+          customSchema: ""
         });
       } else if (routeSubtab === "page-settings") {
         setEditingService("page-settings");
@@ -1401,9 +1535,10 @@ export default function AdminDashboard() {
         code: cleanCode,
         discountValue: val,
         minOrderAmount: Number(promoForm.minOrderAmount) || 0,
-        maxDiscountAmount: promoForm.maxDiscountAmount ? Number(promoForm.maxDiscountAmount) : undefined,
-        startDate: promoForm.startDate ? promoForm.startDate : undefined,
-        expiryDate: promoForm.expiryDate ? promoForm.expiryDate : undefined,
+        // Empty values are sent as "" / 0 so that clearing a date or limit really removes it.
+        maxDiscountAmount: Number(promoForm.maxDiscountAmount) || 0,
+        startDate: promoForm.startDate || "",
+        expiryDate: promoForm.expiryDate || "",
         usageLimit: Number(promoForm.usageLimit) || 0,
         perUserLimit: Number(promoForm.perUserLimit) || 0
       };
@@ -1460,6 +1595,9 @@ export default function AdminDashboard() {
       if (res.ok) {
         showToast(`Coupon ${promo.code} is now ${!promo.isActive ? "active" : "inactive"}`, "success");
         fetchPromoCodes();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || "Could not change the coupon status", "error");
       }
     } catch (e) {
       showToast("Failed to toggle coupon status", "error");
@@ -1638,6 +1776,17 @@ export default function AdminDashboard() {
 
   const handleLogout = () => { localStorage.removeItem("travelluxx_admin_token"); setToken(null); };
 
+  // Session expired or token from an older version: back to the login form.
+  useEffect(() => {
+    const onLoggedOut = () => {
+      localStorage.removeItem("travelluxx_admin_token");
+      setToken(null);
+      setLoginError("Your session has ended. Please log in again.");
+    };
+    window.addEventListener("travelluxx-admin-logged-out", onLoggedOut);
+    return () => window.removeEventListener("travelluxx-admin-logged-out", onLoggedOut);
+  }, []);
+
   // ─── Bookings ────────────────────────────────────────────────────────────────
   const isStatusTransitionAllowed = (current: string = "Pending", target: string): boolean => {
     if (current === target) return true;
@@ -1733,7 +1882,8 @@ export default function AdminDashboard() {
         body: JSON.stringify(postForm)
       });
       if (res.ok) {
-        const savedPost = await res.json();
+        const response = await res.json();
+        const savedPost = response?.post || response;
         if (editingPost) {
           setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...postForm, ...savedPost } : p));
         } else {
@@ -1741,6 +1891,9 @@ export default function AdminDashboard() {
         }
         navigate(`/admin/posts/edit/${savedPost.id}`);
         showToast(editingPost ? "Post updated successfully!" : "Post created successfully!");
+      } else {
+        const failure = await res.json().catch(() => ({} as any));
+        showToast(failure?.error || "Failed to save post.", "error");
       }
     } catch (err) {
       console.error(err);
@@ -1773,7 +1926,8 @@ export default function AdminDashboard() {
       const method = editingPage ? "PUT" : "POST";
       const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(pageForm) });
       if (res.ok) {
-        const savedPage = await res.json();
+        const response = await res.json();
+        const savedPage = response?.page || response;
         if (editingPage) {
           setPages(prev => prev.map(p => p.id === editingPage.id ? { ...p, ...pageForm, ...savedPage } : p));
         } else {
@@ -1781,6 +1935,9 @@ export default function AdminDashboard() {
         }
         navigate(`/admin/pages/edit/${savedPage.id}`);
         showToast(editingPage ? "Page updated successfully!" : "Page created successfully!");
+      } else {
+        const failure = await res.json().catch(() => ({} as any));
+        showToast(failure?.error || "Failed to save page.", "error");
       }
     } catch (err) {
       console.error(err);
@@ -1860,7 +2017,9 @@ export default function AdminDashboard() {
         showToast(editingService?.id ? "Service updated successfully!" : "Service created successfully!");
         navigate(`/admin/services`);
       } else {
-        showToast("Failed to save service.", "error");
+        // e.g. "Another service already uses the address /services/…"
+        const failure = await res.json().catch(() => ({} as any));
+        showToast(failure?.error || "Failed to save service.", "error");
       }
     } catch (err) {
       console.error(err);
@@ -2019,6 +2178,11 @@ export default function AdminDashboard() {
       setServicesPageSettings((prev: any) => ({ ...prev, hero_image: imageUrl }));
     } else if (editorTarget === "services-page-why-bg") {
       setServicesPageSettings((prev: any) => ({ ...prev, why_choose_bg_image: imageUrl }));
+    } else if (editorTarget && editorTarget.startsWith("settings-")) {
+      // Generic: "settings-<key>" stores the image in settings[key] (fleet photos, service cards,
+      // and every image field of the Site Content tab).
+      const key = editorTarget.slice("settings-".length);
+      setSettings((prev: any) => ({ ...prev, [key]: imageUrl }));
     }
     setEditorMediaModalOpen(false);
     setSelectedEditorMediaUrl(null);
@@ -2045,10 +2209,17 @@ export default function AdminDashboard() {
   const saveMenu = async () => {
     setIsSaving(true);
     try {
-      await fetch("/api/admin/menu", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(menuItems) });
+      const res = await fetch("/api/admin/menu", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(menuItems) });
+      if (!res.ok) {
+        const failure = await res.json().catch(() => ({} as any));
+        showToast(failure?.error || "Failed to save menu.", "error");
+        return;
+      }
       setSaveStatus("Menu saved!"); setTimeout(() => setSaveStatus(""), 3000);
+      showToast("Menu saved!");
     } catch (err) {
       console.error(err);
+      showToast("Failed to save menu.", "error");
     } finally {
       setIsSaving(false);
     }
@@ -2067,23 +2238,28 @@ export default function AdminDashboard() {
   };
   const removeMenuItem = (id: string) => setMenuItems(menuItems.filter(m => m.id !== id));
 
+  // Replace one top-level item's children without mutating the existing state objects.
+  const setMenuChildren = (parentIdx: number, update: (children: any[]) => any[]) => {
+    setMenuItems(prev => prev.map((item, i) => i === parentIdx
+      ? { ...item, children: update(Array.isArray(item.children) ? [...item.children] : []) }
+      : item));
+  };
+  const updateSubMenuItem = (parentIdx: number, subIdx: number, patch: Record<string, any>) => {
+    setMenuChildren(parentIdx, children => children.map((c, i) => i === subIdx ? { ...c, ...patch } : c));
+  };
+
   const addSubMenuItem = (parentId: string, parentIdx: number) => {
     const sub = newSubMenuItems[parentId];
     if (!sub || !sub.label?.trim() || !sub.href?.trim()) {
       showToast("Sub-menu label and link are required!", "error");
       return;
     }
-    const updated = [...menuItems];
-    if (!Array.isArray(updated[parentIdx].children)) {
-      updated[parentIdx].children = [];
-    }
-    updated[parentIdx].children.push({
+    setMenuChildren(parentIdx, children => [...children, {
       id: `sub-${Date.now()}`,
       label: sub.label.trim(),
       href: sub.href.trim(),
       target: sub.target || "_self"
-    });
-    setMenuItems(updated);
+    }]);
     setNewSubMenuItems(prev => ({
       ...prev,
       [parentId]: { label: "", href: "", target: "_self" }
@@ -2092,22 +2268,19 @@ export default function AdminDashboard() {
   };
 
   const removeSubMenuItem = (parentIdx: number, subId: string) => {
-    const updated = [...menuItems];
-    if (Array.isArray(updated[parentIdx].children)) {
-      updated[parentIdx].children = updated[parentIdx].children.filter((c: any) => c.id !== subId);
-      setMenuItems(updated);
-      showToast("Sub-menu item removed.");
-    }
+    if (!Array.isArray(menuItems[parentIdx]?.children)) return;
+    setMenuChildren(parentIdx, children => children.filter((c: any) => c.id !== subId));
+    showToast("Sub-menu item removed.");
   };
 
   const moveSubMenuItem = (parentIdx: number, subIdx: number, dir: -1 | 1) => {
-    const updated = [...menuItems];
-    const children = [...(updated[parentIdx].children || [])];
+    const len = (menuItems[parentIdx]?.children || []).length;
     const swap = subIdx + dir;
-    if (swap < 0 || swap >= children.length) return;
-    [children[subIdx], children[swap]] = [children[swap], children[subIdx]];
-    updated[parentIdx].children = children;
-    setMenuItems(updated);
+    if (swap < 0 || swap >= len) return;
+    setMenuChildren(parentIdx, children => {
+      [children[subIdx], children[swap]] = [children[swap], children[subIdx]];
+      return children;
+    });
   };
 
   // ─── Settings ─────────────────────────────────────────────────────────────────
@@ -2233,6 +2406,7 @@ export default function AdminDashboard() {
     { id: "inquiries", icon: <MessageSquare className="w-4 h-4" />, label: "Customer Inquiries" },
     { id: "posts", icon: <Newspaper className="w-4 h-4" />, label: "Posts (Blog)" },
     { id: "pages", icon: <FileText className="w-4 h-4" />, label: "Pages" },
+    { id: "content", icon: <LayoutDashboard className="w-4 h-4" />, label: "Site Content" },
     { id: "services", icon: <Car className="w-4 h-4" />, label: "Services" },
     { id: "service-areas", icon: <MapPin className="w-4 h-4" />, label: "Service Areas" },
     { id: "media", icon: <Image className="w-4 h-4" />, label: "Media Library" },
@@ -2978,6 +3152,18 @@ export default function AdminDashboard() {
                                 />
                               </div>
 
+                              {/* Author */}
+                              <div className="flex justify-between items-center py-2 border-b border-[#f0f0f1] text-[13px]">
+                                <span className="text-[#646970]">Author</span>
+                                <input
+                                  type="text"
+                                  value={postForm.author || ""}
+                                  onChange={e => setPostForm(prev => ({ ...prev, author: e.target.value }))}
+                                  placeholder="Travelluxx Editorial"
+                                  className="w-32 text-right bg-transparent border-b border-dashed border-[#8c8f94] text-[#2c3338] outline-none font-semibold focus:border-solid focus:border-[#2271b1]"
+                                />
+                              </div>
+
                               {/* Slug */}
                               <div className="flex justify-between items-center py-2 border-b border-[#f0f0f1] text-[13px]">
                                 <span className="text-[#646970]">Slug</span>
@@ -3302,6 +3488,12 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="p-2 sm:p-3 md:p-4 bg-[#f0f0f1]">
+                    <div className="bg-white border border-[#c3c4c7] border-l-4 border-l-[#72aee6] px-3 py-2 mb-4 text-xs text-[#2c3338] shadow-sm">
+                      All texts on the website, including these, can also be edited in{" "}
+                      <button type="button" onClick={() => navigate("/admin/content")} className="text-[#2271b1] hover:text-[#135e96] underline font-semibold">
+                        Site Content
+                      </button>.
+                    </div>
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5">
                       {/* Left Main Content (3 cols) */}
                       <div className="lg:col-span-3 space-y-6">
@@ -3748,7 +3940,7 @@ export default function AdminDashboard() {
                               value={settings.homepage_airports_title || ""}
                               onChange={e => setSettings({ ...settings, homepage_airports_title: e.target.value })}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-[#2c3338] focus:outline-none focus:border-[#2271b1]"
-                              placeholder="e.g. We cover all major London airports"
+                              placeholder="Airport Transfers from Birmingham and Across the UK"
                             />
                           </div>
 
@@ -3801,8 +3993,8 @@ export default function AdminDashboard() {
                                     </div>
                                     <div>
                                       <label className="block text-xs font-semibold text-[#1d2327] mb-1">Description</label>
-                                      <input
-                                        type="text"
+                                      <textarea
+                                        rows={3}
                                         value={settings[`service_desc_${num}`] || ""}
                                         onChange={e => setSettings({ ...settings, [`service_desc_${num}`]: e.target.value })}
                                         className="w-full border border-[#8c8f94] bg-white rounded px-2 py-1.5 text-xs focus:outline-none focus:border-[#2271b1]"
@@ -3970,87 +4162,10 @@ export default function AdminDashboard() {
                               Manage customer reviews that appear in the homepage reviews section. You can add new reviews, edit text/ratings, or remove any review.
                             </p>
 
-                            {Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 && (
-                              <div className="space-y-3 pt-1">
-                                {settings.google_reviews_list.map((rev: any, rIdx: number) => (
-                                  <div key={rIdx} className="bg-white border border-slate-200 rounded p-3 space-y-2">
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-xs font-bold text-slate-700">Reviewer #{rIdx + 1}</span>
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          const list = settings.google_reviews_list.filter((_: any, idx: number) => idx !== rIdx);
-                                          setSettings({ ...settings, google_reviews_list: list });
-                                        }}
-                                        className="text-red-500 hover:text-red-700 p-1"
-                                      >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </button>
-                                    </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                      <div>
-                                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Author Name</label>
-                                        <input
-                                          type="text"
-                                          value={rev.author_name || ""}
-                                          onChange={e => {
-                                            const list = [...settings.google_reviews_list];
-                                            list[rIdx] = { ...list[rIdx], author_name: e.target.value };
-                                            setSettings({ ...settings, google_reviews_list: list });
-                                          }}
-                                          placeholder="e.g. John Doe"
-                                          className="w-full border border-slate-300 rounded px-2 py-1 text-xs"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Star Rating</label>
-                                        <select
-                                          value={rev.rating || 5}
-                                          onChange={e => {
-                                            const list = [...settings.google_reviews_list];
-                                            list[rIdx] = { ...list[rIdx], rating: parseInt(e.target.value) };
-                                            setSettings({ ...settings, google_reviews_list: list });
-                                          }}
-                                          className="w-full border border-slate-300 rounded px-2 py-1 text-xs bg-white"
-                                        >
-                                          <option value={5}>⭐⭐⭐⭐⭐ (5 Stars)</option>
-                                          <option value={4}>⭐⭐⭐⭐ (4 Stars)</option>
-                                          <option value={3}>⭐⭐⭐ (3 Stars)</option>
-                                        </select>
-                                      </div>
-                                      <div>
-                                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Date / Relative Time</label>
-                                        <input
-                                          type="text"
-                                          value={rev.relative_time_description || ""}
-                                          onChange={e => {
-                                            const list = [...settings.google_reviews_list];
-                                            list[rIdx] = { ...list[rIdx], relative_time_description: e.target.value };
-                                            setSettings({ ...settings, google_reviews_list: list });
-                                          }}
-                                          placeholder="e.g. 2 weeks ago"
-                                          className="w-full border border-slate-300 rounded px-2 py-1 text-xs"
-                                        />
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Review Text</label>
-                                      <textarea
-                                        rows={2}
-                                        value={rev.text || ""}
-                                        onChange={e => {
-                                          const list = [...settings.google_reviews_list];
-                                          list[rIdx] = { ...list[rIdx], text: e.target.value };
-                                          setSettings({ ...settings, google_reviews_list: list });
-                                        }}
-                                        placeholder="Customer review comment..."
-                                        className="w-full border border-slate-300 rounded px-2 py-1 text-xs"
-                                      />
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
+                            <ReviewsListEditor
+                              reviews={Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : []}
+                              onChange={list => setSettings((prev: any) => ({ ...prev, google_reviews_list: list }))}
+                            />
                           </div>
                         </div>
 
@@ -4231,7 +4346,7 @@ export default function AdminDashboard() {
                           metaTitle={settings.homepage_seo_title || ""}
                           metaDescription={settings.homepage_seo_description || ""}
                           contentType="homepage"
-                          image={settings.hero_bg_image || ""}
+                          image={settings.homepage_social_image || settings.hero_image || ""}
                           excerpt=""
                           onMetaTitleChange={v => setSettings(prev => ({ ...prev, homepage_seo_title: v }))}
                           onSlugChange={() => {}}
@@ -4726,6 +4841,101 @@ export default function AdminDashboard() {
                           customSchema={pageForm.customSchema || ""}
                           onCustomSchemaChange={v => setPageForm(prev => ({ ...prev, customSchema: v }))}
                         />
+                        {/* FAQs Editor Block (Pages) */}
+                        <div className="bg-white border border-[#c3c4c7] rounded-sm shadow-sm mt-6">
+                          <div className="border-b border-[#f0f0f1] px-4 py-2.5 bg-[#f6f7f7] flex justify-between items-center">
+                            <h3 className="font-semibold text-xs text-[#2c3338]">Frequently Asked Questions (FAQ)</h3>
+                            <button
+                              type="button"
+                              onClick={() => setPageForm(prev => ({ ...prev, faqs: [...(prev.faqs || []), { question: "", answer: "" }] }))}
+                              className="bg-[#2271b1] hover:bg-[#135e96] text-white px-2.5 py-1 rounded-sm text-[10px] font-semibold transition"
+                            >
+                              + Add FAQ
+                            </button>
+                          </div>
+                          <div className="p-4 space-y-4">
+                            <div>
+                              <label className="block text-[10px] font-semibold text-[#646970] mb-1">FAQ SECTION TITLE</label>
+                              <input
+                                type="text"
+                                value={pageForm.faqTitle || ""}
+                                onChange={e => setPageForm(prev => ({ ...prev, faqTitle: e.target.value }))}
+                                placeholder="Frequently Asked Questions"
+                                className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                              />
+                            </div>
+                            {(!pageForm.faqs || pageForm.faqs.length === 0) ? (
+                              <p className="text-xs text-slate-400">No FAQs added yet. Click "+ Add FAQ" to create one.</p>
+                            ) : (
+                              (pageForm.faqs || []).map((faq: any, idx: number) => (
+                                <div key={idx} className="border border-slate-200 p-3 rounded bg-slate-50 relative space-y-2">
+                                  <div className="absolute top-2 right-2 flex items-center gap-1">
+                                    <button
+                                      type="button"
+                                      disabled={idx === 0}
+                                      title="Move Up"
+                                      onClick={() => setPageForm(prev => {
+                                        const list = [...(prev.faqs || [])];
+                                        [list[idx - 1], list[idx]] = [list[idx], list[idx - 1]];
+                                        return { ...prev, faqs: list };
+                                      })}
+                                      className="p-0.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                      <ArrowUp className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      disabled={idx === (pageForm.faqs || []).length - 1}
+                                      title="Move Down"
+                                      onClick={() => setPageForm(prev => {
+                                        const list = [...(prev.faqs || [])];
+                                        [list[idx + 1], list[idx]] = [list[idx], list[idx + 1]];
+                                        return { ...prev, faqs: list };
+                                      })}
+                                      className="p-0.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                      <ArrowDown className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      title="Delete"
+                                      onClick={() => setPageForm(prev => ({ ...prev, faqs: (prev.faqs || []).filter((_: any, i: number) => i !== idx) }))}
+                                      className="p-0.5 text-red-500 hover:text-red-700"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1">QUESTION</label>
+                                    <input
+                                      type="text"
+                                      value={faq.question || ""}
+                                      onChange={e => {
+                                        const v = e.target.value;
+                                        setPageForm(prev => ({ ...prev, faqs: (prev.faqs || []).map((f: any, i: number) => i === idx ? { ...f, question: v } : f) }));
+                                      }}
+                                      placeholder="Enter FAQ Question..."
+                                      className="w-[calc(100%-5rem)] border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-semibold text-[#646970] mb-1">ANSWER</label>
+                                    <textarea
+                                      rows={2}
+                                      value={faq.answer || ""}
+                                      onChange={e => {
+                                        const v = e.target.value;
+                                        setPageForm(prev => ({ ...prev, faqs: (prev.faqs || []).map((f: any, i: number) => i === idx ? { ...f, answer: v } : f) }));
+                                      }}
+                                      placeholder="Enter FAQ Answer..."
+                                      className="w-full border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs focus:outline-none focus:border-[#2271b1] text-black"
+                                    />
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       {/* Right Sidebar Content (1 col) - Styled exactly like WP */}
@@ -4815,7 +5025,7 @@ export default function AdminDashboard() {
                               {/* Template */}
                               <div className="flex justify-between items-center py-2 border-b border-[#f0f0f1] text-[13px]">
                                 <span className="text-[#646970]">Template</span>
-                                <select value={pageForm.template} onChange={e => setPageForm({...pageForm, template: e.target.value})} className="border border-[#c3c4c7] bg-white rounded px-1.5 py-0.5 text-xs text-[#2c3338] outline-none"><option value="Default Template">Default Template</option><option value="Full Width">Full Width</option><option value="Landing Page">Landing Page</option></select>
+                                <select value={pageForm.template} onChange={e => setPageForm({...pageForm, template: e.target.value})} className="border border-[#c3c4c7] bg-white rounded px-1.5 py-0.5 text-xs text-[#2c3338] outline-none"><option value="Default Template">Default Template</option><option value="Full Width">Full Width</option><option value="Landing Page">Landing Page</option><option value="About Page">About Page</option><option value="Contact Page">Contact Page</option></select>
                               </div>
 
                               {/* Discussion */}
@@ -6248,6 +6458,9 @@ export default function AdminDashboard() {
                         <p className="text-[11px] text-slate-500 mt-0.5">
                           Configure the header badge and call-to-action buttons on this service's detail page (/services/:slug).
                         </p>
+                        <p className="text-[11px] text-[#646970] italic mt-0.5">
+                          Leave empty to use the site-wide text from Site Content → Services (shown as grey placeholder text). This applies to every text field of this service.
+                        </p>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -6257,7 +6470,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.heroBadge || ""}
                             onChange={e => setServiceForm({ ...serviceForm, heroBadge: e.target.value })}
-                            placeholder="e.g. EXECUTIVE CHAUFFEUR SERVICE"
+                            placeholder={servicePh("heroBadge")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -6268,7 +6481,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.heroBtn1Text || ""}
                             onChange={e => setServiceForm({ ...serviceForm, heroBtn1Text: e.target.value })}
-                            placeholder="Book This Service"
+                            placeholder={servicePh("heroBtn1Text")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -6279,7 +6492,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.heroBtn1Url || ""}
                             onChange={e => setServiceForm({ ...serviceForm, heroBtn1Url: e.target.value })}
-                            placeholder="/#calculator"
+                            placeholder={servicePh("heroBtn1Url")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -6290,7 +6503,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.heroBtn2Text || ""}
                             onChange={e => setServiceForm({ ...serviceForm, heroBtn2Text: e.target.value })}
-                            placeholder="WhatsApp Inquiry"
+                            placeholder={servicePh("heroBtn2Text")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -6337,7 +6550,7 @@ export default function AdminDashboard() {
                                 type="text"
                                 value={serviceForm.highlightsBadge || ""}
                                 onChange={e => setServiceForm({ ...serviceForm, highlightsBadge: e.target.value })}
-                                placeholder="KEY HIGHLIGHTS"
+                                placeholder={servicePh("highlightsBadge")}
                                 className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                               />
                             </div>
@@ -6347,7 +6560,7 @@ export default function AdminDashboard() {
                                 type="text"
                                 value={serviceForm.highlightsTitle || ""}
                                 onChange={e => setServiceForm({ ...serviceForm, highlightsTitle: e.target.value })}
-                                placeholder="What Sets This Service Apart"
+                                placeholder={servicePh("highlightsTitle")}
                                 className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                               />
                             </div>
@@ -6471,7 +6684,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.guaranteeBadge || ""}
                               onChange={e => setServiceForm({ ...serviceForm, guaranteeBadge: e.target.value })}
-                              placeholder="THE TRAVELLUXX STANDARD"
+                              placeholder={servicePh("guaranteeBadge")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6481,7 +6694,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.guaranteeTitle || ""}
                               onChange={e => setServiceForm({ ...serviceForm, guaranteeTitle: e.target.value })}
-                              placeholder="Ready to Book Your Service?"
+                              placeholder={servicePh("guaranteeTitle")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6491,7 +6704,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.guaranteeSubtitle || ""}
                               onChange={e => setServiceForm({ ...serviceForm, guaranteeSubtitle: e.target.value })}
-                              placeholder="Get an instant fixed fare in seconds with our online journey calculator."
+                              placeholder={servicePh("guaranteeSubtitle")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6501,7 +6714,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.guaranteeBtnText || ""}
                               onChange={e => setServiceForm({ ...serviceForm, guaranteeBtnText: e.target.value })}
-                              placeholder="Instant Quote"
+                              placeholder={servicePh("guaranteeBtnText")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6511,7 +6724,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.guaranteeBtnUrl || ""}
                               onChange={e => setServiceForm({ ...serviceForm, guaranteeBtnUrl: e.target.value })}
-                              placeholder="/#calculator"
+                              placeholder={servicePh("guaranteeBtnUrl")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6547,7 +6760,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.whyChooseBadge || ""}
                               onChange={e => setServiceForm({ ...serviceForm, whyChooseBadge: e.target.value })}
-                              placeholder="WHY CHOOSE TRAVELLUXX"
+                              placeholder={servicePh("whyChooseBadge")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6557,7 +6770,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.whyChooseTitle || ""}
                               onChange={e => setServiceForm({ ...serviceForm, whyChooseTitle: e.target.value })}
-                              placeholder="Your Trusted Travel Partner"
+                              placeholder={servicePh("whyChooseTitle")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6567,7 +6780,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.whyChooseSubtitle || ""}
                               onChange={e => setServiceForm({ ...serviceForm, whyChooseSubtitle: e.target.value })}
-                              placeholder="We go the extra mile to ensure every journey is comfortable, safe and hassle-free."
+                              placeholder={servicePh("whyChooseSubtitle")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6778,7 +6991,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.howItWorksBadge || ""}
                               onChange={e => setServiceForm({ ...serviceForm, howItWorksBadge: e.target.value })}
-                              placeholder="HOW IT WORKS"
+                              placeholder={servicePh("howItWorksBadge")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6788,7 +7001,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.howItWorksTitle || ""}
                               onChange={e => setServiceForm({ ...serviceForm, howItWorksTitle: e.target.value })}
-                              placeholder="Simple Steps to Your Destination"
+                              placeholder={servicePh("howItWorksTitle")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -6798,7 +7011,7 @@ export default function AdminDashboard() {
                               type="text"
                               value={serviceForm.howItWorksSubtitle || ""}
                               onChange={e => setServiceForm({ ...serviceForm, howItWorksSubtitle: e.target.value })}
-                              placeholder="Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time."
+                              placeholder={servicePh("howItWorksSubtitle")}
                               className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                             />
                           </div>
@@ -7034,7 +7247,7 @@ export default function AdminDashboard() {
                                 type="text"
                                 value={serviceForm.faqBadge || ""}
                                 onChange={e => setServiceForm({ ...serviceForm, faqBadge: e.target.value })}
-                                placeholder="FREQUENTLY ASKED QUESTIONS"
+                                placeholder={servicePh("faqBadge")}
                                 className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                               />
                             </div>
@@ -7044,7 +7257,7 @@ export default function AdminDashboard() {
                                 type="text"
                                 value={serviceForm.faqTitle || ""}
                                 onChange={e => setServiceForm({ ...serviceForm, faqTitle: e.target.value })}
-                                placeholder={`Questions About Our ${serviceForm.title || "Service"}`}
+                                placeholder={servicePh("faqTitle")}
                                 className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                               />
                             </div>
@@ -7054,7 +7267,7 @@ export default function AdminDashboard() {
                                 type="text"
                                 value={serviceForm.faqSubtitle || ""}
                                 onChange={e => setServiceForm({ ...serviceForm, faqSubtitle: e.target.value })}
-                                placeholder="Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."
+                                placeholder={servicePh("faqSubtitle")}
                                 className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                               />
                             </div>
@@ -7218,13 +7431,14 @@ export default function AdminDashboard() {
                         <span>Sticky Sidebar Booking Card</span>
                       </div>
                       <div className="p-4 space-y-3.5 text-xs">
+                        <p className="text-[11px] text-[#646970] italic">Leave empty to use the site-wide text from Site Content → Services.</p>
                         <div>
                           <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">Sidebar Badge</label>
                           <input
                             type="text"
                             value={serviceForm.sidebarBadge || ""}
                             onChange={e => setServiceForm({ ...serviceForm, sidebarBadge: e.target.value })}
-                            placeholder="RESERVE YOUR RIDE"
+                            placeholder={servicePh("sidebarBadge")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -7235,7 +7449,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.sidebarTitle || ""}
                             onChange={e => setServiceForm({ ...serviceForm, sidebarTitle: e.target.value })}
-                            placeholder="Book Online Instantly"
+                            placeholder={servicePh("sidebarTitle")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -7246,7 +7460,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.sidebarBtn1Text || ""}
                             onChange={e => setServiceForm({ ...serviceForm, sidebarBtn1Text: e.target.value })}
-                            placeholder="Calculate Fare & Book"
+                            placeholder={servicePh("sidebarBtn1Text")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -7257,7 +7471,7 @@ export default function AdminDashboard() {
                             type="text"
                             value={serviceForm.sidebarBtn1Url || ""}
                             onChange={e => setServiceForm({ ...serviceForm, sidebarBtn1Url: e.target.value })}
-                            placeholder="/#calculator"
+                            placeholder={servicePh("sidebarBtn1Url")}
                             className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
                           />
                         </div>
@@ -7338,6 +7552,11 @@ export default function AdminDashboard() {
                             </button>
                           </div>
 
+                          {(serviceForm.sidebarPerks || []).length === 0 && (
+                            <p className="text-[11px] text-[#646970] italic">
+                              No own list: the site-wide list from Site Content → Services is used ({contentLines(settings, "service_detail_sidebar_perks").length} items).
+                            </p>
+                          )}
                           <div className="space-y-1.5 pt-1 max-h-48 overflow-y-auto">
                             {(serviceForm.sidebarPerks || []).map((perk: string, pIdx: number) => (
                               <div key={pIdx} className="flex items-center justify-between bg-slate-50 border border-slate-200 px-2.5 py-1 rounded text-[11px] text-slate-800">
@@ -7915,6 +8134,19 @@ export default function AdminDashboard() {
           )}
 
           {/* ─── MENUS ──────────────────────────────────────────── */}
+          {activeTab === "content" && (
+            <SiteContentEditor
+              settings={settings}
+              setSettings={(updater) => setSettings((prev: any) => updater(prev))}
+              onSave={() => saveHomepageSettings()}
+              saving={isSaving}
+              pickImage={(key) => {
+                setEditorTarget(`settings-${key}`);
+                setEditorMediaModalOpen(true);
+              }}
+            />
+          )}
+
           {activeTab === "menus" && (
             <div className="space-y-4 max-w-2xl">
               <h1 className="text-2xl font-bold text-[#1d2327]">Menu Manager</h1>
@@ -8043,11 +8275,7 @@ export default function AdminDashboard() {
                                   <input
                                     type="text"
                                     value={child.label || ""}
-                                    onChange={e => {
-                                      const updated = [...menuItems];
-                                      updated[idx].children[cIdx].label = e.target.value;
-                                      setMenuItems(updated);
-                                    }}
+                                    onChange={e => updateSubMenuItem(idx, cIdx, { label: e.target.value })}
                                     placeholder="Sub-item Label"
                                     className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs text-black bg-white focus:outline-none focus:border-emerald-600"
                                   />
@@ -8055,22 +8283,14 @@ export default function AdminDashboard() {
                                   <input
                                     type="text"
                                     value={child.href || ""}
-                                    onChange={e => {
-                                      const updated = [...menuItems];
-                                      updated[idx].children[cIdx].href = e.target.value;
-                                      setMenuItems(updated);
-                                    }}
+                                    onChange={e => updateSubMenuItem(idx, cIdx, { href: e.target.value })}
                                     placeholder="/services/airport-transfers"
                                     className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs text-black bg-white focus:outline-none focus:border-emerald-600"
                                   />
 
                                   <select
                                     value={child.target || "_self"}
-                                    onChange={e => {
-                                      const updated = [...menuItems];
-                                      updated[idx].children[cIdx].target = e.target.value;
-                                      setMenuItems(updated);
-                                    }}
+                                    onChange={e => updateSubMenuItem(idx, cIdx, { target: e.target.value })}
                                     className="border border-slate-300 rounded px-1.5 py-1 text-[11px] bg-white text-black focus:outline-none"
                                   >
                                     <option value="_self">Same tab</option>
@@ -8118,6 +8338,17 @@ export default function AdminDashboard() {
                               placeholder="URL (e.g. /services/airport-transfers)"
                               className="flex-1 border border-slate-300 rounded px-2 py-1 text-xs bg-white text-black focus:outline-none focus:border-emerald-600"
                             />
+                            <select
+                              value={subState.target || "_self"}
+                              onChange={e => setNewSubMenuItems(prev => ({
+                                ...prev,
+                                [item.id]: { ...subState, target: e.target.value }
+                              }))}
+                              className="border border-slate-300 rounded px-1.5 py-1 text-[11px] bg-white text-black focus:outline-none"
+                            >
+                              <option value="_self">Same tab</option>
+                              <option value="_blank">New tab</option>
+                            </select>
                             <button
                               type="button"
                               onClick={() => addSubMenuItem(item.id, idx)}
@@ -8139,6 +8370,11 @@ export default function AdminDashboard() {
                       placeholder="Label" className="border border-[#8c8f94] rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-[#2271b1] flex-1" />
                     <input type="text" value={newMenuItem.href} onChange={e => setNewMenuItem({ ...newMenuItem, href: e.target.value })}
                       placeholder="/blog or /#section" className="border border-[#8c8f94] rounded px-2.5 py-1.5 text-sm focus:outline-none focus:border-[#2271b1] flex-1" />
+                    <select value={newMenuItem.target || "_self"} onChange={e => setNewMenuItem({ ...newMenuItem, target: e.target.value })}
+                      className="border border-[#8c8f94] rounded px-2 py-1.5 text-xs focus:outline-none bg-white text-black">
+                      <option value="_self">Same tab</option>
+                      <option value="_blank">New tab</option>
+                    </select>
                     <button onClick={addMenuItem}
                       className="bg-[#2271b1] hover:bg-[#135e96] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1 transition">
                       <Plus className="w-3.5 h-3.5" /> Add
@@ -8702,7 +8938,7 @@ export default function AdminDashboard() {
                   {[
                     { key: "general", label: "General" },
                     { key: "connectors", label: "Connectors" },
-                    { key: "writing", label: "Writing" },
+                    { key: "writing", label: "Pricing" },
                     { key: "snippets", label: "Code Snippets" }
                   ].map(tab => (
                     <button
@@ -8746,6 +8982,23 @@ export default function AdminDashboard() {
                             <input type="text" value={settings.whatsapp_number || ""}
                               onChange={e => setSettings({ ...settings, whatsapp_number: e.target.value })}
                               className="w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">Business phone (if different from WhatsApp)</label>
+                            <input type="text" value={settings.business_phone || ""}
+                              onChange={e => setSettings({ ...settings, business_phone: e.target.value })}
+                              placeholder="Leave empty to use the WhatsApp number"
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black" />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">Active theme</label>
+                            <select value={settings.active_theme || "default"}
+                              onChange={e => setSettings({ ...settings, active_theme: e.target.value })}
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black">
+                              <option value="default">Default (standard homepage)</option>
+                              <option value="renax">Renax (alternative layout)</option>
+                            </select>
+                            <p className="text-[#646970] text-[10px] mt-1">Changes the homepage layout and the header/footer style across the site.</p>
                           </div>
                           <div>
                             <label className="block text-xs font-semibold text-[#1d2327] mb-1">Office Address</label>
@@ -9033,87 +9286,10 @@ export default function AdminDashboard() {
                               Manage customer reviews that appear in the homepage reviews section. You can add new reviews, edit text/ratings, or remove any review.
                             </p>
 
-                            {Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0 && (
-                              <div className="space-y-3 pt-1">
-                                {settings.google_reviews_list.map((rev: any, rIdx: number) => (
-                                  <div key={rIdx} className="bg-white border border-slate-200 rounded p-3 space-y-2">
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-xs font-bold text-slate-700">Reviewer #{rIdx + 1}</span>
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          const list = settings.google_reviews_list.filter((_: any, idx: number) => idx !== rIdx);
-                                          setSettings({ ...settings, google_reviews_list: list });
-                                        }}
-                                        className="text-red-500 hover:text-red-700 p-1"
-                                      >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </button>
-                                    </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                      <div>
-                                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Author Name</label>
-                                        <input
-                                          type="text"
-                                          value={rev.author_name || ""}
-                                          onChange={e => {
-                                            const list = [...settings.google_reviews_list];
-                                            list[rIdx] = { ...list[rIdx], author_name: e.target.value };
-                                            setSettings({ ...settings, google_reviews_list: list });
-                                          }}
-                                          placeholder="e.g. John Doe"
-                                          className="w-full border border-slate-300 rounded px-2 py-1 text-xs"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Star Rating</label>
-                                        <select
-                                          value={rev.rating || 5}
-                                          onChange={e => {
-                                            const list = [...settings.google_reviews_list];
-                                            list[rIdx] = { ...list[rIdx], rating: parseInt(e.target.value) };
-                                            setSettings({ ...settings, google_reviews_list: list });
-                                          }}
-                                          className="w-full border border-slate-300 rounded px-2 py-1 text-xs bg-white"
-                                        >
-                                          <option value={5}>⭐⭐⭐⭐⭐ (5 Stars)</option>
-                                          <option value={4}>⭐⭐⭐⭐ (4 Stars)</option>
-                                          <option value={3}>⭐⭐⭐ (3 Stars)</option>
-                                        </select>
-                                      </div>
-                                      <div>
-                                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Date / Relative Time</label>
-                                        <input
-                                          type="text"
-                                          value={rev.relative_time_description || ""}
-                                          onChange={e => {
-                                            const list = [...settings.google_reviews_list];
-                                            list[rIdx] = { ...list[rIdx], relative_time_description: e.target.value };
-                                            setSettings({ ...settings, google_reviews_list: list });
-                                          }}
-                                          placeholder="e.g. 2 weeks ago"
-                                          className="w-full border border-slate-300 rounded px-2 py-1 text-xs"
-                                        />
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Review Text</label>
-                                      <textarea
-                                        rows={2}
-                                        value={rev.text || ""}
-                                        onChange={e => {
-                                          const list = [...settings.google_reviews_list];
-                                          list[rIdx] = { ...list[rIdx], text: e.target.value };
-                                          setSettings({ ...settings, google_reviews_list: list });
-                                        }}
-                                        placeholder="Customer review comment..."
-                                        className="w-full border border-slate-300 rounded px-2 py-1 text-xs"
-                                      />
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
+                            <ReviewsListEditor
+                              reviews={Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : []}
+                              onChange={list => setSettings((prev: any) => ({ ...prev, google_reviews_list: list }))}
+                            />
                           </div>
                         </div>
 
@@ -9163,7 +9339,7 @@ export default function AdminDashboard() {
                               setTestEmailLoading(true);
                               setTestEmailResult(null);
                               try {
-                                const r = await fetch("/api/test-email", {
+                                const r = await fetch("/api/admin/test-email", {
                                   method: "POST",
                                   headers: { "Content-Type": "application/json" },
                                   body: JSON.stringify({})
@@ -9196,19 +9372,25 @@ export default function AdminDashboard() {
 
                     {settingsTab === "writing" && (
                       <div className="space-y-4">
-                        <h2 className="font-bold text-[#1d2327] text-sm mb-4 pb-2 border-b border-[#f0f0f1]">
-                          🚖 Default Pricing Rates (£ per mile)
+                        <h2 className="font-bold text-[#1d2327] text-sm mb-1 pb-2 border-b border-[#f0f0f1]">
+                          🚖 Pricing (what customers are charged)
                         </h2>
+                        <p className="text-xs text-[#646970]">
+                          These values are used by the online quote and checkout, and shown on the website. Leave a field empty to use the default shown in grey. Changes apply as soon as you save.
+                        </p>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                           {[
-                            { key: "economy_price", label: "Economy" },
-                            { key: "luxury_price", label: "Luxury" },
-                            { key: "family_price", label: "Family" },
+                            { key: "economy_price", label: "Economy (£ per mile)", placeholder: "1.50", step: "0.10" },
+                            { key: "luxury_price", label: "Luxury (£ per mile)", placeholder: "2.00", step: "0.10" },
+                            { key: "family_price", label: "Family / MPV (£ per mile)", placeholder: "2.50", step: "0.10" },
+                            { key: "minimum_distance", label: "Minimum charged distance (miles)", placeholder: "10", step: "1" },
+                            { key: "extra_stop_charge", label: "Extra stop charge (£ per stop)", placeholder: "10.00", step: "0.50" },
+                            { key: "waiting_charge_per_min", label: "Waiting at stops (£ per minute)", placeholder: "0.50", step: "0.05" },
                           ].map(f => (
                             <div key={f.key}>
-                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">{f.label} (£)</label>
-                              <input type="number" step="0.10" value={settings[f.key] || ""}
-                                onChange={e => setSettings({ ...settings, [f.key]: parseFloat(e.target.value) })}
+                              <label className="block text-xs font-semibold text-[#1d2327] mb-1">{f.label}</label>
+                              <input type="number" min="0" step={f.step} placeholder={f.placeholder} value={settings[f.key] ?? ""}
+                                onChange={e => setSettings({ ...settings, [f.key]: e.target.value === "" ? "" : parseFloat(e.target.value) })}
                                 className="w-full border border-[#8c8f94] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#2271b1] bg-white text-black" />
                             </div>
                           ))}

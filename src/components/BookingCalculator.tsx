@@ -8,15 +8,25 @@ import {
 import dynamic from "next/dynamic";
 import { DistanceResult } from "../types";
 import { trackClick } from "../utils/analytics";
+import { useContent } from "../content/useContent";
+
+const MapLoading = () => {
+  const c = useContent();
+  return (
+    <div className="w-full h-full min-h-[300px] bg-stone-100 flex items-center justify-center text-stone-500 text-sm">
+      {c.t("booking_map_loading")}
+    </div>
+  );
+};
 
 const GoogleBookingMap = dynamic(() => import("./GoogleBookingMap"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full min-h-[300px] bg-stone-100 flex items-center justify-center text-stone-500 text-sm">
-      Loading interactive map...
-    </div>
-  ),
+  loading: () => <MapLoading />,
 });
+
+// Fills "{name}" placeholders in an editable message, e.g. fillText("Booking {id}", { id: "TL-1" }).
+const fillText = (template: string, values: Record<string, string | number>) =>
+  template.replace(/\{(\w+)\}/g, (match, name) => (name in values ? String(values[name]) : match));
 
 interface BookingCalculatorProps {
   initialPickup?: string;
@@ -217,14 +227,6 @@ const UK_LOCATIONS: { [key: string]: { lat: number; lng: number; name: string } 
   return streets;
 };
 
-// Presentational only: step names shown in the progress stepper (same wording as the current-step caption).
-const STEP_LABELS = [
-  "Instant Pricing Options",
-  "Passenger Schedule Details",
-  "Secure Checkout Gateway",
-  "Reservation Confirmed",
-];
-
 // Countries offered for the billing address (ISO codes, as Mollie expects them).
 const BILLING_COUNTRIES: [string, string][] = [
   ["GB", "United Kingdom"], ["IE", "Ireland"], ["US", "United States"], ["CA", "Canada"], ["AU", "Australia"],
@@ -237,6 +239,22 @@ const BILLING_COUNTRIES: [string, string][] = [
 export default function BookingCalculator({ initialPickup = "", initialDropoff = "", settings }: BookingCalculatorProps) {
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
   const whatsappNum = settings?.whatsapp_number || "441217140876";
+
+  // Editable texts (dashboard > Site Content > Homepage > "Booking form – ...").
+  const c = useContent(settings);
+  // Effects that run once (the return from Mollie) read the latest texts through this ref.
+  const contentRef = useRef(c);
+  contentRef.current = c;
+  // Step names shown in the progress stepper (same wording as the current-step caption).
+  const STEP_LABELS = [c.t("booking_step1_name"), c.t("booking_step2_name"), c.t("booking_step3_name"), c.t("booking_step4_name")];
+  // Display names of the vehicle classes; the values ("Economy", "Luxury", "Family") stay as they are.
+  const vehicleLabel = (vehicle: string | null) =>
+    vehicle === "Economy" ? c.t("booking_vehicle_economy")
+      : vehicle === "Luxury" ? c.t("booking_vehicle_luxury")
+      : vehicle === "Family" ? c.t("booking_vehicle_family")
+      : vehicle;
+  const dateAt = (date: string, time: string) => fillText(c.t("booking_date_time_text"), { date, time });
+  const resolvingText = c.t("booking_msg_resolving_address");
 
   // Native Google Places Autocomplete Service
   const [autocompleteService, setAutocompleteService] = useState<any>(null);
@@ -444,11 +462,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
   const useMyLocation = () => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      alert(c.t("booking_msg_geolocation_unsupported"));
       return;
     }
     
-    setPickupInput("Detecting location...");
+    setPickupInput(c.t("booking_msg_detecting_location"));
     
     navigator.geolocation.getCurrentPosition(
       async (position) => {
@@ -476,7 +494,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       },
       (error) => {
         console.error("Geolocation error:", error);
-        setPickupInput("Location access denied or unavailable.");
+        setPickupInput(c.t("booking_msg_location_denied"));
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
@@ -484,11 +502,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
   const useMyDropoffLocation = () => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      alert(c.t("booking_msg_geolocation_unsupported"));
       return;
     }
     
-    setDropoffInput("Detecting location...");
+    setDropoffInput(c.t("booking_msg_detecting_location"));
     
     navigator.geolocation.getCurrentPosition(
       async (position) => {
@@ -515,7 +533,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       },
       (error) => {
         console.error("Geolocation error:", error);
-        setDropoffInput("Location access denied or unavailable.");
+        setDropoffInput(c.t("booking_msg_location_denied"));
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
@@ -739,7 +757,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     }
   }, [initialPickup, initialDropoff]);
   useEffect(() => {
-    if (customPickupCoords && customDropoffCoords && pickupInput && dropoffInput && pickupInput !== "Resolving address..." && dropoffInput !== "Resolving address...") {
+    if (customPickupCoords && customDropoffCoords && pickupInput && dropoffInput && pickupInput !== resolvingText && dropoffInput !== resolvingText) {
       calculateDistance(pickupInput, dropoffInput);
     }
   }, [customPickupCoords, customDropoffCoords]);
@@ -748,9 +766,9 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     const currentMode = mapClickMode;
     
     if (currentMode === "pickup") {
-      setPickupInput("Resolving address...");
+      setPickupInput(resolvingText);
     } else {
-      setDropoffInput("Resolving address...");
+      setDropoffInput(resolvingText);
     }
     
     let resolvedName = `Point on map (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
@@ -823,6 +841,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
           pickupCoords: customPickupCoords,
           dropoffCoords: customDropoffCoords,
           precalculated: result,
+          stops: stops.map(s => ({ address: s.address, duration: s.duration, waiting: s.waiting, lat: s.lat, lng: s.lng })),
         }),
       });
 
@@ -998,7 +1017,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   // Execute calculation
   const calculateDistance = async (pick = pickupInput, drop = dropoffInput, currentStops = stops) => {
     if (!pick || !drop) {
-      setErrorMsg("Please provide both Pickup and Dropoff locations.");
+      setErrorMsg(c.t("booking_msg_missing_locations"));
       return;
     }
     setErrorMsg("");
@@ -1066,7 +1085,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       }
 
       if (!pCoords || !dCoords) {
-        setErrorMsg("We could not pinpoint this UK address. Please select a suggestion from the UK dropdown, enter a valid UK postcode, or tap on the map to pin your location.");
+        setErrorMsg(c.t("booking_msg_address_not_found"));
         setLoadingRoute(false);
         return;
       }
@@ -1183,14 +1202,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         const data = await res.json();
         setDistanceResult(data);
       } else {
-        console.warn("Server distance check failed. Proceeding with client-side estimation fallback.");
-        const fallbackData = getClientSideFallbackRoute(pick, drop, precalculated);
-        setDistanceResult(fallbackData);
+        // Only the server's prices can be booked, so never show a price made up in the browser.
+        setErrorMsg(c.t("booking_msg_quote_unavailable"));
       }
     } catch (err) {
-      console.warn("Error calculating route. Proceeding with client-side estimation fallback.", err);
-      const fallbackData = getClientSideFallbackRoute(pick, drop, precalculated);
-      setDistanceResult(fallbackData);
+      console.warn("Error calculating route:", err);
+      setErrorMsg(c.t("booking_msg_quote_unavailable"));
     } finally {
       setLoadingRoute(false);
     }
@@ -1243,7 +1260,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   const handleReserveDetailsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!rideDate || !rideTime || !passengerName || !passengerEmail || !passengerPhone || !selectedVehicle || !distanceResult) {
-      alert("Please fill in all requested fields.");
+      alert(c.t("booking_msg_fill_all_fields"));
       return;
     }
     const datesError = journeyDatesError();
@@ -1260,12 +1277,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   const handleApplyPromoCode = async () => {
     const raw = promoInput.trim().toUpperCase();
     if (!raw) {
-      setPromoError("Please enter a promo code.");
+      setPromoError(c.t("booking_msg_promo_empty"));
       return;
     }
     const baseAmount = originalBasePrice;
     if (baseAmount <= 0) {
-      setPromoError("Please select a valid ride option first.");
+      setPromoError(c.t("booking_msg_promo_no_ride"));
       return;
     }
 
@@ -1283,16 +1300,16 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       if (res.ok && data.valid) {
         setAppliedPromo(data.coupon || data.promo);
         setPromoDiscountAmount(data.discountAmount);
-        setPromoSuccessMsg(data.message || `Coupon code '${raw}' applied!`);
+        setPromoSuccessMsg(data.message || fillText(c.t("booking_msg_promo_applied"), { code: raw }));
       } else {
         setAppliedPromo(null);
         setPromoDiscountAmount(0);
-        setPromoError(data.message || "Invalid or ineligible coupon code.");
+        setPromoError(data.message || c.t("booking_msg_promo_invalid"));
       }
     } catch (err: any) {
       setAppliedPromo(null);
       setPromoDiscountAmount(0);
-      setPromoError("Could not connect to coupon verification server.");
+      setPromoError(c.t("booking_msg_promo_connection"));
     } finally {
       setPromoLoading(false);
     }
@@ -1314,11 +1331,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
   // Checks the dates before moving on. Returns an error message, or "" when everything is in order.
   const journeyDatesError = () => {
-    if (!rideDate || !rideTime) return "Please choose the date and time of your journey.";
+    if (!rideDate || !rideTime) return c.t("booking_msg_date_missing");
     if (isReturn) {
-      if (!returnDate || !returnTime) return "Please choose the date and time of your return journey.";
+      if (!returnDate || !returnTime) return c.t("booking_msg_return_date_missing");
       if (new Date(`${returnDate}T${returnTime}`).getTime() <= new Date(`${rideDate}T${rideTime}`).getTime()) {
-        return "Your return journey must be after your outbound journey.";
+        return c.t("booking_msg_return_before_outbound");
       }
     }
     return "";
@@ -1366,6 +1383,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       date: rideDate,
       time: rideTime,
       vehicle: selectedVehicle,
+      quoteToken: (distanceResult as any).quoteToken,
       price: finalPayablePrice,
       originalPrice: originalBasePrice,
       promoCode: appliedPromo ? appliedPromo.code : undefined,
@@ -1410,10 +1428,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
         setCurrentStep(4);
       } else {
-        alert("Server failed to register the booking. Please check logs.");
+        const failure = await res.json().catch(() => ({} as any));
+        alert(failure?.error || c.t("booking_msg_booking_failed"));
       }
     } catch (err) {
-      alert("Payment processor connection failed.");
+      alert(c.t("booking_msg_payment_connection"));
     } finally {
       setProcessingPayment(false);
     }
@@ -1446,18 +1465,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
           showPanel();
         } else if (data.success && data.paymentStatus === "Pending" && attempt < 5) {
           if (attempt === 1) showPanel();
-          setPaymentNotice({ kind: "pending", text: `We are confirming your payment for booking ${bookingId}. This can take a few moments.` });
+          setPaymentNotice({ kind: "pending", text: fillText(contentRef.current.t("booking_msg_payment_confirming"), { id: bookingId }) });
           window.setTimeout(() => check(attempt + 1), 3000);
         } else if (data.success && data.paymentStatus === "Pending") {
-          setPaymentNotice({ kind: "pending", text: `Your payment for booking ${bookingId} has not been confirmed yet. We will email you as soon as it clears. You do not need to book again.` });
+          setPaymentNotice({ kind: "pending", text: fillText(contentRef.current.t("booking_msg_payment_not_confirmed"), { id: bookingId }) });
         } else {
-          setPaymentNotice({ kind: "failed", text: "Your payment was not completed, so this booking has not been confirmed and you have not been charged. Please try again, or choose Pay Later / Cash at checkout." });
+          setPaymentNotice({ kind: "failed", text: contentRef.current.t("booking_msg_payment_failed") });
           showPanel();
         }
       } catch (err) {
         console.error("Failed to verify payment status:", err);
         if (!cancelled) {
-          setPaymentNotice({ kind: "pending", text: `We could not check the payment for booking ${bookingId}. Please contact us before booking again.` });
+          setPaymentNotice({ kind: "pending", text: fillText(contentRef.current.t("booking_msg_payment_check_failed"), { id: bookingId }) });
         }
       }
     };
@@ -1473,11 +1492,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   const handleMollieCheckout = async () => {
     if (!distanceResult || !selectedVehicle) return;
     if (!billingStreet.trim() || !billingCity.trim() || !billingPostcode.trim()) {
-      setBillingError("Please enter your billing address to pay online.");
+      setBillingError(c.t("booking_msg_billing_missing"));
       return;
     }
     if (billingCountry === "GB" && !/^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/i.test(billingPostcode.trim())) {
-      setBillingError("Please enter a full UK postcode, for example B90 3AA.");
+      setBillingError(c.t("booking_msg_billing_postcode"));
       return;
     }
     setBillingError("");
@@ -1502,6 +1521,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       date: rideDate,
       time: rideTime,
       vehicle: selectedVehicle,
+      quoteToken: (distanceResult as any).quoteToken,
       price: finalPayablePrice,
       originalPrice: originalBasePrice,
       promoCode: appliedPromo ? appliedPromo.code : undefined,
@@ -1533,11 +1553,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       if (data.success && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
       } else {
-        alert(data.error || "Failed to initialize Mollie payment gateway.");
+        alert(data.error || c.t("booking_msg_mollie_init_failed"));
       }
     } catch (err: any) {
       console.error("Mollie payment error:", err);
-      alert("Could not connect to Mollie payment gateway.");
+      alert(c.t("booking_msg_mollie_connection"));
     } finally {
       setProcessingPayment(false);
     }
@@ -1577,12 +1597,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
         {/* Section Header */}
         <div className="mb-12 lg:mb-14">
-          <span data-reveal className="tl-eyebrow">Instant Booking System</span>
+          <span data-reveal className="tl-eyebrow">{c.t("booking_eyebrow")}</span>
           <h2 data-reveal="lines" className="tl-h2 mt-4">
-            Calculate & Book Your Chauffeur
+            {c.t("booking_title")}
           </h2>
           <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
-            Get instant, guaranteed prices side by side and complete a secure checkout in under 60 seconds. Whether you need private hire Birmingham for an airport run, a business meeting or a special night out, simply enter your pickup and drop-off to see your fixed fare.
+            {c.t("booking_lead")}
           </p>
         </div>
 
@@ -1592,12 +1612,9 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
           {/* STEPPER METADATA SUBBAR */}
           <div className="lg:col-span-12 min-w-0">
             <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-              <span className="text-sm text-stone-500">Booking progress:</span>
+              <span className="text-sm text-stone-500">{c.t("booking_progress_label")}</span>
               <div className="text-sm font-medium text-brand-800 lg:hidden">
-                {currentStep === 1 && "1. Instant Pricing Options"}
-                {currentStep === 2 && "2. Passenger Schedule Details"}
-                {currentStep === 3 && "3. Secure Checkout Gateway"}
-                {currentStep === 4 && "4. Reservation Confirmed"}
+                {`${currentStep}. ${STEP_LABELS[currentStep - 1]}`}
               </div>
             </div>
             <ol aria-label="Booking progress" className="mt-4 grid grid-cols-4 border-b border-stone-200">
@@ -1642,17 +1659,17 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                 {/* Inputs card */}
                 <div className="space-y-6">
                   <div className="space-y-6">
-                    <h3 className="tl-h3">Where would you like to travel?</h3>
+                    <h3 className="tl-h3">{c.t("booking_route_heading")}</h3>
 
                     <div className="space-y-5">
                       <div className="relative" ref={pickupRef}>
                         <label className="block">
-                          <span className="tl-label">Pick-up location</span>
+                          <span className="tl-label">{c.t("booking_pickup_label")}</span>
                           <span className="relative block">
                             <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-medium text-stone-400">P</span>
                             <input
                               type="text"
-                              placeholder="Enter Pick-up Location or Postal Code..."
+                              placeholder={c.t("booking_pickup_placeholder")}
                               value={pickupInput}
                               onChange={(e) => {
                                 handleInput(e.target.value, 'pickup');
@@ -1662,7 +1679,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                             />
                           </span>
                         </label>
-                        <button type="button" onClick={useMyLocation} aria-label="Use my current location for pick-up" className="absolute bottom-0 right-0 flex h-12 w-12 cursor-pointer items-center justify-center text-stone-400 transition-colors duration-200 hover:text-brand-700"><Compass className="w-5 h-5" strokeWidth={1.5} /></button>
+                        <button type="button" onClick={useMyLocation} aria-label={c.t("booking_pickup_locate_label")} className="absolute bottom-0 right-0 flex h-12 w-12 cursor-pointer items-center justify-center text-stone-400 transition-colors duration-200 hover:text-brand-700"><Compass className="w-5 h-5" strokeWidth={1.5} /></button>
                         {pickupSuggestions.length > 0 && (
                           <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-sm border border-stone-200 bg-white shadow-sm">
                             {pickupSuggestions.map((loc, idx) => (
@@ -1697,12 +1714,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                       <div className="relative" ref={dropoffRef}>
                         <label className="block">
-                          <span className="tl-label">Drop-off location</span>
+                          <span className="tl-label">{c.t("booking_dropoff_label")}</span>
                           <span className="relative block">
                             <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-medium text-stone-400">D</span>
                             <input
                               type="text"
-                              placeholder="Enter Drop-off Destination or Airport..."
+                              placeholder={c.t("booking_dropoff_placeholder")}
                               value={dropoffInput}
                               onChange={(e) => {
                                 handleInput(e.target.value, 'dropoff');
@@ -1712,7 +1729,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                             />
                           </span>
                         </label>
-                        <button type="button" onClick={useMyDropoffLocation} aria-label="Use my current location for drop-off" className="absolute bottom-0 right-0 flex h-12 w-12 cursor-pointer items-center justify-center text-stone-400 transition-colors duration-200 hover:text-brand-700"><Compass className="w-5 h-5" strokeWidth={1.5} /></button>
+                        <button type="button" onClick={useMyDropoffLocation} aria-label={c.t("booking_dropoff_locate_label")} className="absolute bottom-0 right-0 flex h-12 w-12 cursor-pointer items-center justify-center text-stone-400 transition-colors duration-200 hover:text-brand-700"><Compass className="w-5 h-5" strokeWidth={1.5} /></button>
                         {dropoffSuggestions.length > 0 && (
                           <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-sm border border-stone-200 bg-white shadow-sm">
                             {dropoffSuggestions.map((loc, idx) => (
@@ -1746,7 +1763,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                     <div className="flex items-start gap-2 text-sm text-stone-500">
                       <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" strokeWidth={1.5} />
-                      <span>Search any UK postcode, city or airport, or click anywhere on the map to pin exact locations.</span>
+                      <span>{c.t("booking_route_help")}</span>
                     </div>
 
                     {errorMsg && !distanceResult && (
@@ -1758,7 +1775,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                     <div className="flex flex-col sm:flex-row gap-5">
                       <label className="block min-w-0 flex-1">
-                        <span className="tl-label">Date</span>
+                        <span className="tl-label">{c.t("booking_date_label")}</span>
                         <span className="relative block">
                           <Calendar aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
                           <input
@@ -1770,7 +1787,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </span>
                       </label>
                       <label className="block min-w-0 flex-1">
-                        <span className="tl-label">Time</span>
+                        <span className="tl-label">{c.t("booking_time_label")}</span>
                         <span className="relative block">
                           <Clock aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
                           <input
@@ -1784,10 +1801,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     </div>
 
                     {/* One way or return */}
-                    <div role="group" aria-label="Journey type">
-                      <span className="tl-label">Journey type</span>
+                    <div role="group" aria-label={c.t("booking_journey_type_label")}>
+                      <span className="tl-label">{c.t("booking_journey_type_label")}</span>
                       <div className="grid grid-cols-2 gap-3">
-                        {([["oneway", "One way"], ["return", "Return journey"]] as const).map(([value, label]) => (
+                        {([["oneway", c.t("booking_oneway_label")], ["return", c.t("booking_return_label")]] as const).map(([value, label]) => (
                           <button
                             key={value}
                             type="button"
@@ -1808,11 +1825,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     {isReturn && (
                       <div className="space-y-4 border-l-2 border-brand-700 bg-brand-50/60 px-4 py-4">
                         <p className="text-sm leading-relaxed text-stone-700">
-                          Your chauffeur collects you from the drop-off address and brings you back to the pick-up address. When would you like to return?
+                          {c.t("booking_return_intro")}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-5">
                           <label className="block min-w-0 flex-1">
-                            <span className="tl-label">Return date</span>
+                            <span className="tl-label">{c.t("booking_return_date_label")}</span>
                             <span className="relative block">
                               <Calendar aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
                               <input
@@ -1825,7 +1842,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                             </span>
                           </label>
                           <label className="block min-w-0 flex-1">
-                            <span className="tl-label">Return time</span>
+                            <span className="tl-label">{c.t("booking_return_time_label")}</span>
                             <span className="relative block">
                               <Clock aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
                               <input
@@ -1840,15 +1857,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       </div>
                     )}
 
-                    <div role="group" aria-label="Vehicle class">
-                      <span className="tl-label">Vehicle class</span>
+                    <div role="group" aria-label={c.t("booking_vehicle_label")}>
+                      <span className="tl-label">{c.t("booking_vehicle_label")}</span>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {["Economy", "Luxury", "Family"].map((vehicle) => {
-                          const rates: Record<string, string> = {
-                            Economy: "£1.50/mi",
-                            Luxury: "£2.00/mi",
-                            Family: "£2.50/mi"
-                          };
                           return (
                             <button
                               key={vehicle}
@@ -1862,7 +1874,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                               }`}
                             >
                               <span>
-                                {vehicle === "Family" ? "Family / MPV" : vehicle}
+                                {vehicleLabel(vehicle)}
                               </span>
                             </button>
                           );
@@ -1880,11 +1892,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       {loadingRoute ? (
                         <>
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Calculating Route...</span>
+                          <span>{c.t("booking_calculating_text")}</span>
                         </>
                       ) : (
                         <>
-                          <span>Calculate Quote</span>
+                          <span>{c.t("booking_calculate_button")}</span>
                           <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                         </>
                       )}
@@ -1892,8 +1904,8 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     <button
                       onClick={clearRoute}
                       className="tl-btn tl-btn-outline w-12 shrink-0 px-0 text-stone-600"
-                      title="Clear Route"
-                      aria-label="Clear Route"
+                      title={c.t("booking_clear_route_label")}
+                      aria-label={c.t("booking_clear_route_label")}
                     >
                       <Trash2 className="w-5 h-5" strokeWidth={1.5} />
                     </button>
@@ -1904,11 +1916,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                 {/* Pricing display panels shown first */}
                 {distanceResult && (
                   <div className="space-y-6 border-t border-stone-200 pt-8">
-                    <h4 className="tl-h3">Route & Pricing Summary</h4>
+                    <h4 className="tl-h3">{c.t("booking_summary_heading")}</h4>
 
                     <dl className="divide-y divide-stone-200 border-y border-stone-200 text-sm">
                       <div className="flex items-baseline justify-between gap-6 py-3">
-                        <dt className="text-stone-600">Total Distance</dt>
+                        <dt className="text-stone-600">{c.t("booking_summary_distance")}</dt>
                         <dd className="text-right font-medium text-stone-900 tabular-nums">
                           {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi
                           <span className="ml-1 font-normal text-stone-500">
@@ -1917,18 +1929,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </dd>
                       </div>
                       <div className="flex items-baseline justify-between gap-6 py-3">
-                        <dt className="text-stone-600">Est. Driving Time</dt>
-                        <dd className="text-right font-medium text-stone-900 tabular-nums">~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins</dd>
+                        <dt className="text-stone-600">{c.t("booking_summary_time")}</dt>
+                        <dd className="text-right font-medium text-stone-900 tabular-nums">~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} {c.t("booking_summary_minutes")}</dd>
                       </div>
                       <div className="flex items-baseline justify-between gap-6 py-3">
-                        <dt className="text-stone-600">Selected Plan</dt>
-                        <dd className="text-right font-medium text-stone-900">{selectedVehicle === "Family" ? "Family / MPV" : selectedVehicle}</dd>
+                        <dt className="text-stone-600">{c.t("booking_summary_plan")}</dt>
+                        <dd className="text-right font-medium text-stone-900">{vehicleLabel(selectedVehicle)}</dd>
                       </div>
                       {distanceResult.waitingTime > 0 && (
                         <div className="flex items-baseline justify-between gap-6 py-3">
                           <dt className="text-stone-600">
-                            <span className="block">Stay / Waiting Charges</span>
-                            <span className="mt-0.5 block text-xs text-stone-500">{stops.length} Stop(s) • Total Wait: {distanceResult.waitingTime} Mins</span>
+                            <span className="block">{c.t("booking_summary_waiting")}</span>
+                            <span className="mt-0.5 block text-xs text-stone-500">{fillText(c.t("booking_summary_waiting_detail"), { stops: stops.length, minutes: distanceResult.waitingTime })}</span>
                           </dt>
                           <dd className="text-right font-medium text-stone-900 tabular-nums">£{Number(distanceResult.waitingChargeAmount || 0).toFixed(2)}</dd>
                         </div>
@@ -1936,14 +1948,14 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       {isReturn && (
                         <>
                           <div className="flex items-baseline justify-between gap-6 py-3">
-                            <dt className="text-stone-600">Outbound journey</dt>
+                            <dt className="text-stone-600">{c.t("booking_summary_outbound")}</dt>
                             <dd className="text-right font-medium text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
                           </div>
                           <div className="flex items-baseline justify-between gap-6 py-3">
                             <dt className="text-stone-600">
-                              <span className="block">Return journey</span>
+                              <span className="block">{c.t("booking_summary_return")}</span>
                               {returnDate && returnTime && (
-                                <span className="mt-0.5 block text-xs text-stone-500">{formatDate(returnDate)} at {returnTime}</span>
+                                <span className="mt-0.5 block text-xs text-stone-500">{dateAt(formatDate(returnDate), returnTime)}</span>
                               )}
                             </dt>
                             <dd className="text-right font-medium text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
@@ -1951,7 +1963,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </>
                       )}
                       <div className="flex items-baseline justify-between gap-6 py-4">
-                        <dt className="text-lg font-semibold text-stone-900">{isReturn ? "Estimated Fare (both journeys)" : "Estimated Fare"}</dt>
+                        <dt className="text-lg font-semibold text-stone-900">{isReturn ? c.t("booking_summary_fare_return") : c.t("booking_summary_fare")}</dt>
                         <dd className="text-right text-2xl font-semibold text-stone-900 tabular-nums">£{selectedPrice.toFixed(2)}</dd>
                       </div>
                     </dl>
@@ -1975,7 +1987,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       }}
                       className="tl-btn tl-btn-primary w-full"
                     >
-                      <span>Continue Booking Details</span>
+                      <span>{c.t("booking_continue_button")}</span>
                       <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                     </button>
                   </div>
@@ -1996,23 +2008,23 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           <span className="shrink-0 font-semibold tabular-nums">£{selectedPrice.toFixed(2)}</span>
                         </div>
                         <div className="mt-1 text-xs text-stone-600">
-                          {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km) • ~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins • {selectedVehicle} Class
+                          {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km) • ~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins • {fillText(c.t("booking_vehicle_class_text"), { vehicle: selectedVehicle ?? "" })}
                         </div>
                         <div className="mt-2 space-y-0.5 text-xs text-stone-700">
-                          <div>{isReturn ? "Outbound: " : ""}{formatDate(rideDate)} at {rideTime}</div>
-                          {isReturn && <div>Return: {formatDate(returnDate)} at {returnTime}</div>}
+                          <div>{isReturn ? `${c.t("booking_details_outbound_prefix")} ` : ""}{dateAt(formatDate(rideDate), rideTime)}</div>
+                          {isReturn && <div>{c.t("booking_details_return_prefix")} {dateAt(formatDate(returnDate), returnTime)}</div>}
                         </div>
                       </div>
                     )}
 
-                    <h3 className="tl-h3">Contact Information</h3>
+                    <h3 className="tl-h3">{c.t("booking_details_heading")}</h3>
 
                     <div className="space-y-5">
                       <label className="block">
-                        <span className="tl-label">Passenger full name</span>
+                        <span className="tl-label">{c.t("booking_name_label")}</span>
                         <input
                           type="text"
-                          placeholder="John Doe"
+                          placeholder={c.t("booking_name_placeholder")}
                           value={passengerName}
                           onChange={(e) => setPassengerName(e.target.value)}
                           className="tl-input"
@@ -2022,10 +2034,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <label className="block min-w-0">
-                          <span className="tl-label">Passenger email</span>
+                          <span className="tl-label">{c.t("booking_email_label")}</span>
                           <input
                             type="email"
-                            placeholder="johndoe@example.com"
+                            placeholder={c.t("booking_email_placeholder")}
                             value={passengerEmail}
                             onChange={(e) => setPassengerEmail(e.target.value)}
                             className="tl-input"
@@ -2034,10 +2046,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </label>
 
                         <label className="block min-w-0">
-                          <span className="tl-label">Mobile phone (WhatsApp ready)</span>
+                          <span className="tl-label">{c.t("booking_phone_label")}</span>
                           <input
                             type="tel"
-                            placeholder="e.g. 0121 714 0876"
+                            placeholder={c.t("booking_phone_placeholder")}
                             value={passengerPhone}
                             onChange={(e) => setPassengerPhone(e.target.value)}
                             className="tl-input"
@@ -2046,10 +2058,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </label>
 
                         <label className="block min-w-0">
-                          <span className="tl-label">Alternate phone (optional)</span>
+                          <span className="tl-label">{c.t("booking_alt_phone_label")}</span>
                           <input
                             type="tel"
-                            placeholder="e.g. 0121 714 0876"
+                            placeholder={c.t("booking_alt_phone_placeholder")}
                             value={passengerAlternatePhone}
                             onChange={(e) => setPassengerAlternatePhone(e.target.value)}
                             className="tl-input"
@@ -2059,7 +2071,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                       <div className="grid grid-cols-2 sm:grid-cols-3 items-end gap-5">
                         <label className="block min-w-0">
-                          <span className="tl-label">Passengers</span>
+                          <span className="tl-label">{c.t("booking_passengers_label")}</span>
                           <select
                             value={passengerCount}
                             onChange={(e) => setPassengerCount(Number(e.target.value))}
@@ -2072,7 +2084,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </label>
 
                         <label className="block min-w-0">
-                          <span className="tl-label">Bags / luggage</span>
+                          <span className="tl-label">{c.t("booking_luggage_label")}</span>
                           <select
                             value={luggageCount}
                             onChange={(e) => setLuggageCount(Number(e.target.value))}
@@ -2085,10 +2097,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </label>
 
                         <label className="col-span-2 block min-w-0 sm:col-span-1">
-                          <span className="tl-label">Flight no (optional)</span>
+                          <span className="tl-label">{c.t("booking_flight_label")}</span>
                           <input
                             type="text"
-                            placeholder="e.g. EK37"
+                            placeholder={c.t("booking_flight_placeholder")}
                             value={flightNumber}
                             onChange={(e) => setFlightNumber(e.target.value)}
                             className="tl-input"
@@ -2097,10 +2109,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                         {isReturn && (
                           <label className="col-span-2 block min-w-0 sm:col-span-3">
-                            <span className="tl-label">Return flight no (optional)</span>
+                            <span className="tl-label">{c.t("booking_return_flight_label")}</span>
                             <input
                               type="text"
-                              placeholder="Flight you arrive on for the return journey, e.g. EK38"
+                              placeholder={c.t("booking_return_flight_placeholder")}
                               value={returnFlightNumber}
                               onChange={(e) => setReturnFlightNumber(e.target.value)}
                               className="tl-input"
@@ -2118,13 +2130,13 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     onClick={() => setCurrentStep(1)}
                     className="tl-btn tl-btn-outline sm:flex-1"
                   >
-                    Back to Rates
+                    {c.t("booking_back_to_rates")}
                   </button>
                   <button
                     type="submit"
                     className="tl-btn tl-btn-primary sm:flex-1"
                   >
-                    Proceed to Payment
+                    {c.t("booking_proceed_payment")}
                   </button>
                 </div>
               </form>
@@ -2137,9 +2149,9 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                   <div className="space-y-8">
                     <div className="border-b border-stone-200 pb-6">
                       <div className="flex items-end justify-between gap-6">
-                        <h3 className="tl-h3">Secure Transaction Checkout</h3>
+                        <h3 className="tl-h3">{c.t("booking_checkout_heading")}</h3>
                         <div className="shrink-0 text-right">
-                          <span className="block text-xs text-stone-500">Total Payable:</span>
+                          <span className="block text-xs text-stone-500">{c.t("booking_total_payable")}</span>
                           <span className="text-2xl font-semibold text-stone-900 tabular-nums">£{finalPayablePrice.toFixed(2)}</span>
                         </div>
                       </div>
@@ -2147,11 +2159,11 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       {isReturn && (
                         <dl className="mt-5 divide-y divide-stone-200 border-t border-stone-200 text-sm">
                           <div className="flex items-baseline justify-between gap-6 py-3">
-                            <dt className="text-stone-600">Outbound, {formatDate(rideDate)} at {rideTime}</dt>
+                            <dt className="text-stone-600">{c.t("booking_checkout_outbound")}, {dateAt(formatDate(rideDate), rideTime)}</dt>
                             <dd className="text-right text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
                           </div>
                           <div className="flex items-baseline justify-between gap-6 py-3">
-                            <dt className="text-stone-600">Return, {formatDate(returnDate)} at {returnTime}</dt>
+                            <dt className="text-stone-600">{c.t("booking_checkout_return")}, {dateAt(formatDate(returnDate), returnTime)}</dt>
                             <dd className="text-right text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
                           </div>
                         </dl>
@@ -2161,15 +2173,15 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       {appliedPromo && (
                         <dl className="mt-5 divide-y divide-stone-200 border-t border-stone-200 text-sm">
                           <div className="flex items-baseline justify-between gap-6 py-3">
-                            <dt className="text-stone-600">Standard Fare:</dt>
+                            <dt className="text-stone-600">{c.t("booking_promo_standard")}</dt>
                             <dd className="text-right text-stone-500 line-through tabular-nums">£{originalBasePrice.toFixed(2)}</dd>
                           </div>
                           <div className="flex items-baseline justify-between gap-6 py-3">
-                            <dt className="text-stone-600">Promo Discount ({appliedPromo.code}):</dt>
+                            <dt className="text-stone-600">{c.t("booking_promo_discount")} ({appliedPromo.code}):</dt>
                             <dd className="text-right font-medium text-brand-700 tabular-nums">-£{promoDiscountAmount.toFixed(2)}</dd>
                           </div>
                           <div className="flex items-baseline justify-between gap-6 pt-3 text-lg font-semibold text-stone-900">
-                            <dt>Final Amount:</dt>
+                            <dt>{c.t("booking_promo_final")}</dt>
                             <dd className="text-right tabular-nums">£{finalPayablePrice.toFixed(2)}</dd>
                           </div>
                         </dl>
@@ -2180,7 +2192,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     <div className="space-y-3">
                       <div>
                         <label className="tl-label">
-                          Have a coupon code or voucher?
+                          {c.t("booking_promo_label")}
                         </label>
                         <div className="flex flex-col gap-3 sm:flex-row">
                           <input
@@ -2190,7 +2202,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                               setPromoInput(e.target.value.toUpperCase());
                               setPromoError("");
                             }}
-                            placeholder="ENTER COUPON CODE (e.g. LUXURY10)"
+                            placeholder={c.t("booking_promo_placeholder")}
                             disabled={!!appliedPromo || promoLoading}
                             aria-label="Coupon code"
                             className="tl-input min-w-0 uppercase tracking-wider placeholder:tracking-normal disabled:bg-stone-100 disabled:text-stone-500 sm:flex-1"
@@ -2201,7 +2213,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                               onClick={handleRemovePromo}
                               className="tl-btn tl-btn-outline shrink-0"
                             >
-                              Remove
+                              {c.t("booking_promo_remove")}
                             </button>
                           ) : (
                             <button
@@ -2213,7 +2225,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                               {promoLoading ? (
                                 <div className="w-4 h-4 border-2 border-stone-900 border-t-transparent rounded-full animate-spin" />
                               ) : null}
-                              <span>Apply</span>
+                              <span>{c.t("booking_promo_apply")}</span>
                             </button>
                           )}
                         </div>
@@ -2247,7 +2259,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         }`}
                       >
                         <ShieldCheck className="w-5 h-5 shrink-0 text-brand-700" strokeWidth={1.5} />
-                        <span>Mollie Online</span>
+                        <span>{c.t("booking_pay_online_option")}</span>
                       </button>
                       <button
                         type="button"
@@ -2260,7 +2272,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         }`}
                       >
                         <Coins className="w-5 h-5 shrink-0 text-brand-700" strokeWidth={1.5} />
-                        <span>Pay Later / Cash</span>
+                        <span>{c.t("booking_pay_later_option")}</span>
                       </button>
                     </div>
 
@@ -2270,39 +2282,37 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         <div className="space-y-3 border-l-2 border-brand-700 bg-brand-50 px-4 py-4 text-stone-800">
                           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                             <span className="text-lg font-semibold tracking-wide text-stone-900">
-                              mollie
+                              {c.t("booking_mollie_name")}
                             </span>
                             <span className="border-l border-stone-300 pl-3 text-xs text-stone-600">
-                              Official Gateway
+                              {c.t("booking_mollie_badge")}
                             </span>
                           </div>
 
                           <p className="text-sm leading-relaxed text-stone-700">
-                            Pay safely via <strong className="font-semibold text-stone-900">Mollie</strong> supporting <strong className="font-semibold text-stone-900">iDEAL, Visa, Mastercard, Bancontact, Klarna, Apple Pay &amp; PayPal</strong>.
+                            {c.t("booking_mollie_text_before")} <strong className="font-semibold text-stone-900">{c.t("booking_mollie_text_provider")}</strong> {c.t("booking_mollie_text_middle")} <strong className="font-semibold text-stone-900">{c.t("booking_mollie_text_methods")}</strong>.
                           </p>
 
                           {/* Supported payment badges */}
                           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-stone-700">
-                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">iDEAL</span>
-                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Visa / MC</span>
-                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Bancontact</span>
-                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Apple Pay</span>
-                            <span className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">Klarna</span>
+                            {c.lines("booking_mollie_methods").map((method, index) => (
+                              <span key={index} className="rounded-sm border border-stone-200 bg-white px-2.5 py-1">{method}</span>
+                            ))}
                           </div>
                         </div>
 
                         {/* Billing address: required by Klarna and used for card checks */}
                         <fieldset className="space-y-5">
-                          <legend className="tl-h3">Billing address</legend>
+                          <legend className="tl-h3">{c.t("booking_billing_heading")}</legend>
                           <p className="text-sm leading-relaxed text-stone-500">
-                            The address your card or Klarna account is registered to. It is needed to offer Klarna at checkout.
+                            {c.t("booking_billing_intro")}
                           </p>
                           <label className="block">
-                            <span className="tl-label">Street and house number</span>
+                            <span className="tl-label">{c.t("booking_billing_street_label")}</span>
                             <input
                               type="text"
                               autoComplete="billing address-line1"
-                              placeholder="e.g. 12 Station Road"
+                              placeholder={c.t("booking_billing_street_placeholder")}
                               value={billingStreet}
                               onChange={(e) => { setBillingStreet(e.target.value); setBillingError(""); }}
                               className="tl-input"
@@ -2310,29 +2320,29 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                             <label className="block min-w-0">
-                              <span className="tl-label">Town or city</span>
+                              <span className="tl-label">{c.t("booking_billing_city_label")}</span>
                               <input
                                 type="text"
                                 autoComplete="billing address-level2"
-                                placeholder="e.g. Solihull"
+                                placeholder={c.t("booking_billing_city_placeholder")}
                                 value={billingCity}
                                 onChange={(e) => { setBillingCity(e.target.value); setBillingError(""); }}
                                 className="tl-input"
                               />
                             </label>
                             <label className="block min-w-0">
-                              <span className="tl-label">Postcode</span>
+                              <span className="tl-label">{c.t("booking_billing_postcode_label")}</span>
                               <input
                                 type="text"
                                 autoComplete="billing postal-code"
-                                placeholder="e.g. B90 3AA"
+                                placeholder={c.t("booking_billing_postcode_placeholder")}
                                 value={billingPostcode}
                                 onChange={(e) => { setBillingPostcode(e.target.value.toUpperCase()); setBillingError(""); }}
                                 className="tl-input uppercase placeholder:normal-case"
                               />
                             </label>
                             <label className="block min-w-0">
-                              <span className="tl-label">Country</span>
+                              <span className="tl-label">{c.t("booking_billing_country_label")}</span>
                               <select
                                 autoComplete="billing country"
                                 value={billingCountry}
@@ -2355,7 +2365,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                         <div className="flex items-start gap-2 text-sm text-stone-500">
                           <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" strokeWidth={1.5} />
-                          <span>Protected by Mollie 256-Bit SSL Bank Grade Encryption.</span>
+                          <span>{c.t("booking_mollie_security_note")}</span>
                         </div>
 
                         <button
@@ -2367,10 +2377,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           {processingPayment ? (
                             <>
                               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                              <span>Redirecting to Mollie Checkout...</span>
+                              <span>{c.t("booking_mollie_redirecting")}</span>
                             </>
                           ) : (
-                            <span>Pay £{selectedPrice.toFixed(2)} with Mollie</span>
+                            <span>{fillText(c.t("booking_mollie_pay_button"), { price: selectedPrice.toFixed(2) })}</span>
                           )}
                         </button>
                       </div>
@@ -2379,14 +2389,14 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         <div className="flex items-start gap-3 border-l-2 border-brand-700 bg-brand-50 px-4 py-4 text-stone-800">
                           <Coins className="mt-0.5 h-5 w-5 shrink-0 text-brand-700" strokeWidth={1.5} />
                           <p className="text-sm leading-relaxed">
-                            Secure your booking now and pay the driver directly in cash upon arrival.
+                            {c.t("booking_pay_later_text")}
                           </p>
                         </div>
                         <button
                           onClick={processCheckoutPayment}
                           className="tl-btn tl-btn-primary w-full"
                         >
-                          Confirm Booking (Pay Later)
+                          {c.t("booking_pay_later_button")}
                         </button>
                       </div>
                     )}
@@ -2397,7 +2407,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                   onClick={() => setCurrentStep(2)}
                   className="tl-btn tl-btn-outline w-full"
                 >
-                  Back to schedule
+                  {c.t("booking_back_to_schedule")}
                 </button>
               </div>
             )}
@@ -2409,9 +2419,9 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                   <Check className="h-6 w-6 text-brand-700" strokeWidth={1.5} />
 
                   <div className="mt-3 space-y-2">
-                    <h3 className="text-2xl font-semibold leading-snug text-stone-900">Chauffeur Reserved Successfully!</h3>
+                    <h3 className="text-2xl font-semibold leading-snug text-stone-900">{c.t("booking_confirm_heading")}</h3>
                     <p className="max-w-md text-base leading-relaxed text-stone-700">
-                      Your luxury airport transfer is secured. A transaction receipt and chauffeur schedule has been dispatched.
+                      {c.t("booking_confirm_text")}
                     </p>
                   </div>
                 </div>
@@ -2419,38 +2429,38 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                 {/* Booking receipt details summary */}
                 <dl className="divide-y divide-stone-200 border-y border-stone-200 text-sm">
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">Reservation ID:</dt>
+                    <dt className="shrink-0 text-stone-600">{c.t("booking_receipt_id")}</dt>
                     <dd className="min-w-0 break-words text-right font-semibold text-brand-800 tabular-nums">{completedBookingId}</dd>
                   </div>
 
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">Passenger:</dt>
+                    <dt className="shrink-0 text-stone-600">{c.t("booking_receipt_passenger")}</dt>
                     <dd className="min-w-0 break-words text-right text-stone-900">{receipt.passengerName}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">Route:</dt>
+                    <dt className="shrink-0 text-stone-600">{c.t("booking_receipt_route")}</dt>
                     <dd className="min-w-0 break-words text-right text-stone-900">{receipt.pickup} → {receipt.dropoff}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">Distance:</dt>
-                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{receipt.miles.toFixed(1)} mi ({(receipt.miles * 1.60934).toFixed(1)} km){receipt.returnJourney ? " each way" : ""}</dd>
+                    <dt className="shrink-0 text-stone-600">{c.t("booking_receipt_distance")}</dt>
+                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{receipt.miles.toFixed(1)} mi ({(receipt.miles * 1.60934).toFixed(1)} km){receipt.returnJourney ? ` ${c.t("booking_receipt_each_way")}` : ""}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">{receipt.returnJourney ? "Outbound:" : "Date & Time:"}</dt>
-                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{formatDate(receipt.date)} at {receipt.time}</dd>
+                    <dt className="shrink-0 text-stone-600">{receipt.returnJourney ? c.t("booking_receipt_outbound") : c.t("booking_receipt_date")}</dt>
+                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{dateAt(formatDate(receipt.date), receipt.time)}</dd>
                   </div>
                   {receipt.returnJourney && (
                     <div className="flex items-baseline justify-between gap-6 py-3">
-                      <dt className="shrink-0 text-stone-600">Return:</dt>
-                      <dd className="min-w-0 text-right text-stone-900 tabular-nums">{formatDate(receipt.returnDate)} at {receipt.returnTime}</dd>
+                      <dt className="shrink-0 text-stone-600">{c.t("booking_receipt_return")}</dt>
+                      <dd className="min-w-0 text-right text-stone-900 tabular-nums">{dateAt(formatDate(receipt.returnDate), receipt.returnTime)}</dd>
                     </div>
                   )}
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">Vehicle:</dt>
-                    <dd className="min-w-0 text-right text-stone-900">{receipt.vehicle} Class</dd>
+                    <dt className="shrink-0 text-stone-600">{c.t("booking_receipt_vehicle")}</dt>
+                    <dd className="min-w-0 text-right text-stone-900">{fillText(c.t("booking_vehicle_class_text"), { vehicle: receipt.vehicle ?? "" })}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-4 text-lg font-semibold text-stone-900">
-                    <dt className="shrink-0">Total Fare:</dt>
+                    <dt className="shrink-0">{c.t("booking_receipt_total")}</dt>
                     <dd className="min-w-0 text-right"><span className="tabular-nums">£{completedBookingPrice.toFixed(2)}</span> <span className="text-sm font-normal text-stone-600">({paymentMethod})</span></dd>
                   </div>
                 </dl>
@@ -2458,13 +2468,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                 {/* Immediate WhatsApp link */}
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <a
-                    href={`https://wa.me/441217140876?text=Hi%20Travelluxx!%20My%20booking%20is%20submitted.%20ID:%20${completedBookingId}%20from%20${encodeURIComponent(receipt.pickup || "")}%20to%20${encodeURIComponent(receipt.dropoff || "")}.%20Total%20Price:%20£${completedBookingPrice}`}
+                    href={`https://wa.me/${String(whatsappNum).replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillText(c.t("booking_whatsapp_message"), {
+                      id: completedBookingId,
+                      pickup: receipt.pickup || "",
+                      dropoff: receipt.dropoff || "",
+                      price: completedBookingPrice,
+                    }))}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="tl-btn tl-btn-primary sm:flex-1"
                   >
                     <Phone className="w-5 h-5" strokeWidth={1.5} />
-                    <span>Open dispatch in WhatsApp</span>
+                    <span>{c.t("booking_whatsapp_button")}</span>
                   </a>
 
                   <button
@@ -2484,7 +2499,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                     }}
                     className="tl-btn tl-btn-outline sm:flex-1"
                   >
-                    Calculate another route
+                    {c.t("booking_new_route_button")}
                   </button>
                 </div>
               </div>
@@ -2515,18 +2530,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
               
               {/* Overlay guides: Left */}
               <div className="absolute top-3 left-3 z-10 rounded-sm border border-stone-200 bg-white px-3 py-2 text-xs text-stone-700">
-                <span>Interactive Route Mapping</span>
+                <span>{c.t("booking_map_badge")}</span>
               </div>
 
               {/* Bottom-Left Map Legend Card matching the user's screenshot exactly */}
               <div className="absolute bottom-3 left-3 z-10 flex items-center gap-4 rounded-sm border border-stone-200 bg-white px-3 py-2 text-xs text-stone-700">
                 <div className="flex items-center gap-2">
                   <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand-700"></span>
-                  <span>Pickup</span>
+                  <span>{c.t("booking_map_legend_pickup")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="inline-block h-2.5 w-2.5 bg-stone-900"></span>
-                  <span>Dropoff</span>
+                  <span>{c.t("booking_map_legend_dropoff")}</span>
                 </div>
               </div>
             </div>

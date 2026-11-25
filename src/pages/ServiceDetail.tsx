@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { hasOwnImage } from "../components/areas/areaShared";
 import { useParams, Link, useNavigate } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -14,6 +15,7 @@ import {
   Plus
 } from "lucide-react";
 import { normalizeRichHtml } from "../utils/richText";
+import { useContent } from "../content/useContent";
 
 const DEFAULT_SERVICE_FAQS = [
   {
@@ -73,6 +75,8 @@ export default function ServiceDetail({
   const service = initialService || allServices.find((s: any) => s.slug === slug || s.id === slug);
   const isLoading = !initialService && ctxLoading;
   const notFound = !isLoading && !service;
+  // Site-wide defaults for every service page (Site Content tab). A service's own value wins.
+  const c = useContent(settings);
 
   useEffect(() => {
     // Scroll to top on slug change
@@ -143,7 +147,7 @@ export default function ServiceDetail({
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-brand-950 text-white">
         <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-brand-300 border-t-transparent"></div>
-        <p className="text-sm text-stone-400">Loading service details...</p>
+        <p className="text-sm text-stone-400">{c.t("service_detail_loading_text")}</p>
       </div>
     );
   }
@@ -153,13 +157,13 @@ export default function ServiceDetail({
       <div className="flex min-h-screen flex-col bg-white">
         <Navbar onScrollTo={() => {}} />
         <main className="flex flex-grow flex-col items-center justify-center px-5 py-24 text-center sm:px-8 lg:py-32">
-          <span className="tl-eyebrow">404 NOT FOUND</span>
-          <h1 className="tl-h2 mt-4">Service Not Found</h1>
+          <span className="tl-eyebrow">{c.t("service_detail_404_badge")}</span>
+          <h1 className="tl-h2 mt-4">{c.t("service_detail_404_title")}</h1>
           <p className="tl-lead mt-5 max-w-md">
-            The service you are looking for may have been moved, renamed, or is currently unavailable.
+            {c.t("service_detail_404_text")}
           </p>
-          <Link to="/services" className="tl-btn tl-btn-primary mt-8">
-            <span>Browse All Services</span>
+          <Link to={c.t("service_detail_404_btn_url")} className="tl-btn tl-btn-primary mt-8">
+            <span>{c.t("service_detail_404_btn_text")}</span>
             <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
           </Link>
         </main>
@@ -168,99 +172,45 @@ export default function ServiceDetail({
     );
   }
 
-  const heroBg =
-    service.heroImage ||
-    service.image ||
-    "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=2000&q=85";
+  // The CMS's stock placeholder photo (a small blue hatchback) counts as "no image".
+  const heroBg = hasOwnImage(service.heroImage)
+    ? service.heroImage
+    : hasOwnImage(service.image)
+      ? service.image
+      : c.t("service_detail_hero_image");
 
   const features = Array.isArray(service.features) && service.features.length > 0
     ? service.features
-    : [
-        "Reliable & punctual service",
-        "Professional licensed chauffeurs",
-        "Immaculate luxury vehicles",
-        "Fixed & transparent pricing",
-        "24/7 dedicated support"
-      ];
+    : c.lines("service_detail_features");
 
   const whatsappNumber = settings?.whatsapp_number || "441217140876";
   const formattedPhone = settings?.whatsapp_number
     ? `+${settings.whatsapp_number}`
     : "+44 121 714 0876";
 
-  const defaultPerks = [
-    "24/7 Availability & Instant Confirmation",
-    "Fixed Price Guarantee — No Hidden Fees",
-    "Licensed, DBS-Checked Executive Chauffeurs",
-    "Immaculate Mercedes Fleet with Free Wi-Fi"
-  ];
+  // Fills the placeholders of the site-wide default texts.
+  const fill = (text: string) =>
+    text.split("{service}").join(service.title || "").split("{phone}").join(formattedPhone);
+
+  const defaultPerks = c.lines("service_detail_sidebar_perks");
   const sidebarPerks = Array.isArray(service.sidebarPerks) && service.sidebarPerks.length > 0
     ? service.sidebarPerks
     : defaultPerks;
 
-  const defaultWhyChoose = [
-    {
-      icon: "UserCheck",
-      title: "Professional & Experienced Drivers",
-      desc: "Skilled, courteous and fully licensed.",
-    },
-    {
-      icon: "Car",
-      title: "Comfortable Vehicles",
-      desc: "Modern, clean and well-maintained fleet.",
-    },
-    {
-      icon: "Tag",
-      title: "Fixed & Transparent Pricing",
-      desc: "No hidden charges, no surprises.",
-    },
-    {
-      icon: "Clock",
-      title: "24/7 Booking Support",
-      desc: "We're always here to help you.",
-    },
-    {
-      icon: "MapPin",
-      title: "Airport & Nationwide Coverage",
-      desc: "All major airports and locations across the UK.",
-    },
-    {
-      icon: "ShieldCheck",
-      title: "Punctual & Reliable Service",
-      desc: "On time, every time.",
-    },
-  ];
+  const defaultWhyChoose = [1, 2, 3, 4, 5, 6].map((n) => ({
+    title: c.t(`service_detail_why_choose_${n}_title`),
+    desc: c.t(`service_detail_why_choose_${n}_text`),
+  }));
 
   const whyChooseList = Array.isArray(service.whyChooseItems) && service.whyChooseItems.length > 0
     ? service.whyChooseItems
     : defaultWhyChoose;
 
-  const defaultSteps = [
-    {
-      num: "01",
-      icon: "CalendarDays",
-      title: "Book Your Journey",
-      desc: "Enter your pickup, destination and journey details.",
-    },
-    {
-      num: "02",
-      icon: "CheckCircle2",
-      title: "Get Your Confirmation",
-      desc: "Receive your booking confirmation with all journey details.",
-    },
-    {
-      num: "03",
-      icon: "UserCheck",
-      title: "Meet Your Driver",
-      desc: "Your professional driver arrives at the agreed pickup location.",
-    },
-    {
-      num: "04",
-      icon: "Car",
-      title: "Enjoy Your Journey",
-      desc: "Sit back, relax and travel comfortably to your destination.",
-    },
-  ];
+  const defaultSteps = [1, 2, 3, 4].map((n) => ({
+    num: `0${n}`,
+    title: c.t(`service_detail_step_${n}_title`),
+    desc: c.t(`service_detail_step_${n}_text`),
+  }));
 
   const stepsList = Array.isArray(service.howItWorksSteps) && service.howItWorksSteps.length > 0
     ? service.howItWorksSteps
@@ -293,14 +243,14 @@ export default function ServiceDetail({
               className="-my-3 flex items-center gap-x-2.5 text-sm text-stone-400"
             >
               <Link to="/" className="shrink-0 py-3 transition-colors duration-200 hover:text-white">
-                Home
+                {c.t("service_detail_breadcrumb_home")}
               </Link>
               <span aria-hidden="true">/</span>
               <Link
                 to="/services"
                 className="shrink-0 py-3 transition-colors duration-200 hover:text-white"
               >
-                Services
+                {c.t("service_detail_breadcrumb_services")}
               </Link>
               <span aria-hidden="true">/</span>
               <span aria-current="page" className="min-w-0 truncate text-stone-300">
@@ -310,7 +260,7 @@ export default function ServiceDetail({
 
             <div className="mt-10 max-w-3xl">
               <span data-reveal className="tl-eyebrow tl-eyebrow-light">
-                {service.heroBadge || "EXECUTIVE CHAUFFEUR SERVICE"}
+                {service.heroBadge || c.t("service_detail_hero_badge")}
               </span>
 
               <h1
@@ -335,8 +285,8 @@ export default function ServiceDetail({
                 data-reveal-delay="0.3"
                 className="mt-9 flex flex-wrap items-center gap-3"
               >
-                <a href={service.heroBtn1Url || "/#calculator"} className="tl-btn tl-btn-light">
-                  <span>{service.heroBtn1Text || "Book This Service"}</span>
+                <a href={service.heroBtn1Url || c.t("service_detail_hero_btn1_url")} className="tl-btn tl-btn-light">
+                  <span>{service.heroBtn1Text || c.t("service_detail_hero_btn1_text")}</span>
                   <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </a>
 
@@ -344,7 +294,7 @@ export default function ServiceDetail({
                   href={
                     service.heroBtn2Url ||
                     `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                      `Hello TravelLuxx, I would like to inquire about your ${service.title} service.`
+                      fill(c.t("service_detail_hero_whatsapp_message"))
                     )}`
                   }
                   target="_blank"
@@ -352,7 +302,7 @@ export default function ServiceDetail({
                   className="tl-btn tl-btn-outline-light"
                 >
                   <MessageSquare className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-                  <span>{service.heroBtn2Text || "WhatsApp Inquiry"}</span>
+                  <span>{service.heroBtn2Text || c.t("service_detail_hero_btn2_text")}</span>
                 </a>
               </div>
             </div>
@@ -368,14 +318,14 @@ export default function ServiceDetail({
               {/* Left Main Column */}
               <div className="min-w-0 space-y-12 lg:col-span-7 xl:col-span-8">
                 {/* Featured Service Image */}
-                {service.image && (
+                {hasOwnImage(service.image) && (
                   <div
                     data-reveal="image"
                     className="aspect-[4/3] overflow-hidden bg-stone-100 sm:aspect-[16/9]"
                   >
                     <img
                       src={service.image}
-                      alt={service.imageAlt || `${service.title} - Executive Chauffeur Services UK`}
+                      alt={service.imageAlt || fill(c.t("service_detail_image_alt"))}
                       loading="lazy"
                       decoding="async"
                       className="h-full w-full object-cover"
@@ -384,13 +334,13 @@ export default function ServiceDetail({
                 )}
 
                 {/* Key Highlights / Features Box */}
-                {service.highlightsEnabled !== false && features.length > 0 && (
+                {service.highlightsEnabled !== false && c.on("service_detail_highlights_enabled") && features.length > 0 && (
                   <div data-reveal className="tl-card p-6 sm:p-8">
                     <h3 className="tl-eyebrow">
-                      {service.highlightsBadge || "KEY HIGHLIGHTS"}
+                      {service.highlightsBadge || c.t("service_detail_highlights_badge")}
                     </h3>
                     <h4 className="mt-3 text-xl leading-snug font-semibold text-stone-900 sm:text-2xl">
-                      {service.highlightsTitle || "What Sets This Service Apart"}
+                      {service.highlightsTitle || c.t("service_detail_highlights_title")}
                     </h4>
                     <div className="mt-6 grid grid-cols-1 gap-x-10 border-b border-stone-200 sm:grid-cols-2">
                       {features.map((feat: string, idx: number) => (
@@ -427,27 +377,27 @@ export default function ServiceDetail({
                 </div>
 
                 {/* Trust & Guarantee Banner */}
-                {service.guaranteeEnabled !== false && (
+                {service.guaranteeEnabled !== false && c.on("service_detail_guarantee_enabled") && (
                   <div
                     data-reveal="fade"
                     className="tl-dark flex flex-col gap-8 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
                   >
                     <div>
                       <span className="tl-eyebrow tl-eyebrow-light">
-                        {service.guaranteeBadge || "THE TRAVELLUXX STANDARD"}
+                        {service.guaranteeBadge || c.t("service_detail_guarantee_badge")}
                       </span>
                       <h3 className="mt-3 text-xl leading-snug font-semibold text-white sm:text-2xl">
-                        {service.guaranteeTitle || `Ready to Book Your ${service.title}?`}
+                        {service.guaranteeTitle || fill(c.t("service_detail_guarantee_title"))}
                       </h3>
                       <p className="mt-2 max-w-md text-sm leading-relaxed text-stone-300">
-                        {service.guaranteeSubtitle || "Get an instant fixed fare in seconds with our online journey calculator."}
+                        {service.guaranteeSubtitle || c.t("service_detail_guarantee_subtitle")}
                       </p>
                     </div>
                     <a
-                      href={service.guaranteeBtnUrl || "/#calculator"}
+                      href={service.guaranteeBtnUrl || c.t("service_detail_guarantee_btn_url")}
                       className="tl-btn tl-btn-light shrink-0"
                     >
-                      {service.guaranteeBtnText || "Instant Quote"}
+                      {service.guaranteeBtnText || c.t("service_detail_guarantee_btn_text")}
                     </a>
                   </div>
                 )}
@@ -461,14 +411,14 @@ export default function ServiceDetail({
                 <div className="lg:flex-1">
                   <div className="tl-card p-6 sm:p-8 lg:sticky lg:top-28">
                     <span className="tl-eyebrow">
-                      {service.sidebarBadge || "RESERVE YOUR RIDE"}
+                      {service.sidebarBadge || c.t("service_detail_sidebar_badge")}
                     </span>
                     <h3 className="mt-3 text-xl leading-snug font-semibold text-stone-900">
-                      {service.sidebarTitle || "Book Online Instantly"}
+                      {service.sidebarTitle || c.t("service_detail_sidebar_title")}
                     </h3>
                     {service.priceText && (
                       <div className="mt-3 flex items-baseline gap-2">
-                        <span className="text-sm text-stone-500">Rates:</span>
+                        <span className="text-sm text-stone-500">{c.t("service_detail_rates_label")}</span>
                         <span className="text-lg font-semibold text-stone-900">
                           {service.priceText}
                         </span>
@@ -491,29 +441,29 @@ export default function ServiceDetail({
 
                     <div className="mt-6 space-y-3">
                       <a
-                        href={service.sidebarBtn1Url || "/#calculator"}
+                        href={service.sidebarBtn1Url || c.t("service_detail_sidebar_btn1_url")}
                         className="tl-btn tl-btn-primary w-full"
                       >
-                        <span>{service.sidebarBtn1Text || "Calculate Fare & Book"}</span>
+                        <span>{service.sidebarBtn1Text || c.t("service_detail_sidebar_btn1_text")}</span>
                         <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                       </a>
 
                       <a
-                        href={service.sidebarBtn2Url || `tel:${formattedPhone}`}
+                        href={service.sidebarBtn2Url || fill(c.t("service_detail_sidebar_btn2_url"))}
                         className="tl-btn tl-btn-outline w-full"
                       >
                         <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-                        <span>{service.sidebarBtn2Text || `Call ${formattedPhone}`}</span>
+                        <span>{service.sidebarBtn2Text || fill(c.t("service_detail_sidebar_btn2_text"))}</span>
                       </a>
                     </div>
                   </div>
                 </div>
 
                 {/* Other Services Navigation List */}
-                {service.showSidebarServices !== false && allServices.length > 0 && (
+                {service.showSidebarServices !== false && c.on("service_detail_all_services_enabled") && allServices.length > 0 && (
                   <div data-reveal className="tl-card p-6 sm:p-8">
                     <h4 className="tl-eyebrow">
-                      ALL OUR SERVICES
+                      {c.t("service_detail_all_services_title")}
                     </h4>
                     <div className="mt-3 divide-y divide-stone-200 border-b border-stone-200">
                       {allServices.map((s) => {
@@ -549,18 +499,18 @@ export default function ServiceDetail({
         {/* ========================================================= */}
         {/* 3. WHY CHOOSE SECTION                                     */}
         {/* ========================================================= */}
-        {service.whyChooseEnabled !== false && (
+        {service.whyChooseEnabled !== false && c.on("service_detail_why_choose_enabled") && (
           <section className="tl-dark tl-section">
             <div className="tl-container">
               <div className="max-w-3xl">
                 <span data-reveal className="tl-eyebrow tl-eyebrow-light">
-                  {service.whyChooseBadge || "WHY CHOOSE TRAVELLUXX"}
+                  {service.whyChooseBadge || c.t("service_detail_why_choose_badge")}
                 </span>
                 <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">
-                  {service.whyChooseTitle || "Your Trusted Travel Partner"}
+                  {service.whyChooseTitle || c.t("service_detail_why_choose_title")}
                 </h2>
                 <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl text-stone-300">
-                  {service.whyChooseSubtitle || "We go the extra mile to ensure every journey is comfortable, safe and hassle-free."}
+                  {service.whyChooseSubtitle || c.t("service_detail_why_choose_subtitle")}
                 </p>
               </div>
 
@@ -593,18 +543,18 @@ export default function ServiceDetail({
         {/* ========================================================= */}
         {/* 4. HOW IT WORKS                                           */}
         {/* ========================================================= */}
-        {service.howItWorksEnabled !== false && (
+        {service.howItWorksEnabled !== false && c.on("service_detail_how_it_works_enabled") && (
           <section className="tl-section bg-ivory">
             <div className="tl-container">
               <div className="max-w-3xl">
                 <span data-reveal className="tl-eyebrow">
-                  {service.howItWorksBadge || "HOW IT WORKS"}
+                  {service.howItWorksBadge || c.t("service_detail_how_it_works_badge")}
                 </span>
                 <h2 data-reveal="lines" className="tl-h2 mt-4">
-                  {service.howItWorksTitle || "Simple Steps to Your Destination"}
+                  {service.howItWorksTitle || c.t("service_detail_how_it_works_title")}
                 </h2>
                 <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
-                  {service.howItWorksSubtitle || "Booking your journey with TravelLuxx is quick and easy. Follow these simple steps and get on your way in no time."}
+                  {service.howItWorksSubtitle || c.t("service_detail_how_it_works_subtitle")}
                 </p>
               </div>
 
@@ -636,19 +586,19 @@ export default function ServiceDetail({
         {/* ========================================================= */}
         {/* 5. SERVICE FAQs ACCORDION                                 */}
         {/* ========================================================= */}
-        {service.faqsEnabled !== false && faqsList.length > 0 && (
+        {service.faqsEnabled !== false && c.on("service_detail_faq_enabled") && faqsList.length > 0 && (
           <section className="tl-section bg-white">
             <div className="tl-container">
               <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
                 <div className="lg:col-span-5">
                   <span data-reveal className="tl-eyebrow">
-                    {service.faqBadge || "FREQUENTLY ASKED QUESTIONS"}
+                    {service.faqBadge || c.t("service_detail_faq_badge")}
                   </span>
                   <h2 data-reveal="lines" className="tl-h2 mt-4">
-                    {service.faqTitle || `Questions About Our ${service?.title || "Chauffeur Service"}`}
+                    {service.faqTitle || fill(c.t("service_detail_faq_title"))}
                   </h2>
                   <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
-                    {service.faqSubtitle || "Find fast answers to common questions about booking, vehicle capacity, and airport meet & greet."}
+                    {service.faqSubtitle || c.t("service_detail_faq_subtitle")}
                   </p>
                 </div>
 

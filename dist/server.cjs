@@ -33,6 +33,7 @@ __export(server_exports, {
 });
 module.exports = __toCommonJS(server_exports);
 var import_express = __toESM(require("express"), 1);
+var import_crypto = __toESM(require("crypto"), 1);
 var import_path = __toESM(require("path"), 1);
 var import_fs = __toESM(require("fs"), 1);
 var import_dotenv = __toESM(require("dotenv"), 1);
@@ -293,6 +294,27 @@ async function connectToDatabase() {
     throw err;
   }
 }
+function readInquiries() {
+  try {
+    if (import_fs.default.existsSync(INQUIRIES_PATH)) {
+      return JSON.parse(import_fs.default.readFileSync(INQUIRIES_PATH, "utf8"));
+    }
+  } catch (err) {
+    console.error("Error reading inquiries.json:", err);
+  }
+  return [];
+}
+function writeInquiries(inquiries) {
+  if (process.env.VERCEL) {
+    console.log("\u2139\uFE0F Skipping writeInquiries to local file on Vercel.");
+    return;
+  }
+  try {
+    import_fs.default.writeFileSync(INQUIRIES_PATH, JSON.stringify(inquiries, null, 2));
+  } catch (err) {
+    console.error("Error writing inquiries.json:", err);
+  }
+}
 function readPages() {
   try {
     if (import_fs.default.existsSync(PAGES_PATH)) {
@@ -454,7 +476,7 @@ async function syncSettingsFromDb() {
       const dbMollie = await SettingModel.findOne({ key: "mollie_api_key" });
       if (dbMollie && dbMollie.value) cachedMollieApiKey = dbMollie.value;
       const dbMenu = await SettingModel.findOne({ key: "menu" });
-      if (dbMenu && Array.isArray(dbMenu.value) && dbMenu.value.length > 0) {
+      if (dbMenu && Array.isArray(dbMenu.value)) {
         cachedMenu = dbMenu.value;
       }
       console.log("\u{1F504} Loaded settings cache from MongoDB!");
@@ -580,26 +602,31 @@ function getCurrentWebsiteSettings() {
   return defaultSettings;
 }
 function getCurrentPricingSettings() {
-  if (cachedPricingSettings) {
-    return cachedPricingSettings;
-  }
-  const defaultPricing = {
-    economy_price_per_mile: 1.5,
-    luxury_price_per_mile: 2,
-    family_price_per_mile: 2.5,
-    minimum_billable_distance: 10,
-    extra_stop_charge: 10,
-    break_time_charge: 0.5
-  };
-  try {
-    if (import_fs.default.existsSync(PRICING_PATH)) {
-      const data = JSON.parse(import_fs.default.readFileSync(PRICING_PATH, "utf8"));
-      cachedPricingSettings = { ...defaultPricing, ...data };
-      return cachedPricingSettings;
+  const num = (...values) => {
+    for (const v of values) {
+      if (v === "" || v === null || v === void 0) continue;
+      const n = Number(v);
+      if (Number.isFinite(n) && n >= 0) return n;
     }
-  } catch (err) {
+    return void 0;
+  };
+  let legacy = cachedPricingSettings || {};
+  if (!cachedPricingSettings) {
+    try {
+      if (import_fs.default.existsSync(PRICING_PATH)) legacy = JSON.parse(import_fs.default.readFileSync(PRICING_PATH, "utf8")) || {};
+    } catch (err) {
+      legacy = {};
+    }
   }
-  return defaultPricing;
+  const ws = getCurrentWebsiteSettings() || {};
+  return {
+    economy_price_per_mile: num(ws.economy_price, legacy.economy_price_per_mile, legacy.Economy?.perMile) ?? 1.5,
+    luxury_price_per_mile: num(ws.luxury_price, legacy.luxury_price_per_mile, legacy.Luxury?.perMile) ?? 2,
+    family_price_per_mile: num(ws.family_price, legacy.family_price_per_mile, legacy.Family?.perMile) ?? 2.5,
+    minimum_billable_distance: num(ws.minimum_distance, legacy.minimum_billable_distance) ?? 10,
+    extra_stop_charge: num(ws.extra_stop_charge, legacy.extra_stop_charge) ?? 10,
+    break_time_charge: num(ws.waiting_charge_per_min, legacy.break_time_charge) ?? 0.5
+  };
 }
 function readSmtpSettings() {
   if (cachedSmtpSettings) {
@@ -866,6 +893,44 @@ async function sendBookingEmails(booking, isConfirmedEmail = false, isStatusChan
     });
   }
 }
+async function sendContactEmails(inquiry) {
+  const ws = getCurrentWebsiteSettings();
+  const smtpSettings = readSmtpSettings();
+  const fromAddress = `"${ws.business_name}" <${smtpSettings.senderAddress || smtpSettings.smtpUser || ws.business_email}>`;
+  const customerHtml = `
+    <div style="font-family: sans-serif; padding: 20px; background: #f8fafc; border-radius: 12px;">
+      <h2>Inquiry Received</h2>
+      <p>Hi ${inquiry.name}, we have received your message and will get back to you under 15 minutes.</p>
+      <p><em>"${inquiry.message}"</em></p>
+    </div>
+  `;
+  const operatorHtml = `
+    <div style="font-family: sans-serif; background: #0f172a; color: #fff; padding: 20px; border-radius: 12px;">
+      <h2>[NEW CONTACT INQUIRY]</h2>
+      <p><strong>Name:</strong> ${inquiry.name} (${inquiry.email}, ${inquiry.phone})</p>
+      <p><strong>Type:</strong> ${inquiry.type}</p>
+      <p><strong>Message:</strong> ${inquiry.message}</p>
+    </div>
+  `;
+  if (inquiry.email) {
+    await sendEmailSafely({
+      from: fromAddress,
+      to: inquiry.email,
+      replyTo: ws.business_email,
+      subject: `We have received your inquiry - ${ws.business_name}`,
+      html: customerHtml
+    });
+  }
+  if (ws.business_email) {
+    await sendEmailSafely({
+      from: fromAddress,
+      to: ws.business_email,
+      replyTo: inquiry.email || ws.business_email,
+      subject: `[New Inquiry] ${inquiry.name} - ${inquiry.type}`,
+      html: operatorHtml
+    });
+  }
+}
 var UK_LOCATIONS = {
   "shirley": { lat: 52.414, lng: -1.815, name: "Shirley, Solihull B90" },
   "solihull": { lat: 52.4135, lng: -1.778, name: "Solihull, West Midlands" },
@@ -971,6 +1036,106 @@ app.use((req, res, next) => {
   next();
 });
 app.use(import_express.default.json({ limit: "50mb" }));
+var adminTokenKey = () => import_crypto.default.createHash("sha256").update(`${process.env.ADMIN_TOKEN_SECRET || ""}|${process.env.ADMIN_PASSWORD || "Travelluxx2026@"}|${MONGODB_URI}`).digest();
+var ADMIN_SESSION_DAYS = 14;
+function issueAdminToken() {
+  const payload = `v1.${Date.now() + ADMIN_SESSION_DAYS * 24 * 60 * 60 * 1e3}`;
+  const sig = import_crypto.default.createHmac("sha256", adminTokenKey()).update(payload).digest("base64url");
+  return `${payload}.${sig}`;
+}
+function isValidAdminToken(token) {
+  if (typeof token !== "string") return false;
+  const parts = token.split(".");
+  if (parts.length !== 3 || parts[0] !== "v1") return false;
+  const expires = Number(parts[1]);
+  if (!Number.isFinite(expires) || expires < Date.now()) return false;
+  const expected = import_crypto.default.createHmac("sha256", adminTokenKey()).update(`${parts[0]}.${parts[1]}`).digest("base64url");
+  const a = Buffer.from(parts[2]);
+  const b = Buffer.from(expected);
+  return a.length === b.length && import_crypto.default.timingSafeEqual(a, b);
+}
+var adminTokenFrom = (req) => {
+  const authHeader = String(req.headers.authorization || "");
+  return authHeader.startsWith("Bearer ") ? authHeader.slice(7) : req.headers["x-admin-token"];
+};
+app.use("/api/admin", (req, res, next) => {
+  if (req.path === "/login") return next();
+  if (isValidAdminToken(adminTokenFrom(req))) return next();
+  return res.status(401).json({ error: "Please log in to the dashboard again." });
+});
+if (!process.env.REVALIDATE_TOKEN) {
+  process.env.REVALIDATE_TOKEN = Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+var NON_CONTENT_ADMIN_ROUTES = /^\/api\/admin\/(login|bookings|promocodes|inquiries|stats|upload|media)/;
+var publishTimer = null;
+var extraPublishPaths = /* @__PURE__ */ new Set();
+var publishRunning = false;
+var publishAgain = false;
+async function publicPaths() {
+  const paths = /* @__PURE__ */ new Set(["/", "/services", "/service-areas", "/blog"]);
+  const add = (prefix, items) => {
+    for (const item of items || []) {
+      if (item && item.slug && item.published !== false && item.status !== "draft") paths.add(`${prefix}${item.slug}`);
+    }
+  };
+  try {
+    if (import_mongoose.default.connection.readyState === 1) {
+      add("/services/", await ServiceModel.find().lean());
+      add("/service-areas/", await ServiceAreaModel.find().lean());
+      add("/", await PageModel.find().lean());
+      add("/blog/", await PostModel.find().lean());
+    } else {
+      add("/services/", readServices());
+      add("/service-areas/", readServiceAreas());
+      add("/", readPages());
+      add("/blog/", readPosts());
+    }
+  } catch (err) {
+    console.warn("[publish] could not list pages:", err?.message);
+  }
+  return Array.from(paths);
+}
+async function publishSite() {
+  if (publishRunning) {
+    publishAgain = true;
+    return;
+  }
+  publishRunning = true;
+  try {
+    const paths = Array.from(/* @__PURE__ */ new Set([...await publicPaths(), ...extraPublishPaths]));
+    extraPublishPaths.clear();
+    const r = await fetch(`http://127.0.0.1:${PORT}/api/revalidate?paths=${encodeURIComponent(JSON.stringify(paths))}`, {
+      method: "POST",
+      headers: { "x-revalidate-token": String(process.env.REVALIDATE_TOKEN) }
+    });
+    const data = await r.json().catch(() => ({}));
+    console.log(`[publish] refreshed ${data?.done?.length ?? 0} pages${data?.failed?.length ? `, failed: ${data.failed.join(", ")}` : ""}`);
+  } catch (err) {
+    console.warn("[publish] refresh failed:", err?.message);
+  } finally {
+    publishRunning = false;
+    if (publishAgain) {
+      publishAgain = false;
+      schedulePublish();
+    }
+  }
+}
+function schedulePublish(extra = []) {
+  for (const p of extra) if (typeof p === "string" && p.startsWith("/")) extraPublishPaths.add(p);
+  if (publishTimer) clearTimeout(publishTimer);
+  publishTimer = setTimeout(() => {
+    publishTimer = null;
+    publishSite();
+  }, 800);
+}
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.path.startsWith("/api/admin/") && !NON_CONTENT_ADMIN_ROUTES.test(req.path)) {
+    res.on("finish", () => {
+      if (res.statusCode < 400) schedulePublish();
+    });
+  }
+  next();
+});
 app.use(import_express.default.urlencoded({ extended: true, limit: "50mb" }));
 app.use("/uploads", import_express.default.static(import_path.default.join(process.cwd(), "uploads")));
 app.use((req, res, next) => {
@@ -980,6 +1145,35 @@ app.use((req, res, next) => {
   if (req.method === "OPTIONS") return res.sendStatus(200);
   next();
 });
+var QUOTE_TTL_MS = 2 * 60 * 60 * 1e3;
+var quoteKey = () => import_crypto.default.createHash("sha256").update(`quote|${process.env.ADMIN_TOKEN_SECRET || ""}|${process.env.ADMIN_PASSWORD || "Travelluxx2026@"}|${MONGODB_URI}`).digest();
+function signQuote(data) {
+  const payload = Buffer.from(JSON.stringify({ p: data.prices, d: data.distanceMiles, e: Date.now() + QUOTE_TTL_MS })).toString("base64url");
+  const sig = import_crypto.default.createHmac("sha256", quoteKey()).update(payload).digest("base64url");
+  return `${payload}.${sig}`;
+}
+function readQuote(token) {
+  if (typeof token !== "string" || !token.includes(".")) return null;
+  const [payload, sig] = token.split(".");
+  const expected = import_crypto.default.createHmac("sha256", quoteKey()).update(payload).digest("base64url");
+  if (!sig || sig.length !== expected.length || !import_crypto.default.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  try {
+    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    if (!data || typeof data.e !== "number" || data.e < Date.now()) return null;
+    return { prices: data.p || {}, distanceMiles: Number(data.d) || 0 };
+  } catch {
+    return null;
+  }
+}
+function priceFromQuote(data) {
+  const quote = readQuote(data?.quoteToken);
+  const vehicle = String(data?.vehicle || "");
+  const oneWay = quote ? Number(quote.prices[vehicle]) : NaN;
+  if (!quote || !Number.isFinite(oneWay) || oneWay <= 0) return null;
+  const isReturn = (data.returnJourney === true || data.returnJourney === "true") && data.returnDate && data.returnTime;
+  return { originalPrice: Math.round(oneWay * (isReturn ? 2 : 1) * 100) / 100, oneWay };
+}
+var QUOTE_EXPIRED_MESSAGE = "Your quote has expired. Please press Calculate Quote again and then complete your booking.";
 app.post("/api/distance", async (req, res) => {
   const { pickup, dropoff, pickupCoords, dropoffCoords, stops, precalculated } = req.body;
   if (!pickup || !dropoff) {
@@ -1040,19 +1234,23 @@ app.post("/api/distance", async (req, res) => {
       }
     }
   }
+  const straightLineMiles = getHaversineDistance(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng);
+  if (Number.isFinite(straightLineMiles) && straightLineMiles > 0) {
+    actualDistanceMiles = Math.max(actualDistanceMiles, straightLineMiles * 1.05);
+  }
   actualDistanceMiles = Number(actualDistanceMiles.toFixed(1));
   const actualDistanceKm = Number((actualDistanceMiles * 1.60934).toFixed(1));
-  const minBillableDist = Number(pricing.minimum_billable_distance || 10);
+  const minBillableDist = Number(pricing.minimum_billable_distance);
   const effectiveDist = Math.max(actualDistanceMiles, minBillableDist);
   const stopCount = Array.isArray(stops) ? stops.length : 0;
-  const stopFee = stopCount * (pricing.extra_stop_charge || 10);
+  const stopFee = stopCount * Number(pricing.extra_stop_charge);
   let totalWaitingMins = 0;
   if (Array.isArray(stops)) {
     stops.forEach((s) => {
       totalWaitingMins += Number(s.waiting || 0);
     });
   }
-  const waitingChargeAmount = totalWaitingMins * (pricing.break_time_charge || 0.5);
+  const waitingChargeAmount = totalWaitingMins * Number(pricing.break_time_charge);
   const prices = {
     Economy: Number((effectiveDist * pricing.economy_price_per_mile + stopFee + waitingChargeAmount).toFixed(2)),
     Luxury: Number((effectiveDist * pricing.luxury_price_per_mile + stopFee + waitingChargeAmount).toFixed(2)),
@@ -1062,6 +1260,7 @@ app.post("/api/distance", async (req, res) => {
     routePoints = generateFallbackRoutePoints(pCoords.lat, pCoords.lng, dCoords.lat, dCoords.lng);
   }
   return res.json({
+    quoteToken: signQuote({ prices, distanceMiles: actualDistanceMiles }),
     distance: actualDistanceMiles,
     distanceMiles: actualDistanceMiles,
     distanceKm: actualDistanceKm,
@@ -1141,12 +1340,14 @@ async function validateAndCalculateCoupon(rawCode, orderAmount, userEmail) {
     if (import_mongoose.default.connection.readyState === 1) {
       userUsedCount = await BookingModel.countDocuments({
         promoCode: promo.code,
-        passengerEmail: normalizedEmail
+        passengerEmail: { $in: [normalizedEmail, String(userEmail || "").trim()] },
+        status: { $ne: "Cancelled" },
+        $or: [{ paymentStatus: "Paid" }, { paymentMethod: { $in: ["Pay Later", "Cash"] } }]
       });
     } else {
       const allBookings = readBookings();
       userUsedCount = allBookings.filter(
-        (b) => b.promoCode && b.promoCode.toUpperCase() === promo.code.toUpperCase() && String(b.passengerEmail || "").toLowerCase().trim() === normalizedEmail
+        (b) => b.promoCode && b.promoCode.toUpperCase() === promo.code.toUpperCase() && String(b.passengerEmail || "").toLowerCase().trim() === normalizedEmail && b.status !== "Cancelled" && (b.paymentStatus === "Paid" || b.paymentMethod === "Pay Later" || b.paymentMethod === "Cash")
       ).length;
     }
     if (userUsedCount >= Number(promo.perUserLimit)) {
@@ -1204,8 +1405,12 @@ app.post("/api/bookings", async (req, res) => {
   try {
     await connectToDatabase();
     const data = req.body;
-    const bookingId = `WLC-2026-${Math.floor(1e3 + Math.random() * 9e3)}`;
-    let originalPrice = Number(data.originalPrice || data.price || 0);
+    const bookingId = `WLC-${(/* @__PURE__ */ new Date()).getFullYear()}-${import_crypto.default.randomBytes(3).toString("hex").toUpperCase()}`;
+    const quoted = priceFromQuote(data);
+    if (!quoted) {
+      return res.status(400).json({ success: false, error: QUOTE_EXPIRED_MESSAGE });
+    }
+    let originalPrice = quoted.originalPrice;
     let discountAmount = 0;
     let finalPrice = originalPrice;
     let verifiedPromo = null;
@@ -1221,11 +1426,17 @@ app.post("/api/bookings", async (req, res) => {
     const newBooking = {
       id: bookingId,
       ...data,
-      ...normaliseReturnJourney(data, originalPrice),
+      ...normaliseReturnJourney({ ...data, returnFare: quoted.oneWay }, originalPrice),
+      quoteToken: void 0,
       price: finalPrice,
       originalPrice,
       discountAmount,
       promoCode: verifiedPromo ? verifiedPromo.code : void 0,
+      // Set by the server, never by the browser: online payments go through Mollie.
+      paymentMethod: "Pay Later",
+      paymentStatus: "Unpaid",
+      status: "Pending",
+      molliePaymentId: void 0,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     const bookings = readBookings();
@@ -1324,7 +1535,7 @@ async function applyPaymentResult(bookingId, result, methodDetail) {
   }
   if (newlyPaid) {
     if (newlyPaid.promoCode) await recordCouponUsage(newlyPaid.promoCode);
-    await sendBookingEmails(newlyPaid).catch((err) => console.error("Email error:", err));
+    await sendBookingEmails(newlyPaid, true).catch((err) => console.error("Email error:", err));
     sendWhatsAppNotification(newlyPaid).catch((err) => console.error("WhatsApp error:", err));
   }
   return newlyPaid;
@@ -1356,8 +1567,12 @@ app.post("/api/mollie/create-payment", async (req, res) => {
   try {
     await connectToDatabase();
     const data = req.body;
-    const bookingId = `WLC-2026-${Math.floor(1e3 + Math.random() * 9e3)}`;
-    let originalPrice = Number(data.originalPrice || data.price || 0);
+    const bookingId = `WLC-${(/* @__PURE__ */ new Date()).getFullYear()}-${import_crypto.default.randomBytes(3).toString("hex").toUpperCase()}`;
+    const quoted = priceFromQuote(data);
+    if (!quoted) {
+      return res.status(400).json({ success: false, error: QUOTE_EXPIRED_MESSAGE });
+    }
+    let originalPrice = quoted.originalPrice;
     let discountAmount = 0;
     let finalPrice = originalPrice;
     let verifiedPromo = null;
@@ -1373,7 +1588,8 @@ app.post("/api/mollie/create-payment", async (req, res) => {
     const newBooking = {
       id: bookingId,
       ...data,
-      ...normaliseReturnJourney(data, originalPrice),
+      ...normaliseReturnJourney({ ...data, returnFare: quoted.oneWay }, originalPrice),
+      quoteToken: void 0,
       price: finalPrice,
       originalPrice,
       discountAmount,
@@ -1400,7 +1616,7 @@ app.post("/api/mollie/create-payment", async (req, res) => {
       newBooking.status = "Confirmed";
       await saveBooking();
       if (verifiedPromo) await recordCouponUsage(verifiedPromo.code);
-      await sendBookingEmails(newBooking).catch((err) => console.error("Email error:", err));
+      await sendBookingEmails(newBooking, true).catch((err) => console.error("Email error:", err));
       sendWhatsAppNotification(newBooking).catch((err) => console.error("WhatsApp error:", err));
       return res.json({ success: true, checkoutUrl: returnUrl, bookingId });
     }
@@ -1489,57 +1705,33 @@ app.get("/api/mollie/status/:bookingId", async (req, res) => {
   }
 });
 app.post("/api/bookings/payment-simulate", async (req, res) => {
-  try {
-    const { bookingId, paymentMethod, transactionId } = req.body;
-    await connectToDatabase();
-    let booking = null;
-    if (import_mongoose.default.connection.readyState === 1) {
-      booking = await BookingModel.findOne({ id: bookingId });
-    }
-    const bookings = readBookings();
-    const idx = bookings.findIndex((b) => b.id === bookingId);
-    if (!booking && idx === -1) {
-      return res.status(404).json({ error: "Booking not found" });
-    }
-    const updates = {
-      paymentStatus: paymentMethod === "Pay Later" ? "Unpaid" : "Paid",
-      status: "Pending",
-      transactionId: transactionId || `SIM-${Date.now()}`
-    };
-    if (booking) {
-      Object.assign(booking, updates);
-      await booking.save();
-    }
-    if (idx !== -1) {
-      Object.assign(bookings[idx], updates);
-      writeBookings(bookings);
-    }
-    const promoToCount = booking && booking.promoCode || idx !== -1 && bookings[idx]?.promoCode;
-    if (promoToCount) {
-      recordCouponUsage(promoToCount).catch((e) => console.error("Error recording coupon usage:", e));
-    }
-    return res.json({ success: true, bookingId });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
+  return res.json({ success: true, bookingId: req.body?.bookingId });
 });
-var ADMIN_AUTH_TOKEN = "admin-auth-token-travelluxx-2026";
 function requireAdminAuth(req, res, next) {
   const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : req.headers["x-admin-token"] || req.query.token;
-  if (token === ADMIN_AUTH_TOKEN) {
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : req.headers["x-admin-token"];
+  if (isValidAdminToken(token)) {
     return next();
   }
   return res.status(401).json({ error: "Unauthorized: Admin authentication token required" });
 }
+var loginAttempts = {};
 app.post("/api/admin/login", async (req, res) => {
-  const { username, password } = req.body;
+  const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+  const now = Date.now();
+  const entry = loginAttempts[ip] && loginAttempts[ip].resetAt > now ? loginAttempts[ip] : loginAttempts[ip] = { count: 0, resetAt: now + 15 * 60 * 1e3 };
+  if (entry.count >= 10) {
+    return res.status(429).json({ success: false, error: "Too many attempts. Please wait 15 minutes and try again." });
+  }
+  const { username, password } = req.body || {};
   const envEmail = (process.env.ADMIN_EMAIL || "info@travelluxx.co.uk").toLowerCase().trim();
   const envPassword = process.env.ADMIN_PASSWORD || "Travelluxx2026@";
   const inputUser = (username || "").toLowerCase().trim();
   if ((inputUser === envEmail || inputUser === "admin") && password === envPassword) {
-    return res.json({ success: true, token: "admin-auth-token-travelluxx-2026" });
+    delete loginAttempts[ip];
+    return res.json({ success: true, token: issueAdminToken() });
   }
+  entry.count += 1;
   return res.status(401).json({ success: false, error: "Invalid username or password" });
 });
 app.get("/api/admin/bookings", async (req, res) => {
@@ -1671,7 +1863,10 @@ app.get("/api/admin/posts", async (req, res) => {
 app.post("/api/admin/posts", async (req, res) => {
   try {
     await connectToDatabase();
+    const { _id, __v, ...postFields } = req.body || {};
     const newPost = {
+      // Every field from the editor (FAQs, SEO and social fields, image alt, noindex...).
+      ...postFields,
       id: `post-${Date.now()}`,
       slug: req.body.slug || (req.body.title ? req.body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : `post-${Date.now()}`),
       title: req.body.title || "",
@@ -1679,11 +1874,12 @@ app.post("/api/admin/posts", async (req, res) => {
       content: req.body.content || "",
       image: req.body.image || "",
       author: req.body.author || "Travelluxx Editorial",
-      date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
-      published: req.body.published !== false ? 1 : 0,
+      date: req.body.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+      published: req.body.published === false || req.body.published === 0 || req.body.published === "0" ? 0 : 1,
       metaTitle: req.body.metaTitle || "",
       metaDescription: req.body.metaDescription || "",
-      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     const posts = readPosts();
     posts.unshift(newPost);
@@ -1704,20 +1900,35 @@ app.put("/api/admin/posts/:id", async (req, res) => {
   const updateData = { ...req.body };
   delete updateData._id;
   delete updateData.__v;
+  updateData.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+  if (updateData.published !== void 0) {
+    updateData.published = updateData.published === false || updateData.published === 0 || updateData.published === "0" ? 0 : 1;
+  }
+  let saved = null;
+  let oldSlug;
   try {
     await connectToDatabase();
-    await PostModel.findOneAndUpdate({ id }, { $set: updateData });
+    if (import_mongoose.default.connection.readyState === 1) {
+      const before = await PostModel.findOne({ id }).lean();
+      oldSlug = before?.slug;
+      const doc = await PostModel.findOneAndUpdate({ id }, { $set: updateData }, { new: true });
+      saved = doc?.toObject ? doc.toObject() : doc;
+    }
   } catch (e) {
     console.error("Error updating MongoDB post:", e);
+    return res.status(500).json({ error: `The post could not be saved: ${e?.message || "database error"}` });
   }
   const posts = readPosts();
   const index = posts.findIndex((p) => p.id === id);
   if (index !== -1) {
-    posts[index] = { ...posts[index], ...req.body };
+    oldSlug = oldSlug || posts[index].slug;
+    posts[index] = { ...posts[index], ...updateData };
     writePosts(posts);
-    return res.json({ success: true, post: posts[index] });
   }
-  return res.status(404).json({ error: "Post not found" });
+  if (oldSlug) schedulePublish([`/blog/${oldSlug}`]);
+  const result = saved || (index !== -1 ? posts[index] : null);
+  if (!result) return res.status(404).json({ error: "Post not found" });
+  return res.json({ success: true, post: result });
 });
 app.delete("/api/admin/posts/:id", async (req, res) => {
   const { id } = req.params;
@@ -1737,8 +1948,85 @@ app.get("/api/settings", async (req, res) => {
     await syncSettingsFromDb();
   } catch (e) {
   }
-  const settings = getCurrentWebsiteSettings();
+  const settings = { ...getCurrentWebsiteSettings() };
+  for (const k of Object.keys(settings)) if (/^(mollie_api_key|google_places_api_key|smtp_.*|.*password.*|.*secret.*|.*_token)$/i.test(k)) delete settings[k];
   return res.json(settings);
+});
+var contactRateLimits = {};
+app.post("/api/contact", async (req, res) => {
+  try {
+    const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+    const now = Date.now();
+    const rl = contactRateLimits[ip] && contactRateLimits[ip].resetAt > now ? contactRateLimits[ip] : contactRateLimits[ip] = { count: 0, resetAt: now + 60 * 60 * 1e3 };
+    if (++rl.count > 10) return res.status(429).json({ error: "Too many messages. Please call us instead." });
+    const clip = (v, max) => String(v ?? "").trim().slice(0, max);
+    const body = req.body || {};
+    const inquiry = {
+      id: `INQ-${(/* @__PURE__ */ new Date()).getFullYear()}-${import_crypto.default.randomBytes(3).toString("hex").toUpperCase()}`,
+      name: clip(body.name, 120),
+      email: clip(body.email, 200),
+      phone: clip(body.phone, 40),
+      message: clip(body.message, 5e3),
+      type: clip(body.type || "General Inquiry", 60),
+      status: "Unread",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    if (!inquiry.name || !inquiry.email || !inquiry.message) {
+      return res.status(400).json({ error: "Please fill in your name, email and message." });
+    }
+    const inquiries = readInquiries();
+    inquiries.unshift(inquiry);
+    writeInquiries(inquiries);
+    await connectToDatabase().catch(() => {
+    });
+    if (import_mongoose.default.connection.readyState === 1) {
+      await new InquiryModel(inquiry).save().catch((err) => console.error("MongoDB inquiry save error:", err.message));
+    }
+    await sendContactEmails(inquiry).catch((err) => console.error("Contact email error:", err));
+    return res.json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ error: "Your message could not be sent. Please call us instead." });
+  }
+});
+app.get("/api/admin/inquiries", async (req, res) => {
+  try {
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) {
+      const rows = await InquiryModel.find().sort({ createdAt: -1 });
+      return res.json(rows.map((r) => r.toObject ? r.toObject() : r));
+    }
+  } catch (e) {
+    console.error("Error reading from MongoDB inquiries:", e.message);
+  }
+  return res.json(readInquiries());
+});
+app.delete("/api/admin/inquiries/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await connectToDatabase();
+    if (import_mongoose.default.connection.readyState === 1) await InquiryModel.deleteOne({ id });
+  } catch (e) {
+  }
+  writeInquiries(readInquiries().filter((i) => i.id !== id));
+  return res.json({ success: true });
+});
+app.post("/api/admin/test-email", async (req, res) => {
+  try {
+    const ws = getCurrentWebsiteSettings();
+    const target = String(req.body?.recipientEmail || ws.business_email || "").trim();
+    if (!target) return res.status(400).json({ success: false, error: "Enter an email address to send the test to." });
+    const smtpSettings = readSmtpSettings();
+    const result = await sendEmailSafely({
+      from: `"${ws.business_name}" <${smtpSettings.senderAddress || smtpSettings.smtpUser || ws.business_email}>`,
+      to: target,
+      subject: `Test Email from ${ws.business_name}`,
+      text: `Hello! This is a test email sent from ${ws.business_name} at ${(/* @__PURE__ */ new Date()).toLocaleString("en-GB")}. Email sending is working.`
+    });
+    if (result.success) return res.json({ success: true, message: `Test email sent to ${target}`, messageId: result.messageId });
+    return res.status(500).json({ success: false, error: result.error || "Failed to send test email" });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message || "Test email failed" });
+  }
 });
 app.get("/api/pricing", async (req, res) => {
   try {
@@ -1746,13 +2034,12 @@ app.get("/api/pricing", async (req, res) => {
     await syncSettingsFromDb();
   } catch (e) {
   }
-  const settings = getCurrentWebsiteSettings();
+  const p = getCurrentPricingSettings();
   return res.json({
-    economy_price_per_mile: settings.economy_price || 1.5,
-    luxury_price_per_mile: settings.luxury_price || 2,
-    family_price_per_mile: settings.family_price || 2.5,
-    minimum_billable_distance: settings.minimum_distance || 10,
-    extra_stop_charge: settings.extra_stop_charge || 15
+    ...p,
+    Economy: { perMile: p.economy_price_per_mile },
+    Luxury: { perMile: p.luxury_price_per_mile },
+    Family: { perMile: p.family_price_per_mile }
   });
 });
 app.post("/api/stats/visit", (req, res) => {
@@ -1777,8 +2064,8 @@ app.post("/api/admin/settings", async (req, res) => {
     const { mollie_api_key, ...otherSettings } = req.body;
     const current = getCurrentWebsiteSettings();
     const updated = { ...current, ...otherSettings };
+    delete updated.mollie_api_key;
     if (mollie_api_key !== void 0) {
-      updated.mollie_api_key = mollie_api_key;
       cachedMollieApiKey = mollie_api_key;
       process.env.MOLLIE_API_KEY = mollie_api_key;
       if (import_mongoose.default.connection.readyState === 1) {
@@ -1969,7 +2256,14 @@ app.post("/api/admin/services", async (req, res) => {
     await connectToDatabase();
     const services = readServices();
     const rawSlug = req.body.slug || req.body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `service-${Date.now()}`;
+    if (import_mongoose.default.connection.readyState === 1 && await ServiceModel.exists({ slug: rawSlug })) {
+      return res.status(409).json({ error: `Another service already uses the address /services/${rawSlug}. Please choose a different slug.` });
+    }
+    const { _id, __v, newFeatureText, newSidebarPerk, ...formFields } = req.body || {};
     const newService = {
+      // Every field from the dashboard form is kept (hero buttons, sidebar, why-choose,
+      // how-it-works, FAQ headings, SEO and social fields...), then the core fields below.
+      ...formFields,
       id: `service-${Date.now()}`,
       slug: rawSlug,
       title: req.body.title || "Untitled Service",
@@ -1982,7 +2276,7 @@ app.post("/api/admin/services", async (req, res) => {
       priceText: req.body.priceText || "",
       published: req.body.published !== false,
       order: Number(req.body.order || services.length + 1),
-      metaTitle: req.body.metaTitle || req.body.title,
+      metaTitle: req.body.metaTitle || "",
       metaDescription: req.body.metaDescription || req.body.excerpt,
       noIndexNoFollow: !!req.body.noIndexNoFollow,
       faqs: Array.isArray(req.body.faqs) ? req.body.faqs : [],
@@ -1991,10 +2285,9 @@ app.post("/api/admin/services", async (req, res) => {
     };
     services.push(newService);
     writeServices(services);
-    try {
+    if (import_mongoose.default.connection.readyState === 1) {
       await ServiceModel.findOneAndUpdate({ id: newService.id }, newService, { upsert: true });
       console.log("\u{1F4BE} Saved Service to MongoDB!");
-    } catch (e) {
     }
     return res.json({ success: true, service: newService });
   } catch (err) {
@@ -2005,27 +2298,47 @@ app.put("/api/admin/services/:id", async (req, res) => {
   const updateData = { ...req.body };
   delete updateData._id;
   delete updateData.__v;
+  delete updateData.newFeatureText;
+  delete updateData.newSidebarPerk;
   updateData.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
   if (updateData.order !== void 0) updateData.order = Number(updateData.order);
   if (updateData.published !== void 0) updateData.published = !!updateData.published;
+  let saved = null;
+  let oldSlug;
   try {
     await connectToDatabase();
-    await ServiceModel.findOneAndUpdate({ id: req.params.id }, updateData);
+    if (import_mongoose.default.connection.readyState === 1) {
+      const before = await ServiceModel.findOne({ id: req.params.id }).lean();
+      oldSlug = before?.slug;
+      if (updateData.slug && await ServiceModel.exists({ slug: updateData.slug, id: { $ne: req.params.id } })) {
+        return res.status(409).json({ error: `Another service already uses the address /services/${updateData.slug}. Please choose a different slug.` });
+      }
+      const doc = await ServiceModel.findOneAndUpdate({ id: req.params.id }, { $set: updateData }, { upsert: true, new: true });
+      saved = doc?.toObject ? doc.toObject() : doc;
+    }
   } catch (e) {
     console.error("Error updating MongoDB service:", e);
+    return res.status(500).json({ error: `The service could not be saved: ${e?.message || "database error"}` });
   }
   const services = readServices();
   const idx = services.findIndex((s) => s.id === req.params.id);
   if (idx !== -1) {
+    oldSlug = oldSlug || services[idx].slug;
     services[idx] = { ...services[idx], ...updateData };
-    writeServices(services);
-    return res.json({ success: true, service: services[idx] });
+  } else {
+    services.push({ id: req.params.id, ...saved || {}, ...updateData });
   }
-  return res.status(404).json({ error: "Service not found" });
+  writeServices(services);
+  if (oldSlug) schedulePublish([`/services/${oldSlug}`]);
+  const result = saved || services.find((s) => s.id === req.params.id);
+  return res.json({ success: true, service: result });
 });
 app.delete("/api/admin/services/:id", async (req, res) => {
   try {
     await connectToDatabase();
+    const before = import_mongoose.default.connection.readyState === 1 ? await ServiceModel.findOne({ id: req.params.id }).lean() : null;
+    const slug = before?.slug || readServices().find((s) => s.id === req.params.id)?.slug;
+    if (slug) schedulePublish([`/services/${slug}`]);
     await ServiceModel.deleteOne({ id: req.params.id });
   } catch (e) {
   }
@@ -2227,11 +2540,11 @@ app.post("/api/admin/services-page-settings", async (req, res) => {
 });
 var MENU_PATH = import_path.default.join(process.cwd(), "menu.json");
 function readMenu() {
-  if (Array.isArray(cachedMenu) && cachedMenu.length > 0) return cachedMenu;
+  if (Array.isArray(cachedMenu)) return cachedMenu;
   try {
     if (import_fs.default.existsSync(MENU_PATH)) {
       const parsed = JSON.parse(import_fs.default.readFileSync(MENU_PATH, "utf8"));
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         cachedMenu = parsed;
         return cachedMenu;
       }
@@ -2281,6 +2594,7 @@ app.get("/api/menu", async (req, res) => {
 app.post("/api/admin/menu", async (req, res) => {
   try {
     await connectToDatabase();
+    if (!Array.isArray(req.body)) return res.status(400).json({ error: "Menu must be a list of items" });
     cachedMenu = req.body;
     if (import_mongoose.default.connection.readyState === 1) {
       await SettingModel.findOneAndUpdate({ key: "menu" }, { value: req.body }, { upsert: true });
@@ -2610,7 +2924,7 @@ app.get("/api/places/geocode", async (req, res) => {
 });
 app.post("/api/promocodes/validate", async (req, res) => {
   try {
-    const ip = req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "client";
+    const ip = String(req.headers["x-forwarded-for"] || req.ip || req.socket.remoteAddress || "client").split(",")[0].trim();
     if (isRateLimitedForCoupon(ip)) {
       return res.status(429).json({
         valid: false,
@@ -2720,54 +3034,65 @@ app.post("/api/admin/promocodes", requireAdminAuth, async (req, res) => {
     return res.status(500).json({ error: err.message || "Failed to create coupon" });
   }
 });
-app.put("/api/admin/promocodes/:id", requireAdminAuth, async (req, res) => {
+app.put("/api/admin/promocodes/:id", requireAdminAuth, async (req, res, next) => {
+  if (req.params.id === "bulk-deactivate") return next();
   try {
     const { id } = req.params;
-    const rawCode = String(req.body.code || "").trim().toUpperCase();
-    if (!rawCode) return res.status(400).json({ error: "Coupon code is required" });
-    const startDate = req.body.startDate ? String(req.body.startDate).trim() : "";
-    const expiryDate = req.body.expiryDate ? String(req.body.expiryDate).trim() : req.body.expiresAt ? String(req.body.expiresAt).trim() : "";
-    if (startDate && expiryDate && expiryDate < startDate) {
-      return res.status(400).json({ error: "Expiry date must be on or after the start date." });
-    }
+    const body = req.body || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(body, k);
     await connectToDatabase();
     const all = readPromoCodes();
     const idx = all.findIndex((c) => c.id === id);
-    let existing = idx !== -1 ? all[idx] : null;
-    if (import_mongoose.default.connection.readyState === 1 && !existing) {
+    let existing = null;
+    if (import_mongoose.default.connection.readyState === 1) {
       existing = await PromoCodeModel.findOne({ id }).lean();
     }
+    if (!existing && idx !== -1) existing = all[idx];
     if (!existing) {
       return res.status(404).json({ error: "Coupon not found" });
     }
-    if (all.some((c) => c.id !== id && c.code && c.code.toUpperCase() === rawCode)) {
+    const rawCode = has("code") ? String(body.code || "").trim().toUpperCase() : String(existing.code || "").toUpperCase();
+    if (!rawCode) return res.status(400).json({ error: "Coupon code is required" });
+    const dateField = (k, fallback) => has(k) ? String(body[k] || "").trim() : fallback;
+    const startDate = dateField("startDate", existing.startDate || "");
+    const expiryDate = has("expiryDate") || has("expiresAt") ? String(body.expiryDate || body.expiresAt || "").trim() : existing.expiryDate || existing.expiresAt || "";
+    if (startDate && expiryDate && expiryDate < startDate) {
+      return res.status(400).json({ error: "Expiry date must be on or after the start date." });
+    }
+    const duplicateInFile = all.some((c) => c.id !== id && c.code && c.code.toUpperCase() === rawCode);
+    const duplicateInDb = import_mongoose.default.connection.readyState === 1 ? await PromoCodeModel.findOne({ code: rawCode, id: { $ne: id } }).lean() : null;
+    if (duplicateInFile || duplicateInDb) {
       return res.status(409).json({ error: "Another coupon with this code already exists" });
+    }
+    const optionalNumber = (k, current) => has(k) ? Number(body[k]) > 0 ? Number(body[k]) : null : current ?? null;
+    if (has("discountValue") && !(Number(body.discountValue) > 0)) {
+      return res.status(400).json({ error: "A valid positive discount value is required" });
     }
     const updated = {
       ...existing,
-      ...req.body,
       id,
       code: rawCode,
-      discountType: req.body.discountType === "percentage" ? "percentage" : "fixed",
-      discountValue: Number(req.body.discountValue ?? existing.discountValue),
-      minOrderAmount: Number(req.body.minOrderAmount ?? 0),
-      maxDiscountAmount: req.body.maxDiscountAmount ? Number(req.body.maxDiscountAmount) : null,
-      startDate: startDate || existing.startDate || "",
-      expiryDate: expiryDate || existing.expiryDate || existing.expiresAt || "",
-      usageLimit: req.body.usageLimit ? Number(req.body.usageLimit) : null,
-      perUserLimit: req.body.perUserLimit ? Number(req.body.perUserLimit) : null,
-      timesUsed: req.body.timesUsed !== void 0 ? Number(req.body.timesUsed) : existing.timesUsed,
-      isActive: req.body.isActive !== false,
-      description: String(req.body.description ?? "").trim(),
+      discountType: has("discountType") ? body.discountType === "percentage" ? "percentage" : "fixed" : existing.discountType || "fixed",
+      discountValue: has("discountValue") ? Number(body.discountValue) : Number(existing.discountValue || 0),
+      minOrderAmount: has("minOrderAmount") ? Number(body.minOrderAmount) || 0 : Number(existing.minOrderAmount || 0),
+      maxDiscountAmount: optionalNumber("maxDiscountAmount", existing.maxDiscountAmount),
+      startDate,
+      expiryDate,
+      usageLimit: optionalNumber("usageLimit", existing.usageLimit),
+      perUserLimit: optionalNumber("perUserLimit", existing.perUserLimit),
+      timesUsed: has("timesUsed") ? Number(body.timesUsed) || 0 : Number(existing.timesUsed || 0),
+      isActive: has("isActive") ? body.isActive !== false && body.isActive !== "false" : existing.isActive !== false,
+      description: has("description") ? String(body.description ?? "").trim() : existing.description || "",
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     delete updated._id;
     delete updated.__v;
+    delete updated.expiresAt;
     if (idx !== -1) all[idx] = updated;
     else all.push(updated);
     writePromoCodes(all);
     if (import_mongoose.default.connection.readyState === 1) {
-      await PromoCodeModel.findOneAndUpdate({ id }, updated, { upsert: true });
+      await PromoCodeModel.findOneAndUpdate({ id }, { $set: updated, $unset: { expiresAt: "" } }, { upsert: true });
     }
     return res.json({ success: true, promoCode: updated, coupon: updated });
   } catch (err) {
@@ -3087,6 +3412,10 @@ app.get("/api/google-reviews", async (req, res) => {
   }
 });
 app.get("/robots.txt", (req, res) => {
+  const ws = getCurrentWebsiteSettings() || {};
+  if (ws.search_engine_visibility === true || ws.search_engine_visibility === "true") {
+    return res.type("text/plain").send("User-agent: *\nDisallow: /\n");
+  }
   const robotsPath = import_path.default.join(process.cwd(), "public", "robots.txt");
   if (import_fs.default.existsSync(robotsPath)) {
     res.type("text/plain").sendFile(robotsPath);
@@ -3100,13 +3429,19 @@ app.get("/sitemap.xml", async (req, res) => {
   let pages = [];
   let posts = [];
   let mediaImages = [];
+  let services = [];
+  let serviceAreas = [];
+  const listable = (item) => item && item.published !== false && !item.noIndexNoFollow && !String(item.id || "").endsWith("-alias");
+  const STOCK_PHOTO = "photo-1549317661-bd32c8ce0db2";
   try {
     await connectToDatabase();
     if (import_mongoose.default.connection.readyState === 1) {
-      const dbPages = await PageModel.find({ published: { $ne: false } });
+      const dbPages = await PageModel.find({ published: { $nin: [false, 0, "0"] } });
       pages = dbPages.map((p) => p.toObject ? p.toObject() : p);
-      const dbPosts = await PostModel.find({ published: { $ne: false } });
+      const dbPosts = await PostModel.find({ published: { $nin: [false, 0, "0"] } });
       posts = dbPosts.map((p) => p.toObject ? p.toObject() : p);
+      services = await ServiceModel.find().lean();
+      serviceAreas = await ServiceAreaModel.find().lean();
     }
   } catch (e) {
   }
@@ -3114,7 +3449,7 @@ app.get("/sitemap.xml", async (req, res) => {
     pages = readPages().filter((p) => p.published !== false);
   }
   if (posts.length === 0) {
-    posts = readPosts().filter((p) => p.published !== false);
+    posts = readPosts().filter((p) => p.published !== false && p.published !== 0);
   }
   try {
     const uploadsDir = import_path.default.join(process.cwd(), "public", "uploads");
@@ -3134,12 +3469,24 @@ app.get("/sitemap.xml", async (req, res) => {
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>${baseUrl}/services</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/service-areas</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>${baseUrl}/blog</loc>
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`;
-  for (const page of pages) {
+  for (const page of pages.filter((p) => !p.noIndexNoFollow)) {
     const slug = page.slug || page.id;
     const lastmod = page.updatedAt ? new Date(page.updatedAt).toISOString().split("T")[0] : page.date || today;
     xml += `
@@ -3154,7 +3501,8 @@ app.get("/sitemap.xml", async (req, res) => {
     </image:image>` : ""}
   </url>`;
   }
-  const services = readServices().filter((s) => s.published !== false);
+  if (services.length === 0) services = readServices();
+  services = services.filter(listable);
   for (const service of services) {
     const slug = service.slug || service.id;
     const lastmod = service.updatedAt ? new Date(service.updatedAt).toISOString().split("T")[0] : today;
@@ -3170,7 +3518,8 @@ app.get("/sitemap.xml", async (req, res) => {
     </image:image>` : ""}
   </url>`;
   }
-  const serviceAreas = readServiceAreas().filter((a) => a.published !== false);
+  if (serviceAreas.length === 0) serviceAreas = readServiceAreas();
+  serviceAreas = serviceAreas.filter(listable);
   for (const area of serviceAreas) {
     const slug = area.slug || area.id;
     const lastmod = area.updatedAt ? new Date(area.updatedAt).toISOString().split("T")[0] : today;
@@ -3179,7 +3528,7 @@ app.get("/sitemap.xml", async (req, res) => {
     <loc>${baseUrl}/service-areas/${slug}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>${area.heroImage ? `
+    <priority>0.8</priority>${area.heroImage && !String(area.heroImage).includes(STOCK_PHOTO) ? `
     <image:image>
       <image:loc>${area.heroImage.startsWith("http") ? area.heroImage : baseUrl + area.heroImage}</image:loc>
       <image:title>${(area.title || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")}</image:title>
@@ -3201,18 +3550,6 @@ app.get("/sitemap.xml", async (req, res) => {
     </image:image>` : ""}
   </url>`;
   }
-  for (const imgUrl of mediaImages) {
-    xml += `
-  <url>
-    <loc>${imgUrl}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-    <image:image>
-      <image:loc>${imgUrl}</image:loc>
-    </image:image>
-  </url>`;
-  }
   xml += `
 </urlset>`;
   res.set("Content-Type", "application/xml");
@@ -3227,7 +3564,7 @@ async function startServer() {
   try {
     const nextModule = await import("next");
     const createNext = nextModule.default || nextModule;
-    const nextApp = createNext({ dev, dir: process.cwd() });
+    const nextApp = createNext({ dev, dir: process.cwd(), hostname: "127.0.0.1", port: Number(PORT) });
     await nextApp.prepare();
     nextHandler = nextApp.getRequestHandler();
     console.log(`[MODE] Next.js ready in ${dev ? "development" : "production"} mode.`);

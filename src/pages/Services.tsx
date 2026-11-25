@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
 import { ArrowRight, Minus, Plus } from "lucide-react";
+import { useContent } from "../content/useContent";
+import { hasOwnImage, areaListImage } from "../components/areas/areaShared";
 
 // Default fallback services if API not yet populated
 const DEFAULT_SERVICES = [
@@ -179,54 +181,10 @@ export default function Services({
     ? initialServices
     : (ctxServices.length > 0 ? ctxServices : DEFAULT_SERVICES);
   const pageSettings = initialPageSettings || ctxPageSettings;
+  const c = useContent(settings);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
-  // SEO Meta Tags & Document Title
-  useEffect(() => {
-    const baseUrl = "https://travelluxx.co.uk";
-    const pageUrl = `${baseUrl}/services`;
-
-    const metaTitle =
-      pageSettings?.meta_title?.trim() ||
-      "Premium Chauffeur & Airport Travel Services | TravelLuxx UK";
-    const metaDesc =
-      pageSettings?.meta_description?.trim() ||
-      "Explore TravelLuxx's premier private travel solutions. From luxury airport transfers and executive business travel to long-distance journeys across the UK.";
-
-    document.title = metaTitle;
-
-    const setMeta = (attr: string, attrVal: string, content: string) => {
-      let el = document.querySelector(`meta[${attr}='${attrVal}']`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute(attr, attrVal);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-
-    setMeta("name", "description", metaDesc);
-    setMeta("name", "robots", "index, follow");
-
-    let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", pageUrl);
-
-    setMeta("property", "og:type", "website");
-    setMeta("property", "og:url", pageUrl);
-    setMeta("property", "og:title", metaTitle);
-    setMeta("property", "og:description", metaDesc);
-    setMeta("property", "og:site_name", "TravelLuxx");
-
-    setMeta("property", "twitter:card", "summary_large_image");
-    setMeta("property", "twitter:url", pageUrl);
-    setMeta("property", "twitter:title", metaTitle);
-    setMeta("property", "twitter:description", metaDesc);
-  }, [pageSettings]);
+  // SEO (title, meta, canonical, FAQPage JSON-LD) is rendered server-side in <Head>.
 
   // Section visibility flags
   const heroEnabled = pageSettings?.hero_enabled !== false;
@@ -293,30 +251,6 @@ export default function Services({
     Array.isArray(pageSettings?.faqs) && pageSettings.faqs.length > 0
       ? pageSettings.faqs
       : DEFAULT_FAQS;
-
-  // Add FAQ JSON-LD schema for rich SEO results
-  useEffect(() => {
-    if (!faqs || faqs.length === 0) return;
-    let script = document.getElementById("services-faq-schema") as HTMLScriptElement;
-    if (!script) {
-      script = document.createElement("script");
-      script.id = "services-faq-schema";
-      script.type = "application/ld+json";
-      document.head.appendChild(script);
-    }
-    script.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs.map((f: any) => ({
-        "@type": "Question",
-        name: f.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: f.answer,
-        },
-      })),
-    });
-  }, [faqs]);
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -391,7 +325,7 @@ export default function Services({
                 data-reveal-group
                 className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2 lg:mt-16 lg:grid-cols-3"
               >
-                {services.map((svc) => {
+                {services.map((svc, svcIndex) => {
                   const detailUrl = `/services/${svc.slug}`;
                   const desc = svc.excerpt || svc.description || "";
 
@@ -407,10 +341,14 @@ export default function Services({
                       >
                         <img
                           src={
-                            svc.image ||
-                            "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80"
+                            // The stock placeholder photo counts as "no image": use the owner's fallback, else one of the site's photos.
+                            hasOwnImage(svc.image)
+                              ? svc.image
+                              : hasOwnImage(c.t("services_index_card_fallback_image"))
+                                ? c.t("services_index_card_fallback_image")
+                                : areaListImage({}, svcIndex)
                           }
-                          alt={svc.imageAlt || `${svc.title} - Executive Chauffeur Services UK`}
+                          alt={svc.imageAlt || `${svc.title} - ${c.t("services_index_card_alt_suffix")}`}
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                           loading="lazy"
                           decoding="async"
@@ -426,18 +364,23 @@ export default function Services({
                         <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-stone-600">
                           {desc}
                         </p>
+                        {svc.priceText && (
+                          <p className="mt-3 text-sm font-medium text-brand-700">
+                            {svc.priceText}
+                          </p>
+                        )}
 
                         <div className="mt-auto flex items-center justify-between gap-4 pt-4">
                           <Link to={detailUrl} className="tl-link relative z-10 min-h-11">
-                            <span>View service</span>
+                            <span>{c.t("services_index_card_view_text")}</span>
                             <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                           </Link>
 
                           <a
-                            href="/#calculator"
+                            href={c.t("services_index_card_book_url")}
                             className="relative z-10 inline-flex min-h-11 items-center text-sm text-stone-500 underline-offset-4 transition-colors duration-200 hover:text-stone-900 hover:underline"
                           >
-                            Book Now
+                            {c.t("services_index_card_book_text")}
                           </a>
                         </div>
                       </div>
@@ -449,7 +392,93 @@ export default function Services({
           </section>
         )}
 
-        {/* 4. Frequently Asked Questions (FAQ) Section */}
+        {/* ========================================================= */}
+        {/* 3. HOW IT WORKS (Pages > Services > How it works)         */}
+        {/* ========================================================= */}
+        {howItWorksEnabled && howItWorksSteps.length > 0 && (
+          <section className="tl-section bg-ivory">
+            <div className="tl-container">
+              <div className="max-w-3xl">
+                <span data-reveal className="tl-eyebrow">{howItWorksTag}</span>
+                <h2 data-reveal="lines" className="tl-h2 mt-4">{howItWorksTitle}</h2>
+                <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
+                  {howItWorksDescription}
+                </p>
+              </div>
+
+              <div
+                data-reveal-group
+                className="mt-14 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4"
+              >
+                {howItWorksSteps.map((step: any, idx: number) => (
+                  <div key={idx} className="border-t border-stone-300 pt-6">
+                    <span
+                      className="block font-display text-4xl leading-none text-brand-700 lining-nums"
+                      aria-hidden="true"
+                    >
+                      {step.num || step.number || String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="mt-4 text-base font-semibold text-stone-900">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                      {step.desc || step.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ========================================================= */}
+        {/* 4. WHY CHOOSE (Pages > Services > Why choose)             */}
+        {/* ========================================================= */}
+        {whyChooseEnabled && whyChooseItems.length > 0 && (
+          <section className="tl-dark tl-section relative overflow-hidden">
+            {whyChooseBgImage && (
+              <>
+                <div
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: `url('${whyChooseBgImage}')` }}
+                  aria-hidden="true"
+                ></div>
+                <div className="absolute inset-0 bg-brand-950/90" aria-hidden="true"></div>
+              </>
+            )}
+            <div className="tl-container relative">
+              <div className="max-w-3xl">
+                <span data-reveal className="tl-eyebrow tl-eyebrow-light">{whyChooseTag}</span>
+                <h2 data-reveal="lines" className="tl-h2 mt-4 text-white">{whyChooseTitle}</h2>
+                <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl text-stone-300">
+                  {whyChooseDescription}
+                </p>
+              </div>
+
+              <div
+                data-reveal-group
+                className="mt-14 grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3"
+              >
+                {whyChooseItems.map((item: any, idx: number) => (
+                  <div key={idx} className="border-t border-white/10 pt-6">
+                    <span
+                      className="block font-display text-3xl leading-none text-brand-300 lining-nums"
+                      aria-hidden="true"
+                    >
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="mt-3 text-base font-semibold text-white">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-stone-400">
+                      {item.desc || item.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 5. Frequently Asked Questions (FAQ) Section */}
         {faqEnabled && faqs.length > 0 && (
           <section className="tl-section bg-ivory">
             <div className="tl-container">

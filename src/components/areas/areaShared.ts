@@ -6,6 +6,7 @@ import transferAirportImg from "../../assets/images/transfer_airport_17864035187
 import transferBusinessImg from "../../assets/images/transfer_business_1786403576291.jpg";
 import transferStationImg from "../../assets/images/transfer_station_1786403548164.jpg";
 import transferPortImg from "../../assets/images/transfer_port_1786403532912.jpg";
+import { formatUkPhone, phoneHref } from "../../utils/phone";
 
 /** Helpers shared by the service-area index and detail pages (presentation only). */
 
@@ -126,14 +127,21 @@ export function areaArticleImage(area: AreaLike | null | undefined): string {
   return pool[slugNumber(area) % pool.length];
 }
 
+/**
+ * Fills the placeholders of an editable text: {area} -> "Solihull", {title} -> "Chauffeur Solihull",
+ * {phone} -> "+44 121 714 0876". Placeholders without a value are left as they are.
+ */
+export function fillPlaceholders(text: string, values: { area?: string; title?: string; phone?: string }): string {
+  return String(text || "").replace(/\{(area|title|phone)\}/g, (match, name: "area" | "title" | "phone") =>
+    values[name] !== undefined ? String(values[name]) : match
+  );
+}
+
 /** "01", "02", … */
 export const twoDigits = (n: number) => String(n).padStart(2, "0");
 
 /** The business phone number, formatted the same way as the navbar and footer. */
 export function phoneFromSettings(settings: any): { label: string; href: string } {
   const raw = String(settings?.whatsapp_number || "441217140876");
-  return {
-    label: raw.startsWith("44") ? `+44 ${raw.substring(2, 6)} ${raw.substring(6)}` : raw,
-    href: raw.startsWith("44") ? `tel:+${raw}` : `tel:${raw}`,
-  };
+  return { label: formatUkPhone(raw), href: phoneHref(raw) };
 }

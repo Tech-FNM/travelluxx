@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Star, ExternalLink } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
+import { useContent } from "../content/useContent";
 
 export interface GoogleReviewItem {
   author_name: string;
@@ -17,6 +18,7 @@ interface GoogleReviewsSectionProps {
 
 export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsSectionProps) {
   const { settings } = useSettings();
+  const c = useContent();
   const [apiReviewsData, setApiReviewsData] = useState<{
     businessName: string;
     overallRating: number;
@@ -45,7 +47,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
   }, []);
 
   // Section visibility check
-  if (settings?.homepage_reviews_enabled === false) {
+  if (!c.on("homepage_reviews_enabled")) {
     return null;
   }
 
@@ -66,9 +68,10 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
   const mapsUrl = settings?.google_business_profile_url || apiReviewsData?.googleMapsUrl || "https://maps.google.com";
 
   // Live custom section headers from dashboard settings
-  const badgeText = settings?.homepage_reviews_badge || "Verified Client Testimonials";
-  const mainTitle = settings?.homepage_reviews_title || "Trusted by Discerning Travelers";
-  const subtitle = settings?.homepage_reviews_subtitle || "Real experiences from clients who rely on TravelLuxx for punctual airport transfers and executive chauffeur travel.";
+  const badgeText = c.t("homepage_reviews_badge");
+  const mainTitle = c.t("homepage_reviews_title");
+  const subtitle = c.t("homepage_reviews_subtitle");
+  const verifiedLabel = c.t("homepage_reviews_verified_label");
 
   return (
     <section className={`tl-section ${
@@ -121,7 +124,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
                   />
                 </svg>
                 <span>
-                  Based on <strong className={`font-medium ${isRenax ? "text-stone-200" : "text-stone-700"}`}>{totalCount} Google Reviews</strong>
+                  {c.t("homepage_reviews_based_on_text")} <strong className={`font-medium ${isRenax ? "text-stone-200" : "text-stone-700"}`}>{totalCount} {c.t("homepage_reviews_count_suffix")}</strong>
                 </span>
               </span>
               <a
@@ -130,7 +133,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
                 rel="noreferrer"
                 className={`tl-link -my-3 py-3 ${isRenax ? "text-brand-300 hover:text-white" : ""}`}
               >
-                <span>View All</span>
+                <span>{c.t("homepage_reviews_view_all_text")}</span>
                 <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} />
               </a>
             </div>
@@ -192,7 +195,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
                   )}
                   <div className="min-w-0">
                     <h4 className={`text-sm font-semibold ${isRenax ? "text-white" : "text-stone-900"}`}>
-                      {review.author_name || "Customer"}
+                      {review.author_name || c.t("homepage_reviews_fallback_author")}
                     </h4>
                     {review.relative_time_description && (
                       <span className={`block text-xs ${isRenax ? "text-stone-400" : "text-stone-500"}`}>
@@ -207,8 +210,8 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
                   href={mapsUrl}
                   target="_blank"
                   rel="noreferrer"
-                  title="Verified Google Review"
-                  aria-label="Verified Google Review"
+                  title={verifiedLabel}
+                  aria-label={verifiedLabel}
                   className="-m-3.5 flex h-11 w-11 shrink-0 items-center justify-center"
                 >
                   <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">

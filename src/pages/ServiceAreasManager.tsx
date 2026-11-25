@@ -33,6 +33,8 @@ type ServiceArea = {
   heroTitle: string;
   heroDescription: string;
   heroImage: string;
+  /** Alt text of the area photograph in the /service-areas list and the "Other areas" gallery. */
+  imageAlt?: string;
   heroButtonText: string;
   heroButtonUrl: string;
   heroSecondaryButtonText: string;
@@ -86,7 +88,8 @@ const emptyArea: Omit<ServiceArea, "id"> = {
   heroTitle: "",
   heroDescription: "",
   heroImage:
-    "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+    "",
+  imageAlt: "",
   heroButtonText: "Plan your journey",
   heroButtonUrl: "/#calculator-section",
   heroSecondaryButtonText: "Call us",
@@ -219,6 +222,7 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
       ...area,
       faqs: Array.isArray(area.faqs) ? area.faqs : [],
       noIndexNoFollow: !!area.noIndexNoFollow,
+      imageAlt: area.imageAlt || "",
       ogTitle: area.ogTitle || "",
       ogDescription: area.ogDescription || "",
       ogImage: area.ogImage || "",
@@ -334,7 +338,7 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
         showToast(updatedStatus ? "Page published live!" : "Page set to draft.");
       }
     } catch (e) {
-      showToast("Failed to update status", "error" as any);
+      showToast("Failed to update status");
     }
   };
 
@@ -1127,7 +1131,7 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
               metaDescription={form.metaDescription}
               contentType="page"
               image={form.heroImage}
-              excerpt={form.description}
+              excerpt={form.heroDescription}
               onMetaTitleChange={v => setForm(prev => ({ ...prev, metaTitle: v }))}
               onSlugChange={v => setForm(prev => ({ ...prev, slug: v }))}
               onMetaDescriptionChange={v => setForm(prev => ({ ...prev, metaDescription: v }))}
@@ -1135,6 +1139,8 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
               onOgTitleChange={v => setForm(prev => ({ ...prev, ogTitle: v }))}
               ogDescription={form.ogDescription}
               onOgDescriptionChange={v => setForm(prev => ({ ...prev, ogDescription: v }))}
+              socialImage={form.ogImage || ""}
+              onSocialImageChange={v => setForm(prev => ({ ...prev, ogImage: v }))}
               customSchema={form.customSchema}
               onCustomSchemaChange={v => setForm(prev => ({ ...prev, customSchema: v }))}
             />
@@ -1161,6 +1167,18 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
                   <span>Discourage search engines (noindex, nofollow)</span>
                 </label>
               </div>
+              <label className="flex items-center gap-2 font-medium">
+                <span className="text-[10px] font-semibold text-[#646970] uppercase">Social share type (og:type)</span>
+                <select
+                  value={form.ogType || "website"}
+                  onChange={e => setForm({ ...form, ogType: e.target.value })}
+                  className="border border-[#8c8f94] bg-white rounded-sm px-2 py-1 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                >
+                  <option value="website">website</option>
+                  <option value="article">article</option>
+                  <option value="business.business">business.business</option>
+                </select>
+              </label>
             </div>
           </div>
 
@@ -1263,6 +1281,27 @@ export default function ServiceAreasManager({ initialViewMode = "list", onBack }
                     <span>+ Select Hero Banner from Media</span>
                   </button>
                 )}
+                {form.heroImage.includes("photo-1549317661-bd32c8ce0db2") && (
+                  <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-2 py-1.5">
+                    This is the default stock photo. The live page ignores it and shows one of the site's own
+                    photographs instead. Choose a real photo of this area, or remove it.
+                  </p>
+                )}
+                <div>
+                  <label className="block text-[10px] font-semibold text-[#646970] mb-1 uppercase">
+                    Image Alt Text
+                  </label>
+                  <input
+                    type="text"
+                    value={form.imageAlt || ""}
+                    onChange={e => setForm({ ...form, imageAlt: e.target.value })}
+                    placeholder={`e.g. Chauffeur-driven car in ${form.title || "this area"}`}
+                    className="w-full border border-[#8c8f94] bg-white rounded-sm px-2.5 py-1.5 text-xs text-black focus:outline-none focus:border-[#2271b1]"
+                  />
+                  <p className="text-[10px] text-slate-500 mt-1">
+                    Used for the area photo on /service-areas and in the "Other areas" gallery. Leave empty for the default text.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

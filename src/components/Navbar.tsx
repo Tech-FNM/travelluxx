@@ -1,84 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "../utils/routerCompat";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { travelluxxLogoBase64 } from "../assets/travelluxx_logo_datauri";
-import { trackClick } from "../utils/analytics";
-import { getCustomImage } from "../utils/customImages";
+import { settingImage } from "../utils/customImages";
+import { formatUkPhone, phoneHref } from "../utils/phone";
+import { SiteLink } from "../utils/siteLink";
 import { useSettings } from "../context/SettingsContext";
+import { useContent } from "../content/useContent";
 
 interface NavbarProps {
-  onScrollTo: (elementId: string) => void;
+  // Kept for the existing callers; anchor links now handle themselves (see SiteLink).
+  onScrollTo?: (elementId: string) => void;
   onAdminClick?: () => void;
 }
 
-export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
+export default function Navbar(_props: NavbarProps) {
   const { settings, menuItems } = useSettings();
   const [isOpen, setIsOpen] = useState(false);
+  const c = useContent();
   const [openMobileDropdowns, setOpenMobileDropdowns] = useState<{ [id: string]: boolean }>({});
 
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
 
-  const getInitialLogo = () => {
-    const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
-    const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : travelluxxLogoBase64;
-    return getCustomImage("logo", defaultImg);
-  };
-
-  const [brandLogo, setBrandLogo] = useState<string>(getInitialLogo);
-
-  useEffect(() => {
-    const handleUpdate = () => {
-      const customSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
-      const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : travelluxxLogoBase64;
-      setBrandLogo(getCustomImage("logo", defaultImg));
-    };
-
-    handleUpdate();
-    window.addEventListener("custom_images_updated", handleUpdate);
-    return () => window.removeEventListener("custom_images_updated", handleUpdate);
-  }, [settings]);
+  // Logo: the dashboard setting (Site Content / Settings → General → Site Logo), else the built-in logo.
+  const logoSetting = settings?.logo_url || settings?.logo_image || settings?.logoImage;
+  const [logoFailed, setLogoFailed] = useState(false);
+  useEffect(() => setLogoFailed(false), [logoSetting]);
+  const brandLogo = logoFailed ? travelluxxLogoBase64 : settingImage(logoSetting, travelluxxLogoBase64);
 
   const isRenax = settings?.active_theme === "renax";
 
-  // Phone number, formatted the same way as the footer (+44 1217 140876)
+  // Phone number, written the UK way (+44 121 714 0876) unless the admin typed their own text
   const whatsappNum = String(settings?.whatsapp_number || "441217140876");
-  const formattedPhone = whatsappNum.startsWith("44")
-    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
-    : whatsappNum;
-  const phoneHref = whatsappNum.startsWith("44") ? `tel:+${whatsappNum}` : `tel:${whatsappNum}`;
+  const formattedPhone = c.t("nav_phone_display") || formatUkPhone(whatsappNum);
+  const phoneLink = c.t("nav_phone_link") || phoneHref(whatsappNum);
+  const quoteText = c.t("nav_quote_text");
+  const quoteHref = c.t("nav_quote_link");
 
-  const fallbackMenuItems = [
-    { id: "nav-home", label: "Home", href: "/", target: "_self" },
-    {
-      id: "nav-services",
-      label: "Services",
-      href: "/services",
-      target: "_self",
-      children: [
-        { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
-        { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
-        { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
-        { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
-        { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
-      ]
-    },
-    {
-      id: "nav-service-areas",
-      label: "Service Areas",
-      href: "/service-areas",
-      target: "_self",
-      children: [
-        { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
-        { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
-        { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
-        { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
-        { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
-      ]
-    },
-    { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
-  ];
-
-  const activeNavItems = (Array.isArray(menuItems) && menuItems.length > 0) ? menuItems : fallbackMenuItems;
+  // The menu comes from the Menus tab via SettingsContext (which has its own default menu).
+  const activeNavItems: any[] = Array.isArray(menuItems) ? menuItems : [];
 
   // Shared class strings (light bar / renax dark bar)
   const barTone = isRenax
@@ -102,6 +61,17 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
   const mobChildLink = `flex min-h-12 w-full items-center py-2 text-left text-sm cursor-pointer transition-colors duration-200 ${isRenax ? "text-stone-300 hover:text-brand-300" : "text-stone-600 hover:text-brand-700"
     }`;
 
+  // Logo goes to the homepage; on the homepage itself it scrolls back to the top.
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (typeof window !== "undefined" && window.location.pathname === "/" && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setIsOpen(false);
+  };
+
+  const closeMenu = () => setIsOpen(false);
+
   return (
     <header className={`sticky top-0 z-50 border-b ${barTone}`}>
       {/* Main Navbar */}
@@ -110,60 +80,33 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
           {/* Logo Section */}
           <div className="flex items-center">
-            <div className="flex shrink-0 cursor-pointer items-center justify-center" onClick={() => onScrollTo("hero")}>
+            <SiteLink href="/" onClick={handleLogoClick} className="flex shrink-0 cursor-pointer items-center justify-center">
               <img
                 src={brandLogo || travelluxxLogoBase64}
-                alt={`${brandName} Logo`}
+                alt={c.t("nav_logo_alt") || `${brandName} Logo`}
                 width={260}
                 height={80}
                 decoding="async"
                 className="h-11 w-auto max-w-[180px] object-contain lg:h-12 lg:max-w-[200px]"
                 onError={() => {
-                  if (brandLogo !== travelluxxLogoBase64) {
-                    setBrandLogo(travelluxxLogoBase64);
-                  }
+                  if (brandLogo !== travelluxxLogoBase64) setLogoFailed(true);
                 }}
               />
-            </div>
+            </SiteLink>
           </div>
 
           {/* Desktop Navigation */}
           <nav aria-label="Main" className="hidden h-full items-center gap-9 lg:flex">
             {activeNavItems.map((item) => {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-              const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
-              const sectionId = isAnchor ? item.href.split("#")[1] : "";
 
               if (hasChildren) {
                 return (
                   <div key={item.id} className="group/dropdown relative flex h-full items-center">
-                    {isAnchor && sectionId ? (
-                      <button
-                        type="button"
-                        onClick={() => onScrollTo(sectionId)}
-                        className={deskParentLink}
-                      >
-                        <span>{item.label}</span>
-                        <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
-                      </button>
-                    ) : item.href?.startsWith("http") ? (
-                      <a
-                        href={item.href || "#"}
-                        target={item.target || "_self"}
-                        className={deskParentLink}
-                      >
-                        <span>{item.label}</span>
-                        <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
-                      </a>
-                    ) : (
-                      <Link
-                        to={item.href || "/"}
-                        className={deskParentLink}
-                      >
-                        <span>{item.label}</span>
-                        <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
-                      </Link>
-                    )}
+                    <SiteLink href={item.href} target={item.target} className={deskParentLink}>
+                      <span>{item.label}</span>
+                      <ChevronDown className="h-4 w-4 opacity-60" strokeWidth={1.5} aria-hidden="true" />
+                    </SiteLink>
 
                     {/* Dropdown panel: hangs from the bar's hairline; opens on hover and on keyboard focus */}
                     <div className="invisible absolute top-full -left-5 z-50 group-hover/dropdown:visible group-has-[:focus-visible]/dropdown:visible">
@@ -171,84 +114,21 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
                           ? "bg-brand-950 border-white/10"
                           : "bg-white border-stone-200"
                         }`}>
-                        {item.children.map((child: any) => {
-                          const childIsAnchor = child.href?.startsWith("/#") || child.href?.startsWith("#");
-                          const childSectionId = childIsAnchor ? child.href.split("#")[1] : "";
-
-                          if (childIsAnchor && childSectionId) {
-                            return (
-                              <button
-                                key={child.id}
-                                type="button"
-                                onClick={() => onScrollTo(childSectionId)}
-                                className={deskChildLink}
-                              >
-                                <span>{child.label}</span>
-                              </button>
-                            );
-                          }
-                          if (child.href?.startsWith("http")) {
-                            return (
-                              <a
-                                key={child.id}
-                                href={child.href}
-                                target={child.target || "_self"}
-                                className={deskChildLink}
-                              >
-                                {child.label}
-                              </a>
-                            );
-                          }
-
-                          return (
-                            <Link
-                              key={child.id}
-                              to={child.href}
-                              className={deskChildLink}
-                            >
-                              {child.label}
-                            </Link>
-                          );
-                        })}
+                        {item.children.map((child: any) => (
+                          <SiteLink key={child.id} href={child.href} target={child.target} className={deskChildLink}>
+                            {child.label}
+                          </SiteLink>
+                        ))}
                       </div>
                     </div>
                   </div>
                 );
               }
 
-              if (isAnchor && sectionId) {
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onScrollTo(sectionId)}
-                    className={deskLink}
-                  >
-                    {item.label}
-                  </button>
-                );
-              }
-
-              if (item.href?.startsWith("http")) {
-                return (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    target={item.target || "_self"}
-                    className={deskLink}
-                  >
-                    {item.label}
-                  </a>
-                );
-              }
-
               return (
-                <Link
-                  key={item.id}
-                  to={item.href || "/"}
-                  className={deskLink}
-                >
+                <SiteLink key={item.id} href={item.href} target={item.target} className={deskLink}>
                   {item.label}
-                </Link>
+                </SiteLink>
               );
             })}
           </nav>
@@ -256,18 +136,18 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
           {/* Desktop contact: phone + quote */}
           <div className="hidden items-center justify-end gap-7 lg:flex">
             <a
-              href={phoneHref}
+              href={phoneLink}
               className={`text-sm font-medium whitespace-nowrap transition-colors duration-200 ${isRenax ? "text-stone-200 hover:text-brand-300" : "text-stone-900 hover:text-brand-700"
                 }`}
             >
               {formattedPhone}
             </a>
-            <a
-              href="/#calculator-section"
+            <SiteLink
+              href={quoteHref}
               className={`tl-btn h-11 px-5 ${isRenax ? "tl-btn-light" : "tl-btn-primary"}`}
             >
-              Get a quote
-            </a>
+              {quoteText}
+            </SiteLink>
           </div>
 
           {/* Mobile menu button */}
@@ -296,43 +176,15 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
             <nav aria-label="Mobile" className={`flex flex-col divide-y border-b ${isRenax ? "divide-white/10" : "divide-stone-200"} ${hairline}`}>
               {activeNavItems.map((item) => {
                 const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-                const isAnchor = item.href?.startsWith("/#") || item.href?.startsWith("#");
-                const sectionId = isAnchor ? item.href.split("#")[1] : "";
                 const isSubOpen = !!openMobileDropdowns[item.id];
 
                 if (hasChildren) {
                   return (
                     <div key={item.id}>
                       <div className="flex items-center justify-between gap-2">
-                        {isAnchor && sectionId ? (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              onScrollTo(sectionId);
-                              setIsOpen(false);
-                            }}
-                            className={`${mobLink} flex-1`}
-                          >
-                            {item.label}
-                          </button>
-                        ) : item.href?.startsWith("http") ? (
-                          <a
-                            href={item.href || "#"}
-                            target={item.target || "_self"}
-                            onClick={() => setIsOpen(false)}
-                            className={`${mobLink} flex-1`}
-                          >
-                            {item.label}
-                          </a>
-                        ) : (
-                          <Link
-                            to={item.href || "/"}
-                            onClick={() => setIsOpen(false)}
-                            className={`${mobLink} flex-1`}
-                          >
-                            {item.label}
-                          </Link>
-                        )}
+                        <SiteLink href={item.href} target={item.target} onClick={closeMenu} className={`${mobLink} flex-1`}>
+                          {item.label}
+                        </SiteLink>
                         <button
                           type="button"
                           onClick={() => setOpenMobileDropdowns(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
@@ -347,109 +199,36 @@ export default function Navbar({ onScrollTo, onAdminClick }: NavbarProps) {
 
                       {isSubOpen && (
                         <div className={`mb-3 border-l pl-4 ${hairline}`}>
-                          {item.children.map((child: any) => {
-                            const childIsAnchor = child.href?.startsWith("/#") || child.href?.startsWith("#");
-                            const childSectionId = childIsAnchor ? child.href.split("#")[1] : "";
-
-                            if (childIsAnchor && childSectionId) {
-                              return (
-                                <button
-                                  key={child.id}
-                                  type="button"
-                                  onClick={() => {
-                                    onScrollTo(childSectionId);
-                                    setIsOpen(false);
-                                  }}
-                                  className={mobChildLink}
-                                >
-                                  {child.label}
-                                </button>
-                              );
-                            }
-                            if (child.href?.startsWith("http")) {
-                              return (
-                                <a
-                                  key={child.id}
-                                  href={child.href}
-                                  target={child.target || "_self"}
-                                  onClick={() => setIsOpen(false)}
-                                  className={mobChildLink}
-                                >
-                                  {child.label}
-                                </a>
-                              );
-                            }
-
-                            return (
-                              <Link
-                                key={child.id}
-                                to={child.href}
-                                onClick={() => setIsOpen(false)}
-                                className={mobChildLink}
-                              >
-                                {child.label}
-                              </Link>
-                            );
-                          })}
+                          {item.children.map((child: any) => (
+                            <SiteLink key={child.id} href={child.href} target={child.target} onClick={closeMenu} className={mobChildLink}>
+                              {child.label}
+                            </SiteLink>
+                          ))}
                         </div>
                       )}
                     </div>
                   );
                 }
 
-                if (isAnchor && sectionId) {
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        onScrollTo(sectionId);
-                        setIsOpen(false);
-                      }}
-                      className={mobLink}
-                    >
-                      {item.label}
-                    </button>
-                  );
-                }
-
-                if (item.href?.startsWith("http")) {
-                  return (
-                    <a
-                      key={item.id}
-                      href={item.href}
-                      target={item.target || "_self"}
-                      onClick={() => setIsOpen(false)}
-                      className={mobLink}
-                    >
-                      {item.label}
-                    </a>
-                  );
-                }
-
                 return (
-                  <Link
-                    key={item.id}
-                    to={item.href || "/"}
-                    onClick={() => setIsOpen(false)}
-                    className={mobLink}
-                  >
+                  <SiteLink key={item.id} href={item.href} target={item.target} onClick={closeMenu} className={mobLink}>
                     {item.label}
-                  </Link>
+                  </SiteLink>
                 );
               })}
             </nav>
 
             {/* Mobile contact: quote + phone */}
             <div className="flex flex-col gap-3 pt-6">
-              <a
-                href="/#calculator-section"
-                onClick={() => setIsOpen(false)}
+              <SiteLink
+                href={quoteHref}
+                onClick={closeMenu}
                 className={`tl-btn w-full ${isRenax ? "tl-btn-light" : "tl-btn-primary"}`}
               >
-                Get a quote
-              </a>
+                {quoteText}
+              </SiteLink>
               <a
-                href={phoneHref}
+                href={phoneLink}
                 className={`tl-btn w-full ${isRenax ? "tl-btn-outline-light" : "tl-btn-outline"}`}
               >
                 {formattedPhone}

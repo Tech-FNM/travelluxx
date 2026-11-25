@@ -1,7 +1,8 @@
 import React from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "../../utils/routerCompat";
-import { AreaLike, areaListImage, areaPlaceName, bareSlug, dedupeAreas, twoDigits } from "./areaShared";
+import { AreaLike, areaListImage, areaPlaceName, bareSlug, dedupeAreas, fillPlaceholders, twoDigits } from "./areaShared";
+import { useContent } from "../../content/useContent";
 
 interface OtherAreasProps {
   /** The raw list from /api/service-areas (aliases included). */
@@ -15,6 +16,7 @@ interface OtherAreasProps {
  * and the cards travel across (data-hscroll); on touch screens the row swipes.
  */
 export default function OtherAreas({ areas, current }: OtherAreasProps) {
+  const c = useContent();
   const currentTitle = String(current?.title || "").trim().toLowerCase();
   const others = dedupeAreas(areas)
     .map((area, index) => ({ area, index }))
@@ -24,7 +26,7 @@ export default function OtherAreas({ areas, current }: OtherAreasProps) {
         String(area.title || "").trim().toLowerCase() !== currentTitle
     );
 
-  if (others.length === 0) return null;
+  if (others.length === 0 || !c.on("area_detail_others_enabled")) return null;
 
   return (
     <section className="overflow-hidden bg-white py-20 lg:py-28">
@@ -32,13 +34,16 @@ export default function OtherAreas({ areas, current }: OtherAreasProps) {
         <div className="tl-container">
           <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
             <div>
-              <span data-reveal className="tl-eyebrow">Other areas we cover</span>
+              <span data-reveal className="tl-eyebrow">{c.t("area_detail_others_eyebrow")}</span>
               <h2 data-reveal="lines" className="tl-h2 mt-4">
-                Beyond {areaPlaceName(current)}
+                {fillPlaceholders(c.t("area_detail_others_title"), {
+                  area: areaPlaceName(current),
+                  title: String(current?.title || ""),
+                })}
               </h2>
             </div>
             <Link to="/service-areas" data-reveal data-reveal-delay="0.1" className="tl-link py-2">
-              <span>All service areas</span>
+              <span>{c.t("area_detail_others_link_text")}</span>
               <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
             </Link>
           </div>
@@ -54,7 +59,13 @@ export default function OtherAreas({ areas, current }: OtherAreasProps) {
                   <div className="aspect-[3/2] overflow-hidden bg-stone-100">
                     <img
                       src={areaListImage(area, index)}
-                      alt={area.imageAlt || `Chauffeur service in ${areaPlaceName(area)}`}
+                      alt={
+                        area.imageAlt ||
+                        fillPlaceholders(c.t("area_detail_others_card_alt"), {
+                          area: areaPlaceName(area),
+                          title: String(area.title || ""),
+                        })
+                      }
                       loading="lazy"
                       decoding="async"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -83,10 +94,12 @@ export default function OtherAreas({ areas, current }: OtherAreasProps) {
                 to="/service-areas"
                 className="tl-dark group flex w-[62vw] flex-col justify-between p-7 transition-colors duration-200 hover:bg-brand-900 sm:w-[300px]"
               >
-                <span className="text-xs font-medium tracking-[0.22em] text-brand-300 uppercase">The directory</span>
+                <span className="text-xs font-medium tracking-[0.22em] text-brand-300 uppercase">
+                  {c.t("area_detail_others_last_label")}
+                </span>
                 <span className="flex items-end justify-between gap-4">
                   <span className="font-display text-3xl leading-[1.08] font-medium text-white">
-                    See every area we cover
+                    {c.t("area_detail_others_last_title")}
                   </span>
                   <ArrowUpRight className="mb-1 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
                 </span>

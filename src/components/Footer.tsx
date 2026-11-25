@@ -1,7 +1,9 @@
 import { Phone, Mail, MapPin, Instagram } from "lucide-react";
 
-import { Link } from "../utils/routerCompat";
+import { SiteLink } from "../utils/siteLink";
+import { formatUkPhone, phoneHref as toPhoneHref } from "../utils/phone";
 import { useSettings } from "../context/SettingsContext";
+import { useContent } from "../content/useContent";
 
 interface FooterProps {
   onScrollTo: (elementId: string) => void;
@@ -26,38 +28,6 @@ function PinterestIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-// Same fallback list the Navbar uses when no menu has been saved yet
-const fallbackMenuItems = [
-  { id: "nav-home", label: "Home", href: "/", target: "_self" },
-  {
-    id: "nav-services",
-    label: "Services",
-    href: "/services",
-    target: "_self",
-    children: [
-      { id: "srv-airport-transfers", label: "Local Airport Transfers Birmingham", href: "/services/airport-transfers", target: "_self" },
-      { id: "srv-private-transfers", label: "Private Transfers", href: "/services/private-transfers", target: "_self" },
-      { id: "srv-long-distance-travel", label: "Long Distance Travel", href: "/services/long-distance-travel", target: "_self" },
-      { id: "srv-business-travel", label: "Business Travel", href: "/services/business-travel", target: "_self" },
-      { id: "srv-all-services", label: "All Services", href: "/services", target: "_self" }
-    ]
-  },
-  {
-    id: "nav-service-areas",
-    label: "Service Areas",
-    href: "/service-areas",
-    target: "_self",
-    children: [
-      { id: "sa-solihull", label: "Solihull", href: "/service-areas/chauffeur-solihull", target: "_self" },
-      { id: "sa-coventry", label: "Chauffeur Coventry", href: "/service-areas/chauffeur-coventry", target: "_self" },
-      { id: "sa-leamington-spa", label: "Chauffeur Leamington Spa", href: "/service-areas/chauffeur-leamington-spa", target: "_self" },
-      { id: "sa-warwick", label: "Chauffeur Warwick", href: "/service-areas/chauffeur-warwick", target: "_self" },
-      { id: "sa-all-areas", label: "All Service Areas", href: "/service-areas", target: "_self" }
-    ]
-  },
-  { id: "nav-blog", label: "Blog", href: "/blog", target: "_self" }
-];
-
 const columnHeading = "text-xs font-medium uppercase tracking-[0.22em] text-stone-400";
 const columnLink = "block py-3 text-sm leading-5 text-stone-300 transition-colors duration-200 hover:text-white lg:py-1.5";
 
@@ -69,20 +39,9 @@ function FooterLinkColumn({ title, links }: { title: string; links: any[] }) {
       <ul className="mt-3 lg:mt-4">
         {links.map((child: any, index: number) => (
           <li key={child.id || `${child.href}-${index}`}>
-            {child.href?.startsWith("http") ? (
-              <a
-                href={child.href}
-                target={child.target || "_self"}
-                rel={child.target === "_blank" ? "noopener noreferrer" : undefined}
-                className={columnLink}
-              >
-                {child.label}
-              </a>
-            ) : (
-              <Link to={child.href || "/"} className={columnLink}>
-                {child.label}
-              </Link>
-            )}
+            <SiteLink href={child.href} target={child.target} className={columnLink}>
+              {child.label}
+            </SiteLink>
           </li>
         ))}
       </ul>
@@ -97,29 +56,46 @@ export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
   const emailAddr = settings?.business_email || "info@travelluxx.co.uk";
   const officeAddr = settings?.office_address || "Shirley B90 Shirley, Solihull, West Midlands, UK";
 
+  const c = useContent();
+
   // Social media URLs
-  const instagramUrl = settings?.social_instagram || "https://www.instagram.com/trave_lluxx/";
-  const tiktokUrl = settings?.social_tiktok || "https://www.tiktok.com/@traveluxx";
-  const pinterestUrl = settings?.social_pinterest || "https://uk.pinterest.com/travelluxx01/";
+  const instagramUrl = c.t("social_instagram");
+  const tiktokUrl = c.t("social_tiktok");
+  const pinterestUrl = c.t("social_pinterest");
+  const showInstagram = c.on("footer_social_instagram_enabled");
+  const showTiktok = c.on("footer_social_tiktok_enabled");
+  const showPinterest = c.on("footer_social_pinterest_enabled");
+  const showSocial = showInstagram || showTiktok || showPinterest;
 
   const isRenax = settings?.active_theme === "renax";
 
-  const formattedPhone = whatsappNum.startsWith("44")
-    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
-    : whatsappNum;
-  const phoneHref = whatsappNum.startsWith("44") ? `tel:+${whatsappNum}` : `tel:${whatsappNum}`;
+  const formattedPhone = formatUkPhone(whatsappNum);
+  const phoneHref = toPhoneHref(whatsappNum);
 
-  // Link columns: children of the "Services" and "Service Areas" menu items
-  const activeNavItems = (Array.isArray(menuItems) && menuItems.length > 0) ? menuItems : fallbackMenuItems;
-  const menuChildren = (label: string, id: string, href: string): any[] => {
-    const wanted = label.toLowerCase();
+  // Link columns: children of the menu items that link to /services and /service-areas (Menus tab,
+  // via SettingsContext). Matched by link first, so renaming the menu label does not empty the
+  // column; then by the default item id, then by label.
+  const activeNavItems: any[] = Array.isArray(menuItems) ? menuItems : [];
+  const normPath = (href: unknown) =>
+    typeof href === "string" ? href.trim().replace(/^https?:\/\/[^/]+/i, "").replace(/[?#].*$/, "").replace(/\/+$/, "").toLowerCase() || "/" : "";
+  const menuChildren = (href: string, id: string, labels: string[]): any[] => {
+    const withChildren = activeNavItems.filter((entry: any) => Array.isArray(entry?.children) && entry.children.length > 0);
     const item =
-      activeNavItems.find((entry: any) => typeof entry?.label === "string" && entry.label.trim().toLowerCase() === wanted) ||
-      activeNavItems.find((entry: any) => entry?.id === id || entry?.href === href);
+      withChildren.find((entry: any) => normPath(entry.href) === href) ||
+      withChildren.find((entry: any) => entry?.id === id) ||
+      withChildren.find((entry: any) => typeof entry?.label === "string" && labels.includes(entry.label.trim().toLowerCase()));
     return Array.isArray(item?.children) ? item.children.filter((child: any) => child && child.label) : [];
   };
-  const serviceLinks = menuChildren("Services", "nav-services", "/services");
-  const areaLinks = menuChildren("Service Areas", "nav-service-areas", "/service-areas");
+  const serviceLinks = c.on("footer_services_enabled") ? menuChildren("/services", "nav-services", ["services", "our services"]) : [];
+  const areaLinks = c.on("footer_areas_enabled") ? menuChildren("/service-areas", "nav-service-areas", ["service areas", "areas", "areas we cover"]) : [];
+
+  // Driver recruitment button: {whatsapp_number} / {business_name} placeholders, WhatsApp message added to wa.me links
+  let driverHref = c.t("footer_driver_button_url").replace(/\{whatsapp_number\}/g, whatsappNum);
+  const driverMessage = c.t("footer_driver_whatsapp_message").replace(/\{business_name\}/g, brandName).trim();
+  if (/wa\.me\//i.test(driverHref) && !/[?&]text=/i.test(driverHref) && driverMessage) {
+    driverHref += `${driverHref.includes("?") ? "&" : "?"}text=${encodeURIComponent(driverMessage)}`;
+  }
+  const driverExternal = /^https?:/i.test(driverHref);
 
   const columnCount = 2 + (serviceLinks.length > 0 ? 1 : 0) + (areaLinks.length > 0 ? 1 : 0);
   const columnGrid = columnCount === 4 ? "lg:grid-cols-4" : columnCount === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2";
@@ -133,21 +109,21 @@ export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
             <div className="flex items-start gap-4">
               <Phone className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
               <div>
-                <p className={columnHeading}>Call Us</p>
+                <p className={columnHeading}>{c.t("footer_renax_call_label")}</p>
                 <p className="mt-1.5 text-sm font-medium text-white">{formattedPhone}</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <Mail className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
               <div className="min-w-0">
-                <p className={columnHeading}>Write to Us</p>
+                <p className={columnHeading}>{c.t("footer_renax_email_label")}</p>
                 <p className="mt-1.5 truncate text-sm font-medium text-white">{emailAddr}</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" strokeWidth={1.5} aria-hidden="true" />
               <div>
-                <p className={columnHeading}>Head Office</p>
+                <p className={columnHeading}>{c.t("footer_renax_office_label")}</p>
                 <p className="mt-1.5 text-sm font-medium text-white">{officeAddr}</p>
               </div>
             </div>
@@ -164,50 +140,58 @@ export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
             </address>
 
             {/* Social Media Quick Icons */}
+            {showSocial && (
             <div className="mt-7 flex items-center text-stone-400">
-              <span className={`mr-2 ${columnHeading}`}>Follow us:</span>
+              <span className={`mr-2 ${columnHeading}`}>{c.t("footer_follow_label")}</span>
+              {showInstagram && (
               <a
                 href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-11 w-11 items-center justify-center transition-colors duration-200 hover:text-white"
                 aria-label="Instagram"
-                title="TravelLuxx on Instagram"
+                title={`${brandName} on Instagram`}
               >
                 <Instagram className="h-5 w-5" strokeWidth={1.5} />
               </a>
+              )}
+              {showTiktok && (
               <a
                 href={tiktokUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-11 w-11 items-center justify-center transition-colors duration-200 hover:text-white"
                 aria-label="TikTok"
-                title="TravelLuxx on TikTok"
+                title={`${brandName} on TikTok`}
               >
                 <TikTokIcon className="h-[18px] w-[18px]" />
               </a>
+              )}
+              {showPinterest && (
               <a
                 href={pinterestUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-11 w-11 items-center justify-center transition-colors duration-200 hover:text-white"
                 aria-label="Pinterest"
-                title="TravelLuxx on Pinterest"
+                title={`${brandName} on Pinterest`}
               >
                 <PinterestIcon className="h-[18px] w-[18px]" />
               </a>
+              )}
             </div>
+            )}
           </div>
 
           {/* Services */}
-          {serviceLinks.length > 0 && <FooterLinkColumn title="Services" links={serviceLinks} />}
+          {serviceLinks.length > 0 && <FooterLinkColumn title={c.t("footer_services_heading")} links={serviceLinks} />}
 
           {/* Service areas */}
-          {areaLinks.length > 0 && <FooterLinkColumn title="Service areas" links={areaLinks} />}
+          {areaLinks.length > 0 && <FooterLinkColumn title={c.t("footer_areas_heading")} links={areaLinks} />}
 
           {/* Contact */}
           <div>
-            <p className={columnHeading}>Contact</p>
+            <p className={columnHeading}>{c.t("footer_contact_heading")}</p>
             <ul className="mt-3 lg:mt-4">
               <li>
                 <a href={phoneHref} className={columnLink}>
@@ -229,37 +213,44 @@ export default function Footer({ onScrollTo, onAdminClick }: FooterProps) {
         </div>
 
         {/* Elite Driver Recruitment Banner */}
+        {c.on("footer_driver_enabled") && (
         <div data-reveal className="flex flex-col gap-6 border-y border-white/10 py-8 md:flex-row md:items-center md:justify-between md:gap-10">
           <div>
             <h3 className="tl-h3 text-white">
-              Join TravelLuxx
+              {c.t("footer_driver_heading").replace(/\{business_name\}/g, brandName)}
             </h3>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-stone-400">
-              Looking for professional driver jobs? We are recruiting premium chauffeurs in Birmingham.
+              {c.t("footer_driver_text")}
             </p>
           </div>
           <a
-            href={`https://wa.me/${whatsappNum}?text=Hi,%20I'm%20a%20licensed%20private%20hire%20driver%20and%20would%20like%20to%20apply%20to%20partner%20with%20${encodeURIComponent(brandName)}.`}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={driverHref}
+            target={driverExternal ? "_blank" : undefined}
+            rel={driverExternal ? "noopener noreferrer" : undefined}
             className="tl-btn tl-btn-outline-light w-full shrink-0 md:w-auto"
           >
-            Apply Now
+            {c.t("footer_driver_button_text")}
           </a>
         </div>
+        )}
 
         {/* Footnote & Bottom Bar */}
         <div className="py-8 text-xs leading-relaxed text-stone-400">
           <p className="pr-16 sm:pr-0">
-            © 2026 Travelluxx. All rights reserved - Develop & Managed By{" "}
+            {c.t("footer_info").replace(/\{business_name\}/g, brandName).replace(/\{year\}/g, String(new Date().getFullYear()))}
+            {c.on("footer_credit_enabled") && (
+            <>
+            {" "}{c.t("footer_credit_prefix")}{" "}
             <a
-              href="https://techfnm.com/"
+              href={c.t("footer_credit_url")}
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium text-stone-300 underline decoration-white/30 underline-offset-4 transition-colors duration-200 hover:text-white"
             >
-              Tech FNM
+              {c.t("footer_credit_name")}
             </a>
+            </>
+            )}
           </p>
         </div>
       </div>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ArrowRight } from "lucide-react";
 
 import mercedesEconomyImg from "../assets/images/fleet_economy_1786403470397.jpg";
 import mercedesLuxuryImg from "../assets/images/fleet_luxury_1786403483244.jpg";
 import mercedesFamilyImg from "../assets/images/fleet_family_1786403496325.jpg";
-import { getCustomImage } from "../utils/customImages";
+import { settingImage } from "../utils/customImages";
+import { useContent } from "../content/useContent";
 
 interface FleetCatalogProps {
   onSelectClass: (carClass: "Economy" | "Luxury" | "Family") => void;
@@ -14,13 +15,7 @@ interface FleetCatalogProps {
 export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogProps) {
   const [activeTab, setActiveTab] = React.useState<"Economy" | "Luxury" | "Family">("Luxury");
   const [pricing, setPricing] = React.useState<any>(null);
-  const [, setRefreshKey] = useState(0);
-
-  useEffect(() => {
-    const handleUpdate = () => setRefreshKey(prev => prev + 1);
-    window.addEventListener("custom_images_updated", handleUpdate);
-    return () => window.removeEventListener("custom_images_updated", handleUpdate);
-  }, []);
+  const c = useContent(settings);
 
   React.useEffect(() => {
     fetch("/api/pricing")
@@ -31,40 +26,47 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
 
   const fleet = {
     Economy: {
-      name: settings?.fleet_economy_name || "Business Economy Class",
-      alt: settings?.fleet_economy_alt || `${settings?.fleet_economy_name || "Business Economy Class"} - Executive Chauffeur Car Solihull & London`,
-      tagline: settings?.fleet_economy_tagline || "Elegant, clean, and highly efficient travel.",
-      image: settings?.fleet_economy_image || getCustomImage("fleet_Economy", mercedesEconomyImg),
+      name: c.t("fleet_economy_name"),
+      alt: c.t("fleet_economy_alt") || `${c.t("fleet_economy_name")} - Executive Chauffeur Car Solihull & London`,
+      tagline: c.t("fleet_economy_tagline"),
+      image: settingImage(c.t("fleet_economy_image"), mercedesEconomyImg),
       rate: pricing?.Economy?.perMile !== undefined ? `£${Number(pricing.Economy.perMile).toFixed(2)}` : "£1.50",
-      description: settings?.fleet_economy_description || "Perfect for business commuters, solo travellers, or quick transfers. Featuring modern executive comfort with absolute fuel efficiency.",
+      description: c.t("fleet_economy_description"),
       cars: ["Tesla Model 3", "Audi A4 Executive", "Mercedes C-Class"],
-      features: (settings?.fleet_economy_features || "Complimentary 4G Wi-Fi, Dual-zone Climate Control, USB Charging Ports, Bottle Holders & Newspapers").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
+      features: c.t("fleet_economy_features").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
     },
     Luxury: {
-      name: settings?.fleet_luxury_name || "First Class Luxury Chauffeur",
-      alt: settings?.fleet_luxury_alt || `${settings?.fleet_luxury_name || "First Class Luxury Chauffeur"} - Executive Mercedes-Benz S-Class Solihull & London`,
-      tagline: settings?.fleet_luxury_tagline || "The pinnacle of executive comfort and style.",
-      image: settings?.fleet_luxury_image || getCustomImage("fleet_Luxury", mercedesLuxuryImg),
+      name: c.t("fleet_luxury_name"),
+      alt: c.t("fleet_luxury_alt") || `${c.t("fleet_luxury_name")} - Executive Mercedes-Benz S-Class Solihull & London`,
+      tagline: c.t("fleet_luxury_tagline"),
+      image: settingImage(c.t("fleet_luxury_image"), mercedesLuxuryImg),
       rate: pricing?.Luxury?.perMile !== undefined ? `£${Number(pricing.Luxury.perMile).toFixed(2)}` : "£2.00",
-      description: settings?.fleet_luxury_description || "Experience VIP travel. Whether it's high-profile business meetings, weddings, or an ultra-comfort ride to Heathrow. Settle into reclining leather chairs.",
+      description: c.t("fleet_luxury_description"),
       cars: ["Mercedes-Benz S-Class", "Audi A8 L", "Jaguar XJ Luxury"],
-      features: (settings?.fleet_luxury_features || "Premium Leather Reclining Seats, Complimentary Bottled Water, Ambient Lighting Controls, Rear Seat Entertainment Systems, Quiet Acoustic Cabins").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
+      features: c.t("fleet_luxury_features").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
     },
     Family: {
-      name: settings?.fleet_family_name || "Family & Executive MPV",
-      alt: settings?.fleet_family_alt || `${settings?.fleet_family_name || "Family & Executive MPV"} - Mercedes-Benz V-Class Chauffeur Solihull & London`,
-      tagline: settings?.fleet_family_tagline || "Generous space for luggage and loved ones.",
-      image: settings?.fleet_family_image || getCustomImage("fleet_Family", mercedesFamilyImg),
+      name: c.t("fleet_family_name"),
+      alt: c.t("fleet_family_alt") || `${c.t("fleet_family_name")} - Mercedes-Benz V-Class Chauffeur Solihull & London`,
+      tagline: c.t("fleet_family_tagline"),
+      image: settingImage(c.t("fleet_family_image"), mercedesFamilyImg),
       rate: pricing?.Family?.perMile !== undefined ? `£${Number(pricing.Family.perMile).toFixed(2)}` : "£2.50",
-      description: settings?.fleet_family_description || "Ideal for family vacations, groups, or high-volume luggage transfers. Spacious seating configuration ensures passengers can converse in absolute comfort.",
+      description: c.t("fleet_family_description"),
       cars: ["Mercedes-Benz V-Class", "Audi Q7 S-Line", "Volkswagen Caravelle Executive"],
-      features: (settings?.fleet_family_features || "Conference Seating Options, Massive Boot Capacity, Automatic Sliding Doors, Privacy Glass, Individual Air-Con Units, Child Seats Available (On Request)").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
+      features: c.t("fleet_family_features").split(/[,•]/).map((s: string) => s.trim()).filter(Boolean)
     }
   };
 
   const selectedClass = fleet[activeTab];
 
   const tabs = Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">;
+  const tabLabels: Record<"Economy" | "Luxury" | "Family", string> = {
+    Economy: c.t("home_fleet_tab_economy"),
+    Luxury: c.t("home_fleet_tab_luxury"),
+    Family: c.t("home_fleet_tab_family"),
+  };
+
+  if (!c.on("home_fleet_enabled")) return null;
 
   return (
     <section id="fleet" className="tl-section overflow-x-clip bg-ivory">
@@ -74,14 +76,14 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-16">
           <div className="lg:col-span-7">
             <span data-reveal className="tl-eyebrow">
-              {settings?.homepage_fleet_subtitle || "Our Premium Fleet"}
+              {c.t("homepage_fleet_subtitle")}
             </span>
             <h2 data-reveal="lines" className="tl-h2 mt-4">
-              {settings?.homepage_fleet_title || "Travel in Premium Comfort"}
+              {c.t("homepage_fleet_title")}
             </h2>
           </div>
           <p data-reveal data-reveal-delay="0.1" className="tl-lead lg:col-span-5">
-            {settings?.homepage_fleet_description || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers."}
+            {c.t("homepage_fleet_description")}
           </p>
         </div>
 
@@ -109,7 +111,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
                     : "border-transparent text-stone-500 hover:text-stone-900"
                 }`}
               >
-                {tab}
+                {tabLabels[tab]}
               </button>
             </React.Fragment>
           ))}
@@ -147,7 +149,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
                 onClick={() => onSelectClass(activeTab)}
                 className="tl-btn tl-btn-primary w-full sm:w-auto"
               >
-                <span>Book This Class Now</span>
+                <span>{c.t("home_fleet_book_button")}</span>
                 <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
               </button>
             </div>
@@ -189,7 +191,7 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
 
             {/* Key Luxury Amenities: two-column hairline list */}
             <div data-reveal className="order-3 lg:mt-10">
-              <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">Included On-Board Amenities:</h4>
+              <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">{c.t("home_fleet_amenities_heading")}</h4>
               <ul className="mt-5 grid grid-cols-1 gap-x-12 sm:grid-cols-2">
                 {selectedClass.features.map((feat, idx) => (
                   <li key={idx} className="border-t border-stone-300 py-3.5 text-sm leading-5 text-stone-700">

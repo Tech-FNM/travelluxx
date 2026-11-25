@@ -1,90 +1,68 @@
 import React from "react";
-import Head from "next/head";
 import { GetStaticProps } from "next";
 import Home from "../src/pages/Home";
-import { getWebsiteSettings } from "../lib/mongodb";
+import SeoHead from "../src/components/SeoHead";
+import { getMenu, getPageBySlug, getWebsiteSettings } from "../lib/mongodb";
+import { faqPageSchema, homepageFaqs, organizationSchemas, siteBaseUrl } from "../src/lib/seoSchemas";
 
-const defaultFaqs = [
-  {
-    question: "How do I book an executive transfer with TravelLuxx?",
-    answer:
-      "You can book easily online using our instant Fare Calculator above, select your desired vehicle class (Economy, Luxury, or Family MPV), specify your pickup time and date, and complete your reservation with instant confirmation.",
-  },
-  {
-    question: "Do you provide flight monitoring for airport pickups?",
-    answer:
-      "Yes, our team actively monitors all inbound commercial flights in real-time. Whether your flight is delayed or lands early, your chauffeur will adjust their schedule accordingly and meet you inside the terminal with a name board.",
-  },
-  {
-    question: "What vehicle classes are available?",
-    answer:
-      "We offer Mercedes-Benz E-Class & S-Class executive sedans for up to 4 passengers, and Mercedes V-Class / luxury multi-passenger vehicles (MPVs) for families and business groups carrying up to 7-8 passengers and substantial luggage.",
-  },
-  {
-    question: "Can I apply a promo code or discount voucher?",
-    answer:
-      "Yes! At Step 3 (Secure Checkout) in our Booking Calculator, you can enter your promo code in the discount field and click 'Apply' to instantly receive your calculated savings before confirming your reservation.",
-  },
-  {
-    question: "What payment methods do you accept?",
-    answer:
-      "We accept all major credit and debit cards, Apple Pay, Google Pay, and Klarna through our secure Mollie payments integration, as well as pre-authorized Cash on Departure / Pay Later options.",
-  },
-];
+const DEFAULT_TITLE = "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx";
+const DEFAULT_DESCRIPTION =
+  "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey.";
 
-export default function HomePage({ settings }: { settings: any }) {
-  const faqs =
-    Array.isArray(settings?.homepage_faqs) && settings.homepage_faqs.length > 0
-      ? settings.homepage_faqs
-      : defaultFaqs;
+interface HomePageProps {
+  settings: any;
+  menu: any[] | null;
+  /** Settings → Reading → "A static page": the chosen page, loaded on the server. */
+  homepagePage: any | null;
+}
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f: any) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
-  };
+export default function HomePage({ settings, homepagePage }: HomePageProps) {
+  const s = settings || {};
+  const base = siteBaseUrl(s);
+  const staticPage = s.homepage_displays === "page" ? homepagePage : null;
+
+  // Homepage tab → SEO; a static homepage uses its page's own SEO fields first.
+  const title =
+    staticPage?.metaTitle || s.homepage_seo_title || s.seo_title || staticPage?.title || DEFAULT_TITLE;
+  const description =
+    staticPage?.metaDescription || s.homepage_seo_description || s.seo_description || DEFAULT_DESCRIPTION;
+
+  const schemas = [...organizationSchemas(s), faqPageSchema(`${base}/`, homepageFaqs(s))];
 
   return (
     <>
-      <Head>
-        <title>
-          {settings?.homepage_seo_title ||
-            settings?.seo_title ||
-            "Luxury Airport Transfers & Chauffeur Service UK | TravelLuxx"}
-        </title>
-        <meta
-          name="description"
-          content={
-            settings?.homepage_seo_description ||
-            settings?.seo_description ||
-            "Book premium airport transfers and luxury chauffeur services across the UK with TravelLuxx. Reliable, comfortable and professional travel for every journey."
-          }
-        />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://travelluxx.co.uk/" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      </Head>
-      <Home initialSettings={settings} />
+      <SeoHead
+        settings={s}
+        path="/"
+        title={title}
+        description={description}
+        ogTitle={staticPage?.ogTitle || s.homepage_og_title}
+        ogDescription={staticPage?.ogDescription || s.homepage_og_description}
+        image={staticPage?.socialImage || s.homepage_social_image || staticPage?.image}
+        xTitle={staticPage?.xTitle || s.homepage_x_title}
+        xDescription={staticPage?.xDescription || s.homepage_x_description}
+        xImage={staticPage?.xImage || s.homepage_x_image}
+        noIndex={staticPage?.noIndexNoFollow}
+        schemas={schemas}
+        customSchema={staticPage?.customSchema || s.homepage_custom_schema}
+      />
+      <Home initialSettings={settings} initialPage={staticPage} />
     </>
   );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const settings = await getWebsiteSettings();
+    const [settings, menu] = await Promise.all([getWebsiteSettings(), getMenu().catch(() => null)]);
+    let homepagePage: any = null;
+    if (settings?.homepage_displays === "page" && settings?.homepage_page_id) {
+      homepagePage = await getPageBySlug(String(settings.homepage_page_id)).catch(() => null);
+    }
     return {
       props: {
         settings: settings || {},
+        menu: menu ?? null,
+        homepagePage: homepagePage || null,
       },
       revalidate: 60,
     };
@@ -93,6 +71,8 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       props: {
         settings: {},
+        menu: null,
+        homepagePage: null,
       },
       revalidate: 60,
     };

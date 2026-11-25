@@ -1,6 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useContent } from "../content/useContent";
+
+// Labels are injected into Leaflet's HTML strings, so escape them.
+const esc = (s: string) =>
+  s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] as string);
+
+const fill = (pattern: string, vars: Record<string, string | number>) =>
+  pattern.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
+
+const toNum = (v: string, fallback: number) => {
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : fallback;
+};
 
 interface GoogleBookingMapProps {
   pickupCoords: { lat: number; lng: number } | null;
@@ -30,6 +43,10 @@ export default function GoogleBookingMap({
   const dropoffMarkerRef = useRef<L.Marker | null>(null);
   const distanceMarkerRef = useRef<L.Marker | null>(null);
   const routePolylineRef = useRef<L.Polyline | null>(null);
+  const c = useContent();
+  // Latest texts, read inside the map effects without adding them as dependencies.
+  const textRef = useRef(c);
+  textRef.current = c;
 
   // Initialize Map
   useEffect(() => {
@@ -39,7 +56,13 @@ export default function GoogleBookingMap({
     const map = L.map(mapContainerRef.current, {
       zoomControl: false,
       attributionControl: false,
-    }).setView([52.414, -1.815], 10);
+    }).setView(
+      [
+        toNum(textRef.current.t("booking_map_center_lat"), 52.414),
+        toNum(textRef.current.t("booking_map_center_lng"), -1.815),
+      ],
+      10
+    );
 
     // Re-add zoom control at bottom-right corner
     L.control.zoom({ position: "bottomright" }).addTo(map);
@@ -97,6 +120,9 @@ export default function GoogleBookingMap({
       routePolylineRef.current = null;
     }
 
+    const t = textRef.current.t;
+    const mi = esc(t("booking_map_unit_miles"));
+    const km = esc(t("booking_map_unit_km"));
     const bounds = L.latLngBounds([]);
     let hasBounds = false;
 
@@ -108,7 +134,7 @@ export default function GoogleBookingMap({
             <div style="width: 28px; height: 28px; border-radius: 9999px; background-color: #184f37; border: 3px solid #ffffff; box-shadow: 0 0 0 1px rgba(28,25,23,0.25); display: flex; align-items: center; justify-content: center;">
               <div style="width: 8px; height: 8px; border-radius: 9999px; background-color: #ffffff;"></div>
             </div>
-            <div style="margin-top: 3px; background-color: #ffffff; color: #1c1917; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.4; padding: 1px 6px; border-radius: 2px; border: 1px solid #d6d3d1; text-transform: uppercase; white-space: nowrap;">PICKUP</div>
+            <div style="margin-top: 3px; background-color: #ffffff; color: #1c1917; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.4; padding: 1px 6px; border-radius: 2px; border: 1px solid #d6d3d1; text-transform: uppercase; white-space: nowrap;">${esc(t("booking_map_pin_pickup"))}</div>
           </div>
         `,
         iconSize: [28, 48],
@@ -129,7 +155,7 @@ export default function GoogleBookingMap({
             <div style="width: 28px; height: 28px; border-radius: 2px; background-color: #1c1917; border: 3px solid #ffffff; box-shadow: 0 0 0 1px rgba(28,25,23,0.25); display: flex; align-items: center; justify-content: center;">
               <div style="width: 8px; height: 8px; border-radius: 1px; background-color: #ffffff;"></div>
             </div>
-            <div style="margin-top: 3px; background-color: #ffffff; color: #1c1917; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.4; padding: 1px 6px; border-radius: 2px; border: 1px solid #d6d3d1; text-transform: uppercase; white-space: nowrap;">DROPOFF</div>
+            <div style="margin-top: 3px; background-color: #ffffff; color: #1c1917; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.4; padding: 1px 6px; border-radius: 2px; border: 1px solid #d6d3d1; text-transform: uppercase; white-space: nowrap;">${esc(t("booking_map_pin_dropoff"))}</div>
           </div>
         `,
         iconSize: [28, 48],
@@ -182,7 +208,7 @@ export default function GoogleBookingMap({
               html: `
                 <div style="display: flex; justify-content: center;">
                   <div style="background-color: #ffffff; color: #1c1917; font-size: 11px; font-weight: 600; line-height: 1.4; padding: 3px 8px; border-radius: 2px; border: 1px solid #184f37; font-family: inherit; font-variant-numeric: tabular-nums; white-space: nowrap;">
-                    ${distanceMiles.toFixed(1)} mi (${distanceKm.toFixed(1)} km)
+                    ${distanceMiles.toFixed(1)} ${mi} (${distanceKm.toFixed(1)} ${km})
                   </div>
                 </div>
               `,
@@ -196,7 +222,11 @@ export default function GoogleBookingMap({
               timeMinutes,
               routePoints,
               instructions: [
-                `Route distance: ${distanceMiles.toFixed(1)} miles (${distanceKm.toFixed(1)} km), ~${Math.round(timeMinutes)} mins`
+                fill(t("booking_map_route_summary"), {
+                  miles: distanceMiles.toFixed(1),
+                  km: distanceKm.toFixed(1),
+                  minutes: Math.round(timeMinutes),
+                }),
               ],
             });
           }
@@ -237,7 +267,7 @@ export default function GoogleBookingMap({
             html: `
               <div style="display: flex; justify-content: center;">
                 <div style="background-color: #ffffff; color: #1c1917; font-size: 11px; font-weight: 600; line-height: 1.4; padding: 3px 8px; border-radius: 2px; border: 1px solid #184f37; font-family: inherit; font-variant-numeric: tabular-nums; white-space: nowrap;">
-                  ${distanceMiles.toFixed(1)} mi
+                  ${distanceMiles.toFixed(1)} ${mi}
                 </div>
               </div>
             `,
@@ -253,7 +283,7 @@ export default function GoogleBookingMap({
               { lat: pickupCoords.lat, lng: pickupCoords.lng },
               { lat: dropoffCoords.lat, lng: dropoffCoords.lng }
             ],
-            instructions: [`Direct Route (~${distanceMiles.toFixed(1)} miles)`],
+            instructions: [fill(t("booking_map_route_summary_direct"), { miles: distanceMiles.toFixed(1) })],
           });
         });
 

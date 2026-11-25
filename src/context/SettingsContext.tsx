@@ -1,3 +1,4 @@
+import { CONTENT_DEFAULTS } from "../content/registry";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface SettingsContextType {
@@ -12,7 +13,7 @@ interface SettingsContextType {
   updateSettingsLocally: (newSettings: any) => void;
 }
 
-const DEFAULT_FALLBACK_SETTINGS = {
+const LEGACY_FALLBACK_SETTINGS: Record<string, any> = {
   business_name: "Travelluxx",
   business_email: "info@travelluxx.co.uk",
   whatsapp_number: "441217140876",
@@ -122,18 +123,41 @@ function readCache(key: string): any {
   }
 }
 
+// Text that the dashboard's Site Content tab manages takes its default from the content registry
+// only (src/content/sections). This older list must not override those defaults, or the website
+// would show different text from what the dashboard says is the default.
+const DEFAULT_FALLBACK_SETTINGS: Record<string, any> = Object.fromEntries(
+  Object.entries(LEGACY_FALLBACK_SETTINGS).filter(([key]) => !(key in CONTENT_DEFAULTS))
+);
+
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
-export function SettingsProvider({ children }: { children: ReactNode }) {
+export function SettingsProvider({
+  children,
+  initialSettings,
+  initialMenu,
+}: {
+  children: ReactNode;
+  initialSettings?: any;
+  /** The saved menu, loaded by the page on the server so the header links are in the first HTML. */
+  initialMenu?: any[] | null;
+}) {
+  const hasServerMenu = Array.isArray(initialMenu);
   // Every visitor starts from the same defaults the server rendered with. Reading the browser
   // cache here instead would make the first client render differ from the server HTML (a React
   // hydration error for returning visitors); the cache is applied right after mount, below.
-  const [settings, setSettings] = useState<any>(DEFAULT_FALLBACK_SETTINGS);
+  // Pages built on the server pass the saved settings in, so the header, footer and every section
+  // render the admin's real content in the first HTML (same on server and client, no flash).
+  const [settings, setSettings] = useState<any>(() =>
+    initialSettings && typeof initialSettings === "object" && Object.keys(initialSettings).length > 0
+      ? { ...DEFAULT_FALLBACK_SETTINGS, ...initialSettings }
+      : DEFAULT_FALLBACK_SETTINGS
+  );
   const [pages, setPages] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [servicesPageSettings, setServicesPageSettings] = useState<any>(null);
-  const [menuItems, setMenuItems] = useState<any[]>(DEFAULT_MENU_ITEMS);
+  const [menuItems, setMenuItems] = useState<any[]>(() => (hasServerMenu ? (initialMenu as any[]) : DEFAULT_MENU_ITEMS));
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchSettings = async () => {
@@ -186,7 +210,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         servicesPageSettingsData,
         menuItemsData
       ] = await Promise.all([
-        safeJson(settingsRes, "/api/admin/settings"),
+        safeJson(settingsRes),
         safeJson(pagesRes),
         safeJson(servicesRes),
         safeJson(postsRes),
@@ -195,7 +219,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       ]);
 
       if (settingsData) {
-        setSettings(settingsData);
+        // Same shape as the first render (defaults + saved values). When nothing changed since the
+        // page was built, the current object is kept so nothing re-renders.
+        const next = { ...DEFAULT_FALLBACK_SETTINGS, ...settingsData };
+        setSettings((prev: any) => {
+          try {
+            if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
+          } catch (e) { }
+          return next;
+        });
         try {
           localStorage.setItem("travelluxx_cached_settings", JSON.stringify(settingsData));
         } catch (e) { }
@@ -205,10 +237,18 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       setPosts(Array.isArray(postsData) ? postsData : []);
       setServicesPageSettings(servicesPageSettingsData);
       if (Array.isArray(menuItemsData) && menuItemsData.length > 0) {
-        setMenuItems(menuItemsData);
+        setMenuItems((prev) => {
+          try {
+            if (JSON.stringify(prev) === JSON.stringify(menuItemsData)) return prev;
+          } catch (e) { }
+          return menuItemsData;
+        });
         try {
           localStorage.setItem("travelluxx_cached_menu", JSON.stringify(menuItemsData));
         } catch (e) { }
+      } else if (hasServerMenu) {
+        // The menu the page brought from the server stays; the built-in default is only for pages
+        // rendered without one.
       } else {
         // Fallback default menu items if empty
         const defaultMenu = [
@@ -257,13 +297,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Show the copy cached on the last visit straight away, then refresh from the server.
     const cachedSettings = readCache("travelluxx_cached_settings");
-    if (cachedSettings) setSettings(cachedSettings);
+    // The server's copy is fresher than the browser's cache, so the cache only fills in when the
+    // page did not bring settings with it.
+    if (cachedSettings && !(initialSettings && Object.keys(initialSettings).length > 0)) setSettings(cachedSettings);
     const cachedPages = readCache("travelluxx_cached_pages");
     if (Array.isArray(cachedPages)) setPages(cachedPages);
     const cachedServices = readCache("travelluxx_cached_services");
     if (Array.isArray(cachedServices)) setServices(cachedServices);
     const cachedMenu = readCache("travelluxx_cached_menu");
-    if (Array.isArray(cachedMenu) && cachedMenu.length > 0) setMenuItems(cachedMenu);
+    if (!hasServerMenu && Array.isArray(cachedMenu) && cachedMenu.length > 0) setMenuItems(cachedMenu);
     fetchSettings();
   }, []);
 

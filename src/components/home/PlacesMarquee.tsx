@@ -1,25 +1,31 @@
 import React from "react";
 import { getAirports, placeName } from "./airports";
+import { useContent } from "../../content/useContent";
 
 interface PlacesMarqueeProps {
   settings?: any;
 }
 
-// Towns and cities already named on the site (service cards and service-area pages).
-const TOWNS = ["Solihull", "Coventry", "Warwick", "Leamington Spa", "Worcester", "Cheltenham"];
-
 /**
  * One quiet line of the places we drive to, moving slowly across a dark band.
- * The names are the airports from the dashboard settings followed by the towns above.
+ * The names are the airports from the dashboard settings followed by the towns
+ * from Site Content (home_marquee_places).
  */
 export default function PlacesMarquee({ settings }: PlacesMarqueeProps) {
+  const c = useContent(settings);
+  if (!c.on("home_marquee_enabled")) return null;
+
+  const airports = c.on("home_marquee_show_airports")
+    ? getAirports(c.settings).map((airport) => placeName(airport.name))
+    : [];
   const seen = new Set<string>();
-  const places = [...getAirports(settings).map((airport) => placeName(airport.name)), ...TOWNS].filter((place) => {
+  const places = [...airports, ...c.lines("home_marquee_places")].filter((place) => {
     const key = place.toLowerCase();
     if (!place || seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+  if (places.length === 0) return null;
 
   return (
     <div className="tl-dark border-y border-white/10 py-7 sm:py-10">
@@ -29,7 +35,7 @@ export default function PlacesMarquee({ settings }: PlacesMarqueeProps) {
           {[0, 1].map((copy) => (
             <ul
               key={copy}
-              aria-label={copy === 0 ? "Places we drive to" : undefined}
+              aria-label={copy === 0 ? c.t("home_marquee_aria_label") : undefined}
               aria-hidden={copy === 1 ? true : undefined}
               className="flex shrink-0 items-center"
             >

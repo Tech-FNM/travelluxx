@@ -3,6 +3,8 @@ import { Link } from "../utils/routerCompat";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useSettings } from "../context/SettingsContext";
+import { useContent, contentOn, contentText } from "../content/useContent";
+import { AREAS_INDEX_FAQ_SLOTS } from "../content/sections/areasIndex";
 import { ArrowDown, ArrowRight, Phone, Plus, Minus } from "lucide-react";
 import AreaCta from "../components/areas/AreaCta";
 import {
@@ -36,57 +38,33 @@ type ServiceArea = {
   published?: boolean;
 };
 
-const SERVICE_AREAS_FAQS = [
-  {
-    question: "Which areas and regions across the UK does TravelLuxx cover?",
-    answer:
-      "TravelLuxx provides executive chauffeur hire and airport transfers across Solihull, Birmingham, Coventry, Warwickshire, and connects passengers to all UK airports and major cities nationwide.",
-  },
-  {
-    question: "Can I book a transfer starting or ending outside your listed service areas?",
-    answer:
-      "Yes, our private hire license covers nationwide pre-booked journeys. Whether you need an intercity transfer to London, Manchester, or Southampton cruise ports, we provide door-to-door service.",
-  },
-  {
-    question: "Are your fares fixed regardless of the service area?",
-    answer:
-      "Yes, every journey is calculated on a 100% fixed-rate basis at the time of booking. There are no surprise meter charges, surge pricing, or hidden fees.",
-  },
-  {
-    question: "How do I book an executive transfer in my area?",
-    answer:
-      "You can book instantly online using our instant Fare Calculator, or get in touch with our 24/7 team via WhatsApp or phone for bespoke itineraries and multi-stop journeys.",
-  },
-];
+/** FAQ list of the index page, edited in Site Content (also used for the FAQPage JSON-LD in the page wrapper). */
+export function areasIndexFaqs(settings: any): { question: string; answer: string }[] {
+  const faqs: { question: string; answer: string }[] = [];
+  for (let n = 1; n <= AREAS_INDEX_FAQ_SLOTS; n++) {
+    if (!contentOn(settings, `areas_index_faq_${n}_enabled`)) continue;
+    const question = contentText(settings, `areas_index_faq_${n}_question`).trim();
+    const answer = contentText(settings, `areas_index_faq_${n}_answer`).trim();
+    if (question) faqs.push({ question, answer });
+  }
+  return faqs;
+}
 
-// What stays the same wherever the journey starts (presentation copy, facts from the site).
-const COVERAGE_POINTS = [
-  {
-    title: "Fixed fares",
-    text: "Your fare is agreed when you book. No surge pricing and no meter running.",
-  },
-  {
-    title: "Licensed drivers",
-    text: "Every journey is driven by a licensed private hire chauffeur in a Mercedes-Benz or Audi.",
-  },
-  {
-    title: "Flight monitoring",
-    text: "On airport pickups we follow your flight, so an early or late arrival is allowed for.",
-  },
-  {
-    title: "24/7 booking",
-    text: "Book online at any hour, then pay online or pay later.",
-  },
-];
-
-const AIRPORTS = [
-  { name: "Birmingham", code: "BHX" },
-  { name: "Heathrow", code: "LHR" },
-  { name: "Gatwick", code: "LGW" },
-  { name: "Luton", code: "LTN" },
-  { name: "Stansted", code: "STN" },
-  { name: "London City", code: "LCY" },
-];
+/** Defaults of Service Areas > Page settings, used for any field the admin has not saved. */
+export const DEFAULT_AREAS_PAGE_SETTINGS = {
+  hero_enabled: true,
+  hero_tag: "SERVICE AREAS",
+  hero_title: "Explore TravelLuxx Service Areas Across the UK",
+  hero_description:
+    "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location and schedule.",
+  hero_button_text: "Plan Your Journey",
+  hero_button_url: "/#calculator-section",
+  hero_image:
+    "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
+  meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
+  meta_description:
+    "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer.",
+};
 
 interface ServiceAreasProps {
   initialAreas?: ServiceArea[];
@@ -104,40 +82,30 @@ export default function ServiceAreas({
   const [areas, setAreas] = useState<ServiceArea[]>(initialAreas || []);
   const [loading, setLoading] = useState(!initialAreas || initialAreas.length === 0);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-  const [pageSettings, setPageSettings] = useState<any>(initialPageSettings || {
-    hero_enabled: true,
-    hero_tag: "SERVICE AREAS",
-    hero_title: "Explore TravelLuxx Service Areas Across the UK",
-    hero_description:
-      "Private chauffeur travel, airport transfers, and executive door-to-door transportation tailored around your location and schedule.",
-    hero_button_text: "Plan Your Journey",
-    hero_button_url: "/#calculator-section",
-    hero_image:
-      "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2000&q=85",
-    meta_title: "Service Areas | Executive Chauffeur & Airport Transfers | TravelLuxx",
-    meta_description:
-      "Discover all the areas TravelLuxx covers across the West Midlands, London, and nationwide. Book your private chauffeur and airport transfer."
+  const [pageSettings, setPageSettings] = useState<any>({
+    ...DEFAULT_AREAS_PAGE_SETTINGS,
+    ...(initialPageSettings || {}),
   });
+  const c = useContent(settings);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
+    // Page settings are always refreshed, so an edit in Service Areas > Page settings shows without
+    // waiting for the pre-rendered page to be regenerated.
     if (initialAreas && initialAreas.length > 0) {
       setAreas(initialAreas);
       setLoading(false);
-      return;
+    } else {
+      fetch("/api/service-areas")
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setAreas(data);
+        })
+        .catch(err => console.error("Error loading service areas:", err))
+        .finally(() => setLoading(false));
     }
 
-    // Fetch Areas
-    fetch("/api/service-areas")
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setAreas(data);
-      })
-      .catch(err => console.error("Error loading service areas:", err))
-      .finally(() => setLoading(false));
-
-    // Fetch Page Settings
     fetch("/api/service-areas-page-settings")
       .then(res => res.json())
       .then(data => {
@@ -148,51 +116,39 @@ export default function ServiceAreas({
       .catch(err => console.error("Error loading service areas page settings:", err));
   }, [initialAreas]);
 
-  // SEO Meta Tags
-  useEffect(() => {
-    const baseUrl = "https://travelluxx.co.uk";
-    const pageUrl = `${baseUrl}/service-areas`;
-    const metaTitle = pageSettings.meta_title || "Service Areas | TravelLuxx UK";
-    const metaDesc = pageSettings.meta_description || pageSettings.hero_description;
-
-    document.title = metaTitle;
-
-    const setMeta = (attr: string, attrVal: string, content: string) => {
-      let el = document.querySelector(`meta[${attr}='${attrVal}']`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute(attr, attrVal);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-
-    setMeta("name", "description", metaDesc);
-    setMeta("property", "og:title", metaTitle);
-    setMeta("property", "og:description", metaDesc);
-    setMeta("property", "og:url", pageUrl);
-    setMeta("property", "og:type", "website");
-
-    let canonical = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", pageUrl);
-  }, [pageSettings]);
+  // SEO (title, meta, Open Graph, FAQ JSON-LD) is rendered on the server by pages/service-areas/index.tsx.
 
   // Presentation only: each area once (the API also returns an alias record for every area).
   const directory = dedupeAreas(areas);
   const phone = phoneFromSettings(settings);
   const heroImage = hasOwnImage(pageSettings.hero_image) ? pageSettings.hero_image : AREA_IMG.road;
+  const heroEnabled = pageSettings.hero_enabled !== false && pageSettings.hero_enabled !== "false";
+  const heroTitle = pageSettings.hero_title || "Our Service Areas";
+  const withArea = (template: string, area: ServiceArea) => template.split("{area}").join(area.title || "");
+  const faqs = areasIndexFaqs(c.settings);
+  const airports = c
+    .lines("areas_index_marquee_items")
+    .map(line => {
+      const [name, code = ""] = line.split("|").map(part => part.trim());
+      return { name, code };
+    })
+    .filter(airport => airport.name);
+  const coveragePoints = [1, 2, 3, 4]
+    .map(n => ({ title: c.t(`areas_index_coverage_${n}_title`), text: c.t(`areas_index_coverage_${n}_text`) }))
+    .filter(point => point.title || point.text);
+  const showCoverage = c.on("areas_index_coverage_enabled");
+  const showMarquee = c.on("areas_index_marquee_enabled") && airports.length > 0;
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <Navbar onScrollTo={id => { if (id === "hero" || !id) window.location.href = "/"; }} />
 
       <main className="flex-grow">
+        {/* The page keeps its single <h1> when the banner is switched off in Service Areas > Page settings */}
+        {!heroEnabled && <h1 className="sr-only">{heroTitle}</h1>}
+
         {/* HERO: full-bleed photograph, headline bottom-left, area names along the fold */}
+        {heroEnabled && (
         <section className="relative isolate overflow-hidden bg-brand-950">
           <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
             <div className={heroFrameClass(heroImage)}>
@@ -219,7 +175,7 @@ export default function ServiceAreas({
                 data-reveal="lines"
                 className="tl-h1 mt-6 max-w-4xl text-[2.6rem] text-balance text-white sm:text-6xl lg:text-7xl"
               >
-                {pageSettings.hero_title || "Our Service Areas"}
+                {heroTitle}
               </h1>
 
               {pageSettings.hero_description && (
@@ -237,8 +193,8 @@ export default function ServiceAreas({
                   <span>{pageSettings.hero_button_text || "Plan Your Journey"}</span>
                   <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </a>
-                <a href="#areas" className="tl-btn tl-btn-outline-light">
-                  <span>Browse the areas</span>
+                <a href={c.t("areas_index_hero_secondary_button_url")} className="tl-btn tl-btn-outline-light">
+                  <span>{c.t("areas_index_hero_secondary_button_text")}</span>
                   <ArrowDown className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </a>
               </div>
@@ -250,13 +206,13 @@ export default function ServiceAreas({
             )}
             {directory.length > 0 && (
               <nav
-                aria-label="Jump to an area"
+                aria-label={c.t("areas_index_jump_aria_label")}
                 data-reveal="fade"
                 data-reveal-delay="0.55"
                 className="lg:flex lg:items-center lg:gap-12"
               >
                 <span className="hidden shrink-0 text-xs font-medium tracking-[0.22em] text-stone-400 uppercase lg:block">
-                  {directory.length} {directory.length === 1 ? "area" : "areas"}
+                  {directory.length} {directory.length === 1 ? c.t("areas_index_jump_label_one") : c.t("areas_index_jump_label_many")}
                 </span>
                 <ul className="grid grid-cols-2 gap-x-6 py-3 sm:grid-cols-3 lg:flex lg:flex-wrap lg:gap-x-10 lg:py-0">
                   {directory.map((area, index) => (
@@ -277,19 +233,20 @@ export default function ServiceAreas({
             )}
           </div>
         </section>
+        )}
 
         {/* DIRECTORY: one editorial row per area */}
         <section id="areas" className="scroll-mt-20 bg-white pt-20 pb-6 lg:pt-28 lg:pb-10">
           <div className="tl-container">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-16">
               <div className="lg:col-span-7">
-                <span data-reveal className="tl-eyebrow">The directory</span>
+                <span data-reveal className="tl-eyebrow">{c.t("areas_index_directory_eyebrow")}</span>
                 <h2 data-reveal="lines" className="tl-h2 mt-4 max-w-xl text-balance lg:text-6xl">
-                  Chauffeur service, area by area
+                  {c.t("areas_index_directory_title")}
                 </h2>
               </div>
               <p data-reveal data-reveal-delay="0.1" className="tl-lead lg:col-span-5">
-                Each area has its own guide to local journeys, airport transfers and the questions we are asked most often.
+                {c.t("areas_index_directory_lead")}
               </p>
             </div>
 
@@ -301,8 +258,8 @@ export default function ServiceAreas({
               </div>
             ) : directory.length === 0 ? (
               <div data-reveal className="px-6 py-16 text-center sm:py-20">
-                <h3 className="tl-h3">No service areas found</h3>
-                <p className="mt-2 text-sm text-stone-600">Please check back soon or add areas from the admin dashboard.</p>
+                <h3 className="tl-h3">{c.t("areas_index_empty_title")}</h3>
+                <p className="mt-2 text-sm text-stone-600">{c.t("areas_index_empty_text")}</p>
               </div>
             ) : (
               <ol>
@@ -327,7 +284,7 @@ export default function ServiceAreas({
                         >
                           <img
                             src={areaListImage(area, index)}
-                            alt={area.imageAlt || `${area.title} - Executive Chauffeur Service Area`}
+                            alt={area.imageAlt || withArea(c.t("areas_index_row_image_alt_fallback"), area)}
                             loading="lazy"
                             decoding="async"
                             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -352,10 +309,10 @@ export default function ServiceAreas({
                               {areaPlaceName(area)}
                             </h3>
                             <p className="mt-4 line-clamp-3 max-w-md text-base leading-relaxed text-stone-600">
-                              {area.heroDescription || `Private chauffeur travel and airport transfers covering all destinations in and around ${area.title}.`}
+                              {area.heroDescription || withArea(c.t("areas_index_row_description_fallback"), area)}
                             </p>
                             <span className="tl-link mt-7 group-hover:text-brand-900 group-hover:underline">
-                              <span>View area</span>
+                              <span>{c.t("areas_index_row_link_text")}</span>
                               <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                             </span>
                           </div>
@@ -370,46 +327,50 @@ export default function ServiceAreas({
         </section>
 
         {/* STATEMENT: journeys outside the listed areas */}
+        {c.on("areas_index_statement_enabled") && (
         <section className="tl-section bg-ivory">
           <div className="tl-container">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-3">
-                <span data-reveal className="tl-eyebrow">Not on the list</span>
+                <span data-reveal className="tl-eyebrow">{c.t("areas_index_statement_eyebrow")}</span>
               </div>
               <div className="lg:col-span-9">
                 <p data-reveal="words" className="tl-statement">
-                  Our private hire licence covers pre-booked journeys nationwide. If your town is not listed here, we can still plan your door-to-door transfer.
+                  {c.t("areas_index_statement_text")}
                 </p>
-                <a href="/#calculator-section" data-reveal className="tl-link mt-10 py-2">
-                  <span>Price a journey from your address</span>
+                <a href={c.t("areas_index_statement_link_url")} data-reveal className="tl-link mt-10 py-2">
+                  <span>{c.t("areas_index_statement_link_text")}</span>
                   <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
                 </a>
               </div>
             </div>
           </div>
         </section>
+        )}
 
         {/* HOW WE COVER THE REGION */}
+        {(showCoverage || showMarquee) && (
         <section className="tl-dark">
+          {showCoverage && (
           <div className="tl-container tl-section">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-16">
               <div className="lg:col-span-7">
-                <span data-reveal className="tl-eyebrow tl-eyebrow-light">How we cover the region</span>
+                <span data-reveal className="tl-eyebrow tl-eyebrow-light">{c.t("areas_index_coverage_eyebrow")}</span>
                 <h2 data-reveal="lines" className="tl-h2 mt-4 max-w-xl text-balance text-white lg:text-6xl">
-                  The same standard at every address
+                  {c.t("areas_index_coverage_title")}
                 </h2>
               </div>
               <p data-reveal data-reveal-delay="0.1" className="tl-lead text-stone-300 lg:col-span-5">
-                Based in Shirley, Solihull, we drive across Birmingham and the Midlands, and on to airports and cities nationwide.
+                {c.t("areas_index_coverage_lead")}
               </p>
             </div>
 
             <div data-reveal="rule" className="mt-12 h-px w-full bg-white/20 lg:mt-16" />
 
             <ol data-reveal-group className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-              {COVERAGE_POINTS.map((point, index) => (
+              {coveragePoints.map((point, index) => (
                 <li
-                  key={point.title}
+                  key={index}
                   className="border-b border-white/10 py-8 last:border-b-0 sm:pr-8 sm:[&:nth-last-child(2)]:border-b-0 lg:border-b-0 lg:border-l lg:px-8 lg:pt-10 lg:pb-2 lg:first:border-l-0 lg:first:pl-0"
                 >
                   {/* Not tl-numeral: that class fixes the colour for light backgrounds */}
@@ -422,16 +383,20 @@ export default function ServiceAreas({
               ))}
             </ol>
           </div>
+          )}
 
           {/* Airports we drive to */}
-          <div className="tl-marquee border-t border-white/10 py-8 sm:py-10">
+          {showMarquee && (
+          <div className={`tl-marquee py-8 sm:py-10 ${showCoverage ? "border-t border-white/10" : ""}`}>
             <div className="tl-marquee-track">
               {[0, 1].map(copy => (
                 <ul key={copy} aria-hidden={copy === 1 ? "true" : undefined} className="flex shrink-0 items-center">
-                  {AIRPORTS.map(airport => (
-                    <li key={airport.code} className="flex items-center">
+                  {airports.map((airport, index) => (
+                    <li key={index} className="flex items-center">
                       <span className="font-display text-4xl leading-none text-white sm:text-6xl">{airport.name}</span>
-                      <span className="ml-3 self-start text-xs font-medium tracking-[0.22em] text-brand-300">{airport.code}</span>
+                      {airport.code && (
+                        <span className="ml-3 self-start text-xs font-medium tracking-[0.22em] text-brand-300">{airport.code}</span>
+                      )}
                       <span className="mx-8 block h-px w-10 bg-white/25 sm:mx-12 sm:w-16" aria-hidden="true" />
                     </li>
                   ))}
@@ -439,36 +404,39 @@ export default function ServiceAreas({
               ))}
             </div>
           </div>
+          )}
         </section>
+        )}
 
         {/* Service Areas FAQs */}
+        {c.on("areas_index_faq_enabled") && (
         <section className="tl-section bg-white">
           <div className="tl-container">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-5">
-                <span data-reveal className="tl-eyebrow">Service Coverage FAQs</span>
+                <span data-reveal className="tl-eyebrow">{c.t("areas_index_faq_eyebrow")}</span>
                 <h2 data-reveal="lines" className="tl-h2 mt-4">
-                  Frequently Asked Questions
+                  {c.t("areas_index_faq_title")}
                 </h2>
                 <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-md">
-                  Common questions about our executive chauffeur coverage, airport transfers, and private hire service areas.
+                  {c.t("areas_index_faq_intro")}
                 </p>
                 <div data-reveal data-reveal-delay="0.2" className="mt-8">
                   <a href={phone.href} className="tl-link py-2">
                     <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-                    <span>Ask us on {phone.label}</span>
+                    <span>{c.t("areas_index_faq_phone_prefix")} {phone.label}</span>
                   </a>
                 </div>
               </div>
 
               <div className="lg:col-span-7">
                 <div data-reveal-group className="divide-y divide-stone-200 border-y border-stone-200">
-                  {SERVICE_AREAS_FAQS.map((faq, index) => {
+                  {faqs.map((faq, index) => {
                     const isOpen = openFaqIndex === index;
                     const questionId = `service-areas-faq-q-${index}`;
                     const answerId = `service-areas-faq-a-${index}`;
                     return (
-                      <div key={faq.question}>
+                      <div key={index}>
                         {/* The question is a plain <h3> (text only). The toggle lives on the row + icon button. */}
                         <div
                           onClick={() => setOpenFaqIndex(isOpen ? null : index)}
@@ -512,6 +480,7 @@ export default function ServiceAreas({
             </div>
           </div>
         </section>
+        )}
 
         <AreaCta settings={settings} />
       </main>

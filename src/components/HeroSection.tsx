@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Phone, ArrowRight, ArrowDown } from "lucide-react";
 import heroImg from "../assets/images/hero_background_1786403449488.jpg";
-import { getCustomImage } from "../utils/customImages";
+import { imageSrc, settingImage } from "../utils/customImages";
+import { formatUkPhone, phoneHref } from "../utils/phone";
+import { useContent } from "../content/useContent";
 
 interface HeroSectionProps {
   onScrollToCalculator: () => void;
@@ -14,32 +16,27 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
   const whatsappNum = settings?.whatsapp_number || "441217140876";
 
-  const getInitialBg = () => {
-    const customSetting = settings?.hero_image || settings?.heroImage;
-    const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : heroImg;
-    return getCustomImage("hero_bg", defaultImg);
+  // Background: the dashboard hero image, else the bundled photo. If a URL fails to load, fall back
+  // to the bundled photo, then to a stock photo.
+  const heroSetting = settings?.hero_image || settings?.heroImage;
+  const configuredBg = settingImage(heroSetting, heroImg);
+  const [failedBg, setFailedBg] = useState<string | null>(null);
+  useEffect(() => setFailedBg(null), [configuredBg]);
+  const bundledBg = imageSrc(heroImg);
+  const bgImage = failedBg === null ? configuredBg : failedBg === configuredBg && configuredBg !== bundledBg ? bundledBg : FALLBACK_HERO_URL;
+
+  // WhatsApp / phone number written the UK way (+44 121 714 0876)
+  const formattedPhone = formatUkPhone(whatsappNum);
+
+  const c = useContent(settings);
+  // Fields whose fallback is built from other settings (brand name, phone number): an empty value keeps
+  // that computed fallback; anything the admin typed is used as written.
+  const textOr = (key: string, computed: string) => {
+    const v = c.settings?.[key];
+    return typeof v === "string" && v.trim() !== "" ? c.t(key) : computed;
   };
 
-  const [bgImage, setBgImage] = useState<string>(getInitialBg);
-
-  useEffect(() => {
-    const handleUpdate = () => {
-      const customSetting = settings?.hero_image || settings?.heroImage;
-      const defaultImg = (customSetting && typeof customSetting === "string" && customSetting.trim() !== "") ? customSetting : heroImg;
-      setBgImage(getCustomImage("hero_bg", defaultImg));
-    };
-
-    handleUpdate();
-    window.addEventListener("custom_images_updated", handleUpdate);
-    return () => window.removeEventListener("custom_images_updated", handleUpdate);
-  }, [settings]);
-
-  // Format WhatsApp / Phone number for presentation
-  const formattedPhone = whatsappNum.startsWith("44")
-    ? `+44 ${whatsappNum.substring(2, 6)} ${whatsappNum.substring(6)}`
-    : whatsappNum;
-
-  const rawTitle = settings?.homepage_hero_title || "Nationwide Airport | Transfers & Private Hire";
+  const rawTitle = c.t("homepage_hero_title");
   const titleParts = rawTitle.split("|");
   const titlePart1 = titleParts[0]?.trim() || "Nationwide Airport";
   const titlePart2 = titleParts[1]?.trim();
@@ -50,17 +47,16 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
   const titleLine1 = dashSplit ? dashSplit[1] : titlePart1;
   const titleLine2 = dashSplit ? dashSplit[2] : titlePart2;
 
-  const badgeText = settings?.homepage_hero_badge || `${brandName.toUpperCase()} PRIVATE HIRE`;
-  const heroDesc = settings?.homepage_hero_subtitle || "Experience premium private hire. Beautifully styled Mercedes-Benz and Audi luxury fleets for your ultimate comfort. Secure fixed rates with absolutely no surge pricing.";
-  const ind1 = settings?.homepage_indicator1 || "Licensed Professional Operators";
-  const ind2 = settings?.homepage_indicator2 || "Guaranteed Nationwide Coverage";
-  // The bar along the bottom of the hero: the two indicators from the dashboard between two fixed facts.
-  const facts = ["No surge pricing", ind1, ind2, "Flight monitoring"];
+  const badgeText = textOr("homepage_hero_badge", `${brandName.toUpperCase()} PRIVATE HIRE`);
+  const heroDesc = c.t("homepage_hero_subtitle");
+  // The bar along the bottom of the hero: two facts with the two dashboard indicators between them.
+  const showFacts = c.on("home_hero_facts_enabled");
+  const facts = [c.t("home_hero_fact1"), c.t("homepage_indicator1"), c.t("homepage_indicator2"), c.t("home_hero_fact4")];
 
-  const btn1Text = settings?.homepage_hero_btn_text || "Calculate & Get Quote";
-  const btn1Link = settings?.homepage_hero_btn_link || "calculator-section";
-  const btn2Text = settings?.homepage_hero_phone_text || formattedPhone;
-  const btn2Link = settings?.homepage_hero_phone_link || `tel:${whatsappNum}`;
+  const btn1Text = c.t("homepage_hero_btn_text");
+  const btn1Link = c.t("homepage_hero_btn_link");
+  const btn2Text = textOr("homepage_hero_phone_text", formattedPhone);
+  const btn2Link = textOr("homepage_hero_phone_link", phoneHref(whatsappNum));
 
   const handleBtn1Click = () => {
     if (btn1Link === "calculator-section") {
@@ -86,17 +82,13 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
       <div className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden">
         <img
           src={bgImage}
-          alt={settings?.hero_image_alt || `${brandName} - Executive Luxury Chauffeur Service Solihull & London UK`}
+          alt={textOr("hero_image_alt", `${brandName} - Executive Luxury Chauffeur Service Solihull & London UK`)}
           referrerPolicy="no-referrer"
           loading="eager"
           decoding="async"
           fetchPriority="high"
           onError={() => {
-            if (bgImage !== heroImg) {
-              setBgImage(heroImg);
-            } else if (bgImage !== FALLBACK_HERO_URL) {
-              setBgImage(FALLBACK_HERO_URL);
-            }
+            if (bgImage !== FALLBACK_HERO_URL) setFailedBg(bgImage);
           }}
           data-parallax
           className="h-full w-full object-cover"
@@ -165,6 +157,7 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
           Below 1400px the right end is kept clear for the floating WhatsApp button.
           (The custom breakpoints are written in rem: Tailwind can only order them against sm/lg/xl,
           which are rem values, when the units match.) */}
+      {showFacts && (
       <div data-reveal data-reveal-delay="0.45" className="pointer-events-none relative z-10 -mt-[14vh] pt-[14vh]">
         <div className="pointer-events-auto border-t border-white/15">
           <div className="tl-container flex items-center justify-between gap-14 py-5 max-[87.4375rem]:pr-28 max-[39.9375rem]:pr-20 lg:py-6">
@@ -182,12 +175,13 @@ export default function HeroSection({ onScrollToCalculator, settings }: HeroSect
               onClick={onScrollToCalculator}
               className="hidden h-11 shrink-0 cursor-pointer items-center gap-3 text-xs font-medium uppercase tracking-[0.22em] text-stone-300 transition-colors duration-200 hover:text-white min-[87.5rem]:inline-flex"
             >
-              <span>Scroll</span>
+              <span>{c.t("home_hero_scroll_text")}</span>
               <ArrowDown className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
             </button>
           </div>
         </div>
       </div>
+      )}
 
     </section>
   );

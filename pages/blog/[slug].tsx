@@ -1,73 +1,72 @@
 import React from "react";
-import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import BlogPostDetail from "../../src/pages/BlogPostDetail";
-import { getPosts, getPostBySlug, getWebsiteSettings } from "../../lib/mongodb";
+import SeoHead from "../../src/components/SeoHead";
+import { getMenu, getPosts, getPostBySlug, getWebsiteSettings } from "../../lib/mongodb";
+import { contentText } from "../../src/content/useContent";
+import { absoluteUrl, blogPostFaqs, businessName, faqPageSchema, logoUrl, siteBaseUrl } from "../../src/lib/seoSchemas";
 
 interface BlogPostDetailPageProps {
   post: any;
   settings: any;
+  menu: any[] | null;
 }
 
-const DEFAULT_BLOG_FAQS = [
-  {
-    question: "What makes executive chauffeur travel different from a standard taxi?",
-    answer:
-      "Our executive chauffeur services feature premium Mercedes-Benz vehicles, impeccably presented DBS-checked chauffeurs, complimentary in-cabin amenities, and fixed pricing without metered rates or surge fees.",
-  },
-  {
-    question: "How far in advance should I book my airport chauffeur?",
-    answer:
-      "We recommend booking at least 12 to 24 hours in advance to guarantee vehicle allocation, though same-day urgent bookings can also be arranged.",
-  },
-];
-
-export default function BlogPostDetailPage({
-  post,
-  settings,
-}: BlogPostDetailPageProps) {
+export default function BlogPostDetailPage({ post, settings }: BlogPostDetailPageProps) {
   if (!post) {
     return <BlogPostDetail />;
   }
 
-  const baseUrl = "https://travelluxx.co.uk";
-  const postUrl = `${baseUrl}/blog/${post.slug || post.id}`;
+  const s = settings || {};
+  const base = siteBaseUrl(s);
+  const path = `/blog/${post.slug || post.id}`;
+  const postUrl = `${base}${path}`;
   const metaTitle = post.metaTitle || post.title || "Blog | TravelLuxx";
   const metaDesc = post.metaDescription || post.excerpt || "";
-  const postFaqs =
-    Array.isArray(post.faqs) && post.faqs.length > 0
-      ? post.faqs
-      : DEFAULT_BLOG_FAQS;
+  const image = absoluteUrl(base, post.socialImage || post.image);
+  const logo = logoUrl(s, base);
 
-  const faqSchema = {
+  const article = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": `${postUrl}#faq`,
-    mainEntity: postFaqs.map((f: any) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.answer,
-      },
-    })),
+    "@type": "BlogPosting",
+    "@id": postUrl,
+    headline: post.title,
+    description: metaDesc || undefined,
+    image: image || undefined,
+    datePublished: post.date || post.createdAt || undefined,
+    dateModified: post.updatedAt || post.date || undefined,
+    url: postUrl,
+    inLanguage: "en-GB",
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+    author: { "@type": "Person", name: post.author || contentText(s, "blog_post_author_fallback") },
+    publisher: {
+      "@type": "Organization",
+      "@id": `${base}/#organization`,
+      name: businessName(s),
+      logo: logo ? { "@type": "ImageObject", url: logo } : undefined,
+    },
   };
 
   return (
     <>
-      <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDesc} />
-        <meta
-          name="robots"
-          content={post.noIndexNoFollow ? "noindex, nofollow" : "index, follow"}
-        />
-        <link rel="canonical" href={postUrl} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      </Head>
+      <SeoHead
+        settings={s}
+        path={path}
+        title={metaTitle}
+        description={metaDesc}
+        ogType="article"
+        ogTitle={post.ogTitle}
+        ogDescription={post.ogDescription}
+        image={post.socialImage || post.image}
+        xTitle={post.xTitle}
+        xDescription={post.xDescription}
+        xImage={post.xImage}
+        noIndex={post.noIndexNoFollow}
+        publishedTime={post.date || post.createdAt}
+        modifiedTime={post.updatedAt}
+        schemas={[article, faqPageSchema(postUrl, blogPostFaqs(post, s))]}
+        customSchema={post.customSchema}
+      />
       <BlogPostDetail initialPost={post} initialSettings={settings} />
     </>
   );
@@ -91,9 +90,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const [post, settings] = await Promise.all([
+    const [post, settings, menu] = await Promise.all([
       getPostBySlug(slug),
       getWebsiteSettings(),
+      getMenu().catch(() => null),
     ]);
 
     if (!post) {
@@ -104,6 +104,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       props: {
         post,
         settings: settings || {},
+        menu: menu ?? null,
       },
       revalidate: 60,
     };

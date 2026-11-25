@@ -1,51 +1,40 @@
 import React from "react";
-import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import ServiceAreaPage from "../../src/pages/ServiceAreaPage";
+import SeoHead from "../../src/components/SeoHead";
 import {
+  getMenu,
   getServiceAreas,
   getServiceAreaBySlug,
   getWebsiteSettings,
 } from "../../lib/mongodb";
+import {
+  areaDetailFaqs,
+  businessName,
+  businessTelephone,
+  faqPageSchema,
+  siteBaseUrl,
+} from "../../src/lib/seoSchemas";
 
 interface ServiceAreaDetailPageProps {
   serviceArea: any;
   settings: any;
+  menu: any[] | null;
 }
 
-const DEFAULT_AREA_FAQS = [
-  {
-    question: "How do I book an airport transfer in this area?",
-    answer:
-      "You can book easily online using our instant Fare Calculator above. Enter your pickup address and desired airport, select your luxury vehicle, and receive instant confirmation.",
-  },
-  {
-    question: "Do you monitor flights for airport pickups?",
-    answer:
-      "Yes, our team monitors all inbound commercial flights in real-time. Whether your flight is early or delayed, your chauffeur will be waiting inside arrivals with a name board.",
-  },
-  {
-    question: "Are your prices fixed and all-inclusive?",
-    answer:
-      "Yes. All TravelLuxx fares are fixed upfront with zero hidden fees. Fuel, taxes, airport flight tracking, and standard waiting time are all included.",
-  },
-  {
-    question: "Can I book a private chauffeur for business travel or private events?",
-    answer:
-      "Yes, we provide flexible one-way, return, and full-day as-directed chauffeur hire for corporate meetings, private events, weddings, and long-distance UK journeys.",
-  },
-];
+// The stock photo used as a placeholder hero; never a useful share image.
+const STOCK_HERO = "photo-1549317661-bd32c8ce0db2";
+const ownImage = (v: any) => (typeof v === "string" && v.trim() && !v.includes(STOCK_HERO) ? v.trim() : "");
 
-export default function ServiceAreaDetailPage({
-  serviceArea,
-  settings,
-}: ServiceAreaDetailPageProps) {
+export default function ServiceAreaDetailPage({ serviceArea, settings }: ServiceAreaDetailPageProps) {
   if (!serviceArea) {
     return <ServiceAreaPage />;
   }
 
-  const baseUrl = "https://travelluxx.co.uk";
-  const pageUrl = `${baseUrl}/service-areas/${serviceArea.slug || serviceArea.id}`;
+  const s = settings || {};
+  const base = siteBaseUrl(s);
+  const path = `/service-areas/${serviceArea.slug || serviceArea.id}`;
+  const pageUrl = `${base}${path}`;
   const title =
     serviceArea.metaTitle ||
     serviceArea.ogTitle ||
@@ -55,47 +44,42 @@ export default function ServiceAreaDetailPage({
     serviceArea.ogDescription ||
     serviceArea.heroDescription ||
     "Private chauffeur travel and airport transfers tailored around your location and schedule.";
-  const validFaqs =
-    Array.isArray(serviceArea.faqs) && serviceArea.faqs.length > 0
-      ? serviceArea.faqs
-      : DEFAULT_AREA_FAQS;
 
-  const faqSchema =
-    validFaqs.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "@id": `${pageUrl}#faq`,
-          mainEntity: validFaqs
-            .filter((f: any) => f && (f.question || f.answer))
-            .map((f: any) => ({
-              "@type": "Question",
-              name: f.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: f.answer,
-              },
-            })),
-        }
-      : null;
+  const areaService = {
+    "@context": "https://schema.org",
+    "@type": "TaxiService",
+    "@id": `${pageUrl}#service`,
+    name: `${businessName(s)} - ${serviceArea.title} Chauffeur & Airport Transfers`,
+    url: pageUrl,
+    areaServed: serviceArea.title,
+    description,
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${base}/#organization`,
+      name: businessName(s),
+      telephone: businessTelephone(s) || undefined,
+      url: `${base}/`,
+    },
+  };
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta
-          name="robots"
-          content={serviceArea.noIndexNoFollow ? "noindex, nofollow" : "index, follow"}
-        />
-        <link rel="canonical" href={pageUrl} />
-        {faqSchema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-          />
-        )}
-      </Head>
+      <SeoHead
+        settings={s}
+        path={path}
+        title={title}
+        description={description}
+        ogType={serviceArea.ogType}
+        ogTitle={serviceArea.ogTitle}
+        ogDescription={serviceArea.ogDescription}
+        image={ownImage(serviceArea.ogImage) || ownImage(serviceArea.socialImage) || ownImage(serviceArea.heroImage)}
+        xTitle={serviceArea.xTitle}
+        xDescription={serviceArea.xDescription}
+        xImage={serviceArea.xImage}
+        noIndex={serviceArea.noIndexNoFollow}
+        schemas={[areaService, faqPageSchema(pageUrl, areaDetailFaqs(serviceArea, s))]}
+        customSchema={serviceArea.customSchema}
+      />
       <ServiceAreaPage initialArea={serviceArea} initialSettings={settings} />
     </>
   );
@@ -119,9 +103,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params?.slug as string;
-    const [serviceArea, settings] = await Promise.all([
+    const [serviceArea, settings, menu] = await Promise.all([
       getServiceAreaBySlug(slug),
       getWebsiteSettings(),
+      getMenu().catch(() => null),
     ]);
 
     if (!serviceArea) {
@@ -132,6 +117,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       props: {
         serviceArea,
         settings: settings || {},
+        menu: menu ?? null,
       },
       revalidate: 60,
     };
