@@ -54,7 +54,7 @@ export default function HomepageFaq({
       className={`tl-section ${
         isRenax
           ? "bg-brand-950 border-t border-white/10 text-stone-300"
-          : "bg-ivory text-stone-700 [#airports+&]:border-t [#airports+&]:border-stone-200"
+          : "bg-white text-stone-700"
       }`}
     >
       <div className="tl-container">

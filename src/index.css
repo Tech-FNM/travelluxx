@@ -860,3 +860,56 @@
   margin-top: 0.85rem !important;
   margin-bottom: 0.85rem !important;
 }
+
+/* ==========================================================================
+   Homepage extras
+   ========================================================================== */
+/* Marquee: put two identical copies of the content inside .tl-marquee-track
+   (mark the second copy aria-hidden). */
+.tl-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.tl-marquee-track {
+  display: inline-flex;
+  min-width: max-content;
+  animation: tl-marquee 38s linear infinite;
+}
+.tl-marquee:hover .tl-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes tl-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* Horizontal gallery (data-hscroll): sideways swipe on touch screens, pinned scroll on desktop. */
+[data-hscroll-track] {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+[data-hscroll-track]::-webkit-scrollbar {
+  display: none;
+}
+[data-hscroll-track] > * {
+  flex: none;
+  scroll-snap-align: start;
+}
+@media (min-width: 1024px) {
+  .motion [data-hscroll-track] {
+    overflow: visible;
+    scroll-snap-type: none;
+    will-change: transform;
+  }
+}
+/* Big statement text and oversized numerals. */
+.tl-statement {
+  @apply font-display text-3xl leading-[1.18] font-medium text-stone-900 sm:text-4xl lg:text-5xl;
+}
+.tl-numeral {
+  @apply font-display text-5xl leading-none font-medium text-brand-700 lining-nums sm:text-6xl;
+}

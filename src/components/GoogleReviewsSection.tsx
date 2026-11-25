@@ -90,7 +90,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
           {/* Google Rating Overview */}
           <div data-reveal data-reveal-delay="0.2" className="shrink-0">
             <div className="flex items-center gap-4">
-              <span className={`font-display text-5xl leading-none lining-nums ${isRenax ? "text-white" : "text-stone-900"}`}>
+              <span className={`font-display text-6xl leading-none font-medium lining-nums sm:text-7xl ${isRenax ? "text-white" : "text-stone-900"}`}>
                 {Number(rating).toFixed(1)}
               </span>
               <div className="flex gap-1 text-amber-400" aria-hidden="true">
@@ -137,19 +137,19 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
           </div>
         </div>
 
-        {/* Reviews Cards Grid: wide cards so a quote keeps a comfortable line length.
-            Two per row; three per row when the count divides evenly by three. */}
+        {/* Reviews: open columns under a hairline rather than boxed cards, wide enough that a quote
+            keeps a comfortable line length. Two per row; three per row when the count divides evenly by three. */}
         <div
           data-reveal-group
-          className={`mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:mt-16 ${
+          className={`mt-12 grid grid-cols-1 gap-x-12 gap-y-12 md:grid-cols-2 lg:mt-20 lg:gap-x-16 ${
             dashboardReviews.length % 3 === 0 ? "lg:grid-cols-3" : ""
           }`}
         >
           {dashboardReviews.map((review, idx) => (
             <div
               key={idx}
-              className={`flex flex-col justify-between p-6 sm:p-8 ${
-                isRenax ? "border border-white/10" : "tl-card"
+              className={`flex flex-col justify-between border-t pt-8 ${
+                isRenax ? "border-white/15" : "border-stone-300"
               }`}
             >
               <div>
@@ -165,17 +165,15 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
                 </div>
 
                 {/* Review Text */}
-                <p className={`mt-5 text-base leading-relaxed ${
+                <p className={`mt-6 text-base leading-relaxed sm:text-lg ${
                   isRenax ? "text-stone-300" : "text-stone-700"
                 }`}>
-                  "{review.text}"
+                  “{review.text}”
                 </p>
               </div>
 
               {/* Author Info & Google Icon */}
-              <div className={`mt-8 flex items-center justify-between gap-3 border-t pt-5 ${
-                isRenax ? "border-white/10" : "border-stone-200"
-              }`}>
+              <div className="mt-8 flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
                   {review.profile_photo_url ? (
                     <img

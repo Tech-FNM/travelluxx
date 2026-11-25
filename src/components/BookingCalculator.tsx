@@ -225,6 +225,15 @@ const STEP_LABELS = [
   "Reservation Confirmed",
 ];
 
+// Countries offered for the billing address (ISO codes, as Mollie expects them).
+const BILLING_COUNTRIES: [string, string][] = [
+  ["GB", "United Kingdom"], ["IE", "Ireland"], ["US", "United States"], ["CA", "Canada"], ["AU", "Australia"],
+  ["FR", "France"], ["DE", "Germany"], ["ES", "Spain"], ["IT", "Italy"], ["NL", "Netherlands"], ["BE", "Belgium"],
+  ["PT", "Portugal"], ["CH", "Switzerland"], ["AT", "Austria"], ["SE", "Sweden"], ["NO", "Norway"], ["DK", "Denmark"],
+  ["PL", "Poland"], ["AE", "United Arab Emirates"], ["SA", "Saudi Arabia"], ["QA", "Qatar"], ["IN", "India"],
+  ["PK", "Pakistan"], ["CN", "China"], ["JP", "Japan"], ["SG", "Singapore"], ["ZA", "South Africa"], ["NZ", "New Zealand"],
+];
+
 export default function BookingCalculator({ initialPickup = "", initialDropoff = "", settings }: BookingCalculatorProps) {
   const brandName = settings?.business_name || settings?.businessName || "Travelluxx";
   const whatsappNum = settings?.whatsapp_number || "441217140876";
@@ -287,6 +296,19 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   const [passengerPhone, setPassengerPhone] = useState("");
   const [passengerAlternatePhone, setPassengerAlternatePhone] = useState("");
   const [flightNumber, setFlightNumber] = useState("");
+
+  // Return journey: the same route driven back on its own date and time.
+  const [tripType, setTripType] = useState<"oneway" | "return">("oneway");
+  const [returnDate, setReturnDate] = useState("");
+  const [returnTime, setReturnTime] = useState("");
+  const [returnFlightNumber, setReturnFlightNumber] = useState("");
+
+  // Billing address: Mollie only offers Klarna when the payment carries one.
+  const [billingStreet, setBillingStreet] = useState("");
+  const [billingCity, setBillingCity] = useState("");
+  const [billingPostcode, setBillingPostcode] = useState("");
+  const [billingCountry, setBillingCountry] = useState("GB");
+  const [billingError, setBillingError] = useState("");
   const [passengerCount, setPassengerCount] = useState(1);
   const [luggageCount, setLuggageCount] = useState(1);
 
@@ -309,6 +331,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   // Completed reservation details
   const [completedBookingId, setCompletedBookingId] = useState("");
   const [completedBookingPrice, setCompletedBookingPrice] = useState(0);
+  // The booking as the server stored it. After paying at Mollie the page reloads and the form is
+  // empty, so the confirmation is drawn from this rather than from the form fields.
+  const [completedBooking, setCompletedBooking] = useState<any>(null);
+  const [paymentNotice, setPaymentNotice] = useState<{ kind: "failed" | "pending"; text: string } | null>(null);
   const [trafficToggle, setTrafficToggle] = useState(true);
 
   // Map references and interactive click states
@@ -1197,6 +1223,22 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     }
   };
 
+  // Most journeys start at home, so the pick-up address is offered as the billing address (editable).
+  // Airports, stations and hotels are never the customer's own address, so those are left blank.
+  const prefillBillingAddress = () => {
+    if (billingStreet || billingCity || billingPostcode) return;
+    const pickupText = (distanceResult?.pickupDisplay || pickupInput || "").trim();
+    if (!pickupText || /airport|station|terminal|hotel|\bport\b/i.test(pickupText)) return;
+    const postcode = pickupText.match(/[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}/i);
+    if (!postcode) return;
+    const parts = pickupText.replace(/,?\s*(UK|United Kingdom)\s*$/i, "").split(",").map(part => part.trim()).filter(Boolean);
+    if (parts.length < 2) return;
+    const cityPart = parts[parts.length - 1].replace(postcode[0], "").trim() || parts[parts.length - 2];
+    setBillingStreet(parts[0]);
+    setBillingCity(cityPart.replace(postcode[0], "").trim());
+    setBillingPostcode(postcode[0].toUpperCase());
+  };
+
   // Bookings submission trigger
   const handleReserveDetailsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -1204,6 +1246,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       alert("Please fill in all requested fields.");
       return;
     }
+    const datesError = journeyDatesError();
+    if (datesError) {
+      alert(datesError);
+      return;
+    }
+    prefillBillingAddress();
     // Transition to payment checkout
     setCurrentStep(3);
   };
@@ -1215,7 +1263,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       setPromoError("Please enter a promo code.");
       return;
     }
-    const baseAmount = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+    const baseAmount = originalBasePrice;
     if (baseAmount <= 0) {
       setPromoError("Please select a valid ride option first.");
       return;
@@ -1259,7 +1307,34 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
   };
 
   // Distance parameters
-  const originalBasePrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+  const isReturn = tripType === "return";
+  const oneWayPrice = distanceResult && selectedVehicle ? distanceResult.prices[selectedVehicle] : 0;
+  // A return booking is two journeys over the same route, each at the one-way fare.
+  const originalBasePrice = Math.round(oneWayPrice * (isReturn ? 2 : 1) * 100) / 100;
+
+  // Checks the dates before moving on. Returns an error message, or "" when everything is in order.
+  const journeyDatesError = () => {
+    if (!rideDate || !rideTime) return "Please choose the date and time of your journey.";
+    if (isReturn) {
+      if (!returnDate || !returnTime) return "Please choose the date and time of your return journey.";
+      if (new Date(`${returnDate}T${returnTime}`).getTime() <= new Date(`${rideDate}T${rideTime}`).getTime()) {
+        return "Your return journey must be after your outbound journey.";
+      }
+    }
+    return "";
+  };
+
+  const changeTripType = (next: "oneway" | "return") => {
+    if (next === tripType) return;
+    setTripType(next);
+    setErrorMsg("");
+    // A promo discount was worked out on the old total, so it has to be applied again.
+    if (appliedPromo) handleRemovePromo();
+  };
+
+  const returnJourneyFields = isReturn
+    ? { returnJourney: true, returnDate, returnTime, returnFlightNumber, outboundFare: oneWayPrice, returnFare: oneWayPrice }
+    : { returnJourney: false };
   const finalPayablePrice = Math.max(0, Math.round((originalBasePrice - promoDiscountAmount) * 100) / 100);
   const selectedPrice = finalPayablePrice;
 
@@ -1302,6 +1377,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       flightNumber,
       passengers: passengerCount,
       luggage: luggageCount,
+      ...returnJourneyFields,
       paymentMethod: paymentMethod,
       paymentStatus: paymentMethod === "Pay Later" ? "Unpaid" : "Paid",
       status: "Pending"
@@ -1319,6 +1395,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
         const data = await res.json();
         setCompletedBookingId(data.booking.id);
         setCompletedBookingPrice(data.booking?.price ?? finalPayablePrice);
+        setCompletedBooking(data.booking);
         
         // Dispatch simulation payment server update
         await fetch("/api/bookings/payment-simulate", {
@@ -1342,42 +1419,69 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
     }
   };
 
-  // Check for Mollie redirect success params
+  // Back from Mollie: ask the server what actually happened to the payment.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const bookingStatus = params.get("bookingStatus");
     const bookingId = params.get("bookingId");
-    if (bookingStatus === "success" && bookingId) {
-      // Verify payment status with the server
-      fetch(`/api/mollie/status/${bookingId}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && (data.paymentStatus === "Paid" || data.status === "Pending")) {
-            setCompletedBookingId(bookingId);
-            setPaymentMethod("Mollie");
-            setCurrentStep(4);
-          } else {
-            alert("Payment was not completed. Your booking has not been registered.");
-            setCurrentStep(1);
-          }
-        })
-        .catch(err => {
-          console.error("Failed to verify payment status:", err);
-          alert("We could not confirm your payment status. Please contact support.");
-          setCurrentStep(1);
-        })
-        .finally(() => {
-          // Clean query params
-          window.history.replaceState({}, "", window.location.pathname);
-        });
-    }
+    if (bookingStatus !== "success" || !bookingId) return;
+
+    let cancelled = false;
+    // The customer lands at the top of the page; bring the booking panel (and its message) into view.
+    const showPanel = () =>
+      window.setTimeout(() => document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+    // Some methods take a few seconds to confirm, so a pending payment is asked about again.
+    const check = async (attempt: number) => {
+      try {
+        const res = await fetch(`/api/mollie/status/${bookingId}`);
+        const data = await res.json();
+        if (cancelled) return;
+        if (data.success && data.paymentStatus === "Paid") {
+          setCompletedBooking(data.booking || null);
+          setCompletedBookingId(bookingId);
+          setCompletedBookingPrice(Number(data.booking?.price || 0));
+          setPaymentMethod("Mollie");
+          setPaymentNotice(null);
+          setCurrentStep(4);
+          showPanel();
+        } else if (data.success && data.paymentStatus === "Pending" && attempt < 5) {
+          if (attempt === 1) showPanel();
+          setPaymentNotice({ kind: "pending", text: `We are confirming your payment for booking ${bookingId}. This can take a few moments.` });
+          window.setTimeout(() => check(attempt + 1), 3000);
+        } else if (data.success && data.paymentStatus === "Pending") {
+          setPaymentNotice({ kind: "pending", text: `Your payment for booking ${bookingId} has not been confirmed yet. We will email you as soon as it clears. You do not need to book again.` });
+        } else {
+          setPaymentNotice({ kind: "failed", text: "Your payment was not completed, so this booking has not been confirmed and you have not been charged. Please try again, or choose Pay Later / Cash at checkout." });
+          showPanel();
+        }
+      } catch (err) {
+        console.error("Failed to verify payment status:", err);
+        if (!cancelled) {
+          setPaymentNotice({ kind: "pending", text: `We could not check the payment for booking ${bookingId}. Please contact us before booking again.` });
+        }
+      }
+    };
+    check(1);
+    // Clean query params
+    window.history.replaceState({}, "", window.location.pathname);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Mollie Payment Handler
   const handleMollieCheckout = async () => {
     if (!distanceResult || !selectedVehicle) return;
+    if (!billingStreet.trim() || !billingCity.trim() || !billingPostcode.trim()) {
+      setBillingError("Please enter your billing address to pay online.");
+      return;
+    }
+    if (billingCountry === "GB" && !/^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/i.test(billingPostcode.trim())) {
+      setBillingError("Please enter a full UK postcode, for example B90 3AA.");
+      return;
+    }
+    setBillingError("");
     setProcessingPayment(true);
-    const price = distanceResult.prices[selectedVehicle];
 
     const distMiles = distanceResult.distanceMiles ?? (Number((distanceResult as any).distance) || 0);
     const distKm = distanceResult.distanceKm || (distMiles * 1.60934);
@@ -1409,6 +1513,13 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       flightNumber,
       passengers: passengerCount,
       luggage: luggageCount,
+      ...returnJourneyFields,
+      billingAddress: {
+        street: billingStreet.trim(),
+        city: billingCity.trim(),
+        postcode: billingPostcode.trim().toUpperCase(),
+        country: billingCountry
+      },
       paymentMethod: "Mollie"
     };
 
@@ -1442,6 +1553,23 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
       processCheckoutPayment();
     }, 2500);
   };
+
+  // What the confirmation shows: the booking as stored by the server when there is one (always the
+  // case after returning from Mollie), otherwise the values still in the form.
+  const receipt = {
+    passengerName: completedBooking?.passengerName || passengerName,
+    pickup: completedBooking?.pickup || distanceResult?.pickupDisplay || pickupInput,
+    dropoff: completedBooking?.dropoff || distanceResult?.dropoffDisplay || dropoffInput,
+    miles: Number(completedBooking?.distanceMiles ?? completedBooking?.distance ?? distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0),
+    date: completedBooking?.date || rideDate,
+    time: completedBooking?.time || rideTime,
+    vehicle: completedBooking?.vehicle || selectedVehicle,
+    returnJourney: completedBooking ? Boolean(completedBooking.returnJourney) : isReturn,
+    returnDate: completedBooking?.returnDate || returnDate,
+    returnTime: completedBooking?.returnTime || returnTime,
+  };
+  const formatDate = (value: string) =>
+    value ? new Date(value + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }) : "";
 
   return (
     <section id="calculator" className="tl-section bg-ivory text-stone-700 relative">
@@ -1498,6 +1626,18 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
             {/* STEP 1: CALCULATOR / VEHICLE SELECT */}
             {currentStep === 1 && (
               <div className="space-y-8">
+
+                {paymentNotice && (
+                  <div
+                    role={paymentNotice.kind === "failed" ? "alert" : "status"}
+                    className={`flex items-start gap-3 border-l-2 px-4 py-4 text-sm leading-relaxed ${
+                      paymentNotice.kind === "failed" ? "border-red-600 bg-red-50 text-red-700" : "border-brand-700 bg-brand-50 text-stone-800"
+                    }`}
+                  >
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} />
+                    <span>{paymentNotice.text}</span>
+                  </div>
+                )}
 
                 {/* Inputs card */}
                 <div className="space-y-6">
@@ -1609,7 +1749,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       <span>Search any UK postcode, city or airport, or click anywhere on the map to pin exact locations.</span>
                     </div>
 
-                    {errorMsg && (
+                    {errorMsg && !distanceResult && (
                       <div role="alert" className="flex items-start gap-3 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} />
                         <span>{errorMsg}</span>
@@ -1624,7 +1764,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           <input
                             type="date"
                             value={rideDate}
-                            onChange={(e) => setRideDate(e.target.value)}
+                            onChange={(e) => { setRideDate(e.target.value); setErrorMsg(""); }}
                             className="tl-input pl-11"
                           />
                         </span>
@@ -1636,12 +1776,69 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           <input
                             type="time"
                             value={rideTime}
-                            onChange={(e) => setRideTime(e.target.value)}
+                            onChange={(e) => { setRideTime(e.target.value); setErrorMsg(""); }}
                             className="tl-input pl-11"
                           />
                         </span>
                       </label>
                     </div>
+
+                    {/* One way or return */}
+                    <div role="group" aria-label="Journey type">
+                      <span className="tl-label">Journey type</span>
+                      <div className="grid grid-cols-2 gap-3">
+                        {([["oneway", "One way"], ["return", "Return journey"]] as const).map(([value, label]) => (
+                          <button
+                            key={value}
+                            type="button"
+                            onClick={() => changeTripType(value)}
+                            aria-pressed={tripType === value}
+                            className={`tl-card flex h-12 cursor-pointer items-center justify-center rounded-sm px-4 text-sm font-medium ${
+                              tripType === value
+                                ? "border-brand-700 ring-1 ring-brand-700 bg-brand-50/40 text-brand-800"
+                                : "tl-card-hover text-stone-700"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {isReturn && (
+                      <div className="space-y-4 border-l-2 border-brand-700 bg-brand-50/60 px-4 py-4">
+                        <p className="text-sm leading-relaxed text-stone-700">
+                          Your chauffeur collects you from the drop-off address and brings you back to the pick-up address. When would you like to return?
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-5">
+                          <label className="block min-w-0 flex-1">
+                            <span className="tl-label">Return date</span>
+                            <span className="relative block">
+                              <Calendar aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
+                              <input
+                                type="date"
+                                value={returnDate}
+                                min={rideDate || undefined}
+                                onChange={(e) => { setReturnDate(e.target.value); setErrorMsg(""); }}
+                                className="tl-input pl-11"
+                              />
+                            </span>
+                          </label>
+                          <label className="block min-w-0 flex-1">
+                            <span className="tl-label">Return time</span>
+                            <span className="relative block">
+                              <Clock aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-4 my-auto h-5 w-5 text-stone-400" strokeWidth={1.5} />
+                              <input
+                                type="time"
+                                value={returnTime}
+                                onChange={(e) => { setReturnTime(e.target.value); setErrorMsg(""); }}
+                                className="tl-input pl-11"
+                              />
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
 
                     <div role="group" aria-label="Vehicle class">
                       <span className="tl-label">Vehicle class</span>
@@ -1736,14 +1933,46 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           <dd className="text-right font-medium text-stone-900 tabular-nums">£{Number(distanceResult.waitingChargeAmount || 0).toFixed(2)}</dd>
                         </div>
                       )}
+                      {isReturn && (
+                        <>
+                          <div className="flex items-baseline justify-between gap-6 py-3">
+                            <dt className="text-stone-600">Outbound journey</dt>
+                            <dd className="text-right font-medium text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-6 py-3">
+                            <dt className="text-stone-600">
+                              <span className="block">Return journey</span>
+                              {returnDate && returnTime && (
+                                <span className="mt-0.5 block text-xs text-stone-500">{formatDate(returnDate)} at {returnTime}</span>
+                              )}
+                            </dt>
+                            <dd className="text-right font-medium text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
+                          </div>
+                        </>
+                      )}
                       <div className="flex items-baseline justify-between gap-6 py-4">
-                        <dt className="text-lg font-semibold text-stone-900">Estimated Fare</dt>
+                        <dt className="text-lg font-semibold text-stone-900">{isReturn ? "Estimated Fare (both journeys)" : "Estimated Fare"}</dt>
                         <dd className="text-right text-2xl font-semibold text-stone-900 tabular-nums">£{selectedPrice.toFixed(2)}</dd>
                       </div>
                     </dl>
 
+                    {errorMsg && (
+                      <div role="alert" className="flex items-start gap-3 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} />
+                        <span>{errorMsg}</span>
+                      </div>
+                    )}
+
                     <button
-                      onClick={() => { setCurrentStep(2); }}
+                      onClick={() => {
+                        const datesError = journeyDatesError();
+                        if (datesError) {
+                          setErrorMsg(datesError);
+                          return;
+                        }
+                        setErrorMsg("");
+                        setCurrentStep(2);
+                      }}
                       className="tl-btn tl-btn-primary w-full"
                     >
                       <span>Continue Booking Details</span>
@@ -1768,6 +1997,10 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                         </div>
                         <div className="mt-1 text-xs text-stone-600">
                           {(distanceResult.distanceMiles ?? distanceResult.distance ?? 0).toFixed(1)} mi ({(distanceResult.distanceKm || (distanceResult.distanceMiles ?? distanceResult.distance ?? 0) * 1.60934).toFixed(1)} km) • ~{Math.round(distanceResult.timeMinutes ?? distanceResult.duration ?? 0)} mins • {selectedVehicle} Class
+                        </div>
+                        <div className="mt-2 space-y-0.5 text-xs text-stone-700">
+                          <div>{isReturn ? "Outbound: " : ""}{formatDate(rideDate)} at {rideTime}</div>
+                          {isReturn && <div>Return: {formatDate(returnDate)} at {returnTime}</div>}
                         </div>
                       </div>
                     )}
@@ -1861,6 +2094,19 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                             className="tl-input"
                           />
                         </label>
+
+                        {isReturn && (
+                          <label className="col-span-2 block min-w-0 sm:col-span-3">
+                            <span className="tl-label">Return flight no (optional)</span>
+                            <input
+                              type="text"
+                              placeholder="Flight you arrive on for the return journey, e.g. EK38"
+                              value={returnFlightNumber}
+                              onChange={(e) => setReturnFlightNumber(e.target.value)}
+                              className="tl-input"
+                            />
+                          </label>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1897,6 +2143,19 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           <span className="text-2xl font-semibold text-stone-900 tabular-nums">£{finalPayablePrice.toFixed(2)}</span>
                         </div>
                       </div>
+
+                      {isReturn && (
+                        <dl className="mt-5 divide-y divide-stone-200 border-t border-stone-200 text-sm">
+                          <div className="flex items-baseline justify-between gap-6 py-3">
+                            <dt className="text-stone-600">Outbound, {formatDate(rideDate)} at {rideTime}</dt>
+                            <dd className="text-right text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-6 py-3">
+                            <dt className="text-stone-600">Return, {formatDate(returnDate)} at {returnTime}</dt>
+                            <dd className="text-right text-stone-900 tabular-nums">£{oneWayPrice.toFixed(2)}</dd>
+                          </div>
+                        </dl>
+                      )}
 
                       {/* Price breakdown when promo applied */}
                       {appliedPromo && (
@@ -2032,6 +2291,68 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                           </div>
                         </div>
 
+                        {/* Billing address: required by Klarna and used for card checks */}
+                        <fieldset className="space-y-5">
+                          <legend className="tl-h3">Billing address</legend>
+                          <p className="text-sm leading-relaxed text-stone-500">
+                            The address your card or Klarna account is registered to. It is needed to offer Klarna at checkout.
+                          </p>
+                          <label className="block">
+                            <span className="tl-label">Street and house number</span>
+                            <input
+                              type="text"
+                              autoComplete="billing address-line1"
+                              placeholder="e.g. 12 Station Road"
+                              value={billingStreet}
+                              onChange={(e) => { setBillingStreet(e.target.value); setBillingError(""); }}
+                              className="tl-input"
+                            />
+                          </label>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <label className="block min-w-0">
+                              <span className="tl-label">Town or city</span>
+                              <input
+                                type="text"
+                                autoComplete="billing address-level2"
+                                placeholder="e.g. Solihull"
+                                value={billingCity}
+                                onChange={(e) => { setBillingCity(e.target.value); setBillingError(""); }}
+                                className="tl-input"
+                              />
+                            </label>
+                            <label className="block min-w-0">
+                              <span className="tl-label">Postcode</span>
+                              <input
+                                type="text"
+                                autoComplete="billing postal-code"
+                                placeholder="e.g. B90 3AA"
+                                value={billingPostcode}
+                                onChange={(e) => { setBillingPostcode(e.target.value.toUpperCase()); setBillingError(""); }}
+                                className="tl-input uppercase placeholder:normal-case"
+                              />
+                            </label>
+                            <label className="block min-w-0">
+                              <span className="tl-label">Country</span>
+                              <select
+                                autoComplete="billing country"
+                                value={billingCountry}
+                                onChange={(e) => { setBillingCountry(e.target.value); setBillingError(""); }}
+                                className="tl-input"
+                              >
+                                {BILLING_COUNTRIES.map(([code, name]) => (
+                                  <option key={code} value={code}>{name}</option>
+                                ))}
+                              </select>
+                            </label>
+                          </div>
+                          {billingError && (
+                            <p role="alert" className="flex items-start gap-3 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700">
+                              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} />
+                              <span>{billingError}</span>
+                            </p>
+                          )}
+                        </fieldset>
+
                         <div className="flex items-start gap-2 text-sm text-stone-500">
                           <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" strokeWidth={1.5} />
                           <span>Protected by Mollie 256-Bit SSL Bank Grade Encryption.</span>
@@ -2104,23 +2425,29 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
 
                   <div className="flex items-baseline justify-between gap-6 py-3">
                     <dt className="shrink-0 text-stone-600">Passenger:</dt>
-                    <dd className="min-w-0 break-words text-right text-stone-900">{passengerName}</dd>
+                    <dd className="min-w-0 break-words text-right text-stone-900">{receipt.passengerName}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-3">
                     <dt className="shrink-0 text-stone-600">Route:</dt>
-                    <dd className="min-w-0 break-words text-right text-stone-900">{distanceResult?.pickupDisplay || pickupInput} → {distanceResult?.dropoffDisplay || dropoffInput}</dd>
+                    <dd className="min-w-0 break-words text-right text-stone-900">{receipt.pickup} → {receipt.dropoff}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-3">
                     <dt className="shrink-0 text-stone-600">Distance:</dt>
-                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{(distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0).toFixed(1)} mi ({(distanceResult?.distanceKm || (distanceResult?.distanceMiles ?? distanceResult?.distance ?? 0) * 1.60934).toFixed(1)} km)</dd>
+                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{receipt.miles.toFixed(1)} mi ({(receipt.miles * 1.60934).toFixed(1)} km){receipt.returnJourney ? " each way" : ""}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-3">
-                    <dt className="shrink-0 text-stone-600">Date & Time:</dt>
-                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{rideDate ? new Date(rideDate + "T12:00:00").toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ""} at {rideTime}</dd>
+                    <dt className="shrink-0 text-stone-600">{receipt.returnJourney ? "Outbound:" : "Date & Time:"}</dt>
+                    <dd className="min-w-0 text-right text-stone-900 tabular-nums">{formatDate(receipt.date)} at {receipt.time}</dd>
                   </div>
+                  {receipt.returnJourney && (
+                    <div className="flex items-baseline justify-between gap-6 py-3">
+                      <dt className="shrink-0 text-stone-600">Return:</dt>
+                      <dd className="min-w-0 text-right text-stone-900 tabular-nums">{formatDate(receipt.returnDate)} at {receipt.returnTime}</dd>
+                    </div>
+                  )}
                   <div className="flex items-baseline justify-between gap-6 py-3">
                     <dt className="shrink-0 text-stone-600">Vehicle:</dt>
-                    <dd className="min-w-0 text-right text-stone-900">{selectedVehicle} Class</dd>
+                    <dd className="min-w-0 text-right text-stone-900">{receipt.vehicle} Class</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 py-4 text-lg font-semibold text-stone-900">
                     <dt className="shrink-0">Total Fare:</dt>
@@ -2131,7 +2458,7 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                 {/* Immediate WhatsApp link */}
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <a
-                    href={`https://wa.me/441217140876?text=Hi%20Travelluxx!%20My%20booking%20is%20submitted.%20ID:%20${completedBookingId}%20from%20${encodeURIComponent(distanceResult?.pickupDisplay || "")}%20to%2520${encodeURIComponent(distanceResult?.dropoffDisplay || "")}.%20Total%20Price:%20£${completedBookingPrice}`}
+                    href={`https://wa.me/441217140876?text=Hi%20Travelluxx!%20My%20booking%20is%20submitted.%20ID:%20${completedBookingId}%20from%20${encodeURIComponent(receipt.pickup || "")}%20to%20${encodeURIComponent(receipt.dropoff || "")}.%20Total%20Price:%20£${completedBookingPrice}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="tl-btn tl-btn-primary sm:flex-1"
@@ -2148,6 +2475,12 @@ export default function BookingCalculator({ initialPickup = "", initialDropoff =
                       setDistanceResult(null);
                       setCurrentStep(1);
                       setSelectedVehicle(null);
+                      setCompletedBooking(null);
+                      setPaymentNotice(null);
+                      setTripType("oneway");
+                      setReturnDate("");
+                      setReturnTime("");
+                      setReturnFlightNumber("");
                     }}
                     className="tl-btn tl-btn-outline sm:flex-1"
                   >

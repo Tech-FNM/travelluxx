@@ -10,9 +10,14 @@ import { useEffect } from "react";
  *   data-reveal="lines"         headings: revealed line by line from behind a mask
  *   data-reveal="image"         photo wrapper wipes open while the image settles from a zoom
  *   data-reveal="fade"          opacity only
+ *   data-reveal="words"         a statement paragraph whose words light up as it scrolls past
+ *   data-reveal="rule"          a hairline that draws itself from left to right
  *   data-reveal-group           direct children reveal one after another
  *   data-reveal-delay="0.2"     delay in seconds
  *   data-parallax               image drifts slower than the page scroll
+ *   data-count                  a number that counts up from zero ("120", "4.9", "£45")
+ *   data-hscroll                desktop only: the section pins and its [data-hscroll-track]
+ *                               child travels sideways as the page scrolls
  *
  * Elements are pre-hidden by CSS only under html.motion, a class that an inline script in
  * pages/_document.tsx adds when JavaScript runs and the visitor has not asked for reduced motion.
@@ -20,7 +25,7 @@ import { useEffect } from "react";
  */
 
 const READY = "data-reveal-ready";
-const PENDING = `[data-reveal]:not([${READY}]), [data-reveal-group]:not([${READY}]), [data-parallax]:not([${READY}])`;
+const PENDING = `[data-reveal]:not([${READY}]), [data-reveal-group]:not([${READY}]), [data-parallax]:not([${READY}]), [data-count]:not([${READY}]), [data-hscroll]:not([${READY}])`;
 // clamp(): an element near the end of the page can never scroll up to the 88% line on a tall
 // screen, so the trigger point is capped at the furthest the page can actually scroll.
 const START = "clamp(top 88%)";
@@ -71,8 +76,44 @@ export default function Motion() {
 }
 
 function start(gsap: any, ScrollTrigger: any, SplitText: any) {
-  const onEnter = (trigger: Element, run: () => void) =>
-    ScrollTrigger.create({ trigger, start: START, once: true, onEnter: run });
+  // Reveals that have been set up but have not played yet.
+  const waiting = new Set<() => void>();
+
+  // Plays `run` once, the first time `trigger` is on screen. Three things can start it, and
+  // whichever comes first wins:
+  //  1. it is already on screen when it is set up (everything above the fold on page load:
+  //     a scroll trigger alone never fires for those, because nothing has scrolled yet);
+  //  2. the scroll trigger, as the visitor scrolls down to it;
+  //  3. an IntersectionObserver, as a safety net if the page layout shifted under the trigger.
+  // Reaching the end of the page plays whatever is still waiting (see `onScrollEnd` below).
+  const onEnter = (trigger: Element, run: () => void) => {
+    let played = false;
+    let scrollTrigger: any = null;
+    let observer: IntersectionObserver | null = null;
+    const play = () => {
+      if (played) return;
+      played = true;
+      waiting.delete(play);
+      if (scrollTrigger) scrollTrigger.kill();
+      if (observer) observer.disconnect();
+      run();
+    };
+
+    if (trigger.getBoundingClientRect().top < window.innerHeight * 0.88) {
+      play();
+      return;
+    }
+
+    waiting.add(play);
+    scrollTrigger = ScrollTrigger.create({ trigger, start: START, once: true, onEnter: play });
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) play();
+      },
+      { rootMargin: "0px 0px -12% 0px" }
+    );
+    observer.observe(trigger);
+  };
 
   const setup = (el: HTMLElement) => {
     const delay = Number(el.dataset.revealDelay) || 0;
@@ -92,6 +133,49 @@ function start(gsap: any, ScrollTrigger: any, SplitText: any) {
       );
     }
 
+    if (el.hasAttribute("data-count")) {
+      // "£1,250", "4.9", "120+" -> counts up to the number, keeping whatever surrounds it.
+      const match = (el.textContent || "").match(/^(\D*)([\d,]+(?:\.\d+)?)(.*)$/s);
+      if (match) {
+        const [, prefix, raw, suffix] = match;
+        const target = Number(raw.replace(/,/g, ""));
+        const decimals = (raw.split(".")[1] || "").length;
+        const grouped = raw.includes(",");
+        const format = (n: number) =>
+          prefix + (grouped ? n.toLocaleString("en-GB", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) : n.toFixed(decimals)) + suffix;
+        const state = { value: 0 };
+        el.textContent = format(0);
+        onEnter(el, () =>
+          gsap.to(state, { value: target, duration: 1.6, ease: "power2.out", delay, onUpdate: () => { el.textContent = format(state.value); } })
+        );
+      }
+    }
+
+    if (el.hasAttribute("data-hscroll")) {
+      const track = el.querySelector<HTMLElement>("[data-hscroll-track]");
+      el.setAttribute(READY, "");
+      if (track) {
+        // Desktop only. On touch screens the track simply scrolls sideways under the finger.
+        gsap.matchMedia().add("(min-width: 1024px)", () => {
+          const distance = () => Math.max(0, track.scrollWidth - track.parentElement!.clientWidth);
+          gsap.to(track, {
+            x: () => -distance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "center center",
+              end: () => "+=" + distance(),
+              pin: true,
+              scrub: 0.5,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        });
+      }
+      return;
+    }
+
     if (el.hasAttribute("data-reveal-group")) {
       const items = Array.from(el.children).filter((c): c is HTMLElement => c instanceof HTMLElement);
       const each = Number(el.dataset.revealGroup) || (items.length > 8 ? 0.06 : 0.1);
@@ -109,6 +193,33 @@ function start(gsap: any, ScrollTrigger: any, SplitText: any) {
     }
 
     const kind = el.dataset.reveal || "up";
+
+    if (kind === "words") {
+      el.setAttribute(READY, "");
+      let split: any = null;
+      try {
+        split = SplitText.create(el, { type: "words" });
+      } catch {
+        split = null;
+      }
+      if (!split || !split.words || split.words.length === 0) {
+        gsap.set(el, { clearProps: RESET });
+        return;
+      }
+      gsap.fromTo(
+        split.words,
+        { opacity: 0.16 },
+        { opacity: 1, ease: "none", stagger: 0.08, scrollTrigger: { trigger: el, start: "top 82%", end: "bottom 52%", scrub: 0.4 } }
+      );
+      return;
+    }
+
+    if (kind === "rule") {
+      gsap.set(el, { autoAlpha: 1, scaleX: 0, transformOrigin: "left center" });
+      el.setAttribute(READY, "");
+      onEnter(el, () => gsap.to(el, { scaleX: 1, duration: 1.2, ease: "power3.inOut", delay, clearProps: RESET }));
+      return;
+    }
 
     if (kind === "lines") {
       gsap.set(el, { autoAlpha: 0 });
@@ -187,6 +298,15 @@ function start(gsap: any, ScrollTrigger: any, SplitText: any) {
   const mutations = new MutationObserver(queueScan);
   mutations.observe(document.body, { childList: true, subtree: true });
 
+  // Nothing may stay hidden at the very end of the page (tall screens, short pages).
+  const onScrollEnd = () => {
+    if (waiting.size === 0) return;
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      Array.from(waiting).forEach((play) => play());
+    }
+  };
+  window.addEventListener("scroll", onScrollEnd, { passive: true });
+
   // Page height changes (images loading, accordions, booking steps) move every trigger point.
   let refreshTimer = 0;
   const resize = new ResizeObserver(() => {
@@ -203,6 +323,7 @@ function start(gsap: any, ScrollTrigger: any, SplitText: any) {
   scan();
 
   return () => {
+    window.removeEventListener("scroll", onScrollEnd);
     mutations.disconnect();
     resize.disconnect();
     window.clearTimeout(refreshTimer);

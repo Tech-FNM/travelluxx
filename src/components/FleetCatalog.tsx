@@ -1,25 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Users, 
-  Briefcase, 
-  Compass, 
-  CheckCircle2, 
-  Star, 
-  ShieldCheck, 
-  Car, 
-  Wifi, 
-  Wind, 
-  BatteryCharging, 
-  Droplet, 
-  Tv, 
-  Volume2, 
-  Shield, 
-  Layers,
-  Armchair,
-  Smartphone,
-  BookOpen,
-  ArrowRight
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import mercedesEconomyImg from "../assets/images/fleet_economy_1786403470397.jpg";
 import mercedesLuxuryImg from "../assets/images/fleet_luxury_1786403483244.jpg";
@@ -84,136 +64,139 @@ export default function FleetCatalog({ onSelectClass, settings }: FleetCatalogPr
 
   const selectedClass = fleet[activeTab];
 
-  // Map amenity text to relevant icons (bare, thin stroke, brand green)
-  const getAmenityIcon = (feature: string) => {
-    const f = feature.toLowerCase();
-    const iconClass = "mt-0.5 h-4 w-4 shrink-0 text-brand-700";
-    if (f.includes("wi-fi") || f.includes("wifi")) return <Wifi className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("climate") || f.includes("air-con") || f.includes("air conditioning")) return <Wind className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("charging") || f.includes("usb")) return <Smartphone className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("water") || f.includes("bottle")) return <Droplet className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("entertainment") || f.includes("tv")) return <Tv className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("quiet") || f.includes("acoustic")) return <Volume2 className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("leather") || f.includes("seat") || f.includes("reclining")) return <Armchair className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("newspaper") || f.includes("book")) return <BookOpen className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("privacy") || f.includes("glass")) return <Shield className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("boot") || f.includes("capacity")) return <Briefcase className={iconClass} strokeWidth={1.5} />;
-    if (f.includes("door")) return <Layers className={iconClass} strokeWidth={1.5} />;
-    return <CheckCircle2 className={iconClass} strokeWidth={1.5} />;
-  };
+  const tabs = Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">;
 
   return (
-    <section id="fleet" className="tl-section bg-white">
+    <section id="fleet" className="tl-section overflow-x-clip bg-ivory">
       <div className="tl-container">
 
-        {/* Header */}
-        <div>
-          <span data-reveal className="tl-eyebrow">
-            {settings?.homepage_fleet_subtitle || "Our Premium Fleet"}
-          </span>
-          <h2 data-reveal="lines" className="tl-h2 mt-4">
-            {settings?.homepage_fleet_title || "Travel in Premium Comfort"}
-          </h2>
-          <p data-reveal data-reveal-delay="0.1" className="tl-lead mt-5 max-w-2xl">
+        {/* Header: heading left, lead right */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end lg:gap-16">
+          <div className="lg:col-span-7">
+            <span data-reveal className="tl-eyebrow">
+              {settings?.homepage_fleet_subtitle || "Our Premium Fleet"}
+            </span>
+            <h2 data-reveal="lines" className="tl-h2 mt-4">
+              {settings?.homepage_fleet_title || "Travel in Premium Comfort"}
+            </h2>
+          </div>
+          <p data-reveal data-reveal-delay="0.1" className="tl-lead lg:col-span-5">
             {settings?.homepage_fleet_description || "Our curated fleet features state-of-the-art Mercedes-Benz and Audi luxury models, rigorously maintained to the highest safety and cosmetic standards for nationwide transfers."}
           </p>
         </div>
 
-        {/* Class tabs */}
+        {/* Class tabs: the three class names, set large */}
         <div
           data-reveal
           role="tablist"
           aria-label="Vehicle class"
-          className="mt-10 flex gap-8 border-b border-stone-200 sm:gap-10 lg:mt-12"
+          className="mt-12 flex items-baseline gap-x-3 border-b border-stone-300 sm:gap-x-6 lg:mt-20 lg:gap-x-8"
         >
-          {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((tab) => (
-            <button
-              key={tab}
-              id={`fleet-tab-${tab}`}
-              role="tab"
-              aria-selected={activeTab === tab}
-              aria-controls="fleet-panel"
-              onClick={() => setActiveTab(tab)}
-              className={`-mb-px cursor-pointer border-b-2 pt-3 pb-4 text-sm font-medium transition-colors duration-200 ${
-                activeTab === tab
-                  ? "border-brand-700 text-brand-800"
-                  : "border-transparent text-stone-500 hover:text-stone-900"
-              }`}
-            >
-              {tab === "Family" ? "Family / MPV" : tab}
-            </button>
+          {tabs.map((tab, index) => (
+            <React.Fragment key={tab}>
+              {index > 0 && (
+                <span className="font-display text-3xl leading-none text-stone-300 sm:text-5xl lg:text-6xl" aria-hidden="true">/</span>
+              )}
+              <button
+                id={`fleet-tab-${tab}`}
+                role="tab"
+                aria-selected={activeTab === tab}
+                aria-controls="fleet-panel"
+                onClick={() => setActiveTab(tab)}
+                className={`-mb-px cursor-pointer border-b-2 pt-2 pb-4 font-display text-3xl leading-none font-medium transition-colors duration-200 sm:text-5xl lg:pb-6 lg:text-6xl ${
+                  activeTab === tab
+                    ? "border-brand-700 text-stone-900"
+                    : "border-transparent text-stone-500 hover:text-stone-900"
+                }`}
+              >
+                {tab}
+              </button>
+            </React.Fragment>
           ))}
         </div>
 
-        {/* Tab Content Display */}
+        {/* Tab Content Display. Two columns on desktop: the text on the left, the photograph and the
+            amenities on the right. On mobile the column wrappers dissolve (display: contents) and
+            their blocks are ordered photo, text, amenities, button. */}
         <div
           id="fleet-panel"
           role="tabpanel"
           aria-labelledby={`fleet-tab-${activeTab}`}
-          className="mt-10 grid grid-cols-1 items-start gap-10 lg:mt-14 lg:grid-cols-2 lg:gap-12 xl:grid-cols-12 xl:gap-16"
+          className="mt-8 flex flex-col gap-10 lg:mt-14 lg:grid lg:grid-cols-12 lg:gap-16"
         >
 
-          {/* Left Block - Image. 3:2 rather than 4:3: the fleet photos are 16:9 studio shots with the
-              car filling the frame, and a 4:3 crop cuts the nose and tail off the Economy car. */}
-          <div data-reveal="image" className="aspect-[3/2] overflow-hidden bg-stone-100 xl:col-span-7">
-            {(Object.keys(fleet) as Array<"Economy" | "Luxury" | "Family">).map((key) => (
-              <img
-                key={key}
-                src={fleet[key].image}
-                alt={fleet[key].alt || `${fleet[key].name} - Executive Chauffeur Car`}
-                loading="eager"
-                decoding="async"
-                className={`h-full w-full object-cover ${activeTab === key ? "block" : "hidden"}`}
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  const fallbacks: Record<string, string> = {
-                    Economy: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80",
-                    Luxury: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80",
-                    Family: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80"
-                  };
-                  const fb = fallbacks[key] || fallbacks.Luxury;
-                  if (target.src !== fb) {
-                    target.src = fb;
-                  }
-                }}
-              />
-            ))}
-          </div>
+          <div className="contents lg:col-span-4 lg:block">
+            {/* Name and description */}
+            <div data-reveal data-reveal-delay="0.15" className="order-2">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500 lining-nums">
+                {String(tabs.indexOf(activeTab) + 1).padStart(2, "0")} / {String(tabs.length).padStart(2, "0")}
+              </p>
+              <h3 className="mt-5 font-display text-3xl leading-tight font-medium text-stone-900 sm:text-4xl">
+                {selectedClass.name}
+              </h3>
+              <p className="mt-3 text-sm font-medium text-brand-700">{selectedClass.tagline}</p>
 
-          {/* Right Block - Features & Specifications */}
-          <div data-reveal data-reveal-delay="0.15" className="xl:col-span-5">
-            <h3 className="font-display text-3xl sm:text-4xl font-medium text-stone-900">
-              {selectedClass.name}
-            </h3>
-            <p className="mt-3 text-brand-700 text-sm font-medium">{selectedClass.tagline}</p>
-
-            <p className="mt-6 text-base leading-relaxed text-stone-600">
-              {selectedClass.description}
-            </p>
-
-            {/* Key Luxury Amenities Grid */}
-            <div className="mt-8 border-t border-stone-200 pt-8">
-              <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">Included On-Board Amenities:</h4>
-              <ul className="mt-5 grid grid-cols-1 gap-x-8 gap-y-3.5 sm:grid-cols-2">
-                {selectedClass.features.map((feat, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-sm leading-5 text-stone-700 sm:only:col-span-2">
-                    {getAmenityIcon(feat)}
-                    <span>{feat}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-6 text-base leading-relaxed text-stone-600">
+                {selectedClass.description}
+              </p>
             </div>
 
             {/* Select class and scroll to calculator button */}
-            <div className="mt-10">
+            <div data-reveal data-reveal-delay="0.25" className="order-4 lg:mt-10">
               <button
                 onClick={() => onSelectClass(activeTab)}
                 className="tl-btn tl-btn-primary w-full sm:w-auto"
               >
                 <span>Book This Class Now</span>
-                <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+                <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
               </button>
+            </div>
+          </div>
+
+          <div className="contents lg:col-span-8 lg:block">
+            {/* The photograph: edge to edge on mobile, running off the right edge of the screen on
+                desktop. Close to 16:9 because the fleet photos are 16:9 studio shots with the car
+                filling the frame; a squarer crop cuts the nose and tail off the Economy car. */}
+            <div
+              data-reveal="image"
+              className="relative order-1 -mx-5 aspect-[3/2] overflow-hidden bg-stone-200 sm:-mx-8 lg:mx-0 lg:mr-[min(-2rem,calc((80rem_-_100vw)_/_2_-_2rem))] lg:aspect-[16/9] lg:max-h-[640px]"
+            >
+              {tabs.map((key) => (
+                <img
+                  key={key}
+                  src={fleet[key].image}
+                  alt={fleet[key].alt || `${fleet[key].name} - Executive Chauffeur Car`}
+                  aria-hidden={activeTab !== key}
+                  loading="eager"
+                  decoding="async"
+                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${activeTab === key ? "opacity-100" : "opacity-0"}`}
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const fallbacks: Record<string, string> = {
+                      Economy: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80",
+                      Luxury: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80",
+                      Family: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80"
+                    };
+                    const fb = fallbacks[key] || fallbacks.Luxury;
+                    if (target.src !== fb) {
+                      target.src = fb;
+                    }
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Key Luxury Amenities: two-column hairline list */}
+            <div data-reveal className="order-3 lg:mt-10">
+              <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">Included On-Board Amenities:</h4>
+              <ul className="mt-5 grid grid-cols-1 gap-x-12 sm:grid-cols-2">
+                {selectedClass.features.map((feat, idx) => (
+                  <li key={idx} className="border-t border-stone-300 py-3.5 text-sm leading-5 text-stone-700">
+                    {feat}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 

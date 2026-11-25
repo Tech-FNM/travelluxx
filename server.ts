@@ -65,6 +65,17 @@ const BookingSchema = new mongoose.Schema({
   luggage: Number,
   stops: Array,
   waitingTime: Number,
+  // Return journey (the same route driven back on another date/time)
+  returnJourney: Boolean,
+  returnDate: String,
+  returnTime: String,
+  returnFlightNumber: String,
+  outboundFare: Number,
+  returnFare: Number,
+  // Online payment
+  billingAddress: Object,
+  molliePaymentId: String,
+  paymentMethodDetail: String,
   createdAt: { type: String, default: () => new Date().toISOString() }
 }, { strict: false });
 
@@ -1220,7 +1231,8 @@ Ref: ${booking.id}
 Passenger: ${booking.passengerName}
 Date/Time: ${booking.date} at ${booking.time}
 Pickup: ${booking.pickup}
-Dropoff: ${booking.dropoff}
+Dropoff: ${booking.dropoff}${booking.returnJourney ? `
+Return: ${booking.returnDate} at ${booking.returnTime} (${booking.dropoff} to ${booking.pickup})` : ""}
 Distance: ${Number(booking.distance || 0).toFixed(1)} miles
 Vehicle: ${booking.vehicle} Class
 Total: £${Number(booking.price).toFixed(2)}
@@ -1274,7 +1286,9 @@ Thank you for choosing ${ws.business_name}!`;
                 const hasWaiting = Number(booking.waitingTime || 0) > 0;
                 const paymentDisplay = booking.paymentMethod === "Pay Later"
                   ? "Pay Later"
-                  : `${booking.paymentMethod} <span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;">Paid</span>`;
+                  : booking.paymentStatus === "Paid"
+                    ? `${booking.paymentMethod}${booking.paymentMethodDetail ? ` (${booking.paymentMethodDetail})` : ""} <span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;">Paid</span>`
+                    : `${booking.paymentMethod} (${booking.paymentStatus || "Pending"})`;
 
                 let stopsListHtml = "";
                 if (hasStops) {
@@ -1283,21 +1297,39 @@ Thank you for choosing ${ws.business_name}!`;
                   ).join("");
                 }
 
+                // Return leg: the same route driven back, on its own date and time.
+                const returnRowsHtml = booking.returnJourney ? `
+      <tr style="border-bottom: 1px solid ${borderSlate}; background: #ecfdf5;"><td style="padding: 10px 8px; color: ${brandGreen}; font-weight: 700;">Return Date &amp; Time</td><td style="padding: 10px 8px; font-weight: 700; text-align: right;">${booking.returnDate || "N/A"} at ${booking.returnTime || "N/A"}</td></tr>
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Return Pickup</td><td style="padding: 10px 0; font-weight: 600; text-align: right; font-size: 13px;">${booking.dropoff || "N/A"}</td></tr>
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Return Dropoff</td><td style="padding: 10px 0; font-weight: 600; text-align: right; font-size: 13px;">${booking.pickup || "N/A"}</td></tr>
+      ${booking.returnFlightNumber ? `<tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Return Flight Number</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.returnFlightNumber}</td></tr>` : ""}
+      ` : "";
+
                 const detailsTableHtml = `
     <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 25px;">
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Booking Reference</td><td style="padding: 10px 0; font-weight: 700; text-align: right; color: ${brandGreen}; font-family: monospace;">${booking.id}</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Passenger Name</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.passengerName}</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Email</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.passengerEmail}</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Phone Number</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.passengerPhone}</td></tr>
-      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Date &amp; Time</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.date} at ${booking.time}</td></tr>
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Journey Type</td><td style="padding: 10px 0; font-weight: 700; text-align: right;">${booking.returnJourney ? "Return (two journeys)" : "One way"}</td></tr>
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">${booking.returnJourney ? "Outbound " : ""}Date &amp; Time</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.date} at ${booking.time}</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Pickup Address</td><td style="padding: 10px 0; font-weight: 600; text-align: right; font-size: 13px;">${booking.pickup || "N/A"}</td></tr>
       ${hasStops ? `<tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Intermediate Stops</td><td style="padding: 10px 0; font-weight: 600; text-align: right; font-size: 13px;"><ul style="list-style: none; padding: 0; margin: 0;">${stopsListHtml}</ul></td></tr>` : ""}
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Dropoff Address</td><td style="padding: 10px 0; font-weight: 600; text-align: right; font-size: 13px;">${booking.dropoff || "N/A"}</td></tr>
-      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Total Distance</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${Number(booking.distance || 0) > 0 ? Number(booking.distance).toFixed(1) + ' miles' : 'N/A'}</td></tr>
+      ${returnRowsHtml}
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">${booking.returnJourney ? "Distance (each way)" : "Total Distance"}</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${Number(booking.distance || 0) > 0 ? Number(booking.distance).toFixed(1) + ' miles' : 'N/A'}</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Vehicle Class</td><td style="padding: 10px 0; color: ${brandGreen}; font-weight: 700; text-align: right;">${booking.vehicle} Class</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Passengers / Bags</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.passengers || 1} Passengers, ${booking.luggage || 0} Bags</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Flight Number</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.flightNumber || "N/A"}</td></tr>
-      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Distance Fare</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">£${Number(booking.distanceFare || booking.price).toFixed(2)}</td></tr>
+      ${booking.returnJourney ? `
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Outbound Fare</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">£${Number(booking.outboundFare || 0).toFixed(2)}</td></tr>
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Return Fare</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">£${Number(booking.returnFare || 0).toFixed(2)}</td></tr>
+      ` : `
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Distance Fare</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">£${Number(booking.distanceFare || booking.originalPrice || booking.price).toFixed(2)}</td></tr>
+      `}
+      ${Number(booking.discountAmount || 0) > 0 ? `
+      <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Promo Discount${booking.promoCode ? ` (${booking.promoCode})` : ""}</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">-£${Number(booking.discountAmount).toFixed(2)}</td></tr>
+      ` : ""}
       ${hasWaiting ? `
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Waiting Time</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${booking.waitingTime} Minutes</td></tr>
       <tr style="border-bottom: 1px solid ${borderSlate};"><td style="padding: 10px 0; color: ${textMuted};">Waiting Charge Percentage</td><td style="padding: 10px 0; font-weight: 600; text-align: right;">${(booking.waitingPercent ? booking.waitingPercent * 100 : 0)}%</td></tr>
@@ -1885,6 +1917,7 @@ Thank you for choosing ${ws.business_name}!`;
                   const newBooking = {
                     id: bookingId,
                     ...data,
+                    ...normaliseReturnJourney(data, originalPrice),
                     price: finalPrice,
                     originalPrice,
                     discountAmount,
@@ -1925,6 +1958,136 @@ Thank you for choosing ${ws.business_name}!`;
                 }
               });
 
+              // ============================================================================
+              // --- MOLLIE ONLINE PAYMENTS ---
+              // ============================================================================
+
+              const gbp = (pence: number) => ({ currency: "GBP", value: (pence / 100).toFixed(2) });
+
+              // Return journey fields arrive from the browser; keep them only when they are complete.
+              function normaliseReturnJourney(data: any, originalPrice: number) {
+                const wantsReturn = data.returnJourney === true || data.returnJourney === "true";
+                if (!wantsReturn || !data.returnDate || !data.returnTime) {
+                  return { returnJourney: false, returnDate: undefined, returnTime: undefined, returnFlightNumber: undefined, outboundFare: undefined, returnFare: undefined };
+                }
+                let returnFare = Number(data.returnFare);
+                if (!(returnFare > 0) || returnFare >= originalPrice) returnFare = originalPrice / 2;
+                returnFare = Math.round(returnFare * 100) / 100;
+                return {
+                  returnJourney: true,
+                  returnDate: String(data.returnDate),
+                  returnTime: String(data.returnTime),
+                  returnFlightNumber: data.returnFlightNumber ? String(data.returnFlightNumber) : undefined,
+                  outboundFare: Math.round((originalPrice - returnFare) * 100) / 100,
+                  returnFare
+                };
+              }
+
+              // Klarna (and other "buy now, pay later" methods) are only offered by Mollie when the payment
+              // carries itemised lines and the customer's billing address. Returns null when the address the
+              // customer gave is incomplete, in which case the payment is created without them.
+              function buildMollieOrderDetails(booking: any) {
+                const address = booking.billingAddress || {};
+                const street = String(address.street || "").trim();
+                const city = String(address.city || "").trim();
+                const postcode = String(address.postcode || "").trim().toUpperCase();
+                const email = String(booking.passengerEmail || "").trim();
+                const countryCode = String(address.country || "GB").trim().toUpperCase();
+                const country = countryCode.length === 2 ? countryCode : "GB";
+                if (!street || !city || !postcode || !email) return null;
+
+                const nameParts = String(booking.passengerName || "").trim().split(/\s+/).filter(Boolean);
+                const givenName = nameParts[0] || "Customer";
+                const familyName = nameParts.slice(1).join(" ") || givenName;
+
+                // Work in pence so the lines always add up exactly to the amount charged.
+                const totalPence = Math.round(Number(booking.price || 0) * 100);
+                const discountPence = Math.max(0, Math.round(Number(booking.discountAmount || 0) * 100));
+                const farePence = totalPence + discountPence;
+                const vehicle = booking.vehicle || "Executive";
+                const lines: any[] = [];
+
+                if (booking.returnJourney) {
+                  const returnPence = Math.min(farePence, Math.max(0, Math.round(Number(booking.returnFare || 0) * 100)));
+                  lines.push({ type: "physical", description: `Chauffeur Service (${vehicle} Class) - Outbound - Ref: ${booking.id}`, quantity: 1, unitPrice: gbp(farePence - returnPence), totalAmount: gbp(farePence - returnPence) });
+                  lines.push({ type: "physical", description: `Chauffeur Service (${vehicle} Class) - Return - Ref: ${booking.id}`, quantity: 1, unitPrice: gbp(returnPence), totalAmount: gbp(returnPence) });
+                } else {
+                  lines.push({ type: "physical", description: `Chauffeur Service (${vehicle} Class) - Ref: ${booking.id}`, quantity: 1, unitPrice: gbp(farePence), totalAmount: gbp(farePence) });
+                }
+                if (discountPence > 0) {
+                  lines.push({ type: "discount", description: `Promo code${booking.promoCode ? ` ${booking.promoCode}` : ""}`, quantity: 1, unitPrice: gbp(-discountPence), totalAmount: gbp(-discountPence) });
+                }
+
+                return {
+                  lines,
+                  billingAddress: { givenName, familyName, email, streetAndNumber: street.slice(0, 100), postalCode: postcode, city, country }
+                };
+              }
+
+              // Applies a payment result to the booking in both stores. Returns the booking only when THIS call
+              // moved it to "Paid", so confirmation emails go out exactly once however many times Mollie or the
+              // customer's browser ask.
+              async function applyPaymentResult(bookingId: string, result: "Paid" | "Failed", methodDetail?: string) {
+                const updates: any = result === "Paid"
+                  ? { paymentStatus: "Paid", status: "Confirmed" }
+                  : { paymentStatus: "Failed", status: "Cancelled" };
+                if (methodDetail) updates.paymentMethodDetail = methodDetail;
+
+                let newlyPaid: any = null;
+                if (mongoose.connection.readyState === 1) {
+                  // Never downgrade a booking that is already paid.
+                  const changed = await BookingModel.findOneAndUpdate(
+                    { id: bookingId, paymentStatus: { $ne: "Paid" } },
+                    { $set: updates },
+                    { new: true }
+                  );
+                  if (changed && result === "Paid") newlyPaid = changed.toObject ? changed.toObject() : changed;
+                }
+
+                const bookings = readBookings();
+                const idx = bookings.findIndex((b: any) => b.id === bookingId);
+                if (idx !== -1 && bookings[idx].paymentStatus !== "Paid") {
+                  Object.assign(bookings[idx], updates);
+                  writeBookings(bookings);
+                  if (result === "Paid" && !newlyPaid && mongoose.connection.readyState !== 1) newlyPaid = bookings[idx];
+                }
+
+                if (newlyPaid) {
+                  if (newlyPaid.promoCode) await recordCouponUsage(newlyPaid.promoCode);
+                  await sendBookingEmails(newlyPaid).catch(err => console.error("Email error:", err));
+                  sendWhatsAppNotification(newlyPaid).catch(err => console.error("WhatsApp error:", err));
+                }
+                return newlyPaid;
+              }
+
+              // Asks Mollie for the real state of a booking's payment and records it.
+              // "authorized" is Klarna's state after the customer completes checkout; Mollie then captures it.
+              async function syncMolliePayment(booking: any): Promise<"Paid" | "Pending" | "Failed"> {
+                if (booking.paymentStatus === "Paid") return "Paid";
+                if (!booking.molliePaymentId) return booking.paymentStatus === "Failed" ? "Failed" : "Pending";
+                const mollieClient = getMollieClient();
+                if (!mollieClient) return "Pending";
+
+                const payment: any = await mollieClient.payments.get(booking.molliePaymentId);
+                if (payment.status === "paid" || payment.status === "authorized") {
+                  await applyPaymentResult(booking.id, "Paid", payment.method || undefined);
+                  return "Paid";
+                }
+                if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
+                  await applyPaymentResult(booking.id, "Failed", payment.method || undefined);
+                  return "Failed";
+                }
+                return "Pending";
+              }
+
+              async function findBooking(bookingId: string) {
+                if (mongoose.connection.readyState === 1) {
+                  const doc = await BookingModel.findOne({ id: bookingId });
+                  if (doc) return doc.toObject ? doc.toObject() : doc;
+                }
+                return readBookings().find((b: any) => b.id === bookingId) || null;
+              }
+
               // Mollie checkout creation endpoint
               app.post("/api/mollie/create-payment", async (req, res) => {
                 try {
@@ -1948,9 +2111,10 @@ Thank you for choosing ${ws.business_name}!`;
 
                   finalPrice = Math.max(0, Math.round(finalPrice * 100) / 100);
 
-                  const newBooking = {
+                  const newBooking: any = {
                     id: bookingId,
                     ...data,
+                    ...normaliseReturnJourney(data, originalPrice),
                     price: finalPrice,
                     originalPrice,
                     discountAmount,
@@ -1961,96 +2125,128 @@ Thank you for choosing ${ws.business_name}!`;
                     createdAt: new Date().toISOString()
                   };
 
-                  const bookings = readBookings();
-                  bookings.unshift(newBooking);
-                  writeBookings(bookings);
-
-                  if (mongoose.connection.readyState === 1) {
-                    const dbBooking = new BookingModel(newBooking);
-                    await dbBooking.save();
-                  }
-
-                  const mollieClient = getMollieClient();
                   const reqHost = req.get("host") || "travelluxx.co.uk";
                   const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
                   const origin = `${protocol}://${reqHost}`;
+                  const returnUrl = `${origin}/?bookingStatus=success&bookingId=${bookingId}`;
 
-                  if (mollieClient && finalPrice > 0) {
+                  const saveBooking = async () => {
+                    const bookings = readBookings();
+                    bookings.unshift(newBooking);
+                    writeBookings(bookings);
+                    if (mongoose.connection.readyState === 1) {
+                      await new BookingModel(newBooking).save();
+                    }
+                  };
+
+                  // Nothing to charge (for example a 100% promo code): the booking is complete as it is.
+                  if (finalPrice <= 0) {
+                    newBooking.paymentStatus = "Paid";
+                    newBooking.status = "Confirmed";
+                    await saveBooking();
+                    if (verifiedPromo) await recordCouponUsage(verifiedPromo.code);
+                    await sendBookingEmails(newBooking).catch(err => console.error("Email error:", err));
+                    sendWhatsAppNotification(newBooking).catch(err => console.error("WhatsApp error:", err));
+                    return res.json({ success: true, checkoutUrl: returnUrl, bookingId });
+                  }
+
+                  const mollieClient = getMollieClient();
+                  if (!mollieClient) {
+                    return res.status(503).json({ success: false, error: "Online payment is not available right now. Please choose Pay Later / Cash, or call us to book." });
+                  }
+
+                  const basePayment: any = {
+                    amount: { value: finalPrice.toFixed(2), currency: "GBP" },
+                    description: `TravelLuxx Booking Ref: ${bookingId}`,
+                    redirectUrl: returnUrl,
+                    locale: "en_GB",
+                    metadata: {
+                      bookingId: bookingId,
+                      promoCode: verifiedPromo ? verifiedPromo.code : undefined
+                    }
+                  };
+                  // Mollie refuses webhook addresses it cannot reach, so none is sent from a local machine.
+                  if (!/^(localhost|127\.|\[?::1)/i.test(reqHost)) {
+                    basePayment.webhookUrl = `${origin}/api/mollie/webhook`;
+                  }
+
+                  let payment: any = null;
+                  const orderDetails = buildMollieOrderDetails(newBooking);
+                  if (orderDetails) {
                     try {
-                      const payment = await mollieClient.payments.create({
-                        amount: {
-                          value: finalPrice.toFixed(2),
-                          currency: "GBP"
-                        },
-                        description: `Travel Luxx Transfer ${bookingId} - ${data.passengerName || "Passenger"}`,
-                        redirectUrl: `${origin}/?bookingStatus=success&bookingId=${bookingId}`,
-                        webhookUrl: `${origin}/api/mollie/webhook`,
-                        metadata: {
-                          bookingId: bookingId,
-                          promoCode: verifiedPromo ? verifiedPromo.code : undefined
-                        }
-                      });
-
-                      if (payment && payment.getCheckoutUrl()) {
-                        return res.json({ success: true, checkoutUrl: payment.getCheckoutUrl(), bookingId });
-                      }
+                      payment = await mollieClient.payments.create({ ...basePayment, ...orderDetails });
+                    } catch (detailErr: any) {
+                      // A rejected address or line must not stop the customer paying by card.
+                      console.warn("Mollie rejected the itemised payment, retrying without lines:", detailErr?.message);
+                    }
+                  }
+                  if (!payment) {
+                    try {
+                      payment = await mollieClient.payments.create(basePayment);
                     } catch (mollieErr: any) {
-                      console.warn("Mollie API charge fallback:", mollieErr?.message);
+                      console.error("Mollie payment creation failed:", mollieErr?.message);
+                      return res.status(502).json({ success: false, error: "We could not start the online payment. Please try again, or choose Pay Later / Cash." });
                     }
                   }
 
-                  // Seamless fallback to booking confirmation callback
-                  return res.json({
-                    success: true,
-                    checkoutUrl: `${origin}/?bookingStatus=success&bookingId=${bookingId}`,
-                    bookingId
-                  });
+                  const checkoutUrl = payment?.getCheckoutUrl ? payment.getCheckoutUrl() : payment?._links?.checkout?.href;
+                  if (!checkoutUrl) {
+                    return res.status(502).json({ success: false, error: "We could not start the online payment. Please try again, or choose Pay Later / Cash." });
+                  }
+
+                  // The booking is stored only once a real payment exists for it.
+                  newBooking.molliePaymentId = payment.id;
+                  await saveBooking();
+
+                  return res.json({ success: true, checkoutUrl, bookingId });
                 } catch (err: any) {
                   console.error("Failed to create Mollie payment:", err);
-                  return res.status(500).json({ error: err.message || "Failed to create Mollie checkout" });
+                  return res.status(500).json({ success: false, error: err.message || "Failed to create Mollie checkout" });
                 }
               });
 
-              // Mollie payment verification status endpoint
+              // Mollie calls this whenever a payment changes state (paid, failed, expired, ...).
+              app.post("/api/mollie/webhook", async (req, res) => {
+                try {
+                  const paymentId = String(req.body?.id || "");
+                  const mollieClient = getMollieClient();
+                  if (!paymentId || !mollieClient) return res.status(200).send("OK");
+
+                  await connectToDatabase();
+                  // The id in the request is only a pointer: the state is always read back from Mollie.
+                  const payment: any = await mollieClient.payments.get(paymentId);
+                  const bookingId = payment?.metadata?.bookingId;
+                  if (bookingId) {
+                    const booking = await findBooking(bookingId);
+                    if (booking) await syncMolliePayment({ ...booking, molliePaymentId: paymentId });
+                  }
+                  return res.status(200).send("OK");
+                } catch (err: any) {
+                  console.error("Mollie webhook error:", err?.message);
+                  // A 5xx makes Mollie retry later.
+                  return res.status(500).send("Webhook error");
+                }
+              });
+
+              // The browser asks this when the customer comes back from Mollie. It reports what Mollie says,
+              // so an abandoned or failed checkout is never shown (or stored) as paid.
               app.get("/api/mollie/status/:bookingId", async (req, res) => {
                 try {
                   const { bookingId } = req.params;
                   await connectToDatabase();
-                  let booking: any = null;
-                  if (mongoose.connection.readyState === 1) {
-                    booking = await BookingModel.findOne({ id: bookingId });
-                  }
-                  const bookings = readBookings();
-                  const idx = bookings.findIndex((b: any) => b.id === bookingId);
-                  if (!booking && idx === -1) {
+                  const booking = await findBooking(bookingId);
+                  if (!booking) {
                     return res.status(404).json({ success: false, message: "Booking not found" });
                   }
 
-                  const currentBooking = booking ? (booking.toObject ? booking.toObject() : booking) : bookings[idx];
-
-                  if (currentBooking.paymentStatus !== "Paid") {
-                    if (booking) {
-                      booking.paymentStatus = "Paid";
-                      booking.status = "Confirmed";
-                      await booking.save();
-                    }
-                    if (idx !== -1) {
-                      bookings[idx].paymentStatus = "Paid";
-                      bookings[idx].status = "Confirmed";
-                      writeBookings(bookings);
-                    }
-                    if (currentBooking.promoCode) {
-                      await recordCouponUsage(currentBooking.promoCode);
-                    }
-                    await sendBookingEmails(currentBooking).catch(err => console.error("Email error:", err));
-                    sendWhatsAppNotification(currentBooking).catch(err => console.error("WhatsApp error:", err));
-                  }
+                  const paymentStatus = await syncMolliePayment(booking);
+                  const current = (await findBooking(bookingId)) || booking;
 
                   return res.json({
                     success: true,
-                    booking: currentBooking,
-                    paymentStatus: "Paid",
-                    status: "Confirmed"
+                    booking: current,
+                    paymentStatus,
+                    status: current.status
                   });
                 } catch (err: any) {
                   return res.status(500).json({ success: false, error: err.message });

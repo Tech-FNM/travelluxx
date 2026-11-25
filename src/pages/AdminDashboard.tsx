@@ -2573,7 +2573,14 @@ export default function AdminDashboard() {
                               <div className="text-[#646970]">{b.passengerPhone}</div>
                               {b.passengerEmail && <div className="text-[#646970] text-[10px]">{b.passengerEmail}</div>}
                             </td>
-                            <td className="py-3 px-4 whitespace-nowrap text-[#646970]">{b.date}<br />{b.time}</td>
+                            <td className="py-3 px-4 whitespace-nowrap text-[#646970]">
+                              {b.date}<br />{b.time}
+                              {b.returnJourney && (
+                                <span className="block mt-1 text-[10px] font-semibold text-[#2271b1]">
+                                  Return: {b.returnDate} {b.returnTime}
+                                </span>
+                              )}
+                            </td>
                             <td className="py-3 px-4 max-w-[200px]">
                               <div className="truncate"><span className="text-emerald-600 font-bold">↑</span> {b.pickup}</div>
                               <div className="truncate text-[#646970]"><span className="text-red-500 font-bold">↓</span> {b.dropoff}</div>
@@ -9328,9 +9335,29 @@ export default function AdminDashboard() {
                   <span className="text-red-500 font-bold block mt-1">Dropoff: </span>{selectedBooking.dropoff}
                 </div>
                 <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]">
-                  <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Date & Time</span>
+                  <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">{selectedBooking.returnJourney ? "Outbound Date & Time" : "Date & Time"}</span>
                   <span className="text-[#1d2327] font-bold">{selectedBooking.date} {selectedBooking.time}</span>
                 </div>
+                {selectedBooking.returnJourney && (
+                  <div className="bg-[#f0f6fc] p-3 rounded border border-[#c5d9ed] col-span-1 sm:col-span-2">
+                    <span className="text-[#2271b1] text-[10px] uppercase font-semibold block mb-1">Return Journey</span>
+                    <span className="text-[#1d2327] font-bold block">{selectedBooking.returnDate} {selectedBooking.returnTime}</span>
+                    <span className="text-[#646970] block mt-1">From: {selectedBooking.dropoff}</span>
+                    <span className="text-[#646970] block">To: {selectedBooking.pickup}</span>
+                    {selectedBooking.returnFlightNumber && (
+                      <span className="text-[#646970] block mt-1">Return flight: {selectedBooking.returnFlightNumber}</span>
+                    )}
+                    <span className="text-[#646970] block mt-1">
+                      Outbound £{Number(selectedBooking.outboundFare || 0).toFixed(2)} + Return £{Number(selectedBooking.returnFare || 0).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                {selectedBooking.flightNumber && (
+                  <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]">
+                    <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Flight Number</span>
+                    <span className="text-[#1d2327] font-bold">{selectedBooking.flightNumber}</span>
+                  </div>
+                )}
                 <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]">
                   <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Total Fare</span>
                   <span className="text-[#2271b1] font-extrabold text-base">£{Number(selectedBooking.price || 0).toFixed(2)}</span>
@@ -9341,7 +9368,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="bg-[#f9f9f9] p-3 rounded border border-[#f0f0f1]">
                   <span className="text-[#646970] text-[10px] uppercase font-semibold block mb-1">Payment</span>
-                  <span className="text-[#1d2327]">{selectedBooking.paymentMethod} ({selectedBooking.paymentStatus || "Unpaid"})</span>
+                  <span className="text-[#1d2327]">{selectedBooking.paymentMethod}{selectedBooking.paymentMethodDetail ? ` · ${selectedBooking.paymentMethodDetail}` : ""} ({selectedBooking.paymentStatus || "Unpaid"})</span>
                 </div>
               </div>
             </div>

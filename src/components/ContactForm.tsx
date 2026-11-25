@@ -51,7 +51,7 @@ export default function ContactForm({ settings }: ContactFormProps) {
   };
 
   return (
-    <section id="contact" className="tl-section bg-white">
+    <section id="contact" className="tl-section bg-ivory">
       <div className="tl-container">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
 
@@ -87,10 +87,10 @@ export default function ContactForm({ settings }: ContactFormProps) {
 
               <div className="py-5">
                 <dt className="text-xs uppercase tracking-[0.2em] text-stone-500">WhatsApp & Telephone Hotline</dt>
-                <dd className="mt-2 text-base text-stone-900">
+                <dd className="mt-2 font-display text-3xl leading-tight font-medium text-stone-900 lining-nums sm:text-4xl">
                   <a
                     href={`tel:${whatsappNum}`}
-                    className="-my-2.5 inline-block py-2.5 underline decoration-stone-300 underline-offset-4 transition-colors duration-200 hover:text-brand-700 hover:decoration-brand-700"
+                    className="-my-2 inline-block py-2 transition-colors duration-200 hover:text-brand-700"
                   >
                     {formattedPhone}
                   </a>
