@@ -3196,7 +3196,7 @@ async function expandShortMapsLink(input) {
 }
 async function loadGoogleReviews() {
   const settings = getCurrentWebsiteSettings() || {};
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY || settings.google_maps_api_key || settings.google_places_api_key || "";
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_MAPS_API_KEY || settings.google_places_api_key || settings.google_maps_api_key || "";
   const adminList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
   const configured = String(settings.google_business_profile_url || settings.google_place_id || process.env.GOOGLE_PLACE_ID || "").trim();
   const listingUrl = configured || DEFAULT_GOOGLE_LISTING;
@@ -3213,43 +3213,52 @@ async function loadGoogleReviews() {
   if (!apiKey) return fromAdmin("No Google API key is set, so the reviews from the dashboard are shown.");
   try {
     const identifier = extractPlaceIdentifier(await expandShortMapsLink(listingUrl));
-    const fields = "name,rating,user_ratings_total,reviews,url";
-    const base = "https://maps.googleapis.com/maps/api/place/details/json";
-    let detailsUrl = "";
-    if (identifier.placeId) {
-      detailsUrl = `${base}?place_id=${encodeURIComponent(identifier.placeId)}`;
-    } else if (identifier.cid) {
-      detailsUrl = `${base}?cid=${encodeURIComponent(identifier.cid)}`;
-    } else if (identifier.query) {
-      const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(identifier.query)}&inputtype=textquery&fields=place_id&key=${encodeURIComponent(apiKey)}`;
-      const found = await (await fetch(findUrl)).json();
-      const placeId = found?.candidates?.[0]?.place_id;
-      if (placeId) detailsUrl = `${base}?place_id=${encodeURIComponent(placeId)}`;
+    const headers = (mask) => ({ "Content-Type": "application/json", "X-Goog-Api-Key": apiKey, "X-Goog-FieldMask": mask });
+    let placeId = identifier.placeId || "";
+    if (!placeId) {
+      const names = Array.from(new Set([identifier.query, settings.business_name, "TravelLuxx"].filter(Boolean)));
+      for (const textQuery of names) {
+        const found = await (await fetch("https://places.googleapis.com/v1/places:searchText", {
+          method: "POST",
+          headers: headers("places.id,places.googleMapsUri,places.displayName"),
+          body: JSON.stringify({ textQuery, languageCode: "en" })
+        })).json();
+        const list = Array.isArray(found?.places) ? found.places : [];
+        const match = identifier.cid ? list.find((pl) => String(pl.googleMapsUri || "").includes(`cid=${identifier.cid}`)) : list[0];
+        if (match?.id) {
+          placeId = match.id;
+          break;
+        }
+      }
     }
-    if (!detailsUrl) return fromAdmin("The Google listing could not be found.");
-    const data = await (await fetch(`${detailsUrl}&fields=${fields}&reviews_sort=newest&language=en&key=${encodeURIComponent(apiKey)}`)).json();
-    if (data.status !== "OK" || !data.result) {
-      console.warn("Google Places API response status:", data.status, data.error_message);
-      return fromAdmin(`Google answered: ${data.status}`);
+    if (!placeId) {
+      return fromAdmin("Google did not return this listing in search. Paste the listing's Place ID (starts with ChIJ) into the Google Business Profile URL field.");
     }
-    const r = data.result;
-    const reviews = (r.reviews || []).filter((rev) => rev && String(rev.text || "").trim()).map((rev) => ({
-      author_name: rev.author_name,
-      rating: rev.rating,
-      relative_time_description: rev.relative_time_description,
-      time: rev.time,
-      text: rev.text,
-      profile_photo_url: rev.profile_photo_url || "",
-      author_url: rev.author_url || ""
-    }));
+    const data = await (await fetch(
+      `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=en`,
+      { headers: headers("displayName,rating,userRatingCount,reviews,googleMapsUri") }
+    )).json();
+    if (data?.error) {
+      console.warn("Google Places API (New) error:", data.error.status, data.error.message);
+      return fromAdmin(`Google answered: ${data.error.status || data.error.message}`);
+    }
+    const reviews = (Array.isArray(data.reviews) ? data.reviews : []).map((rev) => ({
+      author_name: rev.authorAttribution?.displayName || "",
+      rating: Number(rev.rating) || 5,
+      relative_time_description: rev.relativePublishTimeDescription || "",
+      time: rev.publishTime ? Math.floor(new Date(rev.publishTime).getTime() / 1e3) : void 0,
+      text: String(rev.text?.text || rev.originalText?.text || "").trim(),
+      profile_photo_url: rev.authorAttribution?.photoUri || "",
+      author_url: rev.authorAttribution?.uri || ""
+    })).filter((rev) => rev.text);
     if (reviews.length === 0 && adminList.length > 0) return fromAdmin("Google returned no written reviews.");
     return {
       success: true,
       source: "google_places_api",
-      businessName: r.name || settings.business_name || "TravelLuxx",
-      overallRating: r.rating || Number(settings.google_reviews_rating) || 5,
-      totalReviews: r.user_ratings_total || reviews.length,
-      googleMapsUrl: r.url || listingUrl,
+      businessName: data.displayName?.text || settings.business_name || "TravelLuxx",
+      overallRating: Number(data.rating) || Number(settings.google_reviews_rating) || 5,
+      totalReviews: Number(data.userRatingCount) || reviews.length,
+      googleMapsUrl: data.googleMapsUri || listingUrl,
       reviews
     };
   } catch (err) {

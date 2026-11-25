@@ -43,6 +43,14 @@ export const sections: ContentSection[] = [
         type: "text",
         default: "Customer",
       },
+      {
+        key: "homepage_reviews_empty_text",
+        label: "Text shown while no reviews are loaded yet",
+        type: "textarea",
+        default: "Read what our clients say about us on Google, or share your own experience of travelling with us.",
+      },
+      { key: "homepage_reviews_read_button", label: "Button – read reviews on Google", type: "text", default: "Read our Google reviews" },
+      { key: "homepage_reviews_write_button", label: "Button – write a review", type: "text", default: "Write a review" },
     ],
   },
   {

@@ -60,9 +60,9 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
       ? settings.google_reviews_list
       : (apiReviewsData?.reviews || []);
 
-  if (dashboardReviews.length === 0) {
-    return null;
-  }
+  // With no reviews loaded yet the section still shows, inviting visitors to the real Google listing.
+  // No rating or count is shown then, because there is nothing real to show.
+  const hasReviews = dashboardReviews.length > 0;
 
   // Live rating, total count and maps link from dashboard settings
   const rating = fromGoogle
@@ -71,7 +71,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
   const totalCount = fromGoogle
     ? apiReviewsData!.totalReviews
     : settings?.google_reviews_count || apiReviewsData?.totalReviews || dashboardReviews.length;
-  const mapsUrl = (fromGoogle && apiReviewsData?.googleMapsUrl) || settings?.google_business_profile_url || apiReviewsData?.googleMapsUrl || "https://www.google.com/maps";
+  const mapsUrl = (fromGoogle && apiReviewsData?.googleMapsUrl) || settings?.google_business_profile_url || apiReviewsData?.googleMapsUrl || "https://maps.app.goo.gl/5r5jwaFUCM7YMzWdA";
 
   // Live custom section headers from dashboard settings
   const badgeText = c.t("homepage_reviews_badge");
@@ -97,6 +97,7 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
           </div>
 
           {/* Google Rating Overview */}
+          {hasReviews && (
           <div data-reveal data-reveal-delay="0.2" className="shrink-0">
             <div className="flex items-center gap-4">
               <span className={`font-display text-6xl leading-none font-medium lining-nums sm:text-7xl ${isRenax ? "text-white" : "text-stone-900"}`}>
@@ -144,7 +145,30 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
               </a>
             </div>
           </div>
+          )}
         </div>
+
+        {!hasReviews && (
+          <div
+            data-reveal
+            className={`mt-12 flex flex-col gap-6 border-t pt-8 sm:flex-row sm:items-center sm:justify-between lg:mt-16 ${
+              isRenax ? "border-white/15" : "border-stone-300"
+            }`}
+          >
+            <p className={`max-w-xl text-base leading-relaxed ${isRenax ? "text-stone-300" : "text-stone-600"}`}>
+              {c.t("homepage_reviews_empty_text")}
+            </p>
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="tl-btn tl-btn-primary inline-flex items-center justify-center gap-2">
+                <span>{c.t("homepage_reviews_read_button")}</span>
+                <ExternalLink className="h-4 w-4" strokeWidth={1.5} />
+              </a>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="tl-btn tl-btn-outline inline-flex items-center justify-center">
+                {c.t("homepage_reviews_write_button")}
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Reviews: open columns under a hairline rather than boxed cards, wide enough that a quote
             keeps a comfortable line length. Two per row; three per row when the count divides evenly by three. */}
