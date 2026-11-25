@@ -4149,261 +4149,121 @@ Thank you for choosing ${ws.business_name}!`;
                           return { query: trimmed };
                         }
 
-                        // POST /api/google-reviews/sync - Force immediate refresh of Google Reviews
-                        app.post("/api/google-reviews/sync", async (req, res) => {
+                        // The business's own Google listing (from maps.app.goo.gl/5r5jwaFUCM7YMzWdA). Used when the
+                        // dashboard has no "Google Business Profile URL" / Place ID of its own.
+                        const DEFAULT_GOOGLE_LISTING =
+                          "https://www.google.com/maps/place/TravelLuxx/data=!4m6!3m5!1s0x478a6a6e33d30571:0xba67a9ca79388dca";
+
+                        /** maps.app.goo.gl / goo.gl/maps short links point at the full Maps URL; follow them once. */
+                        async function expandShortMapsLink(input: string): Promise<string> {
+                          if (!/^https?:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps)\//i.test(input)) return input;
                           try {
-                            cachedGoogleReviews = null; // Clear cache immediately
-                            const settings = getCurrentWebsiteSettings();
-                            const apiKey = process.env.GOOGLE_MAPS_API_KEY || settings.google_maps_api_key || settings.google_places_api_key || "";
-                            const gmbInput = (settings.google_business_profile_url || settings.google_place_id || process.env.GOOGLE_PLACE_ID || "").trim();
-                            const identifier = extractPlaceIdentifier(gmbInput);
-
-                            let targetPlaceId = identifier.placeId || "";
-
-                            if (apiKey) {
-                              if (!targetPlaceId && (identifier.cid || identifier.query)) {
-                                const findQuery = identifier.cid ? `cid:${identifier.cid}` : (identifier.query || settings.business_name || "TravelLuxx");
-                                const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(findQuery)}&inputtype=textquery&fields=place_id,name&key=${encodeURIComponent(apiKey)}`;
-                                const findResp = await fetch(findUrl);
-                                if (findResp.ok) {
-                                  const findData: any = await findResp.json();
-                                  if (findData.candidates && findData.candidates.length > 0) {
-                                    targetPlaceId = findData.candidates[0].place_id;
-                                  }
-                                }
-                              }
-
-                              if (!targetPlaceId) targetPlaceId = "ChIJrTLr-Gyu2EcRBfy61iWz6vM";
-
-                              const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(targetPlaceId)}&fields=name,rating,user_ratings_total,reviews,url&key=${encodeURIComponent(apiKey)}`;
-                              const response = await fetch(url);
-                              const data: any = await response.json();
-
-                              if (data.status === "OK" && data.result) {
-                                const r = data.result;
-                                const reviews = (r.reviews || []).map((rev: any) => ({
-                                  author_name: rev.author_name,
-                                  rating: rev.rating,
-                                  relative_time_description: rev.relative_time_description,
-                                  time: rev.time,
-                                  text: rev.text,
-                                  profile_photo_url: rev.profile_photo_url || ""
-                                }));
-
-                                const payload = {
-                                  success: true,
-                                  source: "google_places_api",
-                                  businessName: r.name || settings.business_name || "TravelLuxx",
-                                  overallRating: r.rating || 5.0,
-                                  totalReviews: r.user_ratings_total || reviews.length,
-                                  googleMapsUrl: r.url || settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
-                                  reviews: reviews.length > 0 ? reviews : []
-                                };
-                                cachedGoogleReviews = { timestamp: Date.now(), data: payload };
-                                return res.json({ success: true, message: "Google reviews synced successfully via Google Places API!", payload });
-                              }
-                            }
-
-                            // Curated / Custom fallback
-                            const customList = Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0
-                              ? settings.google_reviews_list
-                              : null;
-
-                            const payload = {
-                              success: true,
-                              source: customList ? "custom_admin" : "curated",
-                              businessName: settings.business_name || "TravelLuxx",
-                              overallRating: Number(settings.google_reviews_rating) || 5.0,
-                              totalReviews: Number(settings.google_reviews_count) || (customList ? customList.length : 48),
-                              googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
-                              reviews: customList || [
-                                {
-                                  author_name: "James Thornton",
-                                  rating: 5,
-                                  relative_time_description: "a week ago",
-                                  time: Math.floor(Date.now() / 1000) - 7 * 86400,
-                                  text: "Outstanding service from Solihull to Heathrow Terminal 5. Driver was punctual, pristine Mercedes S-Class, and the journey was completely stress-free. TravelLuxx is now our company's go-to executive travel partner.",
-                                  profile_photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                                },
-                                {
-                                  author_name: "Sarah Jenkins",
-                                  rating: 5,
-                                  relative_time_description: "2 weeks ago",
-                                  time: Math.floor(Date.now() / 1000) - 14 * 86400,
-                                  text: "Booked an airport transfer from Birmingham Airport. Flight landed 30 minutes early, yet the chauffeur was already waiting at arrivals with a name board. Impeccable vehicle and polite chauffeur. 10/10!",
-                                  profile_photo_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
-                                },
-                                {
-                                  author_name: "Marcus Vance",
-                                  rating: 5,
-                                  relative_time_description: "a month ago",
-                                  time: Math.floor(Date.now() / 1000) - 30 * 86400,
-                                  text: "Booked the Mercedes V-Class for our family trip to London. Plenty of luggage space, smooth drive, and the kids were comfortable throughout. Booking process online was seamless and transparent.",
-                                  profile_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-                                },
-                                {
-                                  author_name: "Dr. Alistair Ross",
-                                  rating: 5,
-                                  relative_time_description: "2 months ago",
-                                  time: Math.floor(Date.now() / 1000) - 60 * 86400,
-                                  text: "Consistently professional and immaculate vehicles. Used them for multiple client meetings across Warwick and Birmingham. Never once been let down. Highest recommendation.",
-                                  profile_photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80"
-                                }
-                              ]
-                            };
-                            cachedGoogleReviews = { timestamp: Date.now(), data: payload };
-                            return res.json({ success: true, message: "Reviews cache refreshed with your latest Google profile link!", payload });
-                          } catch (err: any) {
-                            return res.status(500).json({ success: false, error: err.message || "Failed to sync reviews" });
+                            const r = await fetch(input, { redirect: "manual" });
+                            return r.headers.get("location") || input;
+                          } catch {
+                            return input;
                           }
-                        });
+                        }
 
-                        app.get("/api/google-reviews", async (req, res) => {
-                          const settings = getCurrentWebsiteSettings();
+                        /**
+                         * Reviews for the homepage. Real Google reviews come from the official Places API (needs an API
+                         * key: GOOGLE_MAPS_API_KEY or Settings → google_maps_api_key). Without a key, or if Google
+                         * fails, the reviews typed into the dashboard are shown. Nothing is ever invented.
+                         */
+                        async function loadGoogleReviews(): Promise<any> {
+                          const settings = getCurrentWebsiteSettings() || {};
                           const apiKey = process.env.GOOGLE_MAPS_API_KEY || settings.google_maps_api_key || settings.google_places_api_key || "";
+                          const adminList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
+                          const configured = String(settings.google_business_profile_url || settings.google_place_id || process.env.GOOGLE_PLACE_ID || "").trim();
+                          const listingUrl = configured || DEFAULT_GOOGLE_LISTING;
 
-                          // Link or Place ID configured in Admin Dashboard
-                          const gmbInput = (settings.google_business_profile_url || settings.google_place_id || process.env.GOOGLE_PLACE_ID || "").trim();
-                          const identifier = extractPlaceIdentifier(gmbInput);
+                          const fromAdmin = (note?: string) => ({
+                            success: true,
+                            source: "custom_admin",
+                            note,
+                            businessName: settings.business_name || "TravelLuxx",
+                            overallRating: Number(settings.google_reviews_rating) || 5.0,
+                            totalReviews: Number(settings.google_reviews_count) || adminList.length,
+                            googleMapsUrl: /^https?:/i.test(listingUrl) ? listingUrl : "https://www.google.com/maps",
+                            reviews: adminList
+                          });
 
-                          let targetPlaceId = identifier.placeId || "";
-
-                          // Check cache (key by targetPlaceId or default)
-                          const now = Date.now();
-                          if (cachedGoogleReviews && (now - cachedGoogleReviews.timestamp < GOOGLE_REVIEWS_CACHE_TTL)) {
-                            if (!req.query.refresh) {
-                              return res.json(cachedGoogleReviews.data);
-                            }
-                          }
-
-                          // Fallback high-quality curated reviews if API key not provided or request fails
-                          const fallbackReviews = [
-                            {
-                              author_name: "James Thornton",
-                              rating: 5,
-                              relative_time_description: "a week ago",
-                              time: Math.floor(Date.now() / 1000) - 7 * 86400,
-                              text: "Outstanding service from Solihull to Heathrow Terminal 5. Driver was punctual, pristine Mercedes S-Class, and the journey was completely stress-free. TravelLuxx is now our company's go-to executive travel partner.",
-                              profile_photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                            },
-                            {
-                              author_name: "Sarah Jenkins",
-                              rating: 5,
-                              relative_time_description: "2 weeks ago",
-                              time: Math.floor(Date.now() / 1000) - 14 * 86400,
-                              text: "Booked an airport transfer from Birmingham Airport. Flight landed 30 minutes early, yet the chauffeur was already waiting at arrivals with a name board. Impeccable vehicle and polite chauffeur. 10/10!",
-                              profile_photo_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
-                            },
-                            {
-                              author_name: "Marcus Vance",
-                              rating: 5,
-                              relative_time_description: "a month ago",
-                              time: Math.floor(Date.now() / 1000) - 30 * 86400,
-                              text: "Booked the Mercedes V-Class for our family trip to London. Plenty of luggage space, smooth drive, and the kids were comfortable throughout. Booking process online was seamless and transparent.",
-                              profile_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-                            },
-                            {
-                              author_name: "Dr. Alistair Ross",
-                              rating: 5,
-                              relative_time_description: "2 months ago",
-                              time: Math.floor(Date.now() / 1000) - 60 * 86400,
-                              text: "Consistently professional and immaculate vehicles. Used them for multiple client meetings across Warwick and Birmingham. Never once been let down. Highest recommendation.",
-                              profile_photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80"
-                            }
-                          ];
-
-                          // If no API key is provided, return custom admin reviews or empty list (no hardcoded dummy reviews)
-                          if (!apiKey) {
-                            const customList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
-                            const payload = {
-                              success: true,
-                              source: "custom_admin",
-                              businessName: settings.business_name || "TravelLuxx",
-                              overallRating: Number(settings.google_reviews_rating) || 5.0,
-                              totalReviews: Number(settings.google_reviews_count) || customList.length,
-                              googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com",
-                              reviews: customList
-                            };
-                            cachedGoogleReviews = { timestamp: now, data: payload };
-                            return res.json(payload);
-                          }
+                          if (!apiKey) return fromAdmin("No Google API key is set, so the reviews from the dashboard are shown.");
 
                           try {
-                            // If we have an API key but no direct placeId, find place using CID or Query
-                            if (!targetPlaceId && (identifier.cid || identifier.query)) {
-                              const findQuery = identifier.cid ? `cid:${identifier.cid}` : (identifier.query || settings.business_name || "TravelLuxx");
-                              const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(findQuery)}&inputtype=textquery&fields=place_id,name&key=${encodeURIComponent(apiKey)}`;
-                              const findResp = await fetch(findUrl);
-                              if (findResp.ok) {
-                                const findData: any = await findResp.json();
-                                if (findData.candidates && findData.candidates.length > 0) {
-                                  targetPlaceId = findData.candidates[0].place_id;
-                                }
-                              }
+                            const identifier = extractPlaceIdentifier(await expandShortMapsLink(listingUrl));
+                            const fields = "name,rating,user_ratings_total,reviews,url";
+                            const base = "https://maps.googleapis.com/maps/api/place/details/json";
+                            let detailsUrl = "";
+                            if (identifier.placeId) {
+                              detailsUrl = `${base}?place_id=${encodeURIComponent(identifier.placeId)}`;
+                            } else if (identifier.cid) {
+                              // Place Details accepts the listing's numeric CID directly.
+                              detailsUrl = `${base}?cid=${encodeURIComponent(identifier.cid)}`;
+                            } else if (identifier.query) {
+                              const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(identifier.query)}&inputtype=textquery&fields=place_id&key=${encodeURIComponent(apiKey)}`;
+                              const found: any = await (await fetch(findUrl)).json();
+                              const placeId = found?.candidates?.[0]?.place_id;
+                              if (placeId) detailsUrl = `${base}?place_id=${encodeURIComponent(placeId)}`;
                             }
+                            if (!detailsUrl) return fromAdmin("The Google listing could not be found.");
 
-                            if (!targetPlaceId) {
-                              targetPlaceId = "ChIJrTLr-Gyu2EcRBfy61iWz6vM"; // Fallback to Solihull area
+                            const data: any = await (await fetch(`${detailsUrl}&fields=${fields}&reviews_sort=newest&language=en&key=${encodeURIComponent(apiKey)}`)).json();
+                            if (data.status !== "OK" || !data.result) {
+                              console.warn("Google Places API response status:", data.status, data.error_message);
+                              return fromAdmin(`Google answered: ${data.status}`);
                             }
-
-                            const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(targetPlaceId)}&fields=name,rating,user_ratings_total,reviews,url&key=${encodeURIComponent(apiKey)}`;
-                            const response = await fetch(url);
-                            if (!response.ok) throw new Error(`Google Places HTTP ${response.status}`);
-                            const data: any = await response.json();
-
-                            if (data.status === "OK" && data.result) {
-                              const r = data.result;
-                              const reviews = (r.reviews || []).map((rev: any) => ({
+                            const r = data.result;
+                            const reviews = (r.reviews || [])
+                              .filter((rev: any) => rev && String(rev.text || "").trim())
+                              .map((rev: any) => ({
                                 author_name: rev.author_name,
                                 rating: rev.rating,
                                 relative_time_description: rev.relative_time_description,
                                 time: rev.time,
                                 text: rev.text,
-                                profile_photo_url: rev.profile_photo_url || ""
+                                profile_photo_url: rev.profile_photo_url || "",
+                                author_url: rev.author_url || ""
                               }));
-
-                              const payload = {
-                                success: true,
-                                source: "google_places_api",
-                                businessName: r.name || settings.business_name || "TravelLuxx",
-                                overallRating: r.rating || 5.0,
-                                totalReviews: r.user_ratings_total || reviews.length,
-                                googleMapsUrl: r.url || settings.google_business_profile_url || "https://maps.google.com/?cid=12345",
-                                reviews: reviews.length > 0 ? reviews : fallbackReviews
-                              };
-
-                              cachedGoogleReviews = { timestamp: now, data: payload };
-                              return res.json(payload);
-                            } else {
-                              console.warn("Google Places API response status:", data.status, data.error_message);
-                              const fallbackList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
-                              const payload = {
-                                success: true,
-                                source: "custom_admin",
-                                businessName: settings.business_name || "TravelLuxx",
-                                overallRating: Number(settings.google_reviews_rating) || 5.0,
-                                totalReviews: Number(settings.google_reviews_count) || fallbackList.length,
-                                googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com",
-                                reviews: fallbackList
-                              };
-                              cachedGoogleReviews = { timestamp: now, data: payload };
-                              return res.json(payload);
-                            }
-                          } catch (err: any) {
-                            console.error("Google Places Reviews API error:", err.message);
-                            const fallbackList = Array.isArray(settings.google_reviews_list) ? settings.google_reviews_list : [];
-                            const payload = {
+                            if (reviews.length === 0 && adminList.length > 0) return fromAdmin("Google returned no written reviews.");
+                            return {
                               success: true,
-                              source: "custom_admin",
-                              businessName: settings.business_name || "TravelLuxx",
-                              overallRating: Number(settings.google_reviews_rating) || 5.0,
-                              totalReviews: Number(settings.google_reviews_count) || fallbackList.length,
-                              googleMapsUrl: settings.google_business_profile_url || "https://maps.google.com",
-                              reviews: fallbackList
+                              source: "google_places_api",
+                              businessName: r.name || settings.business_name || "TravelLuxx",
+                              overallRating: r.rating || Number(settings.google_reviews_rating) || 5.0,
+                              totalReviews: r.user_ratings_total || reviews.length,
+                              googleMapsUrl: r.url || listingUrl,
+                              reviews
                             };
-                            cachedGoogleReviews = { timestamp: now, data: payload };
-                            return res.json(payload);
+                          } catch (err: any) {
+                            console.error("Google Places Reviews API error:", err?.message);
+                            return fromAdmin("Google could not be reached.");
                           }
+                        }
+
+                        // POST /api/google-reviews/sync - refresh now (dashboard button; admin only)
+                        app.post("/api/google-reviews/sync", requireAdminAuth, async (req, res) => {
+                          try {
+                            const payload = await loadGoogleReviews();
+                            cachedGoogleReviews = { timestamp: Date.now(), data: payload };
+                            const message = payload.source === "google_places_api"
+                              ? `Synced ${payload.reviews.length} reviews from Google.`
+                              : payload.note || "Showing the reviews from the dashboard.";
+                            return res.json({ success: true, message, payload });
+                          } catch (err: any) {
+                            return res.status(500).json({ success: false, error: err.message || "Failed to sync reviews" });
+                          }
+                        });
+
+                        // GET /api/google-reviews - public, cached
+                        app.get("/api/google-reviews", async (req, res) => {
+                          const now = Date.now();
+                          if (cachedGoogleReviews && now - cachedGoogleReviews.timestamp < GOOGLE_REVIEWS_CACHE_TTL && !req.query.refresh) {
+                            return res.json(cachedGoogleReviews.data);
+                          }
+                          const payload = await loadGoogleReviews();
+                          cachedGoogleReviews = { timestamp: now, data: payload };
+                          return res.json(payload);
                         });
 
                         app.get("/robots.txt", (req, res) => {

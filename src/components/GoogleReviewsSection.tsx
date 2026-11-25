@@ -52,20 +52,26 @@ export default function GoogleReviewsSection({ isRenax = false }: GoogleReviewsS
   }
 
   // Dashboard reviews: first priority is settings.google_reviews_list from SettingsContext, fallback is /api/google-reviews
-  const dashboardReviews: GoogleReviewItem[] = (
-    Array.isArray(settings?.google_reviews_list) && settings.google_reviews_list.length > 0
+  // Real reviews fetched from Google come first; otherwise the reviews typed into the dashboard.
+  const fromGoogle = (apiReviewsData as any)?.source === "google_places_api" && (apiReviewsData?.reviews || []).length > 0;
+  const dashboardReviews: GoogleReviewItem[] = fromGoogle
+    ? apiReviewsData!.reviews
+    : Array.isArray(settings?.google_reviews_list) && settings.google_reviews_list.length > 0
       ? settings.google_reviews_list
-      : (apiReviewsData?.reviews || [])
-  );
+      : (apiReviewsData?.reviews || []);
 
   if (dashboardReviews.length === 0) {
     return null;
   }
 
   // Live rating, total count and maps link from dashboard settings
-  const rating = Number(settings?.google_reviews_rating) || apiReviewsData?.overallRating || 5.0;
-  const totalCount = settings?.google_reviews_count || apiReviewsData?.totalReviews || 48;
-  const mapsUrl = settings?.google_business_profile_url || apiReviewsData?.googleMapsUrl || "https://maps.google.com";
+  const rating = fromGoogle
+    ? apiReviewsData!.overallRating
+    : Number(settings?.google_reviews_rating) || apiReviewsData?.overallRating || 5.0;
+  const totalCount = fromGoogle
+    ? apiReviewsData!.totalReviews
+    : settings?.google_reviews_count || apiReviewsData?.totalReviews || dashboardReviews.length;
+  const mapsUrl = (fromGoogle && apiReviewsData?.googleMapsUrl) || settings?.google_business_profile_url || apiReviewsData?.googleMapsUrl || "https://www.google.com/maps";
 
   // Live custom section headers from dashboard settings
   const badgeText = c.t("homepage_reviews_badge");

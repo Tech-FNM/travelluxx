@@ -1418,66 +1418,30 @@ export default function AdminDashboard() {
   const handleSyncGoogleReviews = async () => {
     setSyncingReviews(true);
     try {
-      const defaultVerified = [
-        {
-          author_name: "James Thornton",
-          rating: 5,
-          relative_time_description: "a week ago",
-          text: "Outstanding service from Solihull to Heathrow Terminal 5. Driver was punctual, pristine Mercedes S-Class, and the journey was completely stress-free. TravelLuxx is now our company's go-to executive travel partner.",
-          profile_photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-        },
-        {
-          author_name: "Sarah Jenkins",
-          rating: 5,
-          relative_time_description: "2 weeks ago",
-          text: "Booked an airport transfer from Birmingham Airport. Flight landed 30 minutes early, yet the chauffeur was already waiting at arrivals with a name board. Impeccable vehicle and polite chauffeur. 10/10!",
-          profile_photo_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
-        },
-        {
-          author_name: "Marcus Vance",
-          rating: 5,
-          relative_time_description: "a month ago",
-          text: "Booked the Mercedes V-Class for our family trip to London. Plenty of luggage space, smooth drive, and the kids were comfortable throughout. Booking process online was seamless and transparent.",
-          profile_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-        },
-        {
-          author_name: "Dr. Alistair Ross",
-          rating: 5,
-          relative_time_description: "2 months ago",
-          text: "Consistently professional and immaculate vehicles. Used them for multiple client meetings across Warwick and Birmingham. Never once been let down. Highest recommendation.",
-          profile_photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80"
-        }
-      ];
-
-      const updatedSettings = {
-        ...settings,
-        google_reviews_list: (Array.isArray(settings.google_reviews_list) && settings.google_reviews_list.length > 0)
-          ? settings.google_reviews_list
-          : defaultVerified,
-        google_reviews_count: settings.google_reviews_count !== undefined ? String(settings.google_reviews_count) : "48",
-        google_reviews_rating: settings.google_reviews_rating || 5.0
-      };
-
-      setSettings(updatedSettings);
-
-      // Save directly to MongoDB / backend settings
-      await fetch("/api/admin/settings", {
+      // Save the Google listing link first, so the server reads the new one.
+      const saveRes = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedSettings)
+        body: JSON.stringify(settings)
       });
-
-      // Also trigger backend sync endpoint to invalidate reviews cache
+      if (!saveRes.ok) {
+        const err = await saveRes.json().catch(() => ({}));
+        showToast(err.error || "Could not save the settings", "error");
+        return;
+      }
+      // Fetch the real reviews from Google (only works when a Google API key is set).
       const res = await fetch("/api/google-reviews/sync", {
         method: "POST",
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("travelluxx_admin_token") || ""}`
+        }
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok && data.success) {
-        const count = updatedSettings.google_reviews_list?.length || 4;
-        showToast(`Google Reviews Synced! ${count} reviews live with 5.0 rating ⭐`, "success");
+        showToast(data.message || "Reviews refreshed", "success");
       } else {
-        showToast("Google Reviews Synced with GMB Profile!", "success");
+        showToast(data.error || "Could not refresh the reviews", "error");
       }
     } catch (err: any) {
       showToast(err.message || "Network error while syncing reviews", "error");
@@ -9207,6 +9171,25 @@ export default function AdminDashboard() {
                             />
                             <p className="text-[#646970] text-[10px] mt-1">
                               Example: <span className="font-mono">https://maps.google.com/?cid=...</span> or your business search URL.
+                            </p>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-semibold text-[#1d2327] mb-1">
+                              Google Places API key (to fetch reviews automatically)
+                            </label>
+                            <input
+                              type="password"
+                              autoComplete="off"
+                              value={settings.google_places_api_key || ""}
+                              onChange={e => setSettings({ ...settings, google_places_api_key: e.target.value.trim() })}
+                              placeholder="AIza..."
+                              className="w-full border border-[#8c8f94] rounded px-3 py-2 text-xs focus:outline-none focus:border-[#2271b1] bg-white text-black font-mono"
+                            />
+                            <p className="text-[#646970] text-[10px] mt-1">
+                              Create it in Google Cloud Console with the "Places API" enabled. With a key, the homepage shows your
+                              latest real Google reviews (Google provides up to 5) and your real rating; without one, the reviews
+                              you add below are shown. The key is never shown on the public website. Press "Sync GMB Reviews" after saving.
                             </p>
                           </div>
 
